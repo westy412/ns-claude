@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "plugins": {
+    "frontend-design@claude-code-plugins": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-code-plugins/frontend-design/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-07T10:43:49.548Z",
+        "lastUpdated": "2026-01-07T10:43:49.548Z"
+      }
+    ],
+    "commit-commands@claude-code-plugins": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-code-plugins/commit-commands/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-07T10:43:49.639Z",
+        "lastUpdated": "2026-01-07T10:43:49.639Z"
+      }
+    ],
+    "perplexity@perplexity-mcp-server": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/perplexity-mcp-server/perplexity/0.5.1",
+        "version": "0.5.1",
+        "installedAt": "2026-01-07T10:43:49.694Z",
+        "lastUpdated": "2026-01-07T10:43:49.694Z"
+      }
+    ],
+    "claude-hud@claude-hud": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-hud/claude-hud/0.0.2",
+        "version": "0.0.2",
+        "installedAt": "2026-01-07T10:43:49.768Z",
+        "lastUpdated": "2026-01-07T10:43:49.768Z"
+      }
+    ],
+    "ralph-wiggum@claude-code-plugins": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-code-plugins/ralph-wiggum/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-09T15:49:13.218Z",
+        "lastUpdated": "2026-01-09T15:49:13.218Z"
+      }
+    ],
+    "code-simplifier@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-09T17:49:54.176Z",
+        "lastUpdated": "2026-01-09T17:49:54.176Z"
+      }
+    ]
+  }
+}

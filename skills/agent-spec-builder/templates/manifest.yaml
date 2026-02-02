@@ -1,0 +1,130 @@
+# System Manifest
+# Entry point for implementation. impl-builder reads this first.
+#
+# This file provides:
+# 1. System overview and type
+# 2. Hierarchy visualization
+# 3. File locations (all paths relative to spec/)
+
+system:
+  name: [system-name]
+  type: [single-agent | agent-team | nested-teams]
+  description: |
+    Brief description of what this system does.
+
+# =============================================================================
+# HIERARCHY
+# Shows the structure visually. Each team folder is self-contained.
+# Agent specs live in agents/ subdirectory within each team.
+# =============================================================================
+
+hierarchy:
+  # SINGLE AGENT example:
+  # root:
+  #   type: agent
+  #   file: my-agent.md
+  #   config: agent-config.yaml
+
+  # SINGLE TEAM example:
+  # content-review-loop:
+  #   type: team
+  #   pattern: loop
+  #   folder: content-review-loop/
+  #   files:
+  #     team: team.md
+  #     config: agent-config.yaml
+  #   agents:
+  #     - creator:
+  #         file: agents/creator.md
+  #     - critic:
+  #         file: agents/critic.md
+
+  # NESTED TEAMS example:
+  # research-pipeline:
+  #   type: team
+  #   pattern: pipeline
+  #   folder: research-pipeline/
+  #   files:
+  #     team: team.md
+  #     config: agent-config.yaml
+  #   sub-teams:
+  #     - content-refinement:
+  #         type: team
+  #         pattern: loop
+  #         folder: research-pipeline/content-refinement/
+  #         files:
+  #           team: team.md
+  #           config: agent-config.yaml
+  #         agents:
+  #           - creator:
+  #               file: agents/creator.md
+  #           - critic:
+  #               file: agents/critic.md
+  #     - parallel-research:
+  #         type: team
+  #         pattern: fan-in-fan-out
+  #         folder: research-pipeline/parallel-research/
+  #         files:
+  #           team: team.md
+  #           config: agent-config.yaml
+  #         agents:
+  #           - researcher-a:
+  #               file: agents/researcher-a.md
+  #           - researcher-b:
+  #               file: agents/researcher-b.md
+  #           - merger:
+  #               file: agents/merger.md
+
+# =============================================================================
+# FILES
+# Complete list of all spec files for easy traversal
+# All paths relative to spec/
+# =============================================================================
+
+files:
+  root:
+    - manifest.yaml
+    - progress.md
+
+  # List all team folders and their contents
+  teams:
+    # - folder: content-review-loop/
+    #   files:
+    #     - team.md
+    #     - agent-config.yaml
+    #   agents:
+    #     - agents/creator.md
+    #     - agents/critic.md
+
+    # For nested:
+    # - folder: research-pipeline/
+    #   files:
+    #     - team.md
+    #     - agent-config.yaml
+    #   sub-teams:
+    #     - folder: research-pipeline/content-refinement/
+    #       files:
+    #         - team.md
+    #         - agent-config.yaml
+    #       agents:
+    #         - agents/creator.md
+    #         - agents/critic.md
+
+# =============================================================================
+# IMPLEMENTATION ORDER
+# Suggested order for impl-builder
+# Sub-teams can be processed in parallel
+# =============================================================================
+
+implementation-order:
+  # For nested teams, process depth-first (leaf teams first)
+  # Sub-teams at the same level can be parallelized
+
+  parallel-groups:
+    # - group: 1
+    #   teams:
+    #     - content-refinement
+    #     - parallel-research
+    # - group: 2
+    #   teams:
+    #     - research-pipeline  # Root team after sub-teams complete

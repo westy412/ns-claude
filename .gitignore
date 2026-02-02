@@ -1,0 +1,36 @@
+# Sensitive files - NEVER COMMIT
+settings.json
+settings.local.json
+
+# Session/ephemeral data
+history.jsonl
+*.log
+debug/
+cache/
+paste-cache/
+file-history/
+session-env/
+shell-snapshots/
+todos/
+tasks/
+plans/
+telemetry/
+statsig/
+stats-cache.json
+downloads/
+
+# OS files
+.DS_Store
+
+# Plugin cache and ephemeral data
+plugins/cache/
+plugins/install-counts-cache.json
+plugins/marketplaces/
+plugins/repos/
+
+# Chrome extension data
+chrome/
+
+# IDE lock files and project sessions
+ide/
+projects/

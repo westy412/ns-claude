@@ -1,0 +1,143 @@
+# Agent Configuration
+#
+# This file configures a SINGLE team. Each team folder has its own agent-config.yaml.
+# For nested teams, sub-teams have their own config in their own folders.
+#
+# Key principle: Always use `team:` and `agent:` as keys with `name:` as a property inside.
+# Only `notes` fields are free-form. All other fields have defined values.
+#
+# Field reference:
+# | Field              | Type   | Required | Values                                           |
+# |--------------------|--------|----------|--------------------------------------------------|
+# | name               | string | Yes      | Descriptive name                                 |
+# | pattern            | enum   | Yes      | pipeline, router, fan-in-fan-out, loop           |
+# | framework          | enum   | Yes      | langgraph, dspy                                  |
+# | reference          | path   | Yes      | Path to pattern/agent doc                        |
+# | notes              | string | No       | Free-form                                        |
+# | type               | enum   | Yes      | 6 agent types (see below)                        |
+# | prompt.framework   | enum   | Yes      | single-turn, conversational                      |
+# | prompt.role        | enum   | Yes      | 8 roles (see below)                              |
+# | prompt.modifiers   | list   | Yes      | [], or any combo of 4 modifiers                  |
+# | model.provider     | enum   | Yes      | anthropic, openai, google, local                 |
+# | model.name         | string | Yes      | Model identifier (e.g., claude-3-opus)           |
+# | model.reasoning    | bool   | Yes      | true for extended thinking models                |
+# | model.temperature  | float  | No       | 0.0-1.0, defaults to model default               |
+#
+# Agent types: text-agent, message-agent, structured-output-agent,
+#              text-tool-agent, message-tool-agent, structured-output-tool-agent
+#
+# Roles: researcher, critic-reviewer, router-classifier, creative-generator,
+#        planner-strategist, summarizer-synthesizer, conversational-assistant,
+#        transformer-formatter
+#
+# Modifiers: tools, structured-output, memory, reasoning
+#
+# Providers: anthropic (Claude), openai (GPT), google (Gemini), local (Ollama/etc)
+
+# =============================================================================
+# LEAF TEAM EXAMPLE (has agents, no sub-teams)
+# Use this format for teams that contain agents directly
+# =============================================================================
+
+team:
+  name: content-review-loop
+  pattern: loop
+  framework: langgraph
+  reference: agent-patterns/agent-teams/langgraph/loop.md
+  notes: |
+    Iterative content refinement system.
+    Max 3 iterations before forcing exit.
+
+  agents:
+    - agent:
+        name: creator
+        type: text-agent
+        framework: langgraph
+        reference: agent-patterns/individual-agents/langgraph/text-agent.md
+        prompt:
+          framework: single-turn
+          role: creative-generator
+          modifiers: [memory]
+        model:
+          provider: anthropic
+          name: claude-3-sonnet
+          reasoning: false
+          temperature: 0.7
+        notes: |
+          Tone should match brand voice guide.
+          Higher temperature for creative output.
+
+    - agent:
+        name: critic
+        type: structured-output-agent
+        framework: langgraph
+        reference: agent-patterns/individual-agents/langgraph/structured-output-agent.md
+        prompt:
+          framework: single-turn
+          role: critic-reviewer
+          modifiers: [structured-output]
+        model:
+          provider: anthropic
+          name: claude-3-opus
+          reasoning: true
+          temperature: 0.0
+        notes: |
+          Returns pass/fail with score 1-10.
+          Threshold for pass is 7.
+          Uses reasoning model for thorough analysis.
+
+# =============================================================================
+# ROOT/PARENT TEAM EXAMPLE (has sub-teams in separate folders)
+# Use this format for teams that orchestrate other teams
+# Each sub-team has its own agent-config.yaml in its folder
+# =============================================================================
+
+# team:
+#   name: research-pipeline
+#   pattern: pipeline
+#   framework: langgraph
+#   reference: agent-patterns/agent-teams/langgraph/pipeline.md
+#   notes: |
+#     Multi-stage research system.
+#     Orchestrates sub-teams in sequence.
+#
+#   sub-teams:
+#     - name: content-refinement
+#       folder: content-refinement/
+#       pattern: loop
+#       notes: |
+#         First stage: iterative drafting.
+#         See content-refinement/agent-config.yaml for full config.
+#
+#     - name: parallel-research
+#       folder: parallel-research/
+#       pattern: fan-in-fan-out
+#       notes: |
+#         Second stage: parallel source gathering.
+#         See parallel-research/agent-config.yaml for full config.
+
+# =============================================================================
+# FULL AGENT EXAMPLE (all fields)
+# Reference for all available agent configuration options
+# =============================================================================
+
+# - agent:
+#     name: researcher-a
+#     type: text-tool-agent
+#     framework: langgraph
+#     reference: agent-patterns/individual-agents/langgraph/text-tool-agent.md
+#     prompt:
+#       framework: single-turn
+#       role: researcher
+#       modifiers: [tools, reasoning]
+#     model:
+#       provider: openai
+#       name: gpt-4-turbo
+#       reasoning: false
+#       temperature: 0.0
+#     notes: |
+#       Web search focus.
+#       Uses Chain-of-Thought for complex queries.
+#
+#     # Tools defined in agent spec (agents/researcher-a.md), not here
+#     # Structured output schema defined in agent spec, not here
