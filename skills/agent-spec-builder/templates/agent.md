@@ -1,6 +1,6 @@
 ---
 name: [agent-name]
-type: [text-agent | message-agent | structured-output-agent | text-tool-agent | message-tool-agent | structured-output-tool-agent]
+type: [LangGraph: text-agent | message-agent | structured-output-agent | text-tool-agent | message-tool-agent | structured-output-tool-agent] [DSPy: basic-agent | reasoning-agent | conversational-agent | tool-agent | text-agent]
 framework: [langgraph | dspy]
 reference: agent-patterns/individual-agents/[framework]/[type].md
 prompt:

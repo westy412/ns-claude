@@ -188,16 +188,44 @@ This feeds into the prompt-engineering skill.
 
 ## Framework Support
 
-| Agent Type | LangGraph | DSPy |
-|------------|-----------|------|
-| Text Agent | `langgraph/text-agent.md` | `dspy/text-agent.md` |
-| Message Agent | `langgraph/message-agent.md` | `dspy/message-agent.md` |
-| Structured Output Agent | `langgraph/structured-output-agent.md` | `dspy/structured-output-agent.md` |
-| Text + Tool Agent | `langgraph/text-tool-agent.md` | `dspy/text-tool-agent.md` |
-| Message + Tool Agent | `langgraph/message-tool-agent.md` | `dspy/message-tool-agent.md` |
-| Structured Output + Tool Agent | `langgraph/structured-output-tool-agent.md` | `dspy/structured-output-tool-agent.md` |
+### LangGraph Agent Types (2x3 Matrix)
 
-**Note:** DSPy patterns are theoretical and have NOT been validated against real codebases.
+| Agent Type | Reference |
+|------------|-----------|
+| Text Agent | `langgraph/text-agent.md` |
+| Message Agent | `langgraph/message-agent.md` |
+| Structured Output Agent | `langgraph/structured-output-agent.md` |
+| Text + Tool Agent | `langgraph/text-tool-agent.md` |
+| Message + Tool Agent | `langgraph/message-tool-agent.md` |
+| Structured Output + Tool Agent | `langgraph/structured-output-tool-agent.md` |
+
+### DSPy Agent Types
+
+DSPy uses a different taxonomy based on module behavior rather than output format:
+
+| Agent Type | Reference | Use When |
+|------------|-----------|----------|
+| Basic Agent | `dspy/basic-agent.md` | Simple input→output, no reasoning trace needed |
+| Reasoning Agent | `dspy/reasoning-agent.md` | Needs chain-of-thought or multi-step reasoning |
+| Conversational Agent | `dspy/conversational-agent.md` | Multi-turn dialogue, conversation history |
+| Tool Agent | `dspy/tool-agent.md` | Needs to call external tools (ReAct pattern) |
+| Text Agent | `dspy/text-agent.md` | Long-form text generation |
+
+---
+
+## Example: DSPy Pipeline Selection
+
+**Input:**
+- Pattern: Pipeline (multi-hop QA)
+- Slots: `retriever`, `reasoner`
+- Team Framework: DSPy
+
+**Selection:**
+
+| Slot | Agent Type | Framework | Reference |
+|------|-----------|-----------|-----------|
+| retriever | Tool Agent | DSPy | `dspy/tool-agent.md` |
+| reasoner | Reasoning Agent | DSPy | `dspy/reasoning-agent.md` |
 
 ---
 
@@ -218,5 +246,5 @@ This feeds into the prompt-engineering skill.
 ## References
 
 - `overview.md` — Full taxonomy, detailed comparisons, code examples
-- `langgraph/*.md` — LangGraph implementations (validated)
-- `dspy/*.md` — DSPy implementations (unvalidated)
+- `langgraph/*.md` — LangGraph agent implementations
+- `dspy/*.md` — DSPy agent implementations

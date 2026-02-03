@@ -23,8 +23,11 @@
 # | model.reasoning    | bool   | Yes      | true for extended thinking models                |
 # | model.temperature  | float  | No       | 0.0-1.0, defaults to model default               |
 #
-# Agent types: text-agent, message-agent, structured-output-agent,
+# Agent types (framework-dependent):
+#   LangGraph: text-agent, message-agent, structured-output-agent,
 #              text-tool-agent, message-tool-agent, structured-output-tool-agent
+#   DSPy:      basic-agent, reasoning-agent, conversational-agent,
+#              tool-agent, text-agent
 #
 # Roles: researcher, critic-reviewer, router-classifier, creative-generator,
 #        planner-strategist, summarizer-synthesizer, conversational-assistant,
@@ -141,3 +144,54 @@ team:
 #
 #     # Tools defined in agent spec (agents/researcher-a.md), not here
 #     # Structured output schema defined in agent spec, not here
+
+# =============================================================================
+# DSPY LEAF TEAM EXAMPLE
+# DSPy uses different agent types - modules compiled via optimizers
+# =============================================================================
+
+# team:
+#   name: question-answering-pipeline
+#   pattern: pipeline
+#   framework: dspy
+#   reference: agent-patterns/agent-teams/dspy/pipeline.md
+#   notes: |
+#     Multi-hop QA system using DSPy modules.
+#     Optimized with BootstrapFewShot.
+#
+#   agents:
+#     - agent:
+#         name: retriever
+#         type: tool-agent
+#         framework: dspy
+#         reference: agent-patterns/individual-agents/dspy/tool-agent.md
+#         prompt:
+#           framework: single-turn
+#           role: researcher
+#           modifiers: [tools]
+#         model:
+#           provider: anthropic
+#           name: claude-3-sonnet
+#           reasoning: false
+#           temperature: 0.0
+#         notes: |
+#           Uses ColBERTv2 retriever tool.
+#           Returns top-k passages for downstream reasoning.
+#
+#     - agent:
+#         name: reasoner
+#         type: reasoning-agent
+#         framework: dspy
+#         reference: agent-patterns/individual-agents/dspy/reasoning-agent.md
+#         prompt:
+#           framework: single-turn
+#           role: researcher
+#           modifiers: [reasoning]
+#         model:
+#           provider: anthropic
+#           name: claude-3-opus
+#           reasoning: true
+#           temperature: 0.0
+#         notes: |
+#           ChainOfThought module for multi-hop reasoning.
+#           Compiles with BootstrapFewShotWithRandomSearch.

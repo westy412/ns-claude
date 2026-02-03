@@ -66,9 +66,12 @@ Team-level integrations:
 ### Python Packages
 
 ```txt
-# Core framework
+# Core framework (pick one based on framework choice)
+# LangGraph:
 langgraph>=0.x.x
 langchain-anthropic>=0.x.x
+# DSPy:
+dspy>=2.x.x
 
 # Tool dependencies (from agent specs)
 package-name>=1.0.0  # For [tool-name] - [brief reason]
