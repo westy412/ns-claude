@@ -1,10 +1,10 @@
 ---
-name: brainstorm
-description: Brainstorming partner for fleshing out ideas before spec creation. Conversational, truth-seeking, and first-principles focused. Produces a discovery document that feeds into spec-building skills.
+name: discovery
+description: Thinking partner for fleshing out ideas before spec creation. Conversational, truth-seeking, and first-principles focused. Produces a discovery document that feeds into spec-building skills.
 allowed-tools: Read, Glob, Grep, Task, AskUserQuestion, Write, Edit
 ---
 
-# Brainstorm Skill
+# Discovery Skill
 
 ## Purpose
 
@@ -237,12 +237,41 @@ The document should capture **everything a spec-builder needs to understand the 
 
 1. **Problem Statement** — What we're solving, for whom, why it matters
 2. **Solution Overview** — The approach we landed on, at a high level
-3. **Key Decisions** — Decisions made during brainstorming, with rationale
+3. **Key Decisions** — Decisions made during discovery, with rationale
 4. **Constraints** — Hard constraints that must be respected
 5. **Scope** — What's in, what's out, what's deferred
 6. **Context** — Relevant codebase context, integrations, dependencies
-7. **Open Questions** — Things that need to be resolved during spec/implementation
-8. **Next Steps** — What happens after this (which spec-builder, etc.)
+7. **Reference Files** — Any files consulted during discovery (codebase, docs, examples)
+8. **Open Questions** — Things that need to be resolved during spec/implementation
+9. **Next Steps** — What happens after this (which spec-builder, etc.)
+
+### Reference Files (Required)
+
+**Always include a Reference Files section.** This lists any files that were consulted during the discovery process:
+
+- **Codebase files** — Existing code examined for patterns, context, or understanding
+- **Documentation** — READMEs, design docs, or other docs referenced
+- **Example files** — Reference implementations or examples looked at
+- **Research artifacts** — Any files created or consulted during research
+
+**Format:**
+```markdown
+## Reference Files
+
+The following files were consulted during discovery:
+
+**Codebase:**
+- `src/auth/handlers.py` — Existing auth patterns
+- `src/api/routes.py` — Current API structure
+
+**Documentation:**
+- `docs/architecture.md` — System architecture overview
+
+**Examples:**
+- `examples/auth-flow/` — Reference implementation
+```
+
+**Why this matters:** Reference files provide crucial context for spec-builders. They can revisit these files to understand the patterns and decisions that informed the discovery.
 
 ### Format
 
@@ -339,5 +368,6 @@ A discovery document that:
 - Captures the problem and solution thinking
 - Documents key decisions with rationale
 - Identifies constraints and scope
+- **Lists all reference files consulted during discovery**
 - Provides enough context for spec creation
 - Is readable by both humans and spec-building agents

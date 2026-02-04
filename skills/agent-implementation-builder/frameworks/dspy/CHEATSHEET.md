@@ -10,16 +10,145 @@ This cheat sheet contains critical rules, patterns, and anti-patterns for DSPy i
 
 | Rule | One-Line Description |
 |------|---------------------|
-| 1. Singleton LM | Use module-level singleton for shared LM instance |
-| 2. Predict vs ChainOfThought | Predict for extraction/classification, CoT for creative synthesis |
-| 3. Enum Validation | Small enums: prompting. Large enums (20+): `Union` + fuzzy matching |
-| 4. Signature Docstrings | Workflow context + validation rules + anti-patterns |
-| 5. Formatters | Convert structured outputs to markdown between stages |
-| 6. Async Retry | Exponential backoff + rate limit handling |
+| 1. Signatures in signatures.py | All DSPy Signatures live in signatures.py (NOT models.py) |
+| 2. Docstrings ARE Prompts | Signature docstrings are compiled into LLM calls - NO separate prompts.py |
+| 3. Singleton LM | Use module-level singleton for shared LM instance |
+| 4. Predict vs ChainOfThought | Predict for extraction/classification, CoT for creative synthesis |
+| 5. Enum Validation | Small enums: prompting. Large enums (20+): `Union` + fuzzy matching |
+| 6. Rich Docstrings | Workflow context + validation rules + anti-patterns |
+| 7. Formatters | Convert structured outputs to markdown between stages |
+| 8. Async Retry | Exponential backoff + rate limit handling |
 
 ---
 
 ## Critical Rules
+
+### 0. File Organization and Signatures
+
+**CRITICAL: DSPy has specific file organization rules that differ from LangGraph.**
+
+**File Structure:**
+```
+src/team-name/
+├── signatures.py    # All DSPy Signature classes - REQUIRED
+├── models.py        # Pydantic models (optional, for complex outputs)
+├── tools.py         # Tool functions (if agents use tools)
+├── utils.py         # Singleton LM + formatters + retry - REQUIRED
+└── team.py          # dspy.Module orchestration
+```
+
+**CORRECT:**
+```python
+# signatures.py - ALL signatures go here
+
+import dspy
+from typing import Literal
+
+class AgentASignature(dspy.Signature):
+    """
+    THIS DOCSTRING IS THE PROMPT.
+
+    DSPy compiles this docstring directly into the LLM call.
+    Do NOT create a separate prompts.py file.
+
+    === YOUR ROLE IN THE WORKFLOW ===
+    You are Agent A in a pipeline. You receive raw input and extract
+    structured data for downstream agents.
+
+    === YOUR TASK ===
+    Extract the following fields from the input text...
+
+    [... Comprehensive prompt continues ...]
+    """
+
+    raw_input: str = dspy.InputField(desc="Input text to analyze")
+    category: Literal["A", "B", "C"] = dspy.OutputField(
+        desc="EXACTLY one of: A, B, C"
+    )
+
+
+class AgentBSignature(dspy.Signature):
+    """
+    THIS DOCSTRING IS THE PROMPT.
+
+    === YOUR ROLE IN THE WORKFLOW ===
+    You are Agent B. You receive formatted output from Agent A...
+
+    [... Comprehensive prompt continues ...]
+    """
+
+    agent_a_output: str = dspy.InputField(desc="Formatted output from Agent A")
+    result: str = dspy.OutputField(desc="Final result")
+```
+
+```python
+# models.py - ONLY Pydantic models, NOT signatures
+
+from pydantic import BaseModel
+
+class ComplexOutput(BaseModel):
+    """Complex nested output structure."""
+    field1: str
+    field2: int
+    nested: dict
+```
+
+```python
+# team.py - Import signatures from signatures.py
+
+from .signatures import AgentASignature, AgentBSignature
+
+class MyTeam(dspy.Module):
+    def __init__(self, shared_lm):
+        self.agent_a = dspy.Predict(AgentASignature)
+        self.agent_a.set_lm(shared_lm)
+```
+
+**WRONG - DO NOT DO THIS:**
+```python
+# WRONG: Signatures in models.py
+# models.py
+import dspy
+
+class AgentASignature(dspy.Signature):  # WRONG LOCATION
+    """..."""
+```
+
+```python
+# WRONG: Creating prompts.py for DSPy
+# prompts.py
+AGENT_A_PROMPT = """..."""  # WRONG - DSPy doesn't use this pattern
+```
+
+```python
+# WRONG: Brief docstrings
+class AgentASignature(dspy.Signature):
+    """Extract data."""  # WRONG - Too brief, DSPy needs comprehensive instructions
+
+    raw_input: str = dspy.InputField()
+    output: str = dspy.OutputField()
+```
+
+**Why:**
+
+1. **signatures.py is the correct location** - Separates signature definitions (contracts) from Pydantic models (data structures) and team orchestration (logic).
+
+2. **Docstrings ARE prompts** - DSPy compiles signature docstrings directly into the LLM prompt. Creating separate prompts.py files creates confusion about which prompt is actually used and wastes context.
+
+3. **Comprehensive docstrings required** - Brief docstrings like "Extract data" produce poor outputs. Include workflow context, quality standards, constraints, and anti-patterns directly in the docstring.
+
+4. **No prompt-creator sub-agents for DSPy** - Since prompts are docstrings, write them directly when creating signatures.py. Using prompt-creator sub-agents adds unnecessary complexity and may produce prompts that don't integrate properly with the signature structure.
+
+**File placement summary:**
+
+| File | DSPy | LangGraph |
+|------|------|-----------|
+| signatures.py | YES - contains all signatures with docstring prompts | NO |
+| prompts.py | NO - don't create | YES - separate prompt strings |
+| models.py | Optional - only for complex Pydantic outputs | Optional - same |
+| utils.py | YES - singleton LM + formatters required | Optional |
+
+---
 
 ### 1. Singleton LM Pattern
 

@@ -229,6 +229,110 @@ project-name/
 
 ---
 
+## Framework-Specific File Organization
+
+### LangGraph File Organization
+
+LangGraph follows the structure shown above:
+- `team.py` - Orchestration + agent nodes
+- `prompts.py` - Separate prompt strings for each agent
+- `tools.py` - Tool definitions (if needed)
+- `utils.py` - Utilities (if needed)
+
+### DSPy File Organization
+
+**CRITICAL: DSPy has DIFFERENT file organization than LangGraph.**
+
+DSPy uses signature docstrings AS the prompts. There is NO separate prompts.py file.
+
+**Single team:**
+```
+project-name/
+├── pyproject.toml
+├── uv.lock
+├── .env.example
+├── main.py                  # FastAPI service wrapper
+└── src/
+    └── content-review-loop/
+        ├── team.py          # Orchestration module
+        ├── signatures.py    # DSPy Signatures (prompts are in docstrings)
+        ├── models.py        # Pydantic models (if needed for complex outputs)
+        ├── tools.py         # Tool definitions (if needed)
+        └── utils.py         # Utilities + formatters (if needed)
+```
+
+**Nested teams:**
+```
+project-name/
+├── pyproject.toml
+├── uv.lock
+├── .env.example
+├── main.py                  # FastAPI service wrapper
+└── src/
+    └── research-pipeline/
+        ├── team.py          # Top-level orchestration
+        ├── models.py        # Shared Pydantic models (optional)
+        ├── utils.py         # Shared utilities + formatters
+        ├── content-refinement/
+        │   ├── team.py
+        │   ├── signatures.py
+        │   ├── tools.py
+        │   └── utils.py
+        └── parallel-research/
+            ├── team.py
+            ├── signatures.py
+            ├── tools.py
+            └── utils.py
+```
+
+**File Placement Rules for DSPy:**
+
+| File | What Goes Here | Required? |
+|------|----------------|-----------|
+| `signatures.py` | All DSPy Signature classes with rich docstrings | YES (always for DSPy) |
+| `models.py` | Pydantic BaseModel classes for complex nested outputs | If needed |
+| `team.py` | dspy.Module class with Predict/ChainOfThought instances | YES |
+| `tools.py` | Tool functions returning dicts (NOT @tool decorated) | If agents use tools |
+| `utils.py` | Singleton LM factories, formatters, retry wrapper | YES (formatters needed between stages) |
+| `prompts.py` | ❌ **DO NOT CREATE** for DSPy | NO |
+
+**Why no prompts.py for DSPy:**
+DSPy Signatures use their docstrings as prompts. The docstring is compiled directly into the LLM call. Creating separate prompts.py creates confusion about which prompt is actually used.
+
+**Where prompts live in DSPy:**
+```python
+# signatures.py
+
+class MyAgentSignature(dspy.Signature):
+    """
+    ← THIS DOCSTRING IS THE PROMPT
+
+    === YOUR ROLE IN THE WORKFLOW ===
+    You are the [role] agent in a [pattern] pipeline.
+
+    === YOUR TASK ===
+    [Detailed task description]
+
+    === QUALITY STANDARDS ===
+    - Standard 1
+    - Standard 2
+
+    === CONSTRAINTS ===
+    - Never do X
+    - Always do Y
+    """
+
+    input_field: str = dspy.InputField(desc="What this input contains")
+    output_field: str = dspy.OutputField(desc="What to return")
+```
+
+**Signature Organization:**
+- **Small teams (1-5 agents):** All signatures in team's `signatures.py`
+- **Large teams (6+ agents):** Consider grouping by role or stage within signatures.py, use comments as section headers
+- **Nested teams:** Each sub-team has its own `signatures.py`; shared signatures can go in root-level `models.py` if reused
+
+---
+
 ## Workflow
 
 ### Phase 0: Parse Spec and Initialize Project
@@ -422,7 +526,11 @@ For each agent:
    - e.g., `agent-patterns/individual-agents/langgraph/text-agent.md`
 3. Generate implementation following the pattern
 
-### Phase 4: Prompts
+### Phase 4: Prompts/Signatures
+
+**Framework-specific approaches:**
+
+#### LangGraph: prompts.py
 
 **Strategy:** Create scaffold first, then sub-agents edit directly. This keeps prompts out of main agent context.
 
@@ -462,6 +570,93 @@ The sub-agent:
 - Main agent just waits for completion
 - Cleaner context management
 
+#### DSPy: signatures.py
+
+**CRITICAL: DSPy does NOT use prompts.py. Prompts ARE signature docstrings.**
+
+**Strategy:** Write signatures.py directly. Do NOT spawn prompt-creator sub-agents.
+
+**Step 1: Create signatures.py with all DSPy Signature classes**
+
+```python
+# signatures.py
+
+import dspy
+from typing import Literal, Union
+
+class CreatorSignature(dspy.Signature):
+    """
+    ← THIS DOCSTRING IS THE PROMPT - Write comprehensive instructions here
+
+    === YOUR ROLE IN THE WORKFLOW ===
+    You are the Creator agent in a loop pattern. You generate initial content
+    that the Critic will review. You will see the Critic's feedback in your
+    conversation history when called for iteration.
+
+    === YOUR TASK ===
+    Generate creative content based on the input theme and any previous feedback.
+
+    [... Full prompt content goes here ...]
+
+    === QUALITY STANDARDS ===
+    - Be specific and actionable
+    - Incorporate critic feedback when available
+
+    === CONSTRAINTS ===
+    - Never ignore feedback
+    - Always improve on previous iteration
+    """
+
+    # Inputs
+    theme: str = dspy.InputField(desc="Content theme to write about")
+    history: dspy.History = dspy.InputField(desc="Conversation history with critic feedback")
+
+    # Outputs
+    content: str = dspy.OutputField(desc="Generated content")
+
+
+class CriticSignature(dspy.Signature):
+    """
+    ← THIS DOCSTRING IS THE PROMPT
+
+    === YOUR ROLE IN THE WORKFLOW ===
+    You are the Critic agent. Review content created by the Creator and provide
+    structured feedback. If content passes your criteria, approve it. Otherwise,
+    suggest specific improvements.
+
+    [... Full prompt content goes here ...]
+    """
+
+    content: str = dspy.InputField(desc="Content to review")
+    criteria: str = dspy.InputField(desc="Quality criteria")
+
+    feedback: str = dspy.OutputField(desc="Specific improvement suggestions")
+    passed: bool = dspy.OutputField(desc="True if content meets criteria")
+    score: int = dspy.OutputField(desc="Quality score 0-100")
+```
+
+**Step 2: Write rich docstrings**
+
+For each signature:
+1. Read the agent spec (e.g., `agents/creator.md`)
+2. Extract: Purpose, Key Tasks, Inputs, Outputs, Behavioral Requirements
+3. Write a comprehensive docstring following DSPy conventions:
+   - Start with workflow context (which stage, what comes before/after)
+   - Describe the specific task
+   - Include quality standards and rubrics
+   - List constraints and anti-patterns
+   - For enum fields, list valid values IN THE DOCSTRING
+4. Use XML-style section headers for clarity: `=== SECTION NAME ===`
+
+**Do NOT:**
+- ❌ Create prompts.py for DSPy projects
+- ❌ Spawn prompt-creator sub-agents for DSPy
+- ❌ Put prompts anywhere except signature docstrings
+- ❌ Use brief docstrings like "Extract data" - they must be comprehensive
+
+**Why this matters:**
+DSPy compiles signature docstrings directly into LLM prompts. A weak docstring = weak outputs. The docstring is the ONLY place to provide instructions to the agent. There is no separate prompt file.
+
 ### Phase 5: Utilities
 
 Create utils.py if shared utilities are needed.
@@ -491,10 +686,214 @@ LOG_LEVEL=INFO
 
 **Read from:** `team.md` → Dependencies → Environment Variables section
 
+### Phase 7: FastAPI Service Wrapper
+
+**CRITICAL: Every agent system needs a FastAPI wrapper for deployment.**
+
+Agent modules are pure DSPy/LangGraph code. The FastAPI layer provides:
+- HTTP endpoints for agent invocation
+- Request validation
+- Error handling and status codes
+- Async execution
+- Health checks
+
+**Create main.py in project root:**
+
+```python
+"""
+FastAPI service wrapper for [System Name].
+
+Provides HTTP endpoints for agent invocation with request validation,
+error handling, and async execution.
+"""
+
+import logging
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+from src.[team_name].team import [TeamClass]
+from src.[team_name].utils import get_shared_lm  # For DSPy
+# OR for LangGraph:
+# from src.[team_name].team import create_graph
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# Request/Response Models
+# =============================================================================
+
+class [SystemName]Request(BaseModel):
+    """Request model for [system] endpoint."""
+    # Define request fields based on team.py aforward() parameters
+    input_field: str
+    config: dict = {}
+
+
+class [SystemName]Response(BaseModel):
+    """Response model for [system] endpoint."""
+    # Define response fields based on team.py return Prediction
+    output_field: str
+    timings: dict = {}
+    error: str | None = None
+
+
+# =============================================================================
+# Lifespan Management
+# =============================================================================
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Initialize shared resources on startup, cleanup on shutdown.
+
+    For DSPy: Initialize singleton LM
+    For LangGraph: Initialize graph, checkpointer, etc.
+    """
+    # Startup
+    logger.info("[Startup] Initializing [System Name]...")
+
+    # DSPy: Initialize singleton LM
+    from src.[team_name].utils import get_shared_lm
+    app.state.shared_lm = get_shared_lm()
+    app.state.pipeline = [TeamClass](shared_lm=app.state.shared_lm)
+
+    # OR for LangGraph:
+    # app.state.graph = create_graph()
+
+    logger.info("[Startup] [System Name] ready")
+
+    yield
+
+    # Shutdown
+    logger.info("[Shutdown] Cleaning up resources...")
+
+
+# =============================================================================
+# FastAPI App
+# =============================================================================
+
+app = FastAPI(
+    title="[System Name] API",
+    description="[Brief description of what this system does]",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
+
+# =============================================================================
+# Health Check
+# =============================================================================
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for container orchestration."""
+    return {"status": "healthy", "service": "[system-name]"}
+
+
+# =============================================================================
+# Main Endpoint
+# =============================================================================
+
+@app.post("/[endpoint-name]", response_model=[SystemName]Response)
+async def run_[system_name](request: [SystemName]Request) -> [SystemName]Response:
+    """
+    Execute the [system name] pipeline.
+
+    Args:
+        request: Input data and configuration.
+
+    Returns:
+        Processed output with timings and error status.
+
+    Raises:
+        HTTPException: 500 if pipeline execution fails.
+    """
+    try:
+        logger.info("[API] Received request for [system name]")
+
+        # Execute pipeline
+        result = await app.state.pipeline.aforward(
+            input_field=request.input_field,
+            config=request.config,
+        )
+
+        # Check for pipeline-level errors
+        if hasattr(result, 'error') and result.error:
+            logger.error("[API] Pipeline failed: %s", result.error)
+            raise HTTPException(
+                status_code=500,
+                detail=f"Pipeline execution failed: {result.error}"
+            )
+
+        logger.info("[API] Request completed. Timings: %s", result.timings)
+
+        return [SystemName]Response(
+            output_field=result.output_field,
+            timings=result.timings,
+            error=None,
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("[API] Unexpected error")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal server error: {str(e)}"
+        )
+
+
+# =============================================================================
+# Run Server (Development)
+# =============================================================================
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info",
+    )
+```
+
+**Customize based on spec:**
+
+1. **Read team.md** → Inputs/Outputs sections
+2. **Define Request model** with fields matching `aforward()` parameters
+3. **Define Response model** with fields matching the return Prediction
+4. **Name the endpoint** based on the system purpose (e.g., `/generate-ideas`, `/summarize`, `/analyze`)
+5. **Add uvicorn dependency:** `uv add fastapi uvicorn[standard]`
+
+**Additional endpoints to consider:**
+
+For systems with status callbacks or multi-step flows:
+```python
+@app.post("/[system-name]/start")
+async def start_generation(request: StartRequest):
+    """Start async job, return job_id for status polling."""
+    # Queue job with background task
+    pass
+
+@app.get("/[system-name]/status/{job_id}")
+async def get_status(job_id: str):
+    """Check job status."""
+    # Return status + partial results if available
+    pass
+```
+
+**Only create if spec mentions async job patterns or status callbacks.**
+
 ---
 
 ## Task Dependencies
 
+**LangGraph:**
 ```
 team.py scaffold
        ↓
@@ -506,7 +905,26 @@ agent implementations (can be parallel per agent if tools complete)
        ↓
     utils.py (as needed)
        ↓
-requirements.txt + .env.example
+  .env.example
+       ↓
+    main.py (FastAPI wrapper)
+```
+
+**DSPy:**
+```
+signatures.py (write signature docstrings directly - NO prompt-creator sub-agents)
+       ↓
+    tools.py (if needed)
+       ↓
+    utils.py (singleton LM, formatters, retry wrapper)
+       ↓
+    models.py (Pydantic models if needed for complex outputs)
+       ↓
+    team.py (dspy.Module with Predict instances)
+       ↓
+  .env.example
+       ↓
+    main.py (FastAPI wrapper)
 ```
 
 ---
@@ -696,13 +1114,30 @@ Parallel Group 2 (after group 1 completes):
 
 ## File Generation Order
 
-**Per team (including nested):**
+**LangGraph (per team including nested):**
 
 1. **team.py scaffold** — Orchestration structure + placeholder agents
 2. **tools.py** — Tool definitions (if needed)
 3. **team.py full** — Fill in agent implementations
-4. **prompts.py** — All prompts (parallel generation)
+4. **prompts.py** — All prompts (parallel generation via prompt-creator sub-agents)
 5. **utils.py** — Shared utilities (if needed)
+6. **main.py** — FastAPI wrapper (root level only)
+
+**DSPy (per team including nested):**
+
+1. **signatures.py** — All DSPy Signature classes with comprehensive docstrings (prompts are HERE)
+2. **tools.py** — Tool functions returning dicts (if needed)
+3. **utils.py** — Singleton LM factories, formatters, retry wrapper (REQUIRED)
+4. **models.py** — Pydantic models for complex nested outputs (if needed)
+5. **team.py** — dspy.Module with Predict/ChainOfThought instances
+6. **main.py** — FastAPI wrapper (root level only)
+
+**Key DSPy differences:**
+- signatures.py is created FIRST and contains all prompts as docstrings
+- NO prompts.py file
+- NO prompt-creator sub-agents
+- utils.py is REQUIRED (not optional) — must have singleton LM + formatters
+- models.py only for complex Pydantic outputs, NOT for signatures
 
 ---
 

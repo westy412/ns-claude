@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Grep, Task, AskUserQuestion, Write, Edit
 
 ## Purpose
 
-Transform a discovery document (from the `brainstorm` skill) into a formal spec that can be executed by the autonomous Ralph loop.
+Transform a discovery document (from the `discovery` skill) into a formal spec that can be executed by the autonomous Ralph loop.
 
 **Goal:** Produce a spec detailed enough for Claude to work through autonomously, with clear work breakdown, acceptance criteria, and completion promise.
 
@@ -54,7 +54,7 @@ A Spec is for a **big piece of work** that gets broken into smaller chunks:
 ## When to Use This Skill
 
 Use this skill when:
-- You have a discovery document ready from brainstorming
+- You have a discovery document ready from the `discovery` skill
 - The work involves APIs, frontend, or general features
 - The work is a hybrid (agent system + supporting API/frontend)
 
@@ -73,9 +73,10 @@ This skill expects a discovery document containing:
 - Constraints
 - Scope (in/out/deferred)
 - Context (codebase, integrations)
+- **Reference files** (files consulted during discovery)
 - Open questions
 
-If no discovery document exists, suggest running the `brainstorm` skill first.
+If no discovery document exists, suggest running the `discovery` skill first.
 
 ---
 
@@ -110,6 +111,16 @@ Load these skills before starting:
 ## Architecture
 
 [Key decisions, patterns to follow, constraints. Optional for simple work.]
+
+## Reference Files
+
+<!-- Files consulted during discovery and spec creation. Helps executing agent understand context. -->
+
+**From Discovery:**
+- [file paths from discovery document's Reference Files section]
+
+**From Spec Research:**
+- [additional files examined during spec creation]
 
 ## Work Breakdown
 
@@ -199,6 +210,29 @@ Pull from:
 - Discovery doc's "Key Decisions"
 - Research findings (codebase patterns, reference projects)
 - User input on preferences
+
+### Reference Files
+
+**Required section.** Lists all files that informed this spec, enabling the executing agent to understand context.
+
+**Two sources:**
+1. **From Discovery** — Copy the reference files section from the discovery document
+2. **From Spec Research** — Add any additional files examined during spec creation
+
+**Format:**
+```markdown
+## Reference Files
+
+**From Discovery:**
+- `src/auth/handlers.py` — Existing auth patterns
+- `docs/api-design.md` — API design guidelines
+
+**From Spec Research:**
+- `src/middleware/rate_limit.py` — Rate limiting implementation to follow
+- `tests/auth/` — Existing auth test patterns
+```
+
+**Why this matters:** The agent executing the spec can quickly reference these files to understand patterns, conventions, and context without re-discovering them.
 
 ### Work Breakdown
 
@@ -615,6 +649,16 @@ Load these skills before starting:
 - Use FastAPI dependency injection for auth middleware
 - Auth middleware extracts user from token, adds to request state
 
+## Reference Files
+
+**From Discovery:**
+- `src/api/routes.py` — Existing API patterns
+- `src/models/user.py` — User model structure
+
+**From Spec Research:**
+- `src/middleware/` — Existing middleware patterns
+- `src/dependencies/` — FastAPI dependency injection examples
+
 ## Work Breakdown
 
 ### Backend API
@@ -686,6 +730,6 @@ Load these skills before starting:
 ## References
 
 - `DEVELOPMENT-WORKFLOW.md` — Full workflow context and spec template
-- `brainstorm` skill — Produces the discovery document this skill consumes
+- `discovery` skill — Produces the discovery document this skill consumes
 - `agent-spec-builder` skill — Handles pure agent work and hybrid handoffs
 - `project-management` skill — Can help create Linear issues from Work Breakdown

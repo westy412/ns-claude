@@ -514,12 +514,73 @@ Follow the "Starting from a Spec" workflow above.
 
 ---
 
-## Codebase Research
+## Subagent Usage (Context Window Management)
 
-When exploring the codebase to understand implementations, patterns, or architecture:
+### The Principle
 
-- ✅ **Use `codebase-researcher` agent** - Preferred for thorough code analysis
-- ❌ **Avoid `Explore` agent** - Less thorough, prefer codebase-researcher
+**Use subagents liberally. The main context window is precious.** Every file read, search result, and research output that lands in the main context window consumes tokens that should be reserved for reasoning, decision-making, and code generation. Subagents do the heavy lifting and return only the relevant findings.
+
+**Be suspicious of doing research directly.** If you're about to search files, read multiple files to understand patterns, do web research, or explore the codebase — that work almost always belongs in a subagent.
+
+### Why This Matters
+
+The main context window has a finite size. When it fills up, the conversation gets summarized and older context is lost. By delegating research and exploration to subagents:
+
+- The main context stays focused on the actual task
+- Research results come back summarized and relevant
+- Multiple research threads can run in parallel
+- You can do more work before hitting context limits
+
+### Available Subagents
+
+| Subagent | When to Use | What It Does |
+|----------|-------------|--------------|
+| `codebase-researcher` | Understanding existing code, finding patterns, exploring implementations, locating relevant files | Reads and analyzes code files across the codebase, returns structured findings about patterns, architecture, and conventions |
+| `web-researcher` | External docs, best practices, API references, current information, library comparisons | Searches the web using Perplexity tools and returns relevant findings with sources |
+| `code-reviewer` | Reviewing code quality, security vulnerabilities, best practices, maintainability | Analyzes code for issues and returns actionable review findings |
+
+### Rules
+
+1. **Parallelize aggressively.** If you need codebase context AND web research, launch both simultaneously in a single message with multiple Task tool calls. Never do them sequentially when they're independent.
+
+2. **Never search files directly when a subagent can do it.** Open-ended searches (finding patterns, understanding architecture, locating relevant code) should go through `codebase-researcher`, not through direct Grep/Glob calls that pollute the main context.
+
+3. **Use the right subagent for the job:**
+   - Codebase understanding, file exploration, pattern discovery → `codebase-researcher`
+   - External information, docs, best practices → `web-researcher`
+   - Code quality, security, review → `code-reviewer`
+
+4. **Surface findings, don't dump.** When subagent results return, extract what's relevant and integrate it naturally. Don't paste entire research outputs into the conversation.
+
+5. **Direct tools are fine for targeted reads.** If you already know the exact file and line range you need, use Read directly. Subagents are for exploration and research, not for reading a known file.
+
+### Example Patterns
+
+**Starting work on a feature (parallel subagents):**
+```
+Task tool (parallel):
+- subagent_type: "codebase-researcher" → "How are API endpoints structured in this repo? What patterns do existing routes follow?"
+- subagent_type: "web-researcher" → "Best practices for [technology] in 2026"
+```
+
+**Understanding before modifying:**
+```
+Task tool:
+- subagent_type: "codebase-researcher" → "How does the auth middleware work? What files are involved and what patterns do they use?"
+```
+
+**Reviewing work before committing:**
+```
+Task tool:
+- subagent_type: "code-reviewer" → "Review the changes in src/auth/ for security issues and code quality"
+```
+
+**NOT this (pollutes main context):**
+```
+❌ Grep for "auth" → 200 results dumped into context
+❌ Read 5 files directly → all file contents in main context
+❌ Glob for patterns → list of files you then read one by one
+```
 
 ---
 

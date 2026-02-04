@@ -202,8 +202,8 @@ if [ -n "$session_id" ]; then
     STATE=$(cat "$STATE_FILE" 2>/dev/null)
     case "$STATE" in
       "ready")
-        # Wide bright green block
-        state_indicator="\033[42;97;1m            ✓  READY            \033[0m"
+        # Wide bright green block (vivid green background)
+        state_indicator="\033[48;5;46;30;1m            ✓  READY            \033[0m"
         ;;
       "permission")
         # Wide bright yellow/orange block

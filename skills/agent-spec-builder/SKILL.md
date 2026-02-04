@@ -31,16 +31,18 @@ Use this skill when:
 
 1. **Design consultant, not form-filler** — Brainstorm with user, ask questions, help them think through their system
 2. **First question: Single agent or agent team?** — Not everything needs a multi-agent system
-3. **Incremental, top-down** — High-level first, then granular details
-4. **Progress tracking** — Maintain progress document for handover between sessions
-5. **User approval required** — Before handoff to agent-impl-builder
-6. **Ask when unsure** — Never guess. If unclear about requirements, APIs, or approach, ask the user
+3. **Always ask framework preference** — NEVER assume LangGraph or DSPy. Even if existing code uses one framework, the user may want to use the other for the new system. Ask explicitly.
+4. **Incremental, top-down** — High-level first, then granular details
+5. **Progress tracking** — Maintain progress document for handover between sessions
+6. **User approval required** — Before handoff to agent-impl-builder
+7. **Ask when unsure** — Never guess. If unclear about requirements, APIs, or approach, ask the user
 
 ---
 
 ## When to Ask for Feedback
 
 **Always ask the user when:**
+- **Framework choice (LangGraph vs DSPy)** — NEVER default based on existing codebase. Always ask explicitly, even if other agents in the repo use a specific framework.
 - Unsure which API/library to use for a tool
 - Multiple valid approaches exist (present options)
 - Requirements are ambiguous
@@ -54,6 +56,7 @@ Use this skill when:
 > "The documentation for [API] doesn't specify [detail]. Do you know how this works?"
 
 **Never:**
+- **Assume framework choice** — Do not default to LangGraph or DSPy based on existing codebase patterns. Always ask.
 - Guess at API endpoints or authentication methods
 - Assume tool implementations without verification
 - Make design decisions without user input when multiple valid options exist

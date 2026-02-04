@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Hand over context from a previous session to continue building implementation from a completed agent specification",
+  "goal_categories": {
+    "session_handover": 1
+  },
+  "outcome": "partially_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "moderately_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "proactive_help",
+  "brief_summary": "User handed over session context for implementing an agent spec; Claude began reading spec files and loading skills but the session ended before implementation started.",
+  "session_id": "e2e0c2a4-8405-417a-84d0-57d4f6e5f5dc"
+}

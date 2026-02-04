@@ -626,6 +626,13 @@ Automate deployments on push to main using GitHub Actions with Workload Identity
 
 ### Workflow Structure
 
+**Two workflows are recommended:**
+
+1. **CI workflow** (`.github/workflows/ci.yml`) — Runs on pull requests targeting `main`. Validates the code builds and passes checks before merge.
+2. **Deploy workflow** (`.github/workflows/deploy.yml`) — Runs on push to `main` (i.e., after merge). Builds, pushes, and deploys to Cloud Run.
+
+#### Deploy Workflow Steps (push to main)
+
 1. Checkout code
 2. Authenticate to GCP using WIF (keyless)
 3. Configure Docker for GCR
@@ -633,6 +640,84 @@ Automate deployments on push to main using GitHub Actions with Workload Identity
 5. Push image to GCR
 6. Deploy to Cloud Run (image only - env vars managed in console)
 7. Verify deployment (health check)
+
+### CI Workflow (Pull Request Checks)
+
+Create `.github/workflows/ci.yml` to run build validation on PRs. This catches build failures before they reach `main` and trigger a broken deploy.
+
+**What to include depends on the project:**
+
+| Language | Steps |
+|----------|-------|
+| **Next.js / Node.js** | Install deps → Lint → Build |
+| **Python (FastAPI)** | Install deps → Lint (ruff) → Type check (mypy/pyright, optional) → Test (pytest) |
+| **Go** | Lint (golangci-lint) → Test → Build |
+
+#### Example: Next.js CI Workflow
+
+```yaml
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        env:
+          # Placeholder values for NEXT_PUBLIC_* vars required at build time
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder
+          NEXT_PUBLIC_API_BASE_URL: https://placeholder.example.com
+        run: npm run build
+```
+
+**Note for Next.js:** `NEXT_PUBLIC_*` variables must be present at build time or the build will fail. Use placeholder values in CI — the real values are only needed for the production deploy.
+
+#### Example: Python (FastAPI) CI Workflow
+
+```yaml
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Test
+        run: uv run pytest
+```
 
 ### Adding a New Repo to Existing WIF
 

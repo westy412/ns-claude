@@ -5,7 +5,7 @@
       "repo": "anthropics/claude-code"
     },
     "installLocation": "/Users/georgewestbrook/.claude/plugins/marketplaces/claude-code-plugins",
-    "lastUpdated": "2026-02-02T13:09:58.498Z"
+    "lastUpdated": "2026-02-04T15:50:54.450Z"
   },
   "perplexity-mcp-server": {
     "source": {
@@ -21,7 +21,7 @@
       "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "/Users/georgewestbrook/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-02-02T12:47:21.301Z"
+    "lastUpdated": "2026-02-04T15:50:12.801Z"
   },
   "claude-hud": {
     "source": {

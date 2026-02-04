@@ -26,8 +26,7 @@
 # Agent types (framework-dependent):
 #   LangGraph: text-agent, message-agent, structured-output-agent,
 #              text-tool-agent, message-tool-agent, structured-output-tool-agent
-#   DSPy:      basic-agent, reasoning-agent, conversational-agent,
-#              tool-agent, text-agent
+#   DSPy:      basic-agent, reasoning-agent, conversational-agent, tool-agent
 #
 # Roles: researcher, critic-reviewer, router-classifier, creative-generator,
 #        planner-strategist, summarizer-synthesizer, conversational-assistant,

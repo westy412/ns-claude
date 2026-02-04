@@ -1,0 +1,18 @@
+{
+  "underlying_goal": "Fix a bug where PDF generation progress state is lost when users navigate away from the LinkedIn carousel page, causing users to repeatedly click regenerate",
+  "goal_categories": {
+    "bug_fix_implementation": 1,
+    "issue_tracking_creation": 1
+  },
+  "outcome": "partially_achieved",
+  "user_satisfaction_counts": {
+    "likely_satisfied": 2
+  },
+  "claude_helpfulness": "very_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "good_debugging",
+  "brief_summary": "User wanted to fix a bug where carousel PDF generation state was lost on navigation; Claude diagnosed the issue, created a Linear issue, but the session ended before implementation was completed.",
+  "session_id": "84977ab5-ada4-4eba-ab67-800348e13d85"
+}

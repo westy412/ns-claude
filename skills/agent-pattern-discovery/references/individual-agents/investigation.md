@@ -116,7 +116,7 @@ def agent_name(state: StateType) -> StateType:
 
 ## DSPy Agent Investigation
 
-> **⚠️ UNVALIDATED:** The DSPy patterns and examples below are based on framework documentation and model knowledge. They have NOT been validated against real codebase implementations. When analyzing DSPy codebases, verify patterns against actual code before documenting.
+> **Note:** DSPy uses a simpler taxonomy than LangGraph (4 types instead of 6). See the DSPy-specific type indicators below.
 
 ### Finding DSPy Agents
 
@@ -162,26 +162,32 @@ class AgentModule(dspy.Module):
 | Predictor Type | `dspy.Predict`, `dspy.ChainOfThought`, `dspy.ReAct` |
 | Tools | `dspy.ReAct` with tool definitions |
 
-### DSPy Type Indicators (6-Type Taxonomy)
+### DSPy Type Indicators (4-Type Taxonomy)
 
-> **⚠️ Note:** These indicators are theoretical and need validation against real DSPy implementations.
+DSPy uses a simpler taxonomy than LangGraph. All DSPy outputs are Signature-defined, so there is no text vs structured distinction.
 
 | Type | Code Indicators |
 |------|-----------------|
-| Text Agent | `dspy.Predict(Signature)`, single string `OutputField` |
-| Message Agent | String history field, conversational signature |
-| Structured Output Agent | `dspy.TypedPredictor`, multiple typed `OutputField`s |
-| Text + Tool Agent | `dspy.ReAct(Signature, tools=[...])`, string output |
-| Message + Tool Agent | `dspy.ReAct` with history handling |
-| Structured Output + Tool Agent | `dspy.ReAct` with typed output fields |
+| Basic Agent | `dspy.Predict(Signature)` - any number of typed `OutputField`s |
+| Reasoning Agent | `dspy.ChainOfThought(Signature)` - adds reasoning trace |
+| Conversational Agent | `dspy.History` used as input, multi-turn conversation tracking |
+| Tool Agent | `dspy.ReAct(Signature, tools=[...])` - external tool calling |
 
 **DSPy Predictor Types:**
-| Predictor | Use Case |
-|-----------|----------|
-| `dspy.Predict` | Simple single-turn (Text Agent) |
-| `dspy.ChainOfThought` | Reasoning tasks (any output type) |
-| `dspy.TypedPredictor` | Structured output with Pydantic |
-| `dspy.ReAct` | Tool-using agents (any output type) |
+| Predictor | Use Case | Agent Type |
+|-----------|----------|------------|
+| `dspy.Predict` | Extraction, classification, evaluation | Basic Agent |
+| `dspy.ChainOfThought` | Creative synthesis, complex reasoning | Reasoning Agent |
+| `dspy.ReAct` | Tool-calling workflows | Tool Agent |
+
+**Key DSPy Patterns to Look For:**
+| Pattern | What It Indicates |
+|---------|-------------------|
+| `shared_lm` / `set_lm()` | Singleton LM pattern (critical for concurrency) |
+| `dspy.History(messages=[])` | Conversational agent with multi-turn tracking |
+| `Union[Literal[...], str]` | Large enum validation with fuzzy matching safety net |
+| `format_*()` functions | Formatter pattern between pipeline stages |
+| `call_with_retry()` | Async retry wrapper with exponential backoff |
 
 ### DSPy-Specific Patterns
 

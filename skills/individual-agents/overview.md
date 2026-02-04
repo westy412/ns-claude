@@ -52,9 +52,9 @@ Is output machine-parseable (JSON, typed)?
 | Framework | Coverage | Validation Status |
 |-----------|----------|-------------------|
 | LangGraph | Full (all 6 types documented) | **Validated** - grounded in analyzed codebase examples |
-| DSPy | Partial (signatures documented, modules vary) | **⚠️ Unvalidated** - based on model knowledge, not real code |
+| DSPy | Full (4 types + alias documented) | **Validated** - grounded in ns-cold-outreach-workforce codebase |
 
-> **Note on DSPy:** The DSPy examples in this documentation are theoretical and based on framework documentation. They have NOT been validated against real codebase implementations. When working with DSPy, verify patterns against actual codebases before production use.
+> **Note on DSPy:** DSPy uses a different, simpler taxonomy than LangGraph. In DSPy, all outputs are defined via Signatures with typed fields, so the LangGraph distinction between Text/Message/Structured doesn't apply. See the DSPy Patterns section below.
 
 ---
 
@@ -169,120 +169,109 @@ return {"output": result.model_dump()}
 
 ## DSPy Patterns
 
-> **⚠️ UNVALIDATED:** DSPy implementations are based on framework documentation and have NOT been validated against real codebases.
+DSPy uses a simpler, DSPy-native taxonomy based on **module behavior** rather than output format. In DSPy, all outputs are defined via Signatures with typed fields, so the LangGraph distinction between Text/Message/Structured doesn't apply.
 
-### Text Agent
-**What:** Single prediction returning text output using DSPy signatures.
+### Basic Agent
+**What:** Single-turn prediction using `dspy.Predict(Signature)`. The core DSPy building block.
 
-**Pattern:**
-```python
-class TextGenerationSignature(dspy.Signature):
-    """Generate text output based on the input context."""
-    context: str = dspy.InputField(desc="The context and requirements")
-    output: str = dspy.OutputField(desc="The generated text response")
-
-class TextAgent(dspy.Module):
-    def __init__(self):
-        self.generator = dspy.Predict(TextGenerationSignature)
-```
-
-**Documentation:** [dspy/text-agent.md](./dspy/text-agent.md)
-
----
-
-### Message Agent
-**What:** Conversational agent maintaining history as formatted text.
+**Use when:** Extraction, classification, ranking, evaluation - any task with clear input/output mapping.
 
 **Pattern:**
 ```python
-class ConversationSignature(dspy.Signature):
-    """Generate a conversational response based on chat history."""
-    history: str = dspy.InputField(desc="The conversation history")
-    current_message: str = dspy.InputField(desc="The latest user message")
-    response: str = dspy.OutputField(desc="The assistant's response")
+class ExtractorSignature(dspy.Signature):
+    """Extract company intelligence from website content."""
+    company_name: str = dspy.InputField()
+    website_content: str = dspy.InputField()
+
+    overview: str = dspy.OutputField(description="2-3 sentence overview")
+    industry: Literal["B2B SaaS", "Healthcare", "Other"] = dspy.OutputField()
+
+class ExtractorAgent(dspy.Module):
+    def __init__(self, shared_lm):
+        self.predictor = dspy.Predict(ExtractorSignature)
+        self.predictor.set_lm(shared_lm)
 ```
 
-**Documentation:** [dspy/message-agent.md](./dspy/message-agent.md)
+**Documentation:** [dspy/basic-agent.md](./dspy/basic-agent.md)
 
 ---
 
-### Structured Output Agent
-**What:** Agent returning typed/validated output using TypedPredictor.
+### Reasoning Agent
+**What:** Uses `dspy.ChainOfThought(Signature)` to show reasoning before producing output.
+
+**Use when:** Creative synthesis, complex decisions, multi-input reasoning where visible thinking improves quality.
 
 **Pattern:**
 ```python
-class RankingSignature(dspy.Signature):
-    """Rank items by relevance."""
-    context: str = dspy.InputField(desc="The context for ranking")
-    rankings: List[dict] = dspy.OutputField(desc="List of ranked items")
+class CreatorSignature(dspy.Signature):
+    """Create personalized outreach messages."""
+    requirements: str = dspy.InputField()
+    context: str = dspy.InputField()
 
-class StructuredAgent(dspy.Module):
-    def __init__(self):
-        self.ranker = dspy.TypedPredictor(RankingSignature)
+    response: str = dspy.OutputField(description="Reasoning and approach")
+    draft: str = dspy.OutputField(description="The created content")
+
+class CreatorAgent(dspy.Module):
+    def __init__(self, shared_lm):
+        self.creator = dspy.ChainOfThought(CreatorSignature)
+        self.creator.set_lm(shared_lm)
 ```
 
-**Documentation:** [dspy/structured-output-agent.md](./dspy/structured-output-agent.md)
+**Documentation:** [dspy/reasoning-agent.md](./dspy/reasoning-agent.md)
 
 ---
 
-### Text + Tool Agent
-**What:** ReAct agent using tools and returning text output.
+### Conversational Agent
+**What:** Multi-turn agent using `dspy.History` for conversation context tracking.
+
+**Use when:** Iterative loops, critic-iterator patterns, any workflow where agents build on previous exchanges.
+
+**Pattern:**
+```python
+critic_history = dspy.History(messages=[])
+
+result = await self.critic.acall(
+    content=content,
+    history=critic_history
+)
+
+critic_history.messages.append({
+    "role": "assistant",
+    "content": result.feedback
+})
+```
+
+**Documentation:** [dspy/conversational-agent.md](./dspy/conversational-agent.md)
+
+---
+
+### Tool Agent
+**What:** Agent that calls external tools using `dspy.ReAct` or manual tool orchestration.
+
+**Use when:** Searching, API calls, database queries, or any external action.
 
 **Pattern:**
 ```python
 class ResearchSignature(dspy.Signature):
-    """Research using tools and provide summary."""
-    query: str = dspy.InputField(desc="The research query")
-    summary: str = dspy.OutputField(desc="Summary of findings")
+    """Research a topic using available tools."""
+    query: str = dspy.InputField()
+    summary: str = dspy.OutputField()
 
-class TextToolAgent(dspy.Module):
-    def __init__(self):
-        tools = [search_database, get_current_data]
+class ResearchAgent(dspy.Module):
+    def __init__(self, shared_lm):
+        tools = [search_tool, fetch_tool]
         self.agent = dspy.ReAct(ResearchSignature, tools=tools, max_iters=5)
+        self.agent.set_lm(shared_lm)
 ```
 
-**Documentation:** [dspy/text-tool-agent.md](./dspy/text-tool-agent.md)
+**Documentation:** [dspy/tool-agent.md](./dspy/tool-agent.md)
 
 ---
 
-### Message + Tool Agent
-**What:** Conversational ReAct agent with tool access.
+### Text Agent (Alias)
+**What:** Alias for Basic Agent. In DSPy, there is no distinction between "text" and "structured" output - all outputs use Signatures.
 
-**Pattern:**
-```python
-class ConversationalAgentSignature(dspy.Signature):
-    """Converse while using tools to complete tasks."""
-    history: str = dspy.InputField(desc="The conversation history")
-    current_message: str = dspy.InputField(desc="Current user message")
-    response: str = dspy.OutputField(desc="Your response")
-
-class MessageToolAgent(dspy.Module):
-    def __init__(self):
-        tools = [search_tool, submit_tool]
-        self.agent = dspy.ReAct(ConversationalAgentSignature, tools=tools)
-```
-
-**Documentation:** [dspy/message-tool-agent.md](./dspy/message-tool-agent.md)
-
----
-
-### Structured Output + Tool Agent
-**What:** ReAct agent returning typed output after tool use.
-
-**Pattern:**
-```python
-class StructuredAnalysisSignature(dspy.Signature):
-    """Analyze using tools and return structured findings."""
-    query: str = dspy.InputField(desc="The analysis query")
-    analysis: AnalysisResult = dspy.OutputField(desc="Structured result")
-
-class StructuredToolAgent(dspy.Module):
-    def __init__(self):
-        tools = [search, verify]
-        self.researcher = dspy.ReAct(StructuredAnalysisSignature, tools=tools)
-```
-
-**Documentation:** [dspy/structured-output-tool-agent.md](./dspy/structured-output-tool-agent.md)
+**Documentation:** [dspy/text-agent.md](./dspy/text-agent.md) (redirects to basic-agent)
 
 ---
 

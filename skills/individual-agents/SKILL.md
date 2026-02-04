@@ -205,11 +205,11 @@ DSPy uses a different taxonomy based on module behavior rather than output forma
 
 | Agent Type | Reference | Use When |
 |------------|-----------|----------|
-| Basic Agent | `dspy/basic-agent.md` | Simple input→output, no reasoning trace needed |
-| Reasoning Agent | `dspy/reasoning-agent.md` | Needs chain-of-thought or multi-step reasoning |
-| Conversational Agent | `dspy/conversational-agent.md` | Multi-turn dialogue, conversation history |
+| Basic Agent | `dspy/basic-agent.md` | Extraction, classification, ranking - any single-turn prediction |
+| Reasoning Agent | `dspy/reasoning-agent.md` | Creative synthesis, complex decisions needing visible reasoning |
+| Conversational Agent | `dspy/conversational-agent.md` | Multi-turn loops, critic-iterator patterns with dspy.History |
 | Tool Agent | `dspy/tool-agent.md` | Needs to call external tools (ReAct pattern) |
-| Text Agent | `dspy/text-agent.md` | Long-form text generation |
+| Text Agent *(alias)* | `dspy/text-agent.md` | Redirects to Basic Agent - DSPy has no text vs structured distinction |
 
 ---
 

@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Complete analytics DB schema validation by fixing SQL queries in a spec file to match the actual database schema",
+  "goal_categories": {
+    "code_fix": 1
+  },
+  "outcome": "partially_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "very_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "correct_code_edits",
+  "brief_summary": "User handed over a session to validate/fix analytics DB schema SQL queries in a spec file; Claude identified schema mismatches and began fixing them but was interrupted before completion.",
+  "session_id": "7988afab-2a7f-4190-9fef-1fac0aba4305"
+}
