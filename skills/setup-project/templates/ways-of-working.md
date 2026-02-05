@@ -467,6 +467,100 @@ Follow the "Starting from a Spec" workflow above.
 
 ---
 
+## Session Handovers
+
+### Philosophy
+
+**State lives in Git and Linear, not in handover messages.** The handover message is a pointer telling the next session where to look—it is NOT the source of truth. The next session reads reality (spec + Linear + git), not the handover.
+
+### Before Handover (Persist State)
+
+Before creating a handover, ensure all state is properly persisted:
+
+| What | Where | How |
+|------|-------|-----|
+| Code changes | Git | Commit with proper format, reference Linear issue |
+| Task progress | Linear issue | Check off completed tasks in description |
+| Session summary | Linear issue | Add progress comment with what was done |
+| Issue state | Linear issue | Update state (In Progress → In Review if PR created) |
+| Phase completion | Spec file | Check off Work Breakdown item, commit spec |
+
+**Rule:** If it's not in Git or Linear, it doesn't exist for the next session.
+
+### Handover Message Format
+
+The `/handover` command generates this structure (output to chat, NOT saved to file):
+
+```
+## Session Handover
+
+### Context
+- **Spec**: [path to spec file, or "No spec"]
+- **Linear Issue**: [NS-XXX: Title] or "None"
+- **Branch**: [current branch]
+
+### What Was Done
+[2-3 bullet points of accomplishments]
+
+### Git State
+[Recent commits: git log --oneline -5]
+
+### Next Task
+[First unchecked task in Linear issue, or next phase]
+
+### Blockers / Open Questions
+[Any HUMAN_NEEDED items or questions]
+
+### How to Resume
+1. Read the spec: `[spec path]`
+2. Read Linear issue: `[NS-XXX]`
+3. Check git log: `git log --oneline -10`
+4. Continue from: [specific task or phase]
+```
+
+### Resuming from a Handover
+
+**When starting a new session after a handover:**
+
+1. **Read reality, not the handover message:**
+   - The handover tells you WHERE to look
+   - The actual state is in Git + Linear + spec
+
+2. **Follow the "How to Resume" pointers:**
+   ```bash
+   # Read the spec (if one exists)
+   cat specs/[name].md
+
+   # Check git state
+   git log --oneline -10
+   git status
+
+   # Read Linear issue for current tasks
+   mcp__linear__get_issue({ id: "NS-XXX" })
+   ```
+
+3. **Find current work:**
+   - In spec: First unchecked Work Breakdown item
+   - In Linear: First unchecked task in Implementation Steps
+   - In git: Recent commits show what was just done
+
+4. **Continue the work loop** (spec → Linear → work → commit → update)
+
+### Project Setup Requirements for Handovers
+
+For handovers to work effectively, the project CLAUDE.md must have:
+
+| Required | Why |
+|----------|-----|
+| Linear Team ID | To fetch/update issues |
+| Linear Project ID | To create issues in the right place |
+| Specs location | So next session knows where to find specs |
+| Branch conventions | So commits go to the right place |
+
+**If these are missing:** Use the setup-project skill to add them.
+
+---
+
 ## Critical Rules
 
 ### MUST DO

@@ -14,9 +14,12 @@ Use this skill when:
 - Setting up a new repository for Claude Code
 - Bootstrapping an existing repo that lacks a CLAUDE.md
 - Updating a repo's CLAUDE.md with standard Ways of Working
+- **Auditing an existing project** to ensure it has all required sections (Linear IDs, Session Handovers, issue templates)
+- A handover failed because project setup was incomplete
 
 Skip this skill when:
 - You're just doing quick edits, not full project setup
+- The project already has complete CLAUDE.md with all required sections
 
 ## Prerequisites
 
@@ -63,7 +66,24 @@ Gather information about the repository:
    - Anything about workflow/phases/how work gets done
    - Anything about commit message format
    - Rule hierarchy sections
-2. **Identify tech stack:**
+
+   **Sections to AUDIT for completeness:**
+   - Project Configuration (Linear Team ID, Project ID)
+   - Session Handovers section
+   - Subagent Usage guidelines
+
+2. **Audit existing setup** - Check what's missing:
+
+   | Check | Location | If Missing |
+   |-------|----------|------------|
+   | Linear Team ID | CLAUDE.md Project Configuration | Ask user, add it |
+   | Linear Project ID | CLAUDE.md Project Configuration | Ask user, add it |
+   | Ways of Working section | CLAUDE.md | Add full section |
+   | Session Handovers section | CLAUDE.md | Add to Ways of Working |
+   | Issue templates | `.claude/templates/linear-issues/` | Create directory and templates |
+   | Specs directory | `/specs/` | Note if missing (don't create empty) |
+
+3. **Identify tech stack:**
    - Check for `package.json` (Node.js/JS/TS)
    - Check for `pyproject.toml`, `requirements.txt`, `uv.lock` (Python)
    - Check for `go.mod` (Go)
@@ -152,6 +172,38 @@ Build the CLAUDE.md with this structure:
 
 **Important:** The Ways of Working template includes the Project Configuration section with Linear placeholders. Insert the entire template contents, not a reference to it.
 
+**For EXISTING repos needing updates (partial CLAUDE.md):**
+
+Some repos may have an older or incomplete CLAUDE.md. Run an audit:
+
+1. **Check for missing sections:**
+
+   | Section | How to Check | Action if Missing |
+   |---------|--------------|-------------------|
+   | Ways of Working | Look for `## Ways of Working` heading | Add full template |
+   | Session Handovers | Look for `## Session Handovers` heading | Add section (part of Ways of Working) |
+   | Project Configuration | Look for Linear Team ID/Project ID | Ask user for values, add section |
+   | Subagent Usage | Look for `## Subagent Usage` heading | Add section (part of Ways of Working) |
+
+2. **Check for outdated sections:**
+   - If Ways of Working exists but is missing Session Handovers → Add the section
+   - If commit format doesn't match current standard → Update it
+   - If Linear workflow states are outdated → Update them
+
+3. **Check for missing files:**
+
+   | File/Directory | Action if Missing |
+   |----------------|-------------------|
+   | `.claude/templates/linear-issues/feature.md` | Create from template |
+   | `.claude/templates/linear-issues/bug.md` | Create from template |
+   | `.claude/templates/linear-issues/refactor.md` | Create from template |
+   | `.claude/templates/linear-issues/architecture.md` | Create from template |
+
+4. **Report gaps to user:**
+   - List what's missing
+   - Propose the additions
+   - Get approval before making changes
+
 ### Phase 4: Get User Approval
 
 Before writing anything:
@@ -177,10 +229,32 @@ After approval:
 
 ### Phase 6: Confirm Setup
 
-Report back to user:
-- CLAUDE.md created/updated
-- Templates copied to `.claude/templates/linear-issues/`
-- Any sections that need manual completion (e.g., Linear IDs)
+Report back to user with a **completeness checklist**:
+
+```
+## Setup Complete
+
+### CLAUDE.md
+- [x] Project-specific sections (overview, tech stack, directory structure)
+- [x] Ways of Working section (full template)
+- [x] Session Handovers section
+- [x] Project Configuration with Linear Team ID: {{ID}}
+- [x] Project Configuration with Linear Project ID: {{ID}}
+- [x] Subagent Usage guidelines
+
+### Issue Templates
+- [x] .claude/templates/linear-issues/feature.md
+- [x] .claude/templates/linear-issues/bug.md
+- [x] .claude/templates/linear-issues/refactor.md
+- [x] .claude/templates/linear-issues/architecture.md
+
+### Ready for Handovers
+- [x] Linear IDs configured (can create/update issues)
+- [x] Session Handovers documented (next session knows how to resume)
+- [x] Git conventions documented (commits link to Linear)
+```
+
+If any items are incomplete, note what the user needs to provide (e.g., "Need Linear Team ID - run `mcp__linear__list_teams` to find it").
 
 ## Templates
 
