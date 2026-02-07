@@ -101,19 +101,21 @@ Child skills load into YOUR context window. Sub-agents run in their OWN context 
 |-----------|-------------|------------|-------------|-------|
 | `agent-type-advisor` | Analyzes agents, proposes types with reasoning | `individual-agents` | Phase 3a — agent type analysis | Opus |
 | `prompt-config-advisor` | Analyzes agents, proposes prompt configs with reasoning | `prompt-engineering` | Phase 3b — prompt config analysis (AFTER types validated) | Opus |
-| `agent-spec-writer` | Writes complete agent spec files from validated decisions | `individual-agents`, `prompt-engineering` | Phase 3c — spec file writing (AFTER all decisions validated) | Opus |
+| `team-spec-writer` | Writes team.md and agent-config.yaml with agent placeholders | `agent-teams` | Phase 3c — team spec writing (AFTER all decisions validated) | Opus |
+| `agent-spec-writer` | Writes complete agent spec files from validated decisions | `individual-agents`, `prompt-engineering` | Phase 3d — agent spec writing (fills in placeholders from team-spec-writer) | Opus |
 
 **Phase 3 execution flow:**
 1. **Spawn agent-type-advisor** for all agents → returns proposals → present table to user → user validates → save to progress.md
 2. **Spawn prompt-config-advisor** (can batch large teams) → returns proposals → present table to user → user validates → save to progress.md
-3. **Spawn agent-spec-writer** (can spawn multiple in parallel, each handling one agent or a batch) → writes spec files → confirms completion
+3. **Spawn team-spec-writer** → writes team.md, agent-config.yaml, and agent placeholder files → confirms completion
+4. **Spawn agent-spec-writer** (5-6 in parallel per batch) → fills in agent spec files → confirms completion
 
 **Batching strategy for agent-spec-writer:**
 - **1-3 agents:** One spec-writer for all
 - **4-8 agents:** One spec-writer per 2-3 agents (spawn multiple in parallel)
 - **9+ agents:** One spec-writer per agent (spawn up to 5-6 in parallel per batch, then next batch)
 
-All advisors run sequentially (type → prompt config → write). Within the write phase, multiple spec-writers can run in parallel.
+All advisors run sequentially (type → prompt config). Then team-spec-writer creates structure. Then agent-spec-writers fill in details (can run in parallel).
 
 ### How Sub-Agents Work
 
@@ -265,7 +267,64 @@ Both advisors run in parallel, each analyzing their batch. Merge the results whe
 5. Write validated prompt configs to progress.md
 6. THEN proceed to Step 3
 
-### Step 3: Spawn agent-spec-writer (can parallelize)
+### Step 3: Spawn team-spec-writer
+
+**When:** AFTER both type and prompt config are validated and saved to progress.md.
+
+**Example spawn:**
+
+```
+Task tool → subagent_type: "team-spec-writer"
+Prompt:
+"Write the team spec files for [team-name].
+
+## Validated Decisions
+- Pattern: [pipeline/router/loop/fan-in-fan-out]
+- Framework: [langgraph/dspy]
+- Pattern reference: [path to agent-teams/[framework]/[pattern].md]
+
+## Agent Roster (with validated types and prompt configs)
+[For EACH agent:]
+
+### [Agent Name]
+- Type: [validated type]
+- Framework: [framework]
+- Type reference: [path to individual-agents reference]
+- Prompt framework: [single-turn/conversational]
+- Prompt role: [role]
+- Prompt modifiers: [list]
+- LLM provider: [provider]
+- LLM model: [model]
+- Reasoning: [yes/no]
+- Temperature: [value]
+- Purpose: [brief description]
+- Key tasks: [list]
+- Receives input from: [upstream]
+- Sends output to: [downstream]
+
+## Reference Files
+- Progress file: [path to spec/progress.md]
+- Discovery document: [path if exists]
+- Team template: ~/.claude/skills/agent-spec-builder/templates/team.md
+- Agent-config template: ~/.claude/skills/agent-spec-builder/templates/agent-config.yaml
+- Output directory: [path to spec/[team-name]/]
+
+## Instructions
+Read all reference files.
+Write team.md and agent-config.yaml following templates exactly.
+Create agents/ directory with placeholder files (frontmatter only + TODO comment).
+Use validated decisions - do not re-decide.
+Pull orchestration details from the pattern reference file.
+Confirm completion when done."
+```
+
+**After it returns:**
+1. Verify team.md and agent-config.yaml were created
+2. Verify agent placeholder files exist
+3. Update progress.md to mark team spec as complete
+4. THEN proceed to Step 4
+
+### Step 4: Spawn agent-spec-writer (can parallelize)
 
 **When:** AFTER both type and prompt config are validated and saved to progress.md.
 
