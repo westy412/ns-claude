@@ -82,11 +82,17 @@ Output the following in chat (do NOT save to a file):
 ### Blockers / Open Questions
 [Any HUMAN_NEEDED items or questions for the user]
 
+### Skills/Sub-Agents Used
+[ONLY include this section if skills or sub-agents were actually used in this session]
+[List the specific skills that were invoked or sub-agents that were spawned]
+[DO NOT include this section if no skills/sub-agents were used]
+
 ### How to Resume
 1. Read the spec: `[spec path]`
 2. Read Linear issue: `[NS-XXX]`
 3. Check git log: `git log --oneline -10`
 4. Continue from: [specific task or phase]
+5. [ONLY if skills were used] Consider using: [specific skill/sub-agent] for [specific next step]
 ```
 
 ---
@@ -119,5 +125,6 @@ Analyze the provided argument `$ARGUMENTS`:
 3. **Update Linear before handover** - Task checkboxes and comments persist
 4. **Keep handover concise** - It's a pointer, not the source of truth
 5. **Tell next session WHERE to look** - Not everything that was discussed
+6. **Only mention skills if used** - Don't suggest skills/sub-agents unless they were used in this session or are clearly the next step based on work completed
 
 $ARGUMENTS

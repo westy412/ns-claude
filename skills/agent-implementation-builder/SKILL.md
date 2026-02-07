@@ -37,6 +37,7 @@ Use this skill when:
 5. **Only create what's needed** — Don't generate empty files
 6. **Framework cheat sheets first** — Read framework rules before writing code
 7. **Ask when unsure** — Never guess. If spec is unclear or documentation is missing, ask the user
+8. **Context-conscious loading** — Load child skills one at a time, only at the phase that needs them. The framework cheatsheet is the only reference to load upfront (Phase 0). All other skills are loaded just-in-time per phase. Persist progress to progress.md before each new skill load.
 
 ---
 
@@ -90,28 +91,31 @@ Cheat sheets contain critical rules, patterns, and anti-patterns for each framew
 
 ---
 
-## Child Skills (MANDATORY)
+## Child Skills (Just-in-Time Loading)
 
-**These skills are MANDATORY. You MUST invoke them using the Skill tool at the specified points.**
+**CONTEXT BUDGET RULE: Only invoke ONE child skill at a time, and ONLY when you reach the phase that needs it.** The only upfront reading is the framework cheatsheet (Phase 0, Step 3). Everything else is loaded just-in-time.
 
-| Skill | When | What It Provides |
-|-------|------|------------------|
-| `agent-teams` | Phase 1 - Team Scaffold | Team orchestration patterns, graph structure examples |
-| `individual-agents` | Phase 3 - Agent Implementations | Agent implementation patterns per type |
-| `prompt-engineering` | Phase 4 - Prompts | Invoked by prompt-creator sub-agent |
-| `tools-and-utilities` | Phase 2 - Tools & Utilities | Tool implementation patterns, utility organization |
+| Skill | Invoke At | What It Provides |
+|-------|-----------|------------------|
+| `agent-teams` | Phase 1 (Team Scaffold) | Team orchestration patterns, graph structure examples |
+| `tools-and-utilities` | Phase 2 (Tools) | Tool implementation patterns, utility organization |
+| `individual-agents` | Phase 3 (Agent Implementations) | Agent implementation patterns per type |
+| `prompt-engineering` | Phase 4 (Prompts) | Invoked by prompt-creator sub-agent (LangGraph only) |
 
-**How to invoke:**
+**How to invoke (one at a time):**
 ```
 Skill tool → skill: "agent-teams"
 ```
 
-**Why these are mandatory:**
-- Without `agent-teams`: You'll implement wrong orchestration patterns
-- Without `individual-agents`: You'll miss type-specific implementation details
-- Without `tools-and-utilities`: You'll create broken tools or misplace utilities
+**Loading rules:**
+1. Phase 0: Read ONLY the framework cheatsheet. DO NOT invoke any child skills yet.
+2. At each subsequent phase, invoke the ONE skill needed for that phase.
+3. Before invoking a new child skill, update progress.md with all completed work.
+4. After completing a phase, update progress.md before proceeding.
+5. If context is large after completing a phase, consider a session handover before loading the next skill.
+6. For Phase 4 (LangGraph): `prompt-engineering` is loaded by prompt-creator sub-agents in their own context, NOT by the main agent.
 
-**If you skip these skills, the implementation will be incorrect or incomplete.**
+**Why just-in-time:** Each child skill loads hundreds to thousands of lines. Loading all four upfront alongside the framework cheatsheet and spec files will exhaust the context window, leaving no room for actual code generation.
 
 ---
 
@@ -360,6 +364,17 @@ Based on the framework in agent-config.yaml, read the corresponding cheat sheet:
 
 **Step 4:** Read individual spec files as needed.
 
+**Step 4.5: Determine execution mode.**
+
+Read the `execution-plan` section from manifest.yaml:
+
+- **IF** the execution plan has phases with 2+ parallel chunks across different streams:
+  → Use **TEAM MODE** (see "Team Mode Orchestration" section below)
+- **IF** the execution plan is purely sequential, missing, or all chunks are in one stream:
+  → Use **SINGLE-AGENT MODE** (current workflow — proceed to Phase 1)
+
+Team mode uses Claude Code agent teams to execute chunks in parallel. Each work stream gets its own teammate agent with independent context. Single-agent mode works through phases sequentially as before.
+
 **Step 5: Initialize project with uv.**
 
 ```bash
@@ -437,9 +452,10 @@ For each team (including nested), add these tasks:
 
 ### Phase 1: Team Scaffold
 
-**STOP. Use the Skill tool now: `skill: "agent-teams"`**
+**When you reach this phase:** Invoke `skill: "agent-teams"` to load team pattern implementation guides.
 
-This loads the team pattern implementation guides.
+**Before invoking:** Ensure progress.md reflects Phase 0 completion (project initialized, dependencies added, framework cheatsheet read).
+**After completing this phase:** Update progress.md with scaffold status before proceeding to Phase 2.
 
 Create team.py with:
 - Orchestration logic based on pattern (pipeline, router, fan-in-fan-out, loop)
@@ -464,9 +480,10 @@ async def critic(state: State) -> State:
 
 ### Phase 2: Tools
 
-**STOP. Use the Skill tool now: `skill: "tools-and-utilities"`**
+**When you reach this phase:** Invoke `skill: "tools-and-utilities"` to load tool implementation patterns.
 
-This loads the tool implementation patterns and utility function organization guidance.
+**Before invoking:** Ensure progress.md reflects Phase 1 completion (team scaffold created).
+**After completing this phase:** Update progress.md with tools status before proceeding to Phase 3.
 
 Create tools.py with tool definitions from agent specs.
 
@@ -514,9 +531,10 @@ For each agent that has tools:
 
 ### Phase 3: Agent Implementations
 
-**STOP. Use the Skill tool now: `skill: "individual-agents"`**
+**When you reach this phase:** Invoke `skill: "individual-agents"` to load agent type implementation guides.
 
-This loads the agent type implementation guides.
+**Before invoking:** Ensure progress.md reflects Phase 2 completion (tools created).
+**After completing this phase:** Update progress.md with agent implementation status before proceeding to Phase 4.
 
 Fill in placeholder functions with actual implementations.
 
@@ -527,6 +545,8 @@ For each agent:
 3. Generate implementation following the pattern
 
 ### Phase 4: Prompts/Signatures
+
+**Note:** For LangGraph, the `prompt-engineering` skill is loaded by prompt-creator sub-agents in their own context windows, NOT by the main agent. Do not invoke `prompt-engineering` directly — it would waste main-agent context. The sub-agent spawn template (below) handles this. For DSPy, write signature docstrings directly without sub-agents.
 
 **Framework-specific approaches:**
 
@@ -893,7 +913,9 @@ async def get_status(job_id: str):
 
 ## Task Dependencies
 
-**LangGraph:**
+**When an execution plan exists in manifest.yaml**, use the phases and chunk dependencies from the plan instead of these default chains. The execution plan provides project-specific dependencies that override these defaults.
+
+**Default LangGraph dependencies (when no execution plan):**
 ```
 team.py scaffold
        ↓
@@ -910,7 +932,7 @@ agent implementations (can be parallel per agent if tools complete)
     main.py (FastAPI wrapper)
 ```
 
-**DSPy:**
+**Default DSPy dependencies (when no execution plan):**
 ```
 signatures.py (write signature docstrings directly - NO prompt-creator sub-agents)
        ↓
@@ -961,6 +983,8 @@ When implementing:
 
 ## Sub-Agent Strategy
 
+### Single-Agent Mode
+
 | Task | Sub-Agent | Notes |
 |------|-----------|-------|
 | Team scaffold | None | agent-impl-builder does directly |
@@ -968,6 +992,19 @@ When implementing:
 | Agent implementations | None | agent-impl-builder does directly |
 | Prompts | `prompt-creator` | One per agent, run in parallel, edits file directly |
 | Utils | None | agent-impl-builder does directly |
+
+### Team Mode
+
+| Task | Method | Notes |
+|------|--------|-------|
+| Quick focused work (single file) | Task tool sub-agent | No coordination needed, fires and forgets |
+| Parallel phased work | Agent team teammate | One per work stream, execution plan has parallel chunks |
+| Prompt generation | prompt-creator sub-agent OR team prompts stream | Sub-agent if few prompts; teammate stream if many |
+
+**When to use which:**
+- Use **Task sub-agents** for isolated, quick tasks within a single file
+- Use **Agent team teammates** when the execution plan defines parallel work streams
+- Team mode teammates maintain context across phases within their stream
 
 **Prompt-creator invocation:**
 
@@ -1088,9 +1125,11 @@ Maintain a task list throughout implementation:
 
 ## Handling Nested Teams
 
-For nested teams, process depth-first with parallelization:
+For nested teams, use the **execution plan** from manifest.yaml to determine phasing.
 
-1. Read `manifest.yaml` for parallel groups
+If no execution plan exists, process depth-first with parallelization:
+
+1. Read `manifest.yaml` for the execution plan (or fall back to hierarchy)
 2. Sub-teams at the same level can be implemented in parallel
 3. Parent team waits for all sub-teams to complete
 4. Top-level team.py imports and orchestrates sub-teams
@@ -1098,17 +1137,128 @@ For nested teams, process depth-first with parallelization:
 **Each sub-team folder is self-contained** - has its own `agent-config.yaml`, can be processed independently.
 
 ```
-Parallel Group 1 (can run simultaneously):
+Phase 1 (can run simultaneously):
 ├── Implement content-refinement/ (complete team)
 └── Implement parallel-research/ (complete team)
 
-Parallel Group 2 (after group 1 completes):
+Phase 2 (after Phase 1 completes):
 └── Implement research-pipeline/ top-level (orchestrates sub-teams)
 ```
 
-**Spawn sub-agents for parallel work:**
-- Each sub-team can be processed by a separate Task agent
-- Use `manifest.yaml → implementation-order → parallel-groups` to determine what can run in parallel
+In **team mode**, each sub-team can be assigned to a different work stream's teammate. In **single-agent mode**, spawn Task sub-agents for parallel sub-team work.
+
+---
+
+## Team Mode Orchestration
+
+When the execution plan (from manifest.yaml) contains parallel phases with multiple work streams, use Claude Code agent teams to execute chunks in parallel.
+
+**This section only applies when Step 4.5 in Phase 0 determined TEAM MODE.**
+
+### Step 1: Create the Team
+
+```
+Use TeamCreate to set up the team:
+- team_name: project name (e.g., "youtube-summarizer")
+- description: Brief description of the implementation work
+```
+
+### Step 2: Create ALL Tasks Upfront
+
+Read the execution plan and create one `TaskCreate` per chunk:
+
+```
+For each phase in execution-plan.phases:
+  For each chunk in phase.chunks:
+    TaskCreate:
+      subject: chunk.name
+      description: chunk.description + stream info + skills to load
+      activeForm: "Implementing [chunk.name]"
+
+Then set dependencies:
+  - Tasks in Phase 1: no blockedBy
+  - Tasks in Phase 2: blockedBy = [all Phase 1 task IDs]
+  - Tasks in Phase N: blockedBy = [all Phase N-1 task IDs]
+  - Chunk-level deps: add specific task IDs to blockedBy as needed
+```
+
+### Step 3: Spawn Teammates from Work Streams
+
+For each unique work stream in the execution plan, spawn a teammate using the Task tool with `team_name` parameter.
+
+**Critical: The spawn prompt IS the teammate's entire context.** Teammates do NOT inherit the lead's conversation history. Include everything they need:
+
+```
+Task tool:
+  team_name: [project-name]
+  name: [stream-name]
+  subagent_type: general-purpose  (or prompt-creator for prompts stream)
+  prompt: [see Teammate Spawn Prompt Template below]
+```
+
+### Step 4: Monitor Phase Execution
+
+- Teammates check TaskList for available (unblocked) tasks in their stream
+- All chunks in a phase execute in parallel across teammates
+- When a teammate completes a chunk, it marks the task complete and checks for next work
+- Phase barriers are enforced via `blockedBy` — Phase 2 tasks unblock when all Phase 1 tasks complete
+- The lead monitors progress via TaskList and handles any issues
+
+### Step 5: Handle Inter-Agent Communication
+
+The `communication` section of the execution plan defines what needs to be shared:
+
+- After a phase completes, teammates send relevant information to downstream streams via `SendMessage`
+- Example: tools stream sends function signatures to scaffold stream after Phase 1
+- The lead can relay information between teammates if direct messaging isn't sufficient
+
+### Step 6: Finalization
+
+After all phases complete:
+1. Lead validates all files exist and are internally consistent
+2. Run tests if defined in acceptance criteria
+3. Shutdown teammates via `SendMessage(shutdown_request)`
+4. Clean up team via `TeamDelete`
+
+### Teammate Spawn Prompt Template
+
+When spawning a teammate, provide this context:
+
+```
+"You are a teammate working on [project-name].
+
+YOUR WORK STREAM: [stream-name]
+YOUR RESPONSIBILITY: [stream responsibility from execution plan]
+YOUR FILES: You own and may edit these files ONLY:
+  [file list from stream.owns]
+DO NOT edit files outside your ownership — message the owning stream instead.
+
+SKILLS TO LOAD: Before starting work, use the Skill tool to load:
+  [list from stream.skills, e.g.:]
+  - skill: "agent-teams"
+  - skill: "individual-agents"
+
+SPEC LOCATION: [path to spec/ directory]
+FRAMEWORK: [langgraph or dspy]
+FRAMEWORK CHEATSHEET: [path to frameworks/[framework]/CHEATSHEET.md]
+  READ THIS BEFORE WRITING ANY CODE.
+
+WORKFLOW:
+1. Load your required skills (above)
+2. Read the framework cheatsheet
+3. Check TaskList for available (unblocked) tasks in your stream
+4. Claim a task with TaskUpdate (set status to in_progress)
+5. Read the relevant spec files for context
+6. Implement the chunk
+7. Mark task completed with TaskUpdate
+8. Check TaskList for next available task
+9. If a task requires info from another stream, use SendMessage to request it
+
+COMMUNICATION:
+  [Include relevant communication patterns from execution plan, e.g.:]
+  - After completing Phase 1 tools: Send function signatures to 'scaffold' stream
+  - After completing Phase 2 agents: Send state schema to 'prompts' stream"
+```
 
 ---
 
