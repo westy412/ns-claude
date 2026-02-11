@@ -634,9 +634,24 @@ When writing a prompt:
    - Apply advice for each section
 
 3. **Layer in modifiers** (from `modifiers/`)
-   - Check if Tools, Structured Output, or Memory apply
+   - Check if Tools, Structured Output, Memory, or Reasoning apply
    - Read the modifier file for integration patterns
    - Check the role file's "Modifier Notes" for role-specific advice
+   - Use this quick placement guide:
+
+   **Tools** — Add tool documentation to `<capabilities>` or within `<task>`. Include: name, purpose, parameters, when to use, expected response, error handling. Specify confirmation requirements for actions with side effects.
+
+   **Structured Output** — Define exact schema in `<output_format>`. Include field types, required vs optional, and an example output. For conversational + structured: wrap the natural language response in JSON with metadata fields (confidence, intent, reasoning).
+
+   **Memory** — Add context handling to `<inputs>` (conversation history or session state). Include guidance on using previous context in `<operational_logic>`. Add rules for what to remember vs forget.
+
+   **Reasoning** — Add reasoning instructions to `<task>` based on the technique:
+   - Chain-of-Thought: "Think through this step by step before providing your answer"
+   - Chain-of-Verification: Draft answer → generate verification questions → answer them → revise
+   - Step-Back: Abstract the problem first, then reason from the abstraction
+   - Tree-of-Thoughts: Generate 2-3 candidate approaches, evaluate each, select the best
+
+   Update `<output_format>` to include reasoning trace structure. Add constraints about showing work in `<important_notes>`.
 
 4. **Run through this checklist**
    - Verify all required sections are complete
@@ -644,3 +659,33 @@ When writing a prompt:
    - Validate length is within budget
 
 The result should be a complete prompt that follows the framework structure, applies role expertise, and incorporates any modifiers.
+
+---
+
+## Target-Specific Notes
+
+When writing prompts for specific targets, keep these differences in mind. For full details, see `references/targets/`.
+
+### DSPy
+
+- The prompt content lives in a separate markdown file (`prompts/{agent_name}.md`) that gets loaded into the signature's docstring at runtime
+- Use XML tags for section structure (same as other targets) — they work fine in docstrings
+- **Skip `<output_format>`** — output structure is defined by typed `OutputField` declarations and Pydantic models in `signatures.py`
+- **Add `<enum_compliance>`** for any constrained-value output fields — list valid values explicitly
+- Field descriptions on `InputField`/`OutputField` are part of the compiled prompt — make them specific and actionable
+- Aim for 20+ lines of substantive prompt content; brief prompts produce poor results in DSPy
+- Reasoning is an architectural choice (Predict vs ChainOfThought), not prompt text — don't add "think step by step"
+
+### LangGraph
+
+- **Escape all literal curly braces** as `{{` and `}}` — LangGraph uses `{variable}` for template variables
+- JSON examples in `<output_format>` need escaped braces: `{{"key": "value"}}`
+- Document template variables `{var_name}` in the `<inputs>` section
+- Full XML-section structure applies — no sections skipped
+- Reasoning techniques are written directly into the prompt text (unlike DSPy)
+
+### General
+
+- Standard XML-section structure with no special considerations
+- No escaping needed, no type system integration
+- What you write is what gets used as the system message

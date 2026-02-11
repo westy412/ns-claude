@@ -58,6 +58,11 @@ Based on the specification, read these files:
 **Always read:**
 1. `{base}/references/guidelines/prompt-writing.md` — Core techniques
 
+**Target (read ONE based on specification):**
+- DSPy: `{base}/references/targets/dspy.md`
+- LangGraph: `{base}/references/targets/langgraph.md`
+- General: `{base}/references/targets/general.md`
+
 **Framework (read ONE):**
 - Single-Turn: `{base}/references/frameworks/single-turn.md`
 - Conversational: `{base}/references/frameworks/conversational.md`
@@ -283,15 +288,15 @@ Before returning, verify:
 
 ---
 
-## Output: Edit the File Directly
+## Output: Edit Files Directly
 
-**DO NOT return the prompt content. Edit the target file directly.**
+**DO NOT return the prompt content. Edit the target file(s) directly.**
 
-You will receive:
-- **File path:** The prompts.py file to edit
-- **Variable name:** Which prompt variable to update (e.g., `CREATOR_PROMPT`)
+The output depends on the target platform:
 
-Use the Edit tool to replace the placeholder with your generated prompt:
+### LangGraph Target
+
+You will receive a file path and variable name. Edit prompts.py directly:
 
 ```python
 # Before (placeholder)
@@ -308,15 +313,44 @@ CREATOR_PROMPT = """
 """
 ```
 
+**Remember:** Escape all literal curly braces as `{{` and `}}` — LangGraph uses `{variable}` for template variables.
+
+### DSPy Target
+
+You produce TWO files:
+
+**1. signatures.py** — Signature class with empty docstring and typed fields:
+```python
+class AgentNameSignature(dspy.Signature):
+    """"""  # Empty — populated from prompts/agent_name.md at runtime
+
+    input_field: str = dspy.InputField(description="...")
+    output_field: str = dspy.OutputField(description="...")
+```
+
+**2. prompts/{agent_name}.md** — Prompt content using XML sections:
+- Follow the framework template structure
+- Skip `<output_format>` — typed fields handle this
+- Add `<enum_compliance>` for any Literal/Union output fields
+- Add `<quality_standards>` and `<anti_patterns>` sections
+
+See `references/targets/dspy.md` for full details on sections to skip/keep/add.
+
+### General Target
+
+Edit the specified file with a standalone XML-tagged prompt string. No special escaping or adaptations.
+
+### After Editing
+
+Confirm completion with a brief message:
+- Which prompt was created
+- Target, framework, and role applied
+- Any key decisions made
+
 **Why edit directly:**
 - Keeps prompts out of the main agent's context
 - Avoids context pollution from large prompt content
-- Parallel sub-agents can each edit different variables
-
-After editing, confirm completion with a brief message:
-- Which prompt was created
-- Framework and role applied
-- Any key decisions made
+- Parallel sub-agents can each edit different variables/files
 
 ---
 
@@ -325,10 +359,12 @@ After editing, confirm completion with a brief message:
 You will receive:
 
 ```
-## Target File
+## Target File(s)
 
-**File path:** [path to prompts.py]
-**Variable name:** [e.g., CREATOR_PROMPT]
+**Target Platform:** DSPy | LangGraph | General
+**Prompt file path:** [path to prompts.py or prompts/agent_name.md]
+**Variable name:** [e.g., CREATOR_PROMPT — for LangGraph only]
+**Signatures file path:** [path to signatures.py — for DSPy only]
 
 ## Agent Spec File
 
@@ -345,11 +381,11 @@ Read this file to extract the full specification.
 
 **Your workflow:**
 1. Ensure `prompt-engineering` skill is loaded (auto-loaded, or invoke if not)
-2. Read the reference files for framework, role, and modifiers
+2. Read the target reference file, then framework, role, and modifier reference files
 3. Read the agent spec file at the provided path
 4. Extract: Purpose, Key Tasks, Inputs, Outputs, Behavioral Requirements, Examples
-5. Write the prompt following reference file patterns
-6. Use Edit tool to update the variable in prompts.py
+5. Write the prompt following reference file patterns, adapted per target
+6. Edit the file(s) directly at the specified path(s)
 7. Confirm completion
 
 Work with whatever specification you receive. Fill gaps with reasonable defaults based on the role and framework guidance.

@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Grep, Task
 
 ## Purpose
 
-Provides system prompt templates and guidance for building agent prompts. Framework-agnostic — the same prompts work with LangGraph, DSPy, or any other agent framework.
+Provides system prompt templates and guidance for building agent prompts. Supports three target platforms — DSPy (signature + prompt file), LangGraph (prompt string for prompts.py), and General (standalone prompt string) — with shared role and modifier patterns that compose across all targets.
 
 ---
 
@@ -25,6 +25,46 @@ Use this skill when:
 ## Selection Criteria
 
 Use this section to determine the right framework, role, and modifiers for an agent. After each selection, validate your choice with the user and explain your reasoning.
+
+---
+
+### Step 0: Identify Target Platform
+
+Before choosing a framework or role, determine where this prompt will run. The target affects output format, which sections are needed, and platform-specific quirks.
+
+| Target | What You Produce | Reference |
+|--------|-----------------|-----------|
+| **DSPy** | `signatures.py` (typed fields, empty docstring) + separate `prompts/{agent_name}.md` file | `references/targets/dspy.md` |
+| **LangGraph** | Prompt string for `prompts.py` with `{template_variables}` and escaped curly braces | `references/targets/langgraph.md` |
+| **General** | Standalone XML-tagged prompt string | `references/targets/general.md` |
+
+#### Quick Decision
+
+```
+What are you creating?
+├── A DSPy signature with prompt → DSPy target
+├── A LangGraph node prompt → LangGraph target
+└── A standalone system prompt → General target
+```
+
+#### Signals for DSPy
+- The agent is built with DSPy modules (Predict, ChainOfThought, ReAct)
+- There are `signatures.py` and `models.py` files in the project
+- Output types are defined as Pydantic models or typed fields
+
+#### Signals for LangGraph
+- The agent is a LangGraph node or graph
+- The project uses `ChatPromptTemplate`, `@tool`, state graphs
+- Prompts live in `prompts.py` or as constants in node files
+
+#### Signals for General
+- No specific framework chosen yet
+- Direct API calls to LLM providers
+- Prototyping phase
+
+#### Validation
+
+Confirm the target with the user before proceeding. Read the target-specific reference file before moving to Step 1.
 
 ---
 
@@ -412,29 +452,31 @@ Apply these to any role to add specific capabilities:
 
 ### Single Agent
 
-1. **Select framework** — Single-Turn or Conversational based on interaction model
-2. **Choose role** — Identify which role template best matches the agent's purpose
-3. **Apply modifiers** — Add tools, structured output, or memory as needed
-4. **Fill template** — Use the framework template, guided by role-specific advice
-5. **Review** — Check against common pitfalls in the framework doc
+1. **Identify target** — DSPy, LangGraph, or General; read the target reference file
+2. **Select framework** — Single-Turn or Conversational based on interaction model
+3. **Choose role** — Identify which role template best matches the agent's purpose
+4. **Apply modifiers** — Add tools, structured output, memory, or reasoning as needed
+5. **Fill template** — Use the framework template, guided by role-specific advice, adapted per target reference
+6. **Review** — Check against target-specific checklist and common pitfalls
 
 ### Multi-Agent Systems (Parallel Generation)
 
-When building multiple agents at once, use sub-agents for parallel prompt generation:
+When building multiple agents at once, use `prompt-creator` sub-agents for parallel prompt generation. This works whether you are calling this skill directly or as a teammate in an agent team — the sub-agent pattern keeps each prompt's generation in its own context window.
 
 **Phase 1: Requirements Gathering**
 - Identify all agents needed in the system
-- For each agent, determine: purpose, inputs, outputs, interactions with other agents
+- For each agent, determine: target platform, purpose, inputs, outputs, interactions with other agents
 - Map the data flow between agents
 
 **Phase 2: Selection (per agent)**
+- Target: DSPy, LangGraph, or General
 - Framework: Single-Turn vs Conversational
 - Role: Which of the 8 roles fits
-- Modifiers: Tools, structured output, memory
+- Modifiers: Tools, structured output, memory, reasoning
 
 **Phase 3: Parallel Generation**
 
-Dispatch a sub-agent for each prompt. Each sub-agent needs comprehensive context to write a complete prompt without further clarification.
+Dispatch a `prompt-creator` sub-agent for each prompt. Each sub-agent needs comprehensive context to write a complete prompt without further clarification.
 
 **Required information for each sub-agent:**
 
@@ -444,8 +486,9 @@ Dispatch a sub-agent for each prompt. Each sub-agent needs comprehensive context
 **Agent Name:** [name]
 **Purpose:** [1-2 sentence description of what this agent does]
 
-## Framework & Role
+## Target & Configuration
 
+**Target Platform:** DSPy | LangGraph | General
 **Framework:** Single-Turn | Conversational
 **Reasoning:** [Why this framework fits - reference specific signals]
 
@@ -510,21 +553,27 @@ Dispatch a sub-agent for each prompt. Each sub-agent needs comprehensive context
 **What This Agent Should NOT Do:**
 - [Explicit constraint 1]
 - [Explicit constraint 2]
+
+## File Locations
+
+**Write prompt to:** [file path where the prompt should be written]
+**Write signatures to:** [file path, if DSPy target]
 ```
 
 **Sub-agent process:**
-1. Read the framework template from `references/frameworks/[framework].md`
-2. Read the role guidance from `references/roles/[role].md`
-3. Read relevant modifier files from `references/modifiers/`
-4. Read prompt engineering guidelines from `references/guidelines/prompt-writing.md`
-5. Write the complete prompt using framework template structure
-6. Apply role-specific section guidance
-7. Incorporate modifier patterns where applicable
-8. Return the complete prompt
+1. Read the target reference from `references/targets/[target].md`
+2. Read the framework template from `references/frameworks/[framework].md`
+3. Read the role guidance from `references/roles/[role].md`
+4. Read relevant modifier files from `references/modifiers/`
+5. Read prompt engineering guidelines from `references/guidelines/prompt-writing.md`
+6. Write the prompt following the target-specific output pattern
+7. Apply role-specific section guidance
+8. Incorporate modifier patterns (adapted per target reference)
+9. Edit the file directly at the specified location
 
 **Invoking the Prompt-Creator Sub-Agent:**
 
-Use the Task tool with `subagent_type='prompt-creator'` to generate prompts. The sub-agent has access to Read, Glob, and Grep tools and can discover the reference files automatically.
+Use the Task tool with `subagent_type='prompt-creator'` to generate prompts. The sub-agent has access to Read, Glob, Grep, Edit, and Write tools and can discover the reference files automatically. Spawn one sub-agent per prompt and run them in parallel.
 
 ```
 Task(
@@ -539,6 +588,10 @@ Task(
 prompt-engineering/
 ├── SKILL.md
 └── references/
+    ├── targets/
+    │   ├── dspy.md
+    │   ├── langgraph.md
+    │   └── general.md
     ├── frameworks/
     │   ├── single-turn.md
     │   └── conversational.md
@@ -556,8 +609,9 @@ prompt-engineering/
     │   ├── output-type.md
     │   ├── memory.md
     │   └── reasoning.md
-    └── guidelines/
-        └── prompt-writing.md
+    ├── guidelines/
+    │   └── prompt-writing.md
+    └── teammate-usage.md
 ```
 
 **Sub-agent prompt template:**
@@ -576,6 +630,11 @@ First, find the prompt engineering skill location:
 ## Step 2: Read Required Files
 
 Using the base directory, read these files:
+
+**Target (read ONE based on specification):**
+- DSPy: `{base}/references/targets/dspy.md`
+- LangGraph: `{base}/references/targets/langgraph.md`
+- General: `{base}/references/targets/general.md`
 
 **Framework (read ONE based on specification):**
 - Single-Turn: `{base}/references/frameworks/single-turn.md`
@@ -602,22 +661,31 @@ Using the base directory, read these files:
 
 ## Step 3: Write the Prompt
 
-1. Use the framework template as your structure
-2. Apply role-specific section guidance
-3. Incorporate modifier patterns where applicable
-4. Follow prompt writing guidelines for quality
+1. Follow the target reference for what to produce and target-specific adaptations
+2. Use the framework template as your section structure
+3. Apply role-specific section guidance
+4. Incorporate modifier patterns (adapted per target reference)
+5. Follow prompt writing guidelines for quality
+
+### Target-Specific Output:
+
+**DSPy target** — produce TWO artifacts:
+- `signatures.py` entry: Signature class with empty docstring, typed InputField/OutputField
+- `prompts/{agent_name}.md`: Prompt content using XML sections (skip `<output_format>`)
+- Edit files directly at the paths specified in the agent specification
+
+**LangGraph target** — produce ONE artifact:
+- Prompt string with full XML section structure
+- Escape all literal curly braces as `{{` and `}}`
+- Edit the prompts.py file directly at the path specified
+
+**General target** — produce ONE artifact:
+- Standalone prompt string with full XML section structure
+- Edit the file directly at the path specified
 
 ## Agent Specification
 
 [Paste the full specification here - see "Required information for each sub-agent" above]
-
-## Output
-
-Return the complete system prompt wrapped in a markdown code block. The prompt should:
-- Follow the framework's XML section structure
-- Apply all role-specific guidance
-- Include all modifiers
-- Be production-ready (no placeholders, no TODOs)
 ```
 
 **Phase 4: Integration**
@@ -627,11 +695,22 @@ Return the complete system prompt wrapped in a markdown code block. The prompt s
 - Check for conflicting constraints or behaviors between agents
 - Validate that all edge cases are covered across the agent chain
 
+### Teammate Usage
+
+If you are a teammate in an agent team that has loaded this skill, see `references/teammate-usage.md` for a step-by-step guide on how to use this skill to create prompts. The guide covers loading the skill, reading reference files, writing prompts per target, and validating output.
+
 ---
 
 ## Composition: How It All Fits Together
 
-Building a prompt follows this pattern: **Framework + Role + Modifiers**
+Building a prompt follows this pattern: **Target + Framework + Role + Modifiers**
+
+### Step 0: Read Target Reference
+
+The target tells you what to produce and what adaptations apply:
+- **DSPy**: Skip `<output_format>`, reasoning is architectural (module choice), tools are Python functions, output structure via typed fields
+- **LangGraph**: Escape curly braces, include full `<output_format>`, reasoning is prompt-level, full XML structure
+- **General**: No adaptations, full XML structure
 
 ### Step 1: Start with the Framework Template
 
@@ -670,13 +749,13 @@ If your agent needs tools, structured output, or memory:
 
 **Example combinations:**
 
-| Agent | Framework | Role | Modifiers |
-|-------|-----------|------|-----------|
-| Email analyzer | Single-Turn | Researcher | Structured Output |
-| Support chatbot | Conversational | Conversational/Assistant | Tools + Memory |
-| Data migrator | Single-Turn | Transformer/Formatter | Structured Output |
-| Code reviewer | Single-Turn | Critic/Reviewer | Tools (git, linter) |
-| Sales copilot | Conversational | Creative/Generator | Tools + Memory |
+| Agent | Target | Framework | Role | Modifiers |
+|-------|--------|-----------|------|-----------|
+| Email analyzer | DSPy | Single-Turn | Researcher | Structured Output (via typed fields) |
+| Support chatbot | LangGraph | Conversational | Conversational/Assistant | Tools + Memory |
+| Data migrator | General | Single-Turn | Transformer/Formatter | Structured Output |
+| Code reviewer | LangGraph | Single-Turn | Critic/Reviewer | Tools (git, linter) |
+| Sales copilot | DSPy | Conversational | Creative/Generator | Tools + Memory |
 
 ### Composition Example
 
@@ -784,7 +863,9 @@ Before deploying a prompt:
 
 ## References
 
+- `references/targets/` — Target platform guides (DSPy, LangGraph, General)
 - `references/frameworks/` — Base templates (Single-Turn, Conversational)
 - `references/roles/` — Role-specific guidance (8 roles)
-- `references/modifiers/` — Implementation features (Tools, Structured Output, Memory)
+- `references/modifiers/` — Implementation features (Tools, Structured Output, Memory, Reasoning)
 - `references/guidelines/` — Prompt writing techniques and best practices
+- `references/teammate-usage.md` — Guide for teammates using this skill in agent teams
