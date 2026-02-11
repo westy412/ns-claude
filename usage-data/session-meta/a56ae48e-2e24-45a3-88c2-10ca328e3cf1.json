@@ -1,0 +1,57 @@
+{
+  "session_id": "a56ae48e-2e24-45a3-88c2-10ca328e3cf1",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-08T12:45:52.498Z",
+  "duration_minutes": 36,
+  "user_message_count": 4,
+  "assistant_message_count": 118,
+  "tool_counts": {
+    "Read": 25,
+    "Glob": 6,
+    "Task": 1,
+    "Skill": 1,
+    "TaskUpdate": 5,
+    "SendMessage": 3,
+    "TaskList": 2,
+    "Edit": 28,
+    "Grep": 9
+  },
+  "languages": {
+    "Markdown": 31,
+    "YAML": 22
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 138,
+  "output_tokens": 3786,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are `existing-spec-fixer` on team `impl-builder-fixes`. Your task is Task #4.  ## YOUR MISSION Retroactively fix the idea-agents spec output to match the…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.024,
+    389.232,
+    2.053
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Edit Failed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 196,
+  "lines_removed": 42,
+  "files_modified": 12,
+  "message_hours": [
+    12,
+    12,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T12:45:52.498Z",
+    "2026-02-08T12:57:06.754Z",
+    "2026-02-08T13:03:43.940Z",
+    "2026-02-08T13:21:34.451Z"
+  ]
+}

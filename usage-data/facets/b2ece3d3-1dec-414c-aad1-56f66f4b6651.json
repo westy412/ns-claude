@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Analyze integration points of the idea-agents service with the broader Content Workforce system as part of a team-lead directed task",
+  "goal_categories": {
+    "codebase_analysis": 1
+  },
+  "outcome": "not_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "moderately_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "fast_accurate_search",
+  "brief_summary": "User (via team-lead directive) asked Claude to analyze integration points of the idea-agents service, but the session was interrupted before Claude could deliver its findings.",
+  "session_id": "b2ece3d3-1dec-414c-aad1-56f66f4b6651"
+}

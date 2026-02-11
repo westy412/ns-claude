@@ -1,0 +1,44 @@
+{
+  "session_id": "a25fc169-1f76-4a59-9433-2993d303ac41",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-01-31T22:09:06.728Z",
+  "duration_minutes": 4,
+  "user_message_count": 4,
+  "assistant_message_count": 6,
+  "tool_counts": {
+    "Bash": 2
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 54,
+  "output_tokens": 22,
+  "first_prompt": "[Request interrupted by user]",
+  "summary": "Twitter Platform Integration Phase 2 Complete",
+  "user_interruptions": 1,
+  "user_response_times": [
+    3.031,
+    23.542
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T22:12:08.460Z",
+    "2026-01-31T22:12:08.460Z",
+    "2026-01-31T22:12:20.885Z",
+    "2026-01-31T22:12:41.396Z"
+  ]
+}

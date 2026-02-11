@@ -90,8 +90,12 @@ team:
 
 # =============================================================================
 # ROOT/PARENT TEAM EXAMPLE (has sub-teams in separate folders)
-# Use this format for teams that orchestrate other teams
-# Each sub-team has its own agent-config.yaml in its folder
+# Use this format for teams that orchestrate other teams.
+# Each sub-team has its own agent-config.yaml in its folder.
+#
+# RULE: Every team folder at EVERY level MUST have its own agent-config.yaml.
+# Parent configs MUST include the `sub-teams` key listing child folders.
+# agent-config.yaml mirrors the directory structure — one per team folder.
 # =============================================================================
 
 # team:
@@ -117,6 +121,49 @@ team:
 #       notes: |
 #         Second stage: parallel source gathering.
 #         See parallel-research/agent-config.yaml for full config.
+
+# =============================================================================
+# PARENT TEAM WITH BOTH SUB-TEAMS AND DIRECT AGENTS
+# A parent team can have sub-teams AND its own agents. The agents section
+# lists agents that belong directly to THIS team (not to any sub-team).
+# =============================================================================
+
+# team:
+#   name: research-phase
+#   pattern: fan-in-fan-out
+#   framework: dspy
+#   reference: agent-patterns/agent-teams/dspy/fan-in-fan-out.md
+#   notes: |
+#     7 parallel modules → platform synthesizers → signal blender.
+#
+#   sub-teams:
+#     - name: keyword-search-loop
+#       folder: keyword-search-loop/
+#       pattern: loop
+#       notes: See keyword-search-loop/agent-config.yaml for full config.
+#
+#     - name: analytics-team
+#       folder: analytics-team/
+#       pattern: fan-in-fan-out
+#       notes: See analytics-team/agent-config.yaml for full config.
+#
+#   agents:
+#     - agent:
+#         name: platform-synthesizer
+#         type: reasoning-agent
+#         framework: dspy
+#         reference: agent-patterns/individual-agents/dspy/reasoning-agent.md
+#         prompt:
+#           framework: single-turn
+#           role: summarizer-synthesizer
+#           modifiers: [structured-output, reasoning]
+#         model:
+#           provider: google
+#           name: gemini-3-flash
+#           reasoning: true
+#           temperature: 0.7
+#         notes: |
+#           Direct agent at this level — not in any sub-team.
 
 # =============================================================================
 # FULL AGENT EXAMPLE (all fields)

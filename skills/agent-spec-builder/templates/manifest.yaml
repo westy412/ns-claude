@@ -39,7 +39,7 @@ hierarchy:
   #     - critic:
   #         file: agents/critic.md
 
-  # NESTED TEAMS example:
+  # NESTED TEAMS example (2-level):
   # research-pipeline:
   #   type: team
   #   pattern: pipeline
@@ -74,6 +74,106 @@ hierarchy:
   #               file: agents/researcher-b.md
   #           - merger:
   #               file: agents/merger.md
+
+  # 3-LEVEL NESTING example:
+  # When a parent team orchestrates sub-teams that themselves contain sub-teams.
+  # Each level has its own team.md, agent-config.yaml, and pattern annotation.
+  #
+  # root-pipeline:
+  #   type: team
+  #   pattern: pipeline
+  #   folder: root-pipeline/
+  #   files:
+  #     team: team.md
+  #     config: agent-config.yaml
+  #   sub-teams:
+  #     - research-phase:
+  #         type: team
+  #         pattern: fan-in-fan-out
+  #         folder: root-pipeline/research-team/
+  #         files:
+  #           team: team.md
+  #           config: agent-config.yaml
+  #         agents:                          # Direct agents at level 2
+  #           - synthesizer:
+  #               file: agents/synthesizer.md
+  #         sub-teams:                       # Level 3 sub-teams
+  #           - keyword-loop:
+  #               type: team
+  #               pattern: loop
+  #               folder: root-pipeline/research-team/keyword-loop/
+  #               files:
+  #                 team: team.md
+  #                 config: agent-config.yaml
+  #               agents:
+  #                 - search-agent:
+  #                     file: agents/search-agent.md
+  #                 - analysis-agent:
+  #                     file: agents/analysis-agent.md
+  #           - analytics-team:
+  #               type: team
+  #               pattern: fan-in-fan-out
+  #               folder: root-pipeline/research-team/analytics-team/
+  #               files:
+  #                 team: team.md
+  #                 config: agent-config.yaml
+  #               agents:
+  #                 - analyst-a:
+  #                     file: agents/analyst-a.md
+  #                 - analyst-b:
+  #                     file: agents/analyst-b.md
+
+  # TEMPLATE-TO-INSTANCES example:
+  # When multiple sub-teams share the same structure but differ in config
+  # (e.g., platform-specific research loops), list each instance as a
+  # SEPARATE entry. Do NOT group them under the template.
+  # The template folder is listed with note: "TEMPLATE — not instantiated directly"
+  #
+  # research-team:
+  #   type: team
+  #   pattern: fan-in-fan-out
+  #   folder: research-team/
+  #   files:
+  #     team: team.md
+  #     config: agent-config.yaml
+  #   sub-teams:
+  #     - research-loop:
+  #         type: team
+  #         pattern: loop
+  #         folder: research-team/research-loop/
+  #         note: "TEMPLATE — generic structure. Platform instances below are self-contained."
+  #         files:
+  #           team: team.md
+  #           config: agent-config.yaml
+  #         agents:
+  #           - search-agent:
+  #               file: agents/search-agent.md
+  #           - analysis-agent:
+  #               file: agents/analysis-agent.md
+  #     - linkedin-keyword:                # Instance 1 — fully explicit
+  #         type: team
+  #         pattern: loop
+  #         folder: research-team/linkedin-keyword/
+  #         files:
+  #           team: team.md
+  #           config: agent-config.yaml
+  #         agents:
+  #           - linkedin-keyword-search-agent:
+  #               file: agents/linkedin-keyword-search-agent.md
+  #           - linkedin-keyword-analysis-agent:
+  #               file: agents/linkedin-keyword-analysis-agent.md
+  #     - x-keyword:                       # Instance 2 — fully explicit
+  #         type: team
+  #         pattern: loop
+  #         folder: research-team/x-keyword/
+  #         files:
+  #           team: team.md
+  #           config: agent-config.yaml
+  #         agents:
+  #           - x-keyword-search-agent:
+  #               file: agents/x-keyword-search-agent.md
+  #           - x-keyword-analysis-agent:
+  #               file: agents/x-keyword-analysis-agent.md
 
 # =============================================================================
 # FILES
@@ -111,20 +211,118 @@ files:
     #         - agents/critic.md
 
 # =============================================================================
-# IMPLEMENTATION ORDER
-# Suggested order for impl-builder
-# Sub-teams can be processed in parallel
+# EXECUTION PLAN
+# Phases execute sequentially. Chunks within a phase execute in parallel.
+# Work streams group related chunks for context continuity across phases.
+# The implementation agent uses this to orchestrate a team of agents.
+#
+# Key concepts:
+#   Phase  = sequential barrier. Next phase starts when ALL chunks complete.
+#   Chunk  = unit of work within a phase. All chunks run in parallel.
+#   Stream = group of related chunks across phases. Same agent handles a
+#            stream's chunks to retain context (agents have own context windows).
+#
+# Maps to Claude Code agent teams:
+#   - TaskCreate per chunk, blockedBy for phase/chunk deps
+#   - One teammate per stream (context continuity)
+#   - SendMessage for inter-stream communication
 # =============================================================================
 
-implementation-order:
-  # For nested teams, process depth-first (leaf teams first)
-  # Sub-teams at the same level can be parallelized
+execution-plan:
+  # Work streams — related chunks assigned to the same agent for context
+  # continuity. The implementation agent decides actual agent types at runtime.
+  # Skills tell each stream's agent what skills to load before working.
+  #
+  # streams:
+  #   - name: scaffold
+  #     responsibility: Orchestration, utilities, service wrapper
+  #     owns: [src/*/team.py, src/*/utils.py, main.py, .env.example]
+  #     skills: [agent-teams, individual-agents]
+  #   - name: tools
+  #     responsibility: Tool implementation from agent spec documentation
+  #     owns: [src/*/tools.py]
+  #     skills: [tools-and-utilities]
+  #   - name: prompts
+  #     responsibility: Agent prompt generation
+  #     owns: [src/*/prompts.py]
+  #     skills: [prompt-engineering]
 
-  parallel-groups:
-    # - group: 1
-    #   teams:
-    #     - content-refinement
-    #     - parallel-research
-    # - group: 2
-    #   teams:
-    #     - research-pipeline  # Root team after sub-teams complete
+  # Phases — sequential barriers. All chunks in a phase run in parallel.
+  # Chunk-level dependencies can also be specified via depends_on.
+  #
+  # IMPORTANT: Each chunk MUST include `spec-files` — the exact spec file paths
+  # to read for that chunk. This tells the impl-builder which files contain the
+  # requirements for each unit of work. All paths are relative to spec/.
+  #
+  # phases:
+  #   - phase: 1
+  #     name: Foundation
+  #     chunks:
+  #       - name: team-scaffold
+  #         stream: scaffold
+  #         description: Create team.py with orchestration logic and placeholder agents
+  #         spec-files:
+  #           - content-review-loop/team.md
+  #           - content-review-loop/agent-config.yaml
+  #       - name: tools
+  #         stream: tools
+  #         description: Implement tool definitions from agent specs
+  #         spec-files:
+  #           - content-review-loop/agents/creator.md    # Tool specs in agent files
+  #           - content-review-loop/agents/critic.md
+  #
+  #   - phase: 2
+  #     name: Agent Implementation
+  #     chunks:
+  #       - name: implement-agents
+  #         stream: scaffold
+  #         description: Fill in agent implementation functions in team.py
+  #         spec-files:
+  #           - content-review-loop/agents/creator.md
+  #           - content-review-loop/agents/critic.md
+  #
+  #   - phase: 3
+  #     name: Prompts
+  #     chunks:
+  #       - name: prompt-creator
+  #         stream: prompts
+  #         description: Generate creator agent prompt
+  #         spec-files:
+  #           - content-review-loop/agents/creator.md
+  #       - name: prompt-critic
+  #         stream: prompts
+  #         description: Generate critic agent prompt
+  #         spec-files:
+  #           - content-review-loop/agents/critic.md
+  #
+  #   - phase: 4
+  #     name: Finalization
+  #     chunks:
+  #       - name: utilities
+  #         stream: scaffold
+  #         description: Create shared utilities if needed
+  #         spec-files:
+  #           - content-review-loop/team.md
+  #       - name: env-setup
+  #         stream: scaffold
+  #         description: Generate .env.example
+  #         spec-files:
+  #           - content-review-loop/team.md               # Dependencies section
+  #       - name: fastapi-wrapper
+  #         stream: scaffold
+  #         description: Create FastAPI service wrapper
+  #         spec-files:
+  #           - manifest.yaml                             # System-level config
+
+  # Communication — what agents need to share between streams.
+  # Defines WHAT to communicate, not the exact messages.
+  #
+  # communication:
+  #   - from: tools
+  #     to: scaffold
+  #     after: phase-1
+  #     what: Tool function signatures and return types for agent implementations
+  #   - from: scaffold
+  #     to: prompts
+  #     after: phase-2
+  #     what: Agent function structures and state schemas for prompt context

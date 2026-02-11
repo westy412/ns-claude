@@ -1,0 +1,64 @@
+{
+  "session_id": "d111f59c-f93f-4880-a643-ef5383995c27",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-28T21:41:28.235Z",
+  "duration_minutes": 34,
+  "user_message_count": 4,
+  "assistant_message_count": 236,
+  "tool_counts": {
+    "Read": 31,
+    "mcp__linear__get_issue": 1,
+    "Task": 1,
+    "Glob": 3,
+    "mcp__linear__create_comment": 3,
+    "TaskCreate": 5,
+    "TaskUpdate": 9,
+    "Edit": 32,
+    "Bash": 12,
+    "Write": 3,
+    "Grep": 3,
+    "mcp__linear__update_issue": 1,
+    "Skill": 1
+  },
+  "languages": {
+    "Markdown": 2,
+    "TypeScript": 59,
+    "Python": 5
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 1883,
+  "output_tokens": 545,
+  "first_prompt": "HANDOVER: SPEC-09 Phase 1 (Posting & Publishing) - Backend Complete…",
+  "summary": "SPEC-09 Phase 1 Frontend Layout Redesign",
+  "user_interruptions": 0,
+  "user_response_times": [
+    549.215,
+    509.522
+  ],
+  "tool_errors": 3,
+  "tool_error_categories": {
+    "Other": 1,
+    "File Not Found": 1,
+    "File Changed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1342,
+  "lines_removed": 44,
+  "files_modified": 18,
+  "message_hours": [
+    21,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-01-28T21:41:28.235Z",
+    "2026-01-28T22:06:08.661Z",
+    "2026-01-28T22:06:20.448Z",
+    "2026-01-28T22:15:18.438Z"
+  ]
+}

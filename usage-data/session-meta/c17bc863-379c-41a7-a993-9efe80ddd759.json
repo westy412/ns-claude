@@ -1,0 +1,70 @@
+{
+  "session_id": "c17bc863-379c-41a7-a993-9efe80ddd759",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-28T23:07:09.508Z",
+  "duration_minutes": 33,
+  "user_message_count": 10,
+  "assistant_message_count": 61,
+  "tool_counts": {
+    "Task": 1,
+    "Glob": 2,
+    "Read": 3,
+    "Grep": 4,
+    "Edit": 8,
+    "Skill": 1
+  },
+  "languages": {
+    "TypeScript": 2,
+    "Markdown": 9
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 475,
+  "output_tokens": 154,
+  "first_prompt": "please study @specs/spec-09-posting-publishing.md and see where we are at",
+  "summary": "**Ready Requirements & Approval Flow Design**",
+  "user_interruptions": 0,
+  "user_response_times": [
+    151.514,
+    222.94,
+    365.689,
+    200.745,
+    185.392,
+    96.695,
+    51.027,
+    10.886
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 300,
+  "lines_removed": 24,
+  "files_modified": 1,
+  "message_hours": [
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-01-28T23:07:09.508Z",
+    "2026-01-28T23:10:07.976Z",
+    "2026-01-28T23:18:13.628Z",
+    "2026-01-28T23:25:05.252Z",
+    "2026-01-28T23:29:10.701Z",
+    "2026-01-28T23:32:39.245Z",
+    "2026-01-28T23:34:47.158Z",
+    "2026-01-28T23:35:54.905Z",
+    "2026-01-28T23:39:16.606Z",
+    "2026-01-28T23:39:23.008Z"
+  ]
+}

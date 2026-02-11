@@ -1,0 +1,38 @@
+{
+  "session_id": "1e522bf5-4d2d-4ef0-8265-efe220a9bb4d",
+  "project_path": "/Users/georgewestbrook/Programming",
+  "start_time": "2026-02-01T15:27:03.470Z",
+  "duration_minutes": 10,
+  "user_message_count": 2,
+  "assistant_message_count": 6,
+  "tool_counts": {
+    "Bash": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 50,
+  "output_tokens": 34,
+  "first_prompt": "Last login: Sun Feb  1 15:25:01 on ttys009 /Users/georgewestbrook/.zshrc:34: command not found: starship georgewestbrook@Georges-MacBook-Pro ~ %",
+  "user_interruptions": 0,
+  "user_response_times": [
+    302.546
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T15:31:06.074Z",
+    "2026-02-01T15:36:27.659Z"
+  ]
+}

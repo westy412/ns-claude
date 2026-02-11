@@ -58,6 +58,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,  # REQUIRED: prevents indefinite hangs
         )
     return _shared_lm
 
@@ -65,6 +66,10 @@ def get_shared_lm():
 # =============================================================================
 # ROUTER SIGNATURE
 # =============================================================================
+# STRUCTURED OUTPUT RULE: Use typed output fields (bool, int, list[str],
+# dict[str, Any]) or Pydantic BaseModel/RootModel as OutputField types.
+# NEVER use str fields with JSON parsing instructions.
+# See frameworks/dspy/CHEATSHEET.md Critical Rules.
 
 class RouterSignature(dspy.Signature):
     """
@@ -389,6 +394,8 @@ if __name__ == "__main__":
 ---
 
 ## DSPy-Specific Notes
+
+> **Structured Output Rule:** When defining signatures for router and handler agents, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
 
 - **Router uses Predict:** Classification is a straightforward mapping task that doesn't benefit from ChainOfThought reasoning.
 

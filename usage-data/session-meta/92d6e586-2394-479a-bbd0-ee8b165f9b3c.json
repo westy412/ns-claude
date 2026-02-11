@@ -1,0 +1,66 @@
+{
+  "session_id": "92d6e586-2394-479a-bbd0-ee8b165f9b3c",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-31T23:29:51.863Z",
+  "duration_minutes": 26,
+  "user_message_count": 8,
+  "assistant_message_count": 193,
+  "tool_counts": {
+    "Read": 22,
+    "Grep": 16,
+    "Glob": 6,
+    "Bash": 7,
+    "Edit": 21
+  },
+  "languages": {
+    "TypeScript": 25,
+    "Python": 18
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 1578,
+  "output_tokens": 469,
+  "first_prompt": "Session Handover…",
+  "summary": "Image generation realtime updates stuck at 98%",
+  "user_interruptions": 0,
+  "user_response_times": [
+    159.166,
+    195.533,
+    65.213,
+    19.603,
+    92.774,
+    83.768,
+    171.74
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "File Not Found": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 145,
+  "lines_removed": 91,
+  "files_modified": 6,
+  "message_hours": [
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T23:29:51.863Z",
+    "2026-01-31T23:32:40.555Z",
+    "2026-01-31T23:42:10.834Z",
+    "2026-01-31T23:43:54.524Z",
+    "2026-01-31T23:46:05.309Z",
+    "2026-01-31T23:47:49.136Z",
+    "2026-01-31T23:50:38.311Z",
+    "2026-01-31T23:54:55.914Z"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "session_id": "a7ddcd56-1ee4-4f5d-82ce-9a2ed628a548",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T00:15:39.988Z",
+  "duration_minutes": 629,
+  "user_message_count": 8,
+  "assistant_message_count": 86,
+  "tool_counts": {
+    "Bash": 14,
+    "Read": 13,
+    "Grep": 3,
+    "Edit": 13,
+    "TaskOutput": 1
+  },
+  "languages": {
+    "Python": 23
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 94,
+  "output_tokens": 2607,
+  "first_prompt": "<task-notification> <task-id>b7bff9c</task-id> <output-file>/private/tmp/claude-501/-Users-georgewestbrook-Programming-novosapien-ns-content-workforce-ns-content-workforce-idea-agents/tasks/b7bff9c.ou…",
+  "user_interruptions": 2,
+  "user_response_times": [
+    928.309,
+    908.736,
+    1370.452,
+    42.754,
+    42.835,
+    42.991
+  ],
+  "tool_errors": 4,
+  "tool_error_categories": {
+    "Other": 3,
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 56,
+  "lines_removed": 29,
+  "files_modified": 5,
+  "message_hours": [
+    0,
+    4,
+    6,
+    9,
+    10,
+    10,
+    10,
+    10
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T00:15:39.988Z",
+    "2026-02-10T04:25:14.349Z",
+    "2026-02-10T06:16:58.181Z",
+    "2026-02-10T09:19:43.764Z",
+    "2026-02-10T10:43:16.066Z",
+    "2026-02-10T10:44:40.191Z",
+    "2026-02-10T10:44:40.272Z",
+    "2026-02-10T10:44:40.428Z"
+  ]
+}

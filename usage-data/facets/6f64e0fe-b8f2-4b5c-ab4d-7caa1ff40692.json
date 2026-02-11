@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Improve the post preview UI by hiding zero-value analytics metrics and moving the analytics dashboard to the top for published posts",
+  "goal_categories": {
+    "ui_modification": 2
+  },
+  "outcome": "mostly_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "very_helpful",
+  "session_type": "iterative_refinement",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "multi_file_changes",
+  "brief_summary": "User asked to hide irrelevant zero-value analytics and move the analytics dashboard to the top for published posts; Claude made the changes across Twitter and LinkedIn preview components but the work was left uncommitted and unvalidated.",
+  "session_id": "6f64e0fe-b8f2-4b5c-ab4d-7caa1ff40692"
+}

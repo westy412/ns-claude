@@ -18,6 +18,8 @@ In LangGraph, there's a distinction between:
 
 ## If You Want "Text-Like" Output
 
+> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+
 Use a **Basic Agent (dspy.Predict)** with a string output field:
 
 ```python

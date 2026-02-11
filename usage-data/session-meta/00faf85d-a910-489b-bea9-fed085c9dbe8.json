@@ -1,0 +1,55 @@
+{
+  "session_id": "00faf85d-a910-489b-bea9-fed085c9dbe8",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-29T00:20:37.709Z",
+  "duration_minutes": 11,
+  "user_message_count": 4,
+  "assistant_message_count": 89,
+  "tool_counts": {
+    "Read": 18,
+    "Glob": 4,
+    "Grep": 4,
+    "Task": 1,
+    "Edit": 6,
+    "Bash": 2
+  },
+  "languages": {
+    "Markdown": 4,
+    "Python": 16,
+    "TypeScript": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 58718,
+  "output_tokens": 162,
+  "first_prompt": "Session Handover…",
+  "summary": "SPEC-09 Phase 1.5/1.6 LinkedIn integration verification and fixes",
+  "user_interruptions": 1,
+  "user_response_times": [
+    106.818,
+    14.656
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 99,
+  "lines_removed": 35,
+  "files_modified": 4,
+  "message_hours": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T00:20:37.709Z",
+    "2026-01-29T00:30:13.654Z",
+    "2026-01-29T00:31:10.636Z",
+    "2026-01-29T00:31:24.129Z"
+  ]
+}

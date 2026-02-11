@@ -1,0 +1,40 @@
+{
+  "session_id": "cc046b12-9569-4a08-9cbd-d1658fcd3eaf",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T18:36:52.798Z",
+  "duration_minutes": 1,
+  "user_message_count": 2,
+  "assistant_message_count": 3,
+  "tool_counts": {
+    "Read": 1
+  },
+  "languages": {
+    "Markdown": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 4398,
+  "output_tokens": 5,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are part of the spec-audit team. Your task is Task #1: Extract all requirements from the discovery document.  Read these files: 1. `/Users/georgewestbroo…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    32.848
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    18,
+    18
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T18:36:52.798Z",
+    "2026-02-07T18:37:34.384Z"
+  ]
+}

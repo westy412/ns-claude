@@ -1,0 +1,64 @@
+{
+  "name": "spec-audit",
+  "description": "Audit the research-team spec against the discovery doc for completeness",
+  "createdAt": 1770489301772,
+  "leadAgentId": "team-lead@spec-audit",
+  "leadSessionId": "e357efd9-ae2a-4adc-b63d-191d8fcd7140",
+  "members": [
+    {
+      "agentId": "team-lead@spec-audit",
+      "name": "team-lead",
+      "agentType": "team-lead",
+      "model": "claude-opus-4-6",
+      "joinedAt": 1770489301772,
+      "tmuxPaneId": "",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+      "subscriptions": []
+    },
+    {
+      "agentId": "discovery-analyst@spec-audit",
+      "name": "discovery-analyst",
+      "agentType": "codebase-researcher",
+      "model": "claude-opus-4-6",
+      "prompt": "You are part of the spec-audit team. Your task is Task #1: Extract all requirements from the discovery document.\n\nRead these files:\n1. `/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/specs/discovery/research-and-ideation-architecture.md`\n2. `/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/spec/research-team/apify-actor-research.md`\n\nExtract a comprehensive checklist of everything the Research Phase spec must cover. Focus on:\n1. Every agent mentioned — name, purpose, what it should do\n2. Every data flow / connection between agents\n3. Every sub-team / module described\n4. Architecture decisions that should be reflected in specs\n5. Input/output schemas mentioned\n6. Tool integrations required\n7. Platform-specific requirements (LinkedIn vs X differences)\n8. Quality loop behavior requirements\n9. Synthesis layer requirements (platform synthesizers, signal blender)\n10. Any other concrete requirements\n\nWrite the structured checklist to: `/private/tmp/claude-501/-Users-georgewestbrook-Programming-novosapien-ns-content-workforce/e357efd9-ae2a-4adc-b63d-191d8fcd7140/scratchpad/discovery-requirements.md`\n\nWhen done, mark Task #1 as completed via TaskUpdate.",
+      "color": "blue",
+      "planModeRequired": false,
+      "joinedAt": 1770489411620,
+      "tmuxPaneId": "%4",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+      "subscriptions": [],
+      "backendType": "tmux",
+      "isActive": true
+    },
+    {
+      "agentId": "platform-auditor@spec-audit",
+      "name": "platform-auditor",
+      "agentType": "codebase-researcher",
+      "model": "claude-opus-4-6",
+      "prompt": "You are part of the spec-audit team. Your task is Task #2: Audit the 5 platform-specific research loop specs.\n\nBase path: `/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/spec/research-team/`\n\nRead ALL of these files:\n\n**Generic templates (baseline):**\n- research-loop/agents/search-agent.md\n- research-loop/agents/analysis-agent.md\n\n**Per platform (linkedin-keyword, linkedin-creator, x-trending, x-keyword, x-creator):**\n- {platform}/team.md\n- {platform}/agent-config.yaml\n- {platform}/agents/{platform}-search-agent.md\n- {platform}/agents/{platform}-analysis-agent.md\n\nAlso read: `apify-actor-research.md` for actor details to verify against.\n\nFor each platform, audit:\n1. Template compliance — All sections from generic template present?\n2. Platform specialization — Actually customized, not copy of generic?\n3. Apify actor details — Correct actor ID, input params, output fields?\n4. Actor status — BROKEN/UNTESTED noted where applicable?\n5. Fallback strategy — Broken actors have fallback chains?\n6. Search strategy — Platform-specific strategy described?\n7. Engagement signals — Platform-specific metrics documented?\n8. Examples — Platform-specific, not generic?\n9. team.md ↔ agent-config.yaml consistency\n10. Cross-references — File paths match actual locations?\n\nWrite the audit report to: `/private/tmp/claude-501/-Users-georgewestbrook-Programming-novosapien-ns-content-workforce/e357efd9-ae2a-4adc-b63d-191d8fcd7140/scratchpad/platform-loops-audit.md`\n\nWhen done, mark Task #2 as completed via TaskUpdate.",
+      "color": "green",
+      "planModeRequired": false,
+      "joinedAt": 1770489446119,
+      "tmuxPaneId": "%5",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+      "subscriptions": [],
+      "backendType": "tmux",
+      "isActive": true
+    },
+    {
+      "agentId": "manifest-auditor@spec-audit",
+      "name": "manifest-auditor",
+      "agentType": "codebase-researcher",
+      "model": "claude-opus-4-6",
+      "prompt": "You are part of the spec-audit team. Your task is Task #4: Audit manifest.yaml and cross-reference integrity.\n\nRead: `/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/spec/manifest.yaml`\n\nThen use Glob to find ALL .md and .yaml files under:\n`/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/spec/research-team/`\n\nCheck:\n1. File existence — Every file referenced in manifest.yaml actually exists on disk\n2. No orphans — Every spec file on disk is referenced in manifest.yaml\n3. Hierarchy accuracy — Does the hierarchy match the actual folder structure?\n4. Agent names match — Do names in manifest match names in spec frontmatter and agent-config.yaml?\n5. Execution plan — Does it reference the right modules?\n6. Sub-team completeness — Are all 8 sub-teams listed (research-loop template, 5 platforms, industry, analytics)?\n\nWrite the audit report to: `/private/tmp/claude-501/-Users-georgewestbrook-Programming-novosapien-ns-content-workforce/e357efd9-ae2a-4adc-b63d-191d8fcd7140/scratchpad/manifest-audit.md`\n\nWhen done, mark Task #4 as completed via TaskUpdate.",
+      "color": "purple",
+      "planModeRequired": false,
+      "joinedAt": 1770489486030,
+      "tmuxPaneId": "%7",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+      "subscriptions": [],
+      "backendType": "tmux",
+      "isActive": true
+    }
+  ]
+}

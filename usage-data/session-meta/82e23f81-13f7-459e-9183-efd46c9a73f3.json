@@ -1,0 +1,62 @@
+{
+  "session_id": "82e23f81-13f7-459e-9183-efd46c9a73f3",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T11:01:21.996Z",
+  "duration_minutes": 104,
+  "user_message_count": 8,
+  "assistant_message_count": 43,
+  "tool_counts": {
+    "Read": 3,
+    "Task": 3,
+    "AskUserQuestion": 4,
+    "Write": 1,
+    "Glob": 1,
+    "Bash": 1
+  },
+  "languages": {
+    "Markdown": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 83,
+  "output_tokens": 367,
+  "first_prompt": "Session Handover…",
+  "summary": "YouTube Idea Gen Phase 1 + Phase 2 Planning Complete",
+  "user_interruptions": 1,
+  "user_response_times": [
+    41.558,
+    41.558,
+    14.527,
+    139.908,
+    31.028
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 240,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T11:01:21.996Z",
+    "2026-02-03T11:02:10.497Z",
+    "2026-02-03T11:02:10.497Z",
+    "2026-02-03T11:02:15.366Z",
+    "2026-02-03T11:02:28.290Z",
+    "2026-02-03T12:32:40.279Z",
+    "2026-02-03T12:40:20.293Z",
+    "2026-02-03T12:44:28.436Z"
+  ]
+}

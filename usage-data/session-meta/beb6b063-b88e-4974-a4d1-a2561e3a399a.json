@@ -1,0 +1,41 @@
+{
+  "session_id": "beb6b063-b88e-4974-a4d1-a2561e3a399a",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T12:42:58.592Z",
+  "duration_minutes": 28,
+  "user_message_count": 1,
+  "assistant_message_count": 51,
+  "tool_counts": {
+    "Task": 1,
+    "Read": 17,
+    "AskUserQuestion": 1,
+    "Write": 6,
+    "ExitPlanMode": 1,
+    "Bash": 2
+  },
+  "languages": {
+    "Markdown": 23
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 59,
+  "output_tokens": 21859,
+  "first_prompt": "hey there, so we have an issue with the skills. In the So, we sorry, we have an issue with the Claudemds in this project file. So, the ways of working is duplicated across all of them. And we only rea…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 2560,
+  "lines_removed": 0,
+  "files_modified": 6,
+  "message_hours": [
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T12:42:58.592Z"
+  ]
+}

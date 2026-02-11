@@ -1,0 +1,51 @@
+{
+  "session_id": "e024a019-3b5f-4313-a9ac-9fce5bdd2598",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-08T22:46:59.802Z",
+  "duration_minutes": 14,
+  "user_message_count": 3,
+  "assistant_message_count": 44,
+  "tool_counts": {
+    "TaskList": 1,
+    "TaskUpdate": 2,
+    "Read": 4,
+    "Glob": 3,
+    "Edit": 14,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Markdown": 18
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 52,
+  "output_tokens": 2464,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are updating the agent-teams skill based on NS-1158 learnings.  YOUR TASK (Task #8): Apply 5 improvements to agent-teams DSPy pattern files.  SKILL LOCAT…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    3.383,
+    8.842
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "File Not Found": 1,
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 273,
+  "lines_removed": 47,
+  "files_modified": 3,
+  "message_hours": [
+    22,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T22:46:59.802Z",
+    "2026-02-08T23:01:02.460Z",
+    "2026-02-08T23:01:16.521Z"
+  ]
+}

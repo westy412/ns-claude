@@ -1,0 +1,22 @@
+{
+  "underlying_goal": "Fix a bug where refreshing the post details page doesn't preserve the active tab, persist the tab in the URL, create a Linear issue for it, implement the fix, commit, and push",
+  "goal_categories": {
+    "bug_fix_implementation": 1,
+    "issue_tracking_creation": 1,
+    "git_operations": 2
+  },
+  "outcome": "fully_achieved",
+  "user_satisfaction_counts": {
+    "likely_satisfied": 3
+  },
+  "claude_helpfulness": "very_helpful",
+  "session_type": "single_task",
+  "friction_counts": {
+    "tool_infrastructure_issue": 1,
+    "incomplete_workflow": 1
+  },
+  "friction_detail": "MCP Linear tool failed on first attempt requiring user to reconnect, and Claude didn't commit/push until the user explicitly asked twice.",
+  "primary_success": "correct_code_edits",
+  "brief_summary": "User wanted a tab persistence bug fixed with a Linear issue, code fix, commit, and push — all were completed after some prompting about commit/push steps.",
+  "session_id": "cf26eaa6-86ea-4e56-9316-e0e3df4aa837"
+}

@@ -1,0 +1,65 @@
+{
+  "session_id": "d1642b98-de7d-4060-8618-cdb684cba966",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-06T22:09:22.810Z",
+  "duration_minutes": 846,
+  "user_message_count": 8,
+  "assistant_message_count": 56,
+  "tool_counts": {
+    "Skill": 2,
+    "Read": 10,
+    "Glob": 1,
+    "Task": 3,
+    "Bash": 3,
+    "AskUserQuestion": 1,
+    "Write": 8,
+    "Edit": 3
+  },
+  "languages": {
+    "Markdown": 15,
+    "YAML": 6
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 88,
+  "output_tokens": 1733,
+  "first_prompt": "Session Handover    Context    - Spec: /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/specs/disco   very/research-and-ideation-architecture.md   - Linear Issue: None (discovery pha…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    28.593,
+    16.959,
+    55.647,
+    59.565,
+    110.94,
+    103.045
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1891,
+  "lines_removed": 14,
+  "files_modified": 8,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-06T22:09:22.810Z",
+    "2026-02-06T22:09:58.277Z",
+    "2026-02-06T22:18:48.595Z",
+    "2026-02-06T22:32:08.170Z",
+    "2026-02-06T22:32:12.088Z",
+    "2026-02-06T22:33:03.463Z",
+    "2026-02-07T12:13:33.847Z",
+    "2026-02-07T12:15:27.770Z"
+  ]
+}

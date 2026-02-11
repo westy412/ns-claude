@@ -1,0 +1,53 @@
+{
+  "session_id": "a9474f73-bce6-4b8c-ae2e-38649412b421",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-09T22:56:53.739Z",
+  "duration_minutes": 13,
+  "user_message_count": 3,
+  "assistant_message_count": 49,
+  "tool_counts": {
+    "Read": 7,
+    "TaskList": 2,
+    "TaskUpdate": 2,
+    "Edit": 6,
+    "Write": 1,
+    "Grep": 1,
+    "Bash": 6,
+    "SendMessage": 4
+  },
+  "languages": {
+    "Markdown": 1,
+    "Python": 13
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 61,
+  "output_tokens": 2183,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are teammate code-updater on team react-fix-team.  Read your full instructions at:   /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/n…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.065,
+    2.022
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 565,
+  "lines_removed": 7,
+  "files_modified": 2,
+  "message_hours": [
+    22,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T22:56:53.739Z",
+    "2026-02-09T23:08:54.618Z",
+    "2026-02-09T23:10:07.003Z"
+  ]
+}

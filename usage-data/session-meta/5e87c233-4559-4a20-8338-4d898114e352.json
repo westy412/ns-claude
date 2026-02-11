@@ -1,0 +1,47 @@
+{
+  "session_id": "5e87c233-4559-4a20-8338-4d898114e352",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-08T21:37:03.345Z",
+  "duration_minutes": 27,
+  "user_message_count": 3,
+  "assistant_message_count": 12,
+  "tool_counts": {
+    "TaskUpdate": 2,
+    "Read": 2,
+    "Write": 1,
+    "SendMessage": 2,
+    "TaskList": 1
+  },
+  "languages": {
+    "Markdown": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 20,
+  "output_tokens": 155,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are categorizing all implementation issues by root cause.  PROJECT: /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workfor…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    1492.982,
+    12.265
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 134,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    21,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T21:37:03.345Z",
+    "2026-02-08T22:03:47.146Z",
+    "2026-02-08T22:04:06.189Z"
+  ]
+}

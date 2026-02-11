@@ -1,0 +1,57 @@
+{
+  "session_id": "ca7a0a99-3e8c-42ea-8eba-fd895259c5d4",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-01T13:06:47.992Z",
+  "duration_minutes": 25,
+  "user_message_count": 5,
+  "assistant_message_count": 51,
+  "tool_counts": {
+    "Grep": 3,
+    "Read": 3,
+    "Write": 1,
+    "Edit": 5,
+    "Bash": 7,
+    "mcp__linear__create_comment": 1
+  },
+  "languages": {
+    "TypeScript": 9
+  },
+  "git_commits": 2,
+  "git_pushes": 0,
+  "input_tokens": 414,
+  "output_tokens": 135,
+  "first_prompt": "Okay, so you still haven't updated the preview tab for tweets.",
+  "summary": "Twitter preview avatar icon styling",
+  "user_interruptions": 1,
+  "user_response_times": [
+    85.567,
+    4.087,
+    7.858,
+    7.858
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 353,
+  "lines_removed": 12,
+  "files_modified": 4,
+  "message_hours": [
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T13:26:44.622Z",
+    "2026-02-01T13:30:02.861Z",
+    "2026-02-01T13:30:40.036Z",
+    "2026-02-01T13:30:43.807Z",
+    "2026-02-01T13:30:43.807Z"
+  ]
+}

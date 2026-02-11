@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "User greeted Claude and attempted to resume a previous task, but there was no prior context to continue",
+  "goal_categories": {
+    "warmup_minimal": 1
+  },
+  "outcome": "not_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "slightly_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User said hey and asked to carry on, but there was no previous task context to resume.",
+  "session_id": "09992506-4554-4fc3-a54c-2af0e5273ada"
+}

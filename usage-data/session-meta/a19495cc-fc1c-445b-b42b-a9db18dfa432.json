@@ -1,0 +1,45 @@
+{
+  "session_id": "a19495cc-fc1c-445b-b42b-a9db18dfa432",
+  "project_path": "/Users/georgewestbrook/.claude",
+  "start_time": "2026-02-08T14:02:00.776Z",
+  "duration_minutes": 2,
+  "user_message_count": 2,
+  "assistant_message_count": 21,
+  "tool_counts": {
+    "Glob": 2,
+    "Grep": 1,
+    "Read": 3,
+    "Edit": 3
+  },
+  "languages": {
+    "Markdown": 6
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 37,
+  "output_tokens": 165,
+  "first_prompt": "Hey there, please can we add to the project setup skill a section that says for all sub-agents please use Opus, not haiku or sonnet.",
+  "user_interruptions": 0,
+  "user_response_times": [
+    53.48
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Edit Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 8,
+  "lines_removed": 6,
+  "files_modified": 1,
+  "message_hours": [
+    14,
+    14
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T14:02:00.776Z",
+    "2026-02-08T14:04:05.784Z"
+  ]
+}

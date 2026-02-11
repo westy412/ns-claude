@@ -1,0 +1,58 @@
+{
+  "session_id": "7e7cb709-aa67-424f-9633-a5d158d91c91",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-01-31T22:00:40.915Z",
+  "duration_minutes": 26,
+  "user_message_count": 4,
+  "assistant_message_count": 88,
+  "tool_counts": {
+    "Read": 14,
+    "Glob": 7,
+    "Grep": 1,
+    "mcp__linear__create_issue": 1,
+    "mcp__linear__update_issue": 1,
+    "Edit": 6,
+    "Bash": 4,
+    "mcp__linear__create_comment": 2
+  },
+  "languages": {
+    "Markdown": 2,
+    "TypeScript": 18
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 2188,
+  "output_tokens": 176,
+  "first_prompt": "Hey there, can we create an issue tool up and set up the campaign creation page, please?",
+  "summary": "Wire up campaign creation with real API and schema",
+  "user_interruptions": 0,
+  "user_response_times": [
+    11.18,
+    1082.763,
+    23.633
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "File Not Found": 1,
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 180,
+  "lines_removed": 30,
+  "files_modified": 3,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T22:00:40.915Z",
+    "2026-01-31T22:04:12.811Z",
+    "2026-01-31T22:24:15.077Z",
+    "2026-01-31T22:25:02.738Z"
+  ]
+}

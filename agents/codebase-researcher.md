@@ -2,7 +2,7 @@
 name: codebase-researcher
 description: Explores and analyses codebase to understand implementations, patterns, and architecture. Use when research requires understanding existing code.
 tools: Read, Grep, Glob, Bash
-model: sonnet
+model: opus
 ---
 
 # Codebase Researcher

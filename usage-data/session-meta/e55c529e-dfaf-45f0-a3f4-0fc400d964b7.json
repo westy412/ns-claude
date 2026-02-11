@@ -1,0 +1,53 @@
+{
+  "session_id": "e55c529e-dfaf-45f0-a3f4-0fc400d964b7",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-06T21:28:42.475Z",
+  "duration_minutes": 1,
+  "user_message_count": 5,
+  "assistant_message_count": 8,
+  "tool_counts": {
+    "Read": 1,
+    "Bash": 1,
+    "Skill": 1
+  },
+  "languages": {
+    "Markdown": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 18,
+  "output_tokens": 69,
+  "first_prompt": "Session Handover                                                                                                                                                                  Context…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    15.077,
+    19.073,
+    19.073,
+    19.073
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    21,
+    21,
+    21,
+    21,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-02-06T21:28:42.475Z",
+    "2026-02-06T21:29:15.978Z",
+    "2026-02-06T21:29:19.974Z",
+    "2026-02-06T21:29:19.974Z",
+    "2026-02-06T21:29:19.974Z"
+  ]
+}

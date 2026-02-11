@@ -122,13 +122,47 @@ Load these skills before starting:
 **From Spec Research:**
 - [additional files examined during spec creation]
 
-## Work Breakdown
+## Execution Plan
 
-<!-- Each item becomes a Linear issue. Add issue IDs when created. -->
+<!--
+  Phases execute sequentially (Phase 2 starts after Phase 1 completes).
+  Chunks within a phase execute in parallel across different agents.
+  Work streams group related chunks so the same agent handles them for context continuity.
+-->
 
-- [ ] [Chunk 1 description]
-- [ ] [Chunk 2 description]
-- [ ] [Chunk 3 description]
+### Work Streams
+
+| Stream | Responsibility | Owns | Skills |
+|--------|---------------|------|--------|
+| [stream-name] | [what this stream handles] | [files/directories] | [skills to load] |
+
+### Phase 1: [Name]
+
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| [chunk-name] | [stream] | [what success looks like] | — |
+
+**Details:**
+
+- [ ] **[Chunk name]**
+  Outcome: [success statement]
+  Stream: [stream-name]
+  Skills: [skills this chunk's agent should load]
+  - [Sub-task 1]
+  - [Sub-task 2]
+
+### Phase 2: [Name]
+
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| [chunk-name] | [stream] | [what success looks like] | Phase 1 |
+| [chunk-name] | [stream] | [what success looks like] | Phase 1 + [specific-chunk] |
+
+### Communication
+
+| From | To | When | What |
+|------|----|------|------|
+| [stream] | [stream] | After [chunk/phase] | [what to communicate] |
 
 ## Acceptance Criteria
 
@@ -234,66 +268,77 @@ Pull from:
 
 **Why this matters:** The agent executing the spec can quickly reference these files to understand patterns, conventions, and context without re-discovering them.
 
-### Work Breakdown
+### Execution Plan
 
-**This is the key section for autonomous execution.** Each line item:
-- Becomes a Linear issue
-- Gets an issue ID added when created (e.g., NS-123)
-- Gets checked off when that chunk is complete
+**This is the key section for autonomous execution.** It defines:
+- **Work streams** — groups of related chunks assigned to the same agent for context continuity
+- **Phases** — sequential barriers; all chunks within a phase execute in parallel
+- **Chunks** — individual units of work, each becomes a Linear issue
+- **Communication** — what agents need to share between streams
+
+**The execution plan enables team-based parallel execution.** When multiple chunks exist within a phase, they can be worked on simultaneously by different agents. Each agent retains context across phases within its work stream.
 
 **Example progression:**
 
 Initially:
 ```markdown
-## Work Breakdown
+### Phase 1: Foundation
 
-- [ ] Core auth endpoints
-- [ ] JWT refresh flow
-- [ ] Rate limiting
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| Database models | data | User and token tables exist | — |
+| Auth utilities | api | JWT and password utilities work | — |
+
+- [ ] **Database models**
+  Outcome: User and token tables exist with proper indexes.
+  Stream: data
+  Skills: backend-api
+  - Create User model with password hashing
+  - Create RefreshToken model
 ```
 
-After Linear issues created:
+After Linear issues created (issue IDs added):
 ```markdown
-## Work Breakdown
-
-- [ ] Core auth endpoints (NS-101)
-- [ ] JWT refresh flow (NS-102)
-- [ ] Rate limiting (NS-103)
+- [ ] **Database models** (NS-101)
 ```
 
-After first chunk complete:
+After chunk complete:
 ```markdown
-## Work Breakdown
-
-- [x] Core auth endpoints (NS-101)
-- [ ] JWT refresh flow (NS-102)
-- [ ] Rate limiting (NS-103)
+- [x] **Database models** (NS-101)
 ```
 
 **Chunking principles:**
 - Each chunk should be a coherent unit of work
 - Not too big (should be completable in reasonable time)
 - Not too small (each becomes a Linear issue; too many = overhead)
-- Should be independently completable
-- Should have clear boundaries
+- Should be independently completable within its phase
+- Should have clear file ownership boundaries (no two streams editing the same file)
 
-**Ask user:** "Does this breakdown make sense? Are chunks the right size?"
+**Ask user:** "Does this execution plan make sense? Are the phases and streams right?"
 
-### Work Breakdown Structure
+### Execution Plan Structure
 
-Each work breakdown item should include:
+Each chunk should include:
 
 1. **Bold title** — What's being built
 2. **Outcome statement** — What success looks like (1-2 sentences)
-3. **Sub-tasks** — Detailed steps, but outcome-focused not prescriptive
+3. **Stream** — Which work stream this belongs to
+4. **Skills** — What skills the agent should load for this chunk
+5. **Sub-tasks** — Detailed steps, but outcome-focused not prescriptive
 
 **Structure example:**
 ```markdown
-### [Service/Component Name]
+### Phase 1: [Phase Name]
+
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| [chunk-title] | [stream] | [success statement] | — |
 
 - [ ] **[Chunk title]**
 
-  **Outcome:** [What success looks like - 1-2 sentences]
+  Outcome: [What success looks like - 1-2 sentences]
+  Stream: [stream-name]
+  Skills: [skills to load]
 
   - [Sub-task describing WHAT, not HOW]
   - [Reference patterns to follow]
@@ -339,22 +384,38 @@ When the spec will be executed by an AI agent:
 
 **Good example:**
 ```markdown
-### Agent Service
+### Phase 1: Foundation
 
-- [ ] **Carousel content agents**
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| Carousel schemas | agent-service | Pydantic models for carousel JSON output | — |
+| Carousel tools | agent-service | API integration tools for content sources | — |
 
-  **Outcome:** Two new agents that output structured JSON for carousel content creation and iteration.
+- [ ] **Carousel schemas**
 
-  **Schemas:**
+  Outcome: Pydantic models for carousel JSON output with all slide types.
+  Stream: agent-service
+  Skills: backend-api
+
   - Create Pydantic models for carousel JSON output
   - Define slide type enum with all supported types
   - Define input/output schemas for draft and iteration agents
 
-  **Carousel draft agent:**
+### Phase 2: Agents (blocked by Phase 1)
+
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| Carousel draft agent | agent-service | Draft agent creates carousel content | Phase 1 |
+
+- [ ] **Carousel draft agent**
+
+  Outcome: New agent that outputs structured JSON for carousel content.
+  Stream: agent-service
+  Skills: agent-teams, individual-agents, prompt-engineering
+
   - Create new agent following existing initial_draft agent patterns
   - Use Planning → Research → Creation ↔ Critic workflow
   - Use `prompt-creator` subagent and `prompt-engineering` skill for prompts
-  - Reference existing prompts for patterns
   - Add API endpoint
 ```
 
@@ -373,6 +434,76 @@ When the spec will be executed by an AI agent:
 - [ ] Add API stuff
 - [ ] Make frontend work
 ```
+
+### Phasing Guidance
+
+**How to identify what goes in the same phase (parallel) vs different phases (sequential):**
+
+**Parallel signals — put in the same phase:**
+- Different files or directories (no file conflicts)
+- No shared state or data dependencies
+- Independent test suites
+- Different service boundaries (backend vs frontend vs agent)
+
+**Sequential signals — put in different phases:**
+- Schema/models needed before code that uses them
+- API needed before frontend that calls it
+- Base infrastructure before features that depend on it
+- Shared utilities before code that imports them
+
+**Chunk-level dependency signals:**
+- One chunk produces output another chunk consumes → add explicit `Depends On`
+- Two chunks in the same phase but one needs the other's file → add explicit dep OR move to next phase
+
+**Rule of thumb:** If it can be done in parallel, it should be. Maximize parallelism.
+
+### Work Streams
+
+**What:** Work streams group related chunks across phases so the same agent handles them. This matters because each agent has its own context window — an agent that built the database models in Phase 1 already has context when building the API endpoints that use those models in Phase 2.
+
+**How to define streams:**
+- Group by area of concern (database, API, frontend, agent)
+- Group by file ownership — a stream owns specific files/directories
+- **No two streams should write to the same file** (prevents conflicts)
+- Related tasks that build on each other should be in the same stream
+- Each stream lists the **skills** its agent should load (e.g., backend-api, prompt-engineering)
+
+**Example:**
+```markdown
+| Stream | Responsibility | Owns | Skills |
+|--------|---------------|------|--------|
+| data | Database models and migrations | src/models/, migrations/ | backend-api |
+| api | API endpoints and middleware | src/api/, src/middleware/ | backend-api |
+| frontend | UI components and pages | src/components/, src/pages/ | frontend-nextjs |
+```
+
+### Communication Between Streams
+
+Agents in different streams may need to share information:
+- A stream that builds models should tell the endpoints stream about the schemas
+- A stream that builds tools should tell the agents stream about function signatures
+- A stream that builds the API should tell the frontend stream about endpoints
+
+**Define WHAT needs to be communicated, not the exact messages:**
+```markdown
+### Communication
+
+| From | To | When | What |
+|------|----|------|------|
+| data | api | After Phase 1 | Model schemas and field types |
+| api | frontend | After Phase 2 | Endpoint URLs and response shapes |
+```
+
+### When NOT to Use Teams
+
+Teams add coordination overhead. Skip work streams and teams when:
+- All work is sequential (no parallel phases)
+- All chunks touch the same files (can't parallelize safely)
+- Simple single-component work where one agent can handle everything efficiently
+
+This is NOT a hard rule — use judgment. Even 2 parallel chunks can benefit from a team if the chunks are substantial. The key question is: **"Is there genuine parallelism that would save time?"**
+
+When teams aren't warranted, the execution plan still uses phases and chunks but without work streams — a single agent works through them sequentially.
 
 ### Acceptance Criteria
 
@@ -476,32 +607,55 @@ The template is the same for all work types. The differences are:
 - Data flow between agent and API/frontend
 - Sequencing (what gets built first)
 
-**Work breakdown:**
-- Non-agent components FIRST (agent may depend on them)
-- Agent system as a later chunk (handed off to agent-spec-builder)
+**Execution plan:**
+- Non-agent components in earlier phases (agent may depend on them)
+- Agent system in a later phase (handed off to agent-spec-builder)
 
 ```markdown
-## Work Breakdown
+## Execution Plan
 
-- [ ] API endpoint for content storage
-- [ ] API endpoint for retrieval
-- [ ] Frontend content display component
-- [ ] Agent system (requires agent-spec-builder)
+### Phase 1: API Foundation (parallel)
+
+- [ ] **API endpoint for content storage**
+  Stream: api
+- [ ] **API endpoint for retrieval**
+  Stream: api
+
+### Phase 2: Frontend + Agent (parallel, blocked by Phase 1)
+
+- [ ] **Frontend content display component**
+  Stream: frontend
+- [ ] **Agent system** (requires agent-spec-builder)
+  Stream: agent
 ```
 
 ---
 
 ## How the Spec Fits in the Loop
 
+### Single-Agent Mode (no parallel phases or teams not warranted)
+
 1. Bootstrap prompt tells agent to read the spec at `{{SPEC_PATH}}`
 2. Agent reads spec, loads skills listed
-3. Agent looks at Work Breakdown for first unchecked item
-4. Agent reads that Linear issue for detailed tasks
-5. Agent works through tasks, updating Linear
-6. When all tasks in issue done, agent checks off the item in spec and commits
-7. Agent moves to next unchecked item
-8. When all items checked, agent verifies Acceptance Criteria
-9. If all pass, agent outputs Completion Promise wrapped in `<promise></promise>` tags
+3. Agent reads Execution Plan, works through phases sequentially
+4. For each phase, works through chunks in order
+5. For each chunk, reads the Linear issue for detailed tasks
+6. Agent works through tasks, updating Linear
+7. When all tasks in chunk done, agent checks off the item and commits
+8. Agent moves to next chunk / next phase
+9. When all phases complete, agent verifies Acceptance Criteria
+10. If all pass, agent outputs Completion Promise wrapped in `<promise></promise>` tags
+
+### Team Mode (parallel phases with work streams)
+
+1. Lead agent reads the spec and Execution Plan
+2. Lead creates a team and spawns teammates — one per work stream
+3. Lead creates tasks from chunks, with `blockedBy` for phase barriers
+4. Teammates claim unblocked tasks, execute them, mark complete
+5. Phase barriers auto-enforce: Phase 2 tasks unblock when all Phase 1 tasks complete
+6. Teammates communicate between streams as defined in Communication section
+7. When all phases complete, lead verifies Acceptance Criteria
+8. Lead shuts down teammates and outputs Completion Promise
 
 ---
 
@@ -575,7 +729,7 @@ Use the Section-by-Section Guidance above for each section.
 If the work includes an agent component:
 
 1. **Complete the non-agent spec sections** as above
-2. **Mark the agent chunk in Work Breakdown** with a note:
+2. **Mark the agent chunk in Execution Plan** with a note:
    ```markdown
    - [ ] Agent system (requires agent-spec-builder)
    ```
@@ -598,7 +752,7 @@ Before saving:
 4. **Save the spec**
 5. **Summarize next steps:**
    > "Spec saved. Next steps:
-   > 1. Create Linear issues from Work Breakdown (or let the agent do it)
+   > 1. Create Linear issues from Execution Plan (or let the agent do it)
    > 2. Run the Ralph loop: `./scripts/ralph.sh specs/[name].md [COMPLETION_PROMISE]`
    > [If hybrid: 3. Run agent-spec-builder for the agent component]"
 
@@ -659,34 +813,88 @@ Load these skills before starting:
 - `src/middleware/` — Existing middleware patterns
 - `src/dependencies/` — FastAPI dependency injection examples
 
-## Work Breakdown
+## Execution Plan
 
-### Backend API
+### Work Streams
 
-- [x] **Core auth endpoints** (NS-101)
+| Stream | Responsibility | Owns | Skills |
+|--------|---------------|------|--------|
+| data | Database models and auth utilities | src/models/, src/auth/utils.py | backend-api |
+| api | API endpoints and middleware | src/api/auth/, src/middleware/ | backend-api |
 
-  **Outcome:** Users can authenticate with email/password and receive JWT tokens.
+### Phase 1: Foundation (parallel)
 
-  - Create user model with password hashing (bcrypt)
-  - Implement login and register endpoints
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| User model + token model | data | Database tables exist with hashing | — |
+| Auth utilities | data | JWT signing/verification works | — |
+
+- [x] **User model + token model** (NS-101)
+
+  Outcome: User and RefreshToken tables exist with proper indexes.
+  Stream: data
+  Skills: backend-api
+
+  - Create User model with bcrypt password hashing
+  - Create RefreshToken model for revocation tracking
+  - Follow existing model patterns in the repo
+
+- [x] **Auth utilities** (NS-104)
+
+  Outcome: JWT encode/decode and password verification helpers work.
+  Stream: data
+  Skills: backend-api
+
+  - JWT encode/decode with RS256
+  - Password hashing and verification helpers
+
+### Phase 2: Endpoints (parallel, blocked by Phase 1)
+
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| Login and register | api | Users can authenticate | Phase 1 |
+| Token refresh | api | Users can refresh tokens | Phase 1 |
+
+- [ ] **Login and register endpoints** (NS-102)
+
+  Outcome: Users can authenticate with email/password and receive JWT tokens.
+  Stream: api
+  Skills: backend-api
+
+  - POST /auth/login and POST /auth/register
   - Return access + refresh token pair on success
   - Follow existing API patterns in the repo
 
-- [ ] **JWT refresh flow** (NS-102)
+- [ ] **Token refresh endpoint** (NS-105)
 
-  **Outcome:** Users can refresh expired access tokens without re-authenticating.
+  Outcome: Users can refresh expired access tokens without re-authenticating.
+  Stream: api
+  Skills: backend-api
 
-  - Implement refresh endpoint
+  - POST /auth/refresh with single-use rotation
   - Store refresh tokens in database for revocation tracking
-  - Implement single-use rotation (invalidate after use)
 
-- [ ] **Rate limiting** (NS-103)
+### Phase 3: Protection (blocked by Phase 2)
 
-  **Outcome:** Brute force login attempts are blocked.
+| Chunk | Stream | Outcome | Depends On |
+|-------|--------|---------|------------|
+| Auth middleware + rate limiting | api | Endpoints protected, brute force blocked | Phase 2 |
 
-  - Add rate limiting middleware for auth endpoints
-  - Limit to 5 failed attempts per minute per IP
+- [ ] **Auth middleware and rate limiting** (NS-103)
+
+  Outcome: Protected endpoints require valid tokens, brute force blocked.
+  Stream: api
+  Skills: backend-api
+
+  - Auth middleware extracts user from token via FastAPI dependency injection
+  - Rate limiting: 5 failed attempts per minute per IP
   - Follow existing middleware patterns
+
+### Communication
+
+| From | To | When | What |
+|------|----|------|------|
+| data | api | After Phase 1 | Model schemas, utility function signatures |
 
 ## Acceptance Criteria
 
@@ -717,8 +925,10 @@ Load these skills before starting:
 | Don't | Why |
 |-------|-----|
 | Copy the entire discovery doc into the spec | Spec is operational, not exploratory |
-| Make work breakdown items too granular | Each becomes a Linear issue; too many = overhead |
-| Make work breakdown items too large | Should be completable in reasonable time |
+| Make execution plan chunks too granular | Each becomes a Linear issue; too many = overhead |
+| Make execution plan chunks too large | Should be completable in reasonable time |
+| Put everything in one phase | Maximize parallelism — if chunks are independent, separate phases |
+| Two streams writing to the same file | Causes conflicts in parallel execution |
 | Skip the Architecture section for complex work | Agent needs guidance on patterns |
 | Write acceptance criteria that can't be verified | "Works well" is not verifiable |
 | Finalize without user confirmation | Spec drives execution; must be right |
@@ -732,4 +942,4 @@ Load these skills before starting:
 - `DEVELOPMENT-WORKFLOW.md` — Full workflow context and spec template
 - `discovery` skill — Produces the discovery document this skill consumes
 - `agent-spec-builder` skill — Handles pure agent work and hybrid handoffs
-- `project-management` skill — Can help create Linear issues from Work Breakdown
+- `project-management` skill — Can help create Linear issues from Execution Plan

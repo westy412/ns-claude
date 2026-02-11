@@ -1,0 +1,73 @@
+{
+  "session_id": "d121693e-db20-4f6e-a2bb-fd4e21b91bb8",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-02T21:53:41.257Z",
+  "duration_minutes": 887,
+  "user_message_count": 9,
+  "assistant_message_count": 66,
+  "tool_counts": {
+    "Task": 3,
+    "Glob": 2,
+    "Bash": 8,
+    "Grep": 3,
+    "WebFetch": 1,
+    "Read": 5,
+    "Write": 2,
+    "AskUserQuestion": 1,
+    "Skill": 1,
+    "Edit": 3
+  },
+  "languages": {
+    "Python": 4,
+    "Markdown": 6
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 452,
+  "output_tokens": 266,
+  "first_prompt": "Hey there, Claude So we had a spec for analytics. Please send a codebase research agent out to the specs directory to Look at the spec which includes the analytics elements",
+  "summary": "Analytics debugging & Twitter support implementation",
+  "user_interruptions": 1,
+  "user_response_times": [
+    14.324,
+    38.862,
+    4.941,
+    10.691,
+    10.691,
+    100.896,
+    7.873
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Other": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": true,
+  "lines_added": 709,
+  "lines_removed": 7,
+  "files_modified": 1,
+  "message_hours": [
+    21,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T21:53:41.257Z",
+    "2026-02-02T22:02:29.406Z",
+    "2026-02-02T22:03:33.271Z",
+    "2026-02-02T22:20:48.268Z",
+    "2026-02-02T22:20:54.018Z",
+    "2026-02-02T22:20:54.018Z",
+    "2026-02-02T22:42:10.937Z",
+    "2026-02-02T22:42:14.315Z",
+    "2026-02-03T12:35:51.789Z"
+  ]
+}

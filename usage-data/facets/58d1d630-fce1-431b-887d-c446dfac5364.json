@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "User attempted to resume a previous Claude session but it was from a different directory",
+  "goal_categories": {
+    "warmup_minimal": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "unhelpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User ran /resume command but the session was from a different directory; no substantive interaction occurred.",
+  "session_id": "58d1d630-fce1-431b-887d-c446dfac5364"
+}

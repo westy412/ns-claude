@@ -1,0 +1,41 @@
+{
+  "session_id": "e85a3ba8-73f7-4b29-809c-3a9333ac6835",
+  "project_path": "/Users/georgewestbrook/.claude",
+  "start_time": "2026-02-05T22:17:47.054Z",
+  "duration_minutes": 1,
+  "user_message_count": 2,
+  "assistant_message_count": 11,
+  "tool_counts": {
+    "Skill": 1,
+    "Read": 2,
+    "Edit": 2
+  },
+  "languages": {
+    "JSON": 1,
+    "Shell": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 17,
+  "output_tokens": 846,
+  "first_prompt": "Hey there, can we please add to the status line the model that we are currently using?",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 8,
+  "lines_removed": 3,
+  "files_modified": 1,
+  "message_hours": [
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-05T22:17:47.054Z",
+    "2026-02-05T22:17:51.772Z"
+  ]
+}

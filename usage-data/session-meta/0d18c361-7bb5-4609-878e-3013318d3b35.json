@@ -1,0 +1,64 @@
+{
+  "session_id": "0d18c361-7bb5-4609-878e-3013318d3b35",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-01-31T20:53:54.991Z",
+  "duration_minutes": 11,
+  "user_message_count": 8,
+  "assistant_message_count": 60,
+  "tool_counts": {
+    "Bash": 8,
+    "Edit": 5,
+    "Read": 5,
+    "Skill": 2,
+    "Grep": 1
+  },
+  "languages": {
+    "TypeScript": 7,
+    "Markdown": 3
+  },
+  "git_commits": 2,
+  "git_pushes": 2,
+  "input_tokens": 511,
+  "output_tokens": 220,
+  "first_prompt": "Okay, so at the moment I'm not getting the actual image. I'm getting like the I don't know what it's called, like the alt image text when you can't actually render the image.",
+  "summary": "Fixed bucket mismatch, added unapprove button, planned realtime updates",
+  "user_interruptions": 1,
+  "user_response_times": [
+    167.288,
+    2.054,
+    91.986,
+    30.801,
+    55.632
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Command Failed": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 74,
+  "lines_removed": 3,
+  "files_modified": 2,
+  "message_hours": [
+    20,
+    20,
+    20,
+    21,
+    21,
+    21,
+    21,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T20:54:14.745Z",
+    "2026-01-31T20:57:54.260Z",
+    "2026-01-31T20:58:20.536Z",
+    "2026-01-31T21:02:09.681Z",
+    "2026-01-31T21:02:17.890Z",
+    "2026-01-31T21:03:32.870Z",
+    "2026-01-31T21:03:57.701Z",
+    "2026-01-31T21:04:38.330Z"
+  ]
+}

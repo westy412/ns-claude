@@ -1,0 +1,66 @@
+{
+  "session_id": "a34f2d3f-7ca5-4557-80d9-4ad5c5f52a39",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-agents",
+  "start_time": "2026-01-29T13:17:47.321Z",
+  "duration_minutes": 19,
+  "user_message_count": 8,
+  "assistant_message_count": 66,
+  "tool_counts": {
+    "Glob": 3,
+    "Grep": 1,
+    "Read": 6,
+    "Edit": 7,
+    "mcp__linear__get_issue": 1,
+    "Bash": 4,
+    "mcp__linear__update_issue": 1,
+    "mcp__linear__create_comment": 1,
+    "Skill": 1
+  },
+  "languages": {
+    "TypeScript": 4,
+    "Markdown": 9
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 2548,
+  "output_tokens": 155,
+  "first_prompt": "[Request interrupted by user]",
+  "summary": "SPEC-09 Phase 1.8: Remove LinkedIn Metadata Requirement",
+  "user_interruptions": 1,
+  "user_response_times": [
+    11.285,
+    94.837,
+    49.106,
+    94.322,
+    612.91
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 73,
+  "lines_removed": 50,
+  "files_modified": 2,
+  "message_hours": [
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T13:17:47.321Z",
+    "2026-01-29T13:18:32.728Z",
+    "2026-01-29T13:18:43.879Z",
+    "2026-01-29T13:21:01.784Z",
+    "2026-01-29T13:22:17.173Z",
+    "2026-01-29T13:24:09.271Z",
+    "2026-01-29T13:36:19.961Z",
+    "2026-01-29T13:36:25.077Z"
+  ]
+}

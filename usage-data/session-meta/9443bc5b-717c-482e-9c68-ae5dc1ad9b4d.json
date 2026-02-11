@@ -1,0 +1,42 @@
+{
+  "session_id": "9443bc5b-717c-482e-9c68-ae5dc1ad9b4d",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-01T14:16:56.950Z",
+  "duration_minutes": 1282,
+  "user_message_count": 2,
+  "assistant_message_count": 36,
+  "tool_counts": {
+    "Glob": 4,
+    "Read": 4,
+    "Bash": 4,
+    "Edit": 1
+  },
+  "languages": {
+    "TypeScript": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 304,
+  "output_tokens": 88,
+  "first_prompt": "Can we please update the icon image in the browser so that it's the Novosapien logo please?",
+  "summary": "Update Browser Icon to Novosapien Logo",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 6,
+  "lines_removed": 6,
+  "files_modified": 1,
+  "message_hours": [
+    14,
+    10
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T14:16:56.950Z",
+    "2026-02-02T10:38:10.543Z"
+  ]
+}

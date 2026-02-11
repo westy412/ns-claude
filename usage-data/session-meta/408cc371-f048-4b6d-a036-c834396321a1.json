@@ -1,0 +1,56 @@
+{
+  "session_id": "408cc371-f048-4b6d-a036-c834396321a1",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T16:30:24.430Z",
+  "duration_minutes": 351,
+  "user_message_count": 7,
+  "assistant_message_count": 41,
+  "tool_counts": {
+    "Task": 2,
+    "Bash": 10,
+    "Read": 5,
+    "Write": 1,
+    "Edit": 1
+  },
+  "languages": {
+    "YAML": 4,
+    "Markdown": 3
+  },
+  "git_commits": 1,
+  "git_pushes": 1,
+  "input_tokens": 75,
+  "output_tokens": 327,
+  "first_prompt": "Can you investigate why it seems like the CI C D isn't working when we push to main? So uh the behaviour on the N S Content Workforce app should be that when we push a commit to the main branch or sub…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    518.699,
+    60.786
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 116,
+  "lines_removed": 0,
+  "files_modified": 2,
+  "message_hours": [
+    16,
+    16,
+    16,
+    16,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T16:30:24.430Z",
+    "2026-02-03T16:30:24.429Z",
+    "2026-02-03T16:30:24.430Z",
+    "2026-02-03T16:30:53.002Z",
+    "2026-02-03T22:05:45.974Z",
+    "2026-02-03T22:14:33.851Z",
+    "2026-02-03T22:20:55.637Z"
+  ]
+}

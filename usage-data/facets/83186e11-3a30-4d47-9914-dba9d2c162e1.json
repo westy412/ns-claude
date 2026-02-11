@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Execute a handover procedure to persist session state and create a concise handover message for the next session",
+  "goal_categories": {
+    "handover_procedure": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "moderately_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User triggered a handover procedure and Claude began checking state, but the session transcript is truncated so completion is unclear.",
+  "session_id": "83186e11-3a30-4d47-9914-dba9d2c162e1"
+}

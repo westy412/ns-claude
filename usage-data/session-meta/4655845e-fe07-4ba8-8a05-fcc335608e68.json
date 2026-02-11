@@ -1,0 +1,64 @@
+{
+  "session_id": "4655845e-fe07-4ba8-8a05-fcc335608e68",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien",
+  "start_time": "2026-02-05T12:24:46.809Z",
+  "duration_minutes": 17,
+  "user_message_count": 8,
+  "assistant_message_count": 63,
+  "tool_counts": {
+    "Read": 7,
+    "Glob": 1,
+    "Bash": 3,
+    "TaskCreate": 4,
+    "TaskUpdate": 8,
+    "Write": 12,
+    "Edit": 1
+  },
+  "languages": {
+    "Markdown": 20
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 526,
+  "output_tokens": 11524,
+  "first_prompt": "Session Handover                                                                                                          Context…",
+  "user_interruptions": 2,
+  "user_response_times": [
+    50.401,
+    7.213,
+    7.213,
+    7.213,
+    10.319
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1936,
+  "lines_removed": 0,
+  "files_modified": 13,
+  "message_hours": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-05T12:24:46.809Z",
+    "2026-02-05T12:26:54.659Z",
+    "2026-02-05T12:27:44.158Z",
+    "2026-02-05T12:27:49.347Z",
+    "2026-02-05T12:27:55.633Z",
+    "2026-02-05T12:27:55.633Z",
+    "2026-02-05T12:27:55.633Z",
+    "2026-02-05T12:27:58.739Z"
+  ]
+}

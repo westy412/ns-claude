@@ -16,13 +16,102 @@ A single-turn LLM call that produces a visible reasoning trace before generating
 ## When to Avoid
 
 - Simple extraction or classification — use **Basic Agent** (Predict) instead (faster, cheaper)
+- Scoring/evaluation against a rubric — use **Basic Agent** (Predict) instead (evaluation is a checklist, not creative)
 - Agent needs conversation history — use **Conversational Agent** (dspy.History) instead
-- Agent needs to call external tools — use **Tool Agent** (dspy.ReAct) instead
+- Agent needs to call external tools — use **Tool Agent** (ChainOfThought + ToolCalls for single-tool, ReAct for multi-tool) instead
 - High-throughput pipelines where latency matters — use **Basic Agent** instead
+
+## Predict vs ChainOfThought Decision Table
+
+> **This is one of the most common mistakes.** Getting this wrong wastes tokens (CoT for evaluation) or loses quality (Predict for synthesis). Use this table for every agent.
+
+| Task Type | Predictor | Why | Example |
+|-----------|-----------|-----|---------|
+| **Creative synthesis** | `ChainOfThought` | Needs to explore, combine, and generate novel output | Expert panel analysis, content drafting, signal blending |
+| **Multi-source integration** | `ChainOfThought` | Must reason across diverse inputs to produce coherent output | Combining research from 6 sources into insights |
+| **Complex judgment** | `ChainOfThought` | Decision requires weighing trade-offs with visible rationale | "Should we continue iterating or accept current version?" |
+| **Scoring / evaluation** | `Predict` | Applying a rubric is a checklist, not creative reasoning | Expert scoring ideas 0.0-1.0 on a dimension |
+| **Classification** | `Predict` | Mapping input to a known category | Lead tier classification (A/B/C/D) |
+| **Data extraction** | `Predict` | Pulling structured data from unstructured input | Extracting company name, industry from website |
+| **Targeted iteration** | `Predict` | Applying specific feedback to improve content | "Fix these 3 issues the critic identified" |
+
+### Expert Panel Pattern (Common Confusion Point)
+
+Expert panels often have BOTH analysis and scoring stages. **Each stage uses a different predictor:**
+
+```
+Stage 1: Expert Analysis    → ChainOfThought (creative: generating insights from research)
+Stage 2: Idea Drafting      → ChainOfThought (creative: synthesizing ideas from analyses)
+Stage 3: Expert Scoring     → Predict        (evaluation: scoring ideas against a rubric)
+Stage 4: Refinement         → ChainOfThought (creative: improving ideas based on feedback)
+Stage 5: Selection          → Predict        (evaluation: curating final output from scores)
+```
+
+**Rule of thumb:** If the agent is *generating new content or insights*, use ChainOfThought. If the agent is *judging existing content against criteria*, use Predict.
+
+## Model Tier Assignment
+
+> **Not all agents need the same model.** Match model capability to task complexity to optimize cost and latency.
+
+| Pattern | Model Tier | Rationale |
+|---------|-----------|-----------|
+| **Parallel fan-out** (6 experts, 7 research modules) | Flash | Speed + cost at scale; many concurrent calls |
+| **Single critical-path synthesis** (signal blending, drafting) | Pro | Quality matters; only 1 call, latency acceptable |
+| **Search/analysis loops** (max 3 iterations) | Flash | Volume × iterations = cost multiplier |
+| **Final selection/curation** | Pro | High-stakes decision on single call |
+
+### Multi-Model Singleton Pattern
+
+```python
+# src/utils/lm.py — Two-tier singleton factory
+
+_flash_lm = None
+_pro_lm = None
+
+def get_flash_lm() -> dspy.LM:
+    """Fast, high-concurrency — for parallel fan-out operations."""
+    global _flash_lm
+    if _flash_lm is None:
+        _flash_lm = dspy.LM(
+            "gemini/gemini-2.5-flash",
+            api_key=os.getenv("GOOGLE_API_KEY"),
+            max_parallel_requests=2000,  # High for fan-out
+            timeout=120,
+        )
+    return _flash_lm
+
+def get_pro_lm() -> dspy.LM:
+    """Powerful reasoning — for complex synthesis operations."""
+    global _pro_lm
+    if _pro_lm is None:
+        _pro_lm = dspy.LM(
+            "gemini/gemini-2.5-pro",
+            api_key=os.getenv("GOOGLE_API_KEY"),
+            max_parallel_requests=100,  # Lower — single critical-path ops
+            timeout=120,
+        )
+    return _pro_lm
+```
+
+Then in your pipeline `__init__`:
+```python
+# Fan-out stages use Flash
+self.expert_panel = dspy.ChainOfThought(ExpertPanelSignature)
+self.expert_panel.set_lm(flash_lm)      # 6 parallel calls — Flash
+
+# Synthesis stages use Pro
+self.idea_drafter = dspy.ChainOfThought(IdeaDrafterSignature)
+self.idea_drafter.set_lm(pro_lm)        # 1 critical call — Pro
+
+# Scoring fan-out uses Flash + Predict (evaluation, not creative)
+self.expert_scorer = dspy.Predict(ExpertScoringSignature)
+self.expert_scorer.set_lm(flash_lm)     # 6 parallel evaluations — Flash + Predict
+```
 
 ## Selection Criteria
 
 - If task is straightforward extraction/classification → **Basic Agent** (faster)
+- If task is scoring/evaluation against a rubric → **Basic Agent** (Predict, not CoT)
 - If you need to understand how the agent reached its conclusion → **Reasoning Agent**
 - If building a multi-turn conversation → **Conversational Agent**
 - If agent needs external data or actions → **Tool Agent**
@@ -38,6 +127,121 @@ A single-turn LLM call that produces a visible reasoning trace before generating
 - `reasoning` field (automatically added by ChainOfThought)
 - Output fields defined in the Signature
 - Access via `result.reasoning`, `result.field_name`
+
+> **⚠️ CRITICAL: Typed Outputs Only — NEVER Use str + JSON Parsing**
+>
+> Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. **NEVER use `str` fields with JSON parsing instructions.**
+
+### Wrong vs Right: Structured Output Patterns
+
+```python
+# ❌ WRONG — str field with JSON instructions
+class BadSignature(dspy.Signature):
+    """Score ideas and return results as JSON."""
+    ideas: str = dspy.InputField()
+    scores: str = dspy.OutputField(
+        desc="JSON array of {idea_id, score, reasoning}"  # ← NEVER DO THIS
+    )
+
+# ✅ RIGHT — Pydantic model with RootModel for lists
+class ExpertScore(BaseModel):
+    idea_id: str
+    score: float
+    reasoning: str
+    feedback: str
+    strengths: list[str]
+    weaknesses: list[str]
+
+class ExpertScoreList(RootModel[List[ExpertScore]]):
+    """List of expert scores, one per idea."""
+    pass
+
+class GoodSignature(dspy.Signature):
+    """Score ideas on your assigned dimension."""
+    ideas: str = dspy.InputField()
+    scores: ExpertScoreList = dspy.OutputField(    # ← Pydantic type directly
+        desc="List of ExpertScore objects, one per idea."
+    )
+```
+
+**Why this matters:** DSPy natively handles Pydantic models — it validates types, retries on parse errors, and gives you `.model_dump()` for serialization. String + JSON parsing is fragile, untestable, and throws away DSPy's type system.
+
+**Accessing RootModel data:**
+```python
+result = await scorer.acall(...)
+scores_list = result.scores.root        # .root gives the underlying List[ExpertScore]
+scores_dicts = result.scores.model_dump()  # Serializes to List[dict]
+```
+
+## Signature Docstring Comprehensiveness Checklist
+
+> **Docstrings are your prompt.** In DSPy, the Signature docstring IS the system prompt. A thin docstring produces thin output. Every production signature MUST have comprehensive docstrings.
+
+### Required Sections (All Production Signatures)
+
+| Section | Purpose | Example Header |
+|---------|---------|----------------|
+| **ROLE** | What this agent is and where it sits in the pipeline | `=== YOUR ROLE IN THE WORKFLOW ===` |
+| **TASK** | Numbered step-by-step instructions for the agent | `=== YOUR TASK ===` |
+| **QUALITY STANDARDS** | What "good" looks like — specific, measurable criteria | `=== QUALITY STANDARDS ===` |
+| **ANTI-PATTERNS** | What NOT to do — prevent common mistakes | `=== ANTI-PATTERNS ===` |
+| **OUTPUT FORMAT** | How outputs should be structured (calibration, scales, etc.) | `=== SCORING CALIBRATION ===` |
+
+### Minimum Docstring Guidance
+
+- **Production signatures:** 20+ lines of docstring. If your docstring is shorter, you're under-specifying.
+- **Prototype/test signatures:** 5+ lines acceptable.
+- **Every section** should have concrete examples, not abstract instructions.
+
+### Well-Implemented Example (from ExpertScoringSignature)
+
+```python
+class ExpertScoringSignature(dspy.Signature):
+    """
+    You are a content strategy expert scoring draft ideas from a specific evaluative
+    dimension. You are one of 6 experts running in parallel, each scoring ALL ideas
+    from their assigned perspective.
+
+    === YOUR ROLE IN THE WORKFLOW ===
+    You are Stage 3 of a 5-stage Ideation Pipeline:
+      Stage 1: Expert Panel — 6 experts analyzed research themes
+      Stage 2: Idea Drafter — generated 15-20 content ideas
+      Stage 3: YOU — Expert Scoring (6 experts score every idea on their dimension)
+      Stage 4: Refinement — will improve ideas using YOUR scores and feedback
+      Stage 5: Selection — curates final output using composite scores
+
+    === YOUR TASK ===
+    Score EVERY idea on your assigned dimension (0.0-1.0) with:
+    - Calibrated scores: 0.5 = average, 0.8+ = strong, below 0.3 = weak
+    - Visible reasoning explaining WHY each score was given
+    - Specific, actionable feedback for the Refinement agent
+    - Strengths and weaknesses from your perspective
+
+    === SCORING CALIBRATION ===
+    - 0.0-0.2: Fundamentally misaligned with this dimension
+    - 0.3-0.4: Weak — significant issues from this perspective
+    - 0.5-0.6: Average — functional but unremarkable
+    - 0.7-0.8: Strong — solid alignment with room for improvement
+    - 0.9-1.0: Exceptional — standout performance on this dimension
+
+    Do NOT inflate scores. A mediocre idea should get 0.4-0.5, not 0.7.
+
+    === QUALITY STANDARDS ===
+    - Score EVERY idea — do not skip any, even weak ones
+    - Reasoning must be specific to each idea, not generic boilerplate
+    - Feedback must be actionable: "tone is too casual for this entity's professional
+      positioning" not "improve brand fit"
+
+    === ANTI-PATTERNS ===
+    - Do NOT filter or remove ideas (Selection Agent does that)
+    - Do NOT compute composite scores (utility function does that)
+    - Do NOT modify ideas (Refinement Agent does that)
+    - Do NOT produce vague reasoning
+    - Do NOT inflate scores to be "nice"
+    """
+```
+
+**Why this works:** The agent knows exactly where it sits in the pipeline, what its inputs look like, what "good" output means, and what mistakes to avoid. No ambiguity.
 
 ## Prompting Guidelines
 
@@ -141,6 +345,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("GOOGLE_API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,
         )
     return _shared_lm
 
@@ -452,56 +657,82 @@ print(result.final_recommendation) # Custom field
 
 **Output order:** `reasoning` (auto) → `pros_analysis` → `cons_analysis` → `risk_assessment` → `final_recommendation`
 
-### Structured Reasoning with Pydantic
+### Structured Outputs with Pydantic Models
 
-For complex, typed reasoning structures, use Pydantic models.
+For structured outputs with multiple items or nested data, use Pydantic BaseModel directly in OutputFields:
 
 ```python
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, RootModel
 from typing import List
 import dspy
 
-class ReasoningStep(BaseModel):
-    """Individual step in the reasoning chain."""
-    step_number: int = Field(description="Step number in sequence")
-    thought: str = Field(description="What is being considered")
-    conclusion: str = Field(description="Conclusion from this step")
+# Define Pydantic models (simple, no validators)
+class OutreachMessage(BaseModel):
+    """Single message in an outreach sequence."""
+    sequence_number: int
+    message: str
 
-class StructuredReasoning(BaseModel):
-    """Complete structured reasoning output."""
-    steps: List[ReasoningStep] = Field(description="Ordered reasoning steps")
-    key_assumptions: List[str] = Field(description="Assumptions made")
-    confidence: float = Field(ge=0.0, le=1.0, description="Confidence in conclusion")
-    final_answer: str = Field(description="The final answer")
+# For List outputs, use RootModel (enables proper serialization)
+class OutreachSequence(RootModel[List[OutreachMessage]]):
+    pass
 
-class StructuredReasoningSignature(dspy.Signature):
+class CreationAgent(dspy.Signature):
     """
-    Solve problems with explicit structured reasoning.
+    Create personalized B2B outreach messages for a specific lead.
 
-    Break down your thinking into numbered steps.
-    State assumptions explicitly.
-    Rate your confidence.
+    Generate a sequence of cold outreach messages that follow the provided
+    message skeleton while incorporating specific details about the lead.
+
+    CRITICAL: Must contain ZERO em-dash (—) characters. Use commas/periods instead.
     """
-    question: str = dspy.InputField()
-    context: str = dspy.InputField()
 
-    # Single Pydantic output containing structured reasoning
-    analysis: StructuredReasoning = dspy.OutputField()
+    # Inputs
+    lead_name: str = dspy.InputField(description="Name of the lead")
+    company_name: str = dspy.InputField(description="Company name")
+    context: str = dspy.InputField(description="Lead intelligence and context")
+    message_skeleton: str = dspy.InputField(description="Template structure to follow")
 
-module = dspy.ChainOfThought(StructuredReasoningSignature)
-result = module(
-    question="Should we implement feature X?",
-    context="Current system state and constraints..."
-)
+    # Outputs - use Pydantic models directly
+    response: str = dspy.OutputField(description="Explanation of your approach")
+    sequence: OutreachSequence = dspy.OutputField(description="The created message sequence")
 
-# Access structured fields
-print(f"Steps: {len(result.analysis.steps)}")
-for step in result.analysis.steps:
-    print(f"  {step.step_number}. {step.thought} → {step.conclusion}")
-print(f"Assumptions: {result.analysis.key_assumptions}")
-print(f"Confidence: {result.analysis.confidence}")
-print(f"Answer: {result.analysis.final_answer}")
+# Usage
+class MessageCreator(dspy.Module):
+    def __init__(self, shared_lm):
+        self.creator = dspy.ChainOfThought(CreationAgent)
+        self.creator.set_lm(shared_lm)
+
+    async def aforward(self, lead_name: str, company_name: str, context: str, skeleton: str):
+        result = await call_with_retry(
+            self.creator,
+            agent_name="message_creator",
+            lead_name=lead_name,
+            company_name=company_name,
+            context=context,
+            message_skeleton=skeleton
+        )
+
+        # Access Pydantic model directly
+        sequence = result.sequence  # This is an OutreachSequence (RootModel)
+
+        # Convert to dict/list for storage
+        sequence_data = sequence.model_dump()  # Returns List[dict]
+
+        # Access individual messages
+        for msg in sequence.root:  # RootModel stores data in .root
+            print(f"Message {msg.sequence_number}: {msg.message[:50]}...")
+
+        return result
 ```
+
+**Source Reference:** `ns-cold-outreach-workforce/src/workflows/message_creation/signatures.py:1-114`
+
+**Why Pydantic instead of "output JSON strings":**
+- DSPy natively supports Pydantic models in OutputFields
+- Type safety and automatic validation
+- Clean serialization via `.model_dump()`
+- Better IDE support and autocomplete
+- No string parsing needed
 
 ### Multi-Stage Reasoning Programs
 

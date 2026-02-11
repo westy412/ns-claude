@@ -1,0 +1,76 @@
+{
+  "session_id": "659146b5-d467-496b-9d46-b4c06ee71c30",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-02T22:51:12.971Z",
+  "duration_minutes": 1039,
+  "user_message_count": 12,
+  "assistant_message_count": 54,
+  "tool_counts": {
+    "Task": 1,
+    "Grep": 5,
+    "Glob": 1,
+    "Bash": 14,
+    "Read": 2,
+    "Edit": 1
+  },
+  "languages": {
+    "YAML": 2
+  },
+  "git_commits": 1,
+  "git_pushes": 1,
+  "input_tokens": 128,
+  "output_tokens": 443,
+  "first_prompt": "Session Handover…",
+  "summary": "Feature request system complete, bug report button fixed",
+  "user_interruptions": 0,
+  "user_response_times": [
+    18.38,
+    90.891,
+    248.292,
+    21.594,
+    7.213,
+    9.862,
+    59.671,
+    246.509,
+    216.588
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 3,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    22,
+    22,
+    10,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T22:51:12.971Z",
+    "2026-02-02T22:51:43.510Z",
+    "2026-02-03T10:59:20.781Z",
+    "2026-02-03T11:01:45.290Z",
+    "2026-02-03T11:05:58.960Z",
+    "2026-02-03T11:06:24.099Z",
+    "2026-02-03T11:06:42.078Z",
+    "2026-02-03T11:07:06.653Z",
+    "2026-02-03T11:08:19.349Z",
+    "2026-02-03T11:13:11.206Z",
+    "2026-02-03T11:18:53.875Z",
+    "2026-02-03T16:07:59.471Z"
+  ]
+}

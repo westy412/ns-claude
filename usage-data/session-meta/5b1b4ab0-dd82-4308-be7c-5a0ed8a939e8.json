@@ -1,0 +1,61 @@
+{
+  "session_id": "5b1b4ab0-dd82-4308-be7c-5a0ed8a939e8",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-08T14:19:27.629Z",
+  "duration_minutes": 26,
+  "user_message_count": 6,
+  "assistant_message_count": 80,
+  "tool_counts": {
+    "TaskList": 4,
+    "TaskUpdate": 8,
+    "Read": 15,
+    "Bash": 8,
+    "Write": 10,
+    "Glob": 1,
+    "Grep": 1,
+    "SendMessage": 4
+  },
+  "languages": {
+    "Python": 16,
+    "Markdown": 6
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 100,
+  "output_tokens": 5273,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are a teammate working on idea-agents-impl.  YOUR WORK STREAM: scaffold YOUR RESPONSIBILITY: Root pipeline, FastAPI wrapper, utilities, config, env setup…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    229.323,
+    354.342,
+    2.421
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Other": 1,
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 946,
+  "lines_removed": 0,
+  "files_modified": 9,
+  "message_hours": [
+    14,
+    14,
+    14,
+    14,
+    14,
+    14
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T14:19:27.629Z",
+    "2026-02-08T14:30:17.627Z",
+    "2026-02-08T14:34:11.371Z",
+    "2026-02-08T14:37:08.651Z",
+    "2026-02-08T14:43:06.474Z",
+    "2026-02-08T14:45:35.710Z"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "session_id": "a58d1193-43e2-45e1-8fdd-5e0e5c5c335f",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-02T21:56:19.259Z",
+  "duration_minutes": 18,
+  "user_message_count": 2,
+  "assistant_message_count": 15,
+  "tool_counts": {
+    "Read": 1,
+    "Edit": 4
+  },
+  "languages": {
+    "Markdown": 5
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 130,
+  "output_tokens": 44,
+  "first_prompt": "Okay, so looking at the other spec things, I've tested the media uploads that's working. The only thing we haven't done is the rate limit tracking, which I'm not too bothered about. It doesn't matter…",
+  "summary": "Media uploads complete, rate limiting deferred",
+  "user_interruptions": 0,
+  "user_response_times": [
+    975.935
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 18,
+  "lines_removed": 26,
+  "files_modified": 1,
+  "message_hours": [
+    21,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T21:57:17.454Z",
+    "2026-02-02T22:13:59.216Z"
+  ]
+}

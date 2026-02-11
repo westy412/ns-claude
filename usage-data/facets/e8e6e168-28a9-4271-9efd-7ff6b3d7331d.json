@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Continue a previous session working on implementing spec-13 (YouTube Idea Generation) and running agent-spec-builder (Proactive Idea Generation) for a content workforce agents project",
+  "goal_categories": {
+    "warmup_minimal": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "slightly_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User attempted to continue a previous session with a handover summary, but the session was essentially empty with Claude only beginning to output a handover document before the session ended.",
+  "session_id": "e8e6e168-28a9-4271-9efd-7ff6b3d7331d"
+}

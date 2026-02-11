@@ -1,0 +1,67 @@
+{
+  "session_id": "1f970b19-8cfa-4dac-a572-79690da656dc",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-30T22:38:48.970Z",
+  "duration_minutes": 19,
+  "user_message_count": 6,
+  "assistant_message_count": 173,
+  "tool_counts": {
+    "Read": 16,
+    "Glob": 2,
+    "TaskCreate": 5,
+    "TaskUpdate": 10,
+    "Edit": 24,
+    "Bash": 14,
+    "Write": 1,
+    "Grep": 2,
+    "mcp__plugin_perplexity_perplexity__perplexity_search": 2,
+    "Skill": 1
+  },
+  "languages": {
+    "Markdown": 8,
+    "Python": 18,
+    "TypeScript": 15
+  },
+  "git_commits": 1,
+  "git_pushes": 0,
+  "input_tokens": 1401,
+  "output_tokens": 425,
+  "first_prompt": "Implement the following plan:  # Phase 4: Analytics Implementation Plan  **Spec:** SPEC-09 (Posting & Publishing System) **Spec File:** `specs/spec-09-posting-publishing.md` **Linear Issue:** NS-1116…",
+  "summary": "Analytics implementation with rate limit research",
+  "user_interruptions": 1,
+  "user_response_times": [
+    224.618,
+    366.11,
+    27.293,
+    34.88
+  ],
+  "tool_errors": 3,
+  "tool_error_categories": {
+    "Command Failed": 1,
+    "Other": 1,
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 570,
+  "lines_removed": 57,
+  "files_modified": 10,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-01-30T22:38:48.970Z",
+    "2026-01-30T22:48:10.606Z",
+    "2026-01-30T22:55:05.170Z",
+    "2026-01-30T22:55:38.651Z",
+    "2026-01-30T22:55:46.238Z",
+    "2026-01-30T22:56:07.077Z"
+  ]
+}

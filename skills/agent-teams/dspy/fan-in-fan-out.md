@@ -58,6 +58,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,  # REQUIRED: prevents indefinite hangs
         )
     return _shared_lm
 
@@ -65,6 +66,10 @@ def get_shared_lm():
 # =============================================================================
 # SIGNATURES (Multiple Perspectives)
 # =============================================================================
+# STRUCTURED OUTPUT RULE: Use typed output fields (bool, int, list[str],
+# dict[str, Any]) or Pydantic BaseModel/RootModel as OutputField types.
+# NEVER use str fields with JSON parsing instructions.
+# See frameworks/dspy/CHEATSHEET.md Critical Rules.
 
 class TechnicalCriticSignature(dspy.Signature):
     """
@@ -322,18 +327,25 @@ class FanInFanOutModule(dspy.Module):
             **kwargs
         )
 
-        # Execute all tasks in parallel
+        # Execute all tasks in parallel (return_exceptions=True for resilience)
         technical, style, completeness = await asyncio.gather(
             technical_task,
             style_task,
-            completeness_task
+            completeness_task,
+            return_exceptions=True,
         )
 
         parallel_time = time.time() - start
 
         # =================================================================
-        # FAN-IN: Aggregate results
+        # FAN-IN: Handle errors and aggregate results
         # =================================================================
+        # Check for failed tasks
+        for name, result in [("technical", technical), ("style", style), ("completeness", completeness)]:
+            if isinstance(result, Exception):
+                print(f"✗ {name}_critic failed: {result}")
+                raise result  # Re-raise if any critic is critical
+
         results = {'technical': technical, 'style': style, 'completeness': completeness}
 
         # Option 1: Function-based aggregation (faster, deterministic)
@@ -399,7 +411,11 @@ if __name__ == "__main__":
 
 ## DSPy-Specific Notes
 
-- **asyncio.gather() for parallelism:** DSPy predictors support `acall()` for async execution. Use `asyncio.gather()` to run multiple calls simultaneously.
+> **Structured Output Rule:** When defining signatures for parallel agents, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+
+- **forward() + aforward() — Both REQUIRED:** `forward()` enables DSPy prompt optimization (GEPA/MIPROv2) — runs critics sequentially without retry. `aforward()` is for production with parallel execution and retry logic. Always implement both.
+
+- **asyncio.gather() for parallelism:** DSPy predictors support `acall()` for async execution. Use `asyncio.gather(return_exceptions=True)` to run multiple calls simultaneously with resilience.
 
 - **Shared LM enables parallelism:** The singleton LM pattern with `max_parallel_requests=2000` allows true concurrent execution without connection exhaustion.
 
@@ -407,9 +423,58 @@ if __name__ == "__main__":
 
 - **All critics use Predict:** Evaluation tasks don't benefit from ChainOfThought reasoning. Use `dspy.Predict` for all critics.
 
+- **Tool-calling in fan-out agents:** If fan-out agents need tools, default to ChainOfThought + manual tool handling (1 LLM call) instead of ReAct (N+ LLM calls). ReAct should only be used for multi-step tool chains. See `frameworks/dspy/CHEATSHEET.md` Tool-Calling Patterns section.
+
 ---
 
 ## Key Patterns
+
+### 0. Multi-Model Singleton Pattern
+
+When different agents need different model tiers (e.g., Flash for parallel evaluation, Pro for synthesis):
+
+```python
+_flash_lm = None
+_pro_lm = None
+
+def get_flash_lm():
+    """Flash model for parallel/evaluation tasks (fast, cheap)."""
+    global _flash_lm
+    if _flash_lm is None:
+        _flash_lm = dspy.LM(
+            os.getenv("FLASH_MODEL", "gemini/gemini-2.5-flash"),
+            api_key=os.getenv("API_KEY"),
+            max_parallel_requests=2000,
+            timeout=120,
+        )
+    return _flash_lm
+
+def get_pro_lm():
+    """Pro model for synthesis/complex reasoning (slower, better)."""
+    global _pro_lm
+    if _pro_lm is None:
+        _pro_lm = dspy.LM(
+            os.getenv("PRO_MODEL", "gemini/gemini-2.5-pro"),
+            api_key=os.getenv("API_KEY"),
+            max_parallel_requests=100,
+            timeout=120,
+        )
+    return _pro_lm
+```
+
+**Model tier guidance:**
+| Task Type | Model | Rationale |
+|-----------|-------|-----------|
+| Parallel critics/evaluation | Flash | Many concurrent calls, evaluation is extraction |
+| Aggregation/synthesis | Pro | Complex multi-source reasoning |
+| Scoring against rubric | Flash | Structured extraction, not creative |
+
+```python
+# In __init__:
+self.technical_critic.set_lm(flash_lm)   # Parallel evaluation → Flash
+self.style_critic.set_lm(flash_lm)       # Parallel evaluation → Flash
+self.aggregator.set_lm(pro_lm)           # Synthesis → Pro
+```
 
 ### 1. Parallel Execution with asyncio.gather
 
@@ -474,12 +539,18 @@ async def aforward(self, content: str, **kwargs):
         self.analyst_a.acall(content=content),
         self.analyst_b.acall(content=content),
         self.analyst_c.acall(content=content),
+        return_exceptions=True,
     )
 
+    # Handle any failures gracefully
+    for i, r in enumerate(results):
+        if isinstance(r, Exception):
+            print(f"✗ Analyst {i} failed: {r}")
+
     return dspy.Prediction(
-        analyst_a=results[0],
-        analyst_b=results[1],
-        analyst_c=results[2],
+        analyst_a=results[0] if not isinstance(results[0], Exception) else None,
+        analyst_b=results[1] if not isinstance(results[1], Exception) else None,
+        analyst_c=results[2] if not isinstance(results[2], Exception) else None,
     )
 ```
 
@@ -494,10 +565,17 @@ async def aforward(self, content: str, perspectives: List[str], **kwargs):
         for p in perspectives
     ]
 
-    results = await asyncio.gather(*tasks)
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    # Filter out failures
+    valid = [(p, r) for p, r in zip(perspectives, results) if not isinstance(r, Exception)]
+    failed = [(p, r) for p, r in zip(perspectives, results) if isinstance(r, Exception)]
+    for p, err in failed:
+        print(f"✗ Perspective '{p}' failed: {err}")
 
     return dspy.Prediction(
-        results=list(zip(perspectives, results)),
+        results=valid,
+        failed_perspectives=[p for p, _ in failed],
     )
 ```
 
@@ -509,23 +587,19 @@ async def aforward(self, content: str, perspectives: List[str], **kwargs):
 
 - **Sequential when parallel is possible** — If tasks are independent, use `asyncio.gather()` instead of sequential `await`.
 
-- **No error handling in gather** — One failed task fails all. Consider `return_exceptions=True` for graceful degradation.
+- **No error handling in gather** — One failed task fails all. Always use `return_exceptions=True` (shown in main example above).
 
 - **Creating LM per parallel task** — All parallel tasks should share the singleton LM.
 
 **Best Practices:**
+
+- **Always use `return_exceptions=True`** — This is the default in all examples above. Without it, one failed parallel task crashes all others.
 
 - **Keep aggregation simple** — Use Python functions for score math. Only use LLM aggregator for complex synthesis.
 
 - **Order feedback by priority** — Technical/factual issues before style issues.
 
 - **Time the parallel section** — Track how much time parallel execution saves.
-
-- **Use return_exceptions for resilience:**
-  ```python
-  results = await asyncio.gather(*tasks, return_exceptions=True)
-  valid_results = [r for r in results if not isinstance(r, Exception)]
-  ```
 
 ---
 

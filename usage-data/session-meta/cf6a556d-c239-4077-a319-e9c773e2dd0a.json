@@ -1,0 +1,44 @@
+{
+  "session_id": "cf6a556d-c239-4077-a319-e9c773e2dd0a",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-09T21:47:22.467Z",
+  "duration_minutes": 2,
+  "user_message_count": 3,
+  "assistant_message_count": 28,
+  "tool_counts": {
+    "TaskList": 2,
+    "TaskUpdate": 2,
+    "Glob": 1,
+    "Read": 13,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Python": 13
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 38,
+  "output_tokens": 297,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> Synthesize all findings and create a systematic fix plan.  Check TaskList, claim task #5.  FINDINGS FROM TEAMMATES: - Task #1 (ReAct): Max iters safe, but to…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    21,
+    21,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T21:47:22.467Z",
+    "2026-02-09T21:48:53.969Z",
+    "2026-02-09T21:49:06.153Z"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "session_id": "4d4c4f64-3e93-4a6c-9c18-41f2a9089d55",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-10T15:44:13.114Z",
+  "duration_minutes": 3,
+  "user_message_count": 3,
+  "assistant_message_count": 37,
+  "tool_counts": {
+    "Read": 5,
+    "TaskList": 2,
+    "TaskGet": 1,
+    "TaskUpdate": 2,
+    "Glob": 2,
+    "Grep": 2,
+    "SendMessage": 3,
+    "Bash": 4,
+    "Write": 3
+  },
+  "languages": {
+    "Markdown": 1,
+    "Python": 7
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 47,
+  "output_tokens": 849,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are teammate utilities on team ns-1160-external-posts.  Read your full instructions at:   /Users/georgewestbrook/Programming/novosapien/ns-content-workfo…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.137,
+    4.175
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 356,
+  "lines_removed": 0,
+  "files_modified": 3,
+  "message_hours": [
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T15:44:13.114Z",
+    "2026-02-10T15:46:33.307Z",
+    "2026-02-10T15:46:41.511Z"
+  ]
+}

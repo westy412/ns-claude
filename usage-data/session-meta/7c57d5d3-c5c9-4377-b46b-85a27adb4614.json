@@ -1,0 +1,66 @@
+{
+  "session_id": "7c57d5d3-c5c9-4377-b46b-85a27adb4614",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-02T12:50:24.065Z",
+  "duration_minutes": 16,
+  "user_message_count": 7,
+  "assistant_message_count": 92,
+  "tool_counts": {
+    "Read": 11,
+    "Edit": 12,
+    "Bash": 8,
+    "mcp__linear__get_issue": 1,
+    "Grep": 2,
+    "Skill": 1,
+    "mcp__linear__create_comment": 1
+  },
+  "languages": {
+    "TypeScript": 9,
+    "Markdown": 3,
+    "Python": 11
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 755,
+  "output_tokens": 241,
+  "first_prompt": "Okay, please read the spec and read the linear issue to understand where we're at, what we have implemented, and then look at the current files in Git so that you can understand where we are.",
+  "summary": "Image attachment UI: Threading tweets, backend media upload 403 error",
+  "user_interruptions": 0,
+  "user_response_times": [
+    26.449,
+    45.402,
+    25.049,
+    449.353,
+    26.718
+  ],
+  "tool_errors": 3,
+  "tool_error_categories": {
+    "Command Failed": 1,
+    "Other": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 96,
+  "lines_removed": 11,
+  "files_modified": 5,
+  "message_hours": [
+    12,
+    12,
+    12,
+    12,
+    13,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T12:50:24.065Z",
+    "2026-02-02T12:52:40.736Z",
+    "2026-02-02T12:53:50.554Z",
+    "2026-02-02T12:54:32.662Z",
+    "2026-02-02T13:04:38.044Z",
+    "2026-02-02T13:05:49.944Z",
+    "2026-02-02T13:06:10.861Z"
+  ]
+}

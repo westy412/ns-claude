@@ -1,0 +1,50 @@
+{
+  "session_id": "fa41052b-fa36-4e29-8ba1-60ff6450a589",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-02T23:17:06.256Z",
+  "duration_minutes": 5,
+  "user_message_count": 3,
+  "assistant_message_count": 47,
+  "tool_counts": {
+    "Glob": 2,
+    "Read": 5,
+    "Grep": 3,
+    "Edit": 9,
+    "mcp__linear__create_comment": 1
+  },
+  "languages": {
+    "TypeScript": 14
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 390,
+  "output_tokens": 2309,
+  "first_prompt": "Can we add a button which allows the user to manually fetch the analytics?",
+  "summary": "Add Manual Analytics Refresh Button to Post Previews",
+  "user_interruptions": 1,
+  "user_response_times": [
+    33.494
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Other": 1,
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 183,
+  "lines_removed": 25,
+  "files_modified": 4,
+  "message_hours": [
+    23,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T23:18:34.181Z",
+    "2026-02-02T23:21:07.110Z",
+    "2026-02-02T23:21:40.602Z"
+  ]
+}

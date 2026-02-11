@@ -1,0 +1,42 @@
+{
+  "session_id": "7debb63c-c667-49e1-88a2-d9d5b232077f",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T18:44:28.477Z",
+  "duration_minutes": 12,
+  "user_message_count": 2,
+  "assistant_message_count": 9,
+  "tool_counts": {
+    "Read": 3,
+    "Write": 1,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Markdown": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 19,
+  "output_tokens": 306,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are auditing a spec for completeness. Your job is to extract a comprehensive requirements checklist from the source-of-truth documents.  ## Your Task  Re…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    435.394
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 499,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    18,
+    18
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T18:44:28.477Z",
+    "2026-02-07T18:56:16.281Z"
+  ]
+}

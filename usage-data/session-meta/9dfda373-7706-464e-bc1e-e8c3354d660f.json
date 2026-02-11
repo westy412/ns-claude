@@ -1,0 +1,38 @@
+{
+  "session_id": "9dfda373-7706-464e-bc1e-e8c3354d660f",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T18:37:27.320Z",
+  "duration_minutes": 0,
+  "user_message_count": 2,
+  "assistant_message_count": 4,
+  "tool_counts": {
+    "Read": 3
+  },
+  "languages": {
+    "Markdown": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 12,
+  "output_tokens": 8,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are part of the spec-audit team. Your task is Task #2: Audit the 5 platform-specific research loop specs.  Base path: `/Users/georgewestbrook/Programming…",
+  "user_interruptions": 1,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    18,
+    18
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T18:37:27.320Z",
+    "2026-02-07T18:37:33.564Z"
+  ]
+}

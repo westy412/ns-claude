@@ -1,0 +1,35 @@
+{
+  "session_id": "d3444f0c-0373-4357-b8a9-29322f558827",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-10T10:50:50.347Z",
+  "duration_minutes": 0,
+  "user_message_count": 1,
+  "assistant_message_count": 5,
+  "tool_counts": {
+    "TaskUpdate": 1,
+    "Bash": 3
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 9,
+  "output_tokens": 82,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are analyzing the old v0-pre-rebuild implementation of the idea agents service.  Your task: Review the old implementation patterns (Task #2).  Working di…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    10
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T10:50:50.347Z"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "session_id": "eda14449-c0b6-4da2-9100-a8d1ac6b6d20",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-01T13:39:26.415Z",
+  "duration_minutes": 19,
+  "user_message_count": 7,
+  "assistant_message_count": 69,
+  "tool_counts": {
+    "Edit": 7,
+    "Read": 8,
+    "Grep": 3,
+    "Bash": 7
+  },
+  "languages": {
+    "TypeScript": 9,
+    "Python": 5,
+    "Markdown": 1
+  },
+  "git_commits": 2,
+  "git_pushes": 3,
+  "input_tokens": 582,
+  "output_tokens": 137,
+  "first_prompt": "wnload the React DevTools for a better development experience: https://react.dev/link/react-devtools forward-logs-shared.ts:95 [HMR] connected forward-logs-shared.ts:95 [Fast Refresh] rebuilding forwa…",
+  "summary": "React DevTools, Draft Approval, Post Status Fix",
+  "user_interruptions": 1,
+  "user_response_times": [
+    21.544,
+    54.009,
+    56.646,
+    64.135,
+    144.866,
+    434.401
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 81,
+  "lines_removed": 87,
+  "files_modified": 4,
+  "message_hours": [
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T13:40:55.723Z",
+    "2026-02-01T13:41:31.849Z",
+    "2026-02-01T13:42:52.209Z",
+    "2026-02-01T13:42:54.846Z",
+    "2026-02-01T13:43:02.335Z",
+    "2026-02-01T13:47:05.032Z",
+    "2026-02-01T13:54:55.998Z"
+  ]
+}

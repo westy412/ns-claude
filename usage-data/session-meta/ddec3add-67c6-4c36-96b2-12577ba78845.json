@@ -1,0 +1,46 @@
+{
+  "session_id": "ddec3add-67c6-4c36-96b2-12577ba78845",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T12:33:07.002Z",
+  "duration_minutes": 5,
+  "user_message_count": 2,
+  "assistant_message_count": 20,
+  "tool_counts": {
+    "TaskGet": 1,
+    "Read": 6,
+    "Edit": 2,
+    "SendMessage": 1
+  },
+  "languages": {
+    "Markdown": 7,
+    "YAML": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 170,
+  "output_tokens": 582,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are on team \"spec-update\". Your task is Task #2: Update all files in `spec/research-team/linkedin-creator/`.  Read the task details with TaskGet first.…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    4.35
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 2,
+  "lines_removed": 2,
+  "files_modified": 1,
+  "message_hours": [
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T12:33:07.002Z",
+    "2026-02-10T12:38:07.493Z"
+  ]
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "from": "team-lead",
+    "text": "You are part of the spec-audit team. Your task is Task #2: Audit the 5 platform-specific research loop specs.\n\nBase path: `/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/spec/research-team/`\n\nRead ALL of these files:\n\n**Generic templates (baseline):**\n- research-loop/agents/search-agent.md\n- research-loop/agents/analysis-agent.md\n\n**Per platform (linkedin-keyword, linkedin-creator, x-trending, x-keyword, x-creator):**\n- {platform}/team.md\n- {platform}/agent-config.yaml\n- {platform}/agents/{platform}-search-agent.md\n- {platform}/agents/{platform}-analysis-agent.md\n\nAlso read: `apify-actor-research.md` for actor details to verify against.\n\nFor each platform, audit:\n1. Template compliance — All sections from generic template present?\n2. Platform specialization — Actually customized, not copy of generic?\n3. Apify actor details — Correct actor ID, input params, output fields?\n4. Actor status — BROKEN/UNTESTED noted where applicable?\n5. Fallback strategy — Broken actors have fallback chains?\n6. Search strategy — Platform-specific strategy described?\n7. Engagement signals — Platform-specific metrics documented?\n8. Examples — Platform-specific, not generic?\n9. team.md ↔ agent-config.yaml consistency\n10. Cross-references — File paths match actual locations?\n\nWrite the audit report to: `/private/tmp/claude-501/-Users-georgewestbrook-Programming-novosapien-ns-content-workforce/e357efd9-ae2a-4adc-b63d-191d8fcd7140/scratchpad/platform-loops-audit.md`\n\nWhen done, mark Task #2 as completed via TaskUpdate.",
+    "timestamp": "2026-02-07T18:37:26.120Z",
+    "read": true
+  },
+  {
+    "from": "team-lead",
+    "text": "{\"type\":\"shutdown_request\",\"requestId\":\"shutdown-1770489659055@platform-auditor\",\"from\":\"team-lead\",\"reason\":\"Shutting down the team. Please stop work.\",\"timestamp\":\"2026-02-07T18:40:59.055Z\"}",
+    "timestamp": "2026-02-07T18:40:59.055Z",
+    "read": false
+  }
+]

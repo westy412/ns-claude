@@ -1,0 +1,45 @@
+{
+  "session_id": "fa1db866-1f67-4268-b014-170b7297b4c4",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T12:33:17.302Z",
+  "duration_minutes": 5,
+  "user_message_count": 2,
+  "assistant_message_count": 19,
+  "tool_counts": {
+    "TaskGet": 1,
+    "Read": 6,
+    "Edit": 2
+  },
+  "languages": {
+    "Markdown": 7,
+    "YAML": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 162,
+  "output_tokens": 29,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are on team \"spec-update\". Your task is Task #4: Update all files in `spec/research-team/x-creator/`.  Read the task details with TaskGet first.  **Worki…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    3.66
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 4,
+  "lines_removed": 4,
+  "files_modified": 1,
+  "message_hours": [
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T12:33:17.302Z",
+    "2026-02-10T12:38:06.053Z"
+  ]
+}

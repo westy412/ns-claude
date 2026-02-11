@@ -1,0 +1,45 @@
+{
+  "session_id": "b2ece3d3-1dec-414c-aad1-56f66f4b6651",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-10T10:51:00.836Z",
+  "duration_minutes": 1,
+  "user_message_count": 2,
+  "assistant_message_count": 30,
+  "tool_counts": {
+    "Read": 10,
+    "Glob": 7,
+    "Grep": 2,
+    "Bash": 3,
+    "TaskUpdate": 1
+  },
+  "languages": {
+    "Markdown": 2,
+    "Python": 8
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 38,
+  "output_tokens": 877,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are analyzing how this service integrates with the broader Content Workforce system.  Your task: Analyze integration points with other services (Task #5)…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    25.858
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    10,
+    10
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T10:51:00.836Z",
+    "2026-02-10T10:52:20.934Z"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "session_id": "98870003-2baa-4e55-92cf-6a1796f967ab",
+  "project_path": "/Users/georgewestbrook/.claude",
+  "start_time": "2026-02-05T12:21:10.252Z",
+  "duration_minutes": 15,
+  "user_message_count": 3,
+  "assistant_message_count": 54,
+  "tool_counts": {
+    "Glob": 3,
+    "Bash": 15,
+    "Read": 3,
+    "Edit": 5
+  },
+  "languages": {
+    "Markdown": 8
+  },
+  "git_commits": 1,
+  "git_pushes": 0,
+  "input_tokens": 2934,
+  "output_tokens": 2081,
+  "first_prompt": "Hey there, so please look in the skills directory. One of the things I would like to do is add tool project setup a section in the Claudemd or in the ways of working. To reference what needs to be inc…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    242.884,
+    273.891
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Other": 1,
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 175,
+  "lines_removed": 7,
+  "files_modified": 2,
+  "message_hours": [
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-05T12:21:10.252Z",
+    "2026-02-05T12:26:14.711Z",
+    "2026-02-05T12:34:17.521Z"
+  ]
+}

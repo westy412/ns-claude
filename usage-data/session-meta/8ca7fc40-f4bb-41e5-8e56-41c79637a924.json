@@ -1,0 +1,55 @@
+{
+  "session_id": "8ca7fc40-f4bb-41e5-8e56-41c79637a924",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-29T17:09:13.735Z",
+  "duration_minutes": 373,
+  "user_message_count": 5,
+  "assistant_message_count": 66,
+  "tool_counts": {
+    "Task": 1,
+    "mcp__linear__create_issue": 1,
+    "mcp__linear__update_issue": 2,
+    "Read": 8,
+    "Edit": 7,
+    "Grep": 1,
+    "Bash": 5,
+    "mcp__linear__create_comment": 2
+  },
+  "languages": {
+    "TypeScript": 15
+  },
+  "git_commits": 1,
+  "git_pushes": 0,
+  "input_tokens": 5275,
+  "output_tokens": 148,
+  "first_prompt": "One thing we need to implement and create a Linux issue for this is in the application when a user creates a post, it should automatically start going. to the con it should automatically take them to…",
+  "summary": "Auto-navigate to Content tab on post creation",
+  "user_interruptions": 0,
+  "user_response_times": [
+    80.555,
+    152.137
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 47,
+  "lines_removed": 6,
+  "files_modified": 3,
+  "message_hours": [
+    17,
+    17,
+    17,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T17:09:13.735Z",
+    "2026-01-29T17:12:55.748Z",
+    "2026-01-29T17:16:07.919Z",
+    "2026-01-29T23:18:25.886Z",
+    "2026-01-29T23:18:25.886Z"
+  ]
+}

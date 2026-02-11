@@ -1,0 +1,14 @@
+[
+  {
+    "from": "team-lead",
+    "text": "You are part of the spec-audit team. Your task is Task #4: Audit manifest.yaml and cross-reference integrity.\n\nRead: `/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/spec/manifest.yaml`\n\nThen use Glob to find ALL .md and .yaml files under:\n`/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/spec/research-team/`\n\nCheck:\n1. File existence — Every file referenced in manifest.yaml actually exists on disk\n2. No orphans — Every spec file on disk is referenced in manifest.yaml\n3. Hierarchy accuracy — Does the hierarchy match the actual folder structure?\n4. Agent names match — Do names in manifest match names in spec frontmatter and agent-config.yaml?\n5. Execution plan — Does it reference the right modules?\n6. Sub-team completeness — Are all 8 sub-teams listed (research-loop template, 5 platforms, industry, analytics)?\n\nWrite the audit report to: `/private/tmp/claude-501/-Users-georgewestbrook-Programming-novosapien-ns-content-workforce/e357efd9-ae2a-4adc-b63d-191d8fcd7140/scratchpad/manifest-audit.md`\n\nWhen done, mark Task #4 as completed via TaskUpdate.",
+    "timestamp": "2026-02-07T18:38:06.030Z",
+    "read": true
+  },
+  {
+    "from": "team-lead",
+    "text": "{\"type\":\"shutdown_request\",\"requestId\":\"shutdown-1770489724532@manifest-auditor\",\"from\":\"team-lead\",\"reason\":\"Shutting down.\",\"timestamp\":\"2026-02-07T18:42:04.532Z\"}",
+    "timestamp": "2026-02-07T18:42:04.532Z",
+    "read": false
+  }
+]

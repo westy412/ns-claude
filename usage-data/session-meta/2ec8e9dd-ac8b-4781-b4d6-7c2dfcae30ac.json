@@ -1,0 +1,53 @@
+{
+  "session_id": "2ec8e9dd-ac8b-4781-b4d6-7c2dfcae30ac",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-31T21:00:48.689Z",
+  "duration_minutes": 58,
+  "user_message_count": 3,
+  "assistant_message_count": 131,
+  "tool_counts": {
+    "Read": 15,
+    "Bash": 24,
+    "Grep": 1,
+    "Glob": 3,
+    "Write": 7,
+    "Edit": 12
+  },
+  "languages": {
+    "Markdown": 5,
+    "Python": 29
+  },
+  "git_commits": 1,
+  "git_pushes": 1,
+  "input_tokens": 19446,
+  "output_tokens": 254,
+  "first_prompt": "Session Handover                                                                                                                                                                                      Co…",
+  "summary": "Twitter Platform Integration: Tweet Draft & Iteration Agents",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2888.27,
+    2888.27
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Command Failed": 1,
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1824,
+  "lines_removed": 14,
+  "files_modified": 11,
+  "message_hours": [
+    21,
+    21,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T21:00:48.689Z",
+    "2026-01-31T21:56:30.446Z",
+    "2026-01-31T21:56:30.446Z"
+  ]
+}

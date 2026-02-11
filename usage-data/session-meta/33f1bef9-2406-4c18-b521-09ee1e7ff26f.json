@@ -1,0 +1,50 @@
+{
+  "session_id": "33f1bef9-2406-4c18-b521-09ee1e7ff26f",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-09T15:23:22.519Z",
+  "duration_minutes": 17,
+  "user_message_count": 3,
+  "assistant_message_count": 68,
+  "tool_counts": {
+    "TaskList": 1,
+    "Read": 22,
+    "Grep": 6,
+    "Glob": 10,
+    "TaskUpdate": 2,
+    "SendMessage": 3
+  },
+  "languages": {
+    "Python": 11,
+    "Markdown": 11
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 3714,
+  "output_tokens": 785,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You're identifying the root cause of incorrect async implementations.  TASK #3: Identify the skill gap  Check TaskList, claim task #3 (it's blocked by #1 and…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    6.228
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Other": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T15:23:22.519Z",
+    "2026-02-09T15:38:29.344Z",
+    "2026-02-09T15:39:58.179Z"
+  ]
+}

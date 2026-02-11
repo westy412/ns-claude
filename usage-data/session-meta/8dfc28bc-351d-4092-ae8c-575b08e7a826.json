@@ -1,0 +1,68 @@
+{
+  "session_id": "8dfc28bc-351d-4092-ae8c-575b08e7a826",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-01T12:37:00.418Z",
+  "duration_minutes": 78,
+  "user_message_count": 9,
+  "assistant_message_count": 60,
+  "tool_counts": {
+    "Bash": 14,
+    "Glob": 2,
+    "Read": 3,
+    "Edit": 13
+  },
+  "languages": {
+    "TypeScript": 15,
+    "Markdown": 1
+  },
+  "git_commits": 1,
+  "git_pushes": 3,
+  "input_tokens": 498,
+  "output_tokens": 111,
+  "first_prompt": "Session Handover…",
+  "summary": "Bug fixes: duplicate jobs, image visibility, types",
+  "user_interruptions": 0,
+  "user_response_times": [
+    12.601,
+    17.447,
+    17.447,
+    17.447,
+    26.279,
+    26.279,
+    26.279
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Command Failed": 1,
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 4,
+  "lines_removed": 54,
+  "files_modified": 2,
+  "message_hours": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T12:37:00.418Z",
+    "2026-02-01T12:37:24.260Z",
+    "2026-02-01T12:40:44.510Z",
+    "2026-02-01T12:40:44.510Z",
+    "2026-02-01T12:40:44.510Z",
+    "2026-02-01T12:40:53.342Z",
+    "2026-02-01T12:40:53.342Z",
+    "2026-02-01T12:40:53.342Z",
+    "2026-02-01T13:55:06.079Z"
+  ]
+}

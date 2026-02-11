@@ -1,0 +1,61 @@
+{
+  "session_id": "06d4a1eb-99bd-4934-bd6a-3d5b615460cb",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-09T15:40:42.222Z",
+  "duration_minutes": 4,
+  "user_message_count": 5,
+  "assistant_message_count": 38,
+  "tool_counts": {
+    "TaskList": 2,
+    "Read": 4,
+    "TaskUpdate": 2,
+    "Grep": 4,
+    "Edit": 3,
+    "Skill": 1,
+    "Bash": 2,
+    "SendMessage": 4
+  },
+  "languages": {
+    "Python": 6,
+    "Markdown": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 56,
+  "output_tokens": 1050,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> Fix the async implementation in research/team.py  Check TaskList, claim task #2.  Read /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    19.063,
+    2.046,
+    4.485,
+    16.088
+  ],
+  "tool_errors": 3,
+  "tool_error_categories": {
+    "User Rejected": 1,
+    "File Not Found": 1,
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 41,
+  "lines_removed": 42,
+  "files_modified": 1,
+  "message_hours": [
+    15,
+    15,
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T15:40:42.222Z",
+    "2026-02-09T15:42:48.634Z",
+    "2026-02-09T15:43:48.531Z",
+    "2026-02-09T15:44:00.547Z",
+    "2026-02-09T15:44:23.888Z"
+  ]
+}

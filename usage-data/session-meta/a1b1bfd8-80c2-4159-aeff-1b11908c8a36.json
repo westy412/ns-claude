@@ -1,0 +1,55 @@
+{
+  "session_id": "a1b1bfd8-80c2-4159-aeff-1b11908c8a36",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-09T11:37:54.015Z",
+  "duration_minutes": 3,
+  "user_message_count": 4,
+  "assistant_message_count": 45,
+  "tool_counts": {
+    "TaskUpdate": 6,
+    "Bash": 4,
+    "Write": 1,
+    "SendMessage": 4,
+    "TaskList": 2,
+    "TaskGet": 2,
+    "Glob": 2,
+    "Read": 4,
+    "Edit": 4
+  },
+  "languages": {
+    "Markdown": 5,
+    "YAML": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 55,
+  "output_tokens": 847,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are archiving the stale v0 coordination spec.  LOCATION: /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/  YOUR TASK: Task #7  ACTIONS…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.321,
+    31.632,
+    16.814
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 34,
+  "lines_removed": 1,
+  "files_modified": 4,
+  "message_hours": [
+    11,
+    11,
+    11,
+    11
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T11:37:54.015Z",
+    "2026-02-09T11:39:30.518Z",
+    "2026-02-09T11:40:06.215Z",
+    "2026-02-09T11:40:25.274Z"
+  ]
+}

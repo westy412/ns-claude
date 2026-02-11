@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Execute a handover procedure to persist session state to Git and Linear and create a concise handover message for the next session",
+  "goal_categories": {
+    "handover_documentation": 1
+  },
+  "outcome": "fully_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "very_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "proactive_help",
+  "brief_summary": "User requested a handover procedure and Claude persisted state to Linear and Git and produced a concise handover summary.",
+  "session_id": "e9cc54f0-bb04-4d44-abf5-b4465f4f5c0c"
+}

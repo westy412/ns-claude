@@ -1,0 +1,49 @@
+{
+  "session_id": "7988afab-2a7f-4190-9fef-1fac0aba4305",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T22:15:45.864Z",
+  "duration_minutes": 6,
+  "user_message_count": 4,
+  "assistant_message_count": 34,
+  "tool_counts": {
+    "Read": 7,
+    "Grep": 2,
+    "Edit": 5,
+    "Skill": 1
+  },
+  "languages": {
+    "Python": 1,
+    "Markdown": 11
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 264,
+  "output_tokens": 1979,
+  "first_prompt": "Session Handover                                                                                                                                                                      Context…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    84.519,
+    176.215
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 53,
+  "lines_removed": 26,
+  "files_modified": 2,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T22:15:45.864Z",
+    "2026-02-03T22:18:42.372Z",
+    "2026-02-03T22:21:42.033Z",
+    "2026-02-03T22:21:44.987Z"
+  ]
+}

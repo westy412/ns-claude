@@ -1,0 +1,77 @@
+{
+  "session_id": "7cd5e4e3-6e13-4df5-bf38-4d6bd140bca6",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T22:52:24.918Z",
+  "duration_minutes": 1024,
+  "user_message_count": 10,
+  "assistant_message_count": 202,
+  "tool_counts": {
+    "Bash": 19,
+    "Read": 13,
+    "Task": 6,
+    "mcp__claude-in-chrome__tabs_context_mcp": 1,
+    "mcp__claude-in-chrome__navigate": 4,
+    "mcp__claude-in-chrome__computer": 24,
+    "mcp__claude-in-chrome__read_console_messages": 1,
+    "mcp__claude-in-chrome__read_network_requests": 3,
+    "mcp__claude-in-chrome__javascript_tool": 5,
+    "mcp__claude-in-chrome__find": 1,
+    "Glob": 2,
+    "Grep": 6,
+    "Edit": 15,
+    "TaskOutput": 1
+  },
+  "languages": {
+    "TypeScript": 6,
+    "Python": 22
+  },
+  "git_commits": 2,
+  "git_pushes": 3,
+  "input_tokens": 338,
+  "output_tokens": 14486,
+  "first_prompt": "Session Handover    Context    - Spec: specs/spec-11-image-generation.md (reference image implementation within Phase 1)   - Linear Issue: None created (work was exploratory/in-progress)   - Branch: m…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    273.101,
+    39.274,
+    30.193,
+    96.434,
+    144.967,
+    280.825
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Other": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 105,
+  "lines_removed": 17,
+  "files_modified": 6,
+  "message_hours": [
+    22,
+    23,
+    23,
+    23,
+    23,
+    23,
+    12,
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T22:52:24.918Z",
+    "2026-02-03T23:31:17.653Z",
+    "2026-02-03T23:39:43.558Z",
+    "2026-02-03T23:40:24.784Z",
+    "2026-02-03T23:43:14.579Z",
+    "2026-02-03T23:45:48.090Z",
+    "2026-02-04T12:30:39.391Z",
+    "2026-02-04T15:50:30.167Z",
+    "2026-02-04T15:50:38.364Z",
+    "2026-02-04T15:55:18.775Z"
+  ]
+}

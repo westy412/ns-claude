@@ -1,0 +1,67 @@
+{
+  "session_id": "b387bba0-c83b-4456-9e5c-6a28ebcc4384",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T14:11:04.611Z",
+  "duration_minutes": 82,
+  "user_message_count": 8,
+  "assistant_message_count": 83,
+  "tool_counts": {
+    "Read": 7,
+    "Bash": 17,
+    "Task": 1,
+    "Write": 8,
+    "WebFetch": 1,
+    "Edit": 2
+  },
+  "languages": {
+    "Markdown": 8,
+    "Python": 9
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 141,
+  "output_tokens": 6681,
+  "first_prompt": "Session Handover: Test Gemini Google Search Grounding    Context    - Repository: /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents   - Branch: main…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    60.122,
+    2.292,
+    25.617,
+    77.267,
+    67.148,
+    3492.381,
+    173.66
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Other": 1,
+    "Command Failed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": true,
+  "lines_added": 1932,
+  "lines_removed": 121,
+  "files_modified": 5,
+  "message_hours": [
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T14:11:04.611Z",
+    "2026-02-10T14:24:02.742Z",
+    "2026-02-10T14:24:09.601Z",
+    "2026-02-10T14:24:32.926Z",
+    "2026-02-10T14:26:05.078Z",
+    "2026-02-10T14:28:53.823Z",
+    "2026-02-10T15:28:23.092Z",
+    "2026-02-10T15:32:09.957Z"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "session_id": "4ea8109f-3238-46f2-883c-152a67c72129",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-01-31T22:45:34.057Z",
+  "duration_minutes": 19,
+  "user_message_count": 8,
+  "assistant_message_count": 124,
+  "tool_counts": {
+    "Read": 11,
+    "Grep": 14,
+    "Edit": 11,
+    "Glob": 2,
+    "Bash": 8
+  },
+  "languages": {
+    "TypeScript": 15,
+    "Python": 5,
+    "Markdown": 2
+  },
+  "git_commits": 2,
+  "git_pushes": 0,
+  "input_tokens": 1019,
+  "output_tokens": 295,
+  "first_prompt": "Okay, cool, still don't have real-time updates for it.",
+  "summary": "Image real-time updates and iteration fixes",
+  "user_interruptions": 0,
+  "user_response_times": [
+    121.638,
+    49.424,
+    37.612,
+    123.002,
+    69.617,
+    60.598,
+    60.598
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 133,
+  "lines_removed": 29,
+  "files_modified": 5,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22,
+    22,
+    23,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T22:46:40.185Z",
+    "2026-01-31T22:51:37.798Z",
+    "2026-01-31T22:53:40.767Z",
+    "2026-01-31T22:55:23.748Z",
+    "2026-01-31T22:59:31.299Z",
+    "2026-01-31T23:01:34.815Z",
+    "2026-01-31T23:03:23.529Z",
+    "2026-01-31T23:03:23.529Z"
+  ]
+}

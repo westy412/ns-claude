@@ -1,0 +1,72 @@
+{
+  "session_id": "4523df6a-796e-4fc6-bf4c-8546b53d95fa",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien",
+  "start_time": "2026-02-01T15:14:05.929Z",
+  "duration_minutes": 1267,
+  "user_message_count": 9,
+  "assistant_message_count": 110,
+  "tool_counts": {
+    "Read": 15,
+    "Glob": 2,
+    "Bash": 6,
+    "Task": 3,
+    "Write": 6,
+    "Edit": 10,
+    "Grep": 2
+  },
+  "languages": {
+    "Markdown": 23,
+    "YAML": 2,
+    "Python": 6
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 948,
+  "output_tokens": 2876,
+  "first_prompt": "Session Handover…",
+  "summary": "DSPy Individual Agents + Optimization Spec",
+  "user_interruptions": 1,
+  "user_response_times": [
+    103.441,
+    128.614,
+    326.49,
+    171.439,
+    172.916,
+    175.598,
+    175.598
+  ],
+  "tool_errors": 3,
+  "tool_error_categories": {
+    "Other": 2,
+    "File Too Large": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 3169,
+  "lines_removed": 34,
+  "files_modified": 7,
+  "message_hours": [
+    15,
+    15,
+    20,
+    11,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T15:14:05.929Z",
+    "2026-02-01T15:33:42.443Z",
+    "2026-02-01T20:35:26.374Z",
+    "2026-02-02T11:53:09.002Z",
+    "2026-02-02T12:04:20.994Z",
+    "2026-02-02T12:20:44.731Z",
+    "2026-02-02T12:20:46.208Z",
+    "2026-02-02T12:20:48.890Z",
+    "2026-02-02T12:20:48.890Z"
+  ]
+}

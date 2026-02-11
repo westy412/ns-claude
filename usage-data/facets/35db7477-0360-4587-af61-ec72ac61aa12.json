@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Make the 'brief' field mandatory in the codebase",
+  "goal_categories": {
+    "code_modification": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "moderately_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "correct_code_edits",
+  "brief_summary": "User asked to make the brief field mandatory; Claude made edits but no explicit user feedback was given.",
+  "session_id": "35db7477-0360-4587-af61-ec72ac61aa12"
+}

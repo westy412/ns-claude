@@ -1,0 +1,56 @@
+{
+  "session_id": "272290e0-aa0a-4f3c-8930-be1cbb882ad7",
+  "project_path": "/Users/georgewestbrook",
+  "start_time": "2026-02-03T15:53:04.837Z",
+  "duration_minutes": 10,
+  "user_message_count": 4,
+  "assistant_message_count": 37,
+  "tool_counts": {
+    "Read": 8,
+    "Glob": 3,
+    "Grep": 1,
+    "AskUserQuestion": 1,
+    "Bash": 1,
+    "Write": 1,
+    "Edit": 7
+  },
+  "languages": {
+    "Shell": 4,
+    "JSON": 2,
+    "Markdown": 9
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 51,
+  "output_tokens": 326,
+  "first_prompt": "Yeah, that's perfect.",
+  "user_interruptions": 0,
+  "user_response_times": [
+    8.962,
+    13.409,
+    186.662
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 915,
+  "lines_removed": 20,
+  "files_modified": 1,
+  "message_hours": [
+    15,
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T15:53:14.422Z",
+    "2026-02-03T15:53:26.859Z",
+    "2026-02-03T15:53:49.371Z",
+    "2026-02-03T15:57:01.485Z"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "session_id": "00e382f8-a282-4c67-8b4d-588b3dc493a5",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-28T23:40:22.070Z",
+  "duration_minutes": 27,
+  "user_message_count": 9,
+  "assistant_message_count": 208,
+  "tool_counts": {
+    "Read": 17,
+    "Grep": 2,
+    "Bash": 23,
+    "TaskCreate": 12,
+    "TaskUpdate": 20,
+    "Edit": 21,
+    "Write": 3,
+    "Glob": 1,
+    "Skill": 1
+  },
+  "languages": {
+    "Markdown": 6,
+    "Python": 35
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 1651,
+  "output_tokens": 356,
+  "first_prompt": "Session Handover…",
+  "summary": "SPEC-09 Phase 1.4 Backend Complete, Frontend Ready",
+  "user_interruptions": 2,
+  "user_response_times": [
+    867.679,
+    869.514,
+    875.804,
+    40.54,
+    65.188,
+    15.097
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 550,
+  "lines_removed": 71,
+  "files_modified": 12,
+  "message_hours": [
+    23,
+    23,
+    23,
+    23,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "user_message_timestamps": [
+    "2026-01-28T23:40:22.070Z",
+    "2026-01-28T23:58:47.098Z",
+    "2026-01-28T23:58:48.933Z",
+    "2026-01-28T23:58:55.223Z",
+    "2026-01-29T00:00:01.300Z",
+    "2026-01-29T00:02:08.873Z",
+    "2026-01-29T00:06:32.049Z",
+    "2026-01-29T00:06:46.237Z",
+    "2026-01-29T00:06:50.339Z"
+  ]
+}

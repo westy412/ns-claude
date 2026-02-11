@@ -1,0 +1,73 @@
+{
+  "session_id": "464d6eb6-fb0c-40d1-8488-c14e17e706f1",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-29T00:39:16.987Z",
+  "duration_minutes": 18,
+  "user_message_count": 7,
+  "assistant_message_count": 195,
+  "tool_counts": {
+    "Read": 12,
+    "Edit": 8,
+    "Bash": 15,
+    "mcp__claude-in-chrome__tabs_context_mcp": 4,
+    "mcp__claude-in-chrome__navigate": 4,
+    "mcp__claude-in-chrome__computer": 18,
+    "mcp__claude-in-chrome__tabs_create_mcp": 1,
+    "mcp__claude-in-chrome__read_console_messages": 2,
+    "mcp__claude-in-chrome__read_network_requests": 3,
+    "mcp__claude-in-chrome__find": 1,
+    "mcp__claude-in-chrome__read_page": 3,
+    "Glob": 3,
+    "Grep": 2
+  },
+  "languages": {
+    "Markdown": 6,
+    "Python": 11,
+    "TypeScript": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 7047,
+  "output_tokens": 374,
+  "first_prompt": "Session Handover…",
+  "summary": "SPEC-09 Phase 1.5 LinkedIn OAuth tested & fixed",
+  "user_interruptions": 1,
+  "user_response_times": [
+    15.992,
+    10.821,
+    68.294,
+    153.385,
+    16.668,
+    40.399
+  ],
+  "tool_errors": 9,
+  "tool_error_categories": {
+    "Command Failed": 4,
+    "Other": 5
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 51,
+  "lines_removed": 42,
+  "files_modified": 3,
+  "message_hours": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T00:39:16.987Z",
+    "2026-01-29T00:41:25.826Z",
+    "2026-01-29T00:51:07.327Z",
+    "2026-01-29T00:52:04.800Z",
+    "2026-01-29T00:55:01.197Z",
+    "2026-01-29T00:56:09.766Z",
+    "2026-01-29T00:57:29.717Z"
+  ]
+}

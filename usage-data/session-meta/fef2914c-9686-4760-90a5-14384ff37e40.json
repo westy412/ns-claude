@@ -1,0 +1,40 @@
+{
+  "session_id": "fef2914c-9686-4760-90a5-14384ff37e40",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-agents",
+  "start_time": "2026-01-31T13:24:17.496Z",
+  "duration_minutes": 3,
+  "user_message_count": 3,
+  "assistant_message_count": 5,
+  "tool_counts": {},
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 40,
+  "output_tokens": 16,
+  "first_prompt": "[Request interrupted by user]",
+  "summary": "Context Review: ns-content-workforce Repo",
+  "user_interruptions": 1,
+  "user_response_times": [
+    83.358,
+    10.877
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    13,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T13:24:17.496Z",
+    "2026-01-31T13:26:21.568Z",
+    "2026-01-31T13:26:39.886Z"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "session_id": "632c1590-5669-4e23-a956-dca16bef8faa",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien",
+  "start_time": "2026-02-02T12:58:57.802Z",
+  "duration_minutes": 1462,
+  "user_message_count": 7,
+  "assistant_message_count": 75,
+  "tool_counts": {
+    "Bash": 13,
+    "Read": 6,
+    "Write": 2,
+    "Edit": 10,
+    "Task": 1
+  },
+  "languages": {
+    "JSON": 2,
+    "YAML": 3,
+    "Markdown": 9
+  },
+  "git_commits": 2,
+  "git_pushes": 1,
+  "input_tokens": 353,
+  "output_tokens": 383,
+  "first_prompt": "Okay these look ready to tool the skills directory.",
+  "user_interruptions": 0,
+  "user_response_times": [
+    43.501,
+    18.812,
+    2.38,
+    54.126,
+    283.139
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 305,
+  "lines_removed": 28,
+  "files_modified": 6,
+  "message_hours": [
+    13,
+    13,
+    13,
+    12,
+    13,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T13:00:15.293Z",
+    "2026-02-02T13:05:13.061Z",
+    "2026-02-02T13:11:11.061Z",
+    "2026-02-03T12:49:11.799Z",
+    "2026-02-03T13:14:21.542Z",
+    "2026-02-03T13:15:26.302Z",
+    "2026-02-03T13:20:12.701Z"
+  ]
+}

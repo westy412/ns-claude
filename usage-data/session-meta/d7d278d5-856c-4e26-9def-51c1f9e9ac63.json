@@ -1,0 +1,71 @@
+{
+  "session_id": "d7d278d5-856c-4e26-9def-51c1f9e9ac63",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-10T15:54:59.430Z",
+  "duration_minutes": 347,
+  "user_message_count": 10,
+  "assistant_message_count": 147,
+  "tool_counts": {
+    "Read": 19,
+    "TaskList": 3,
+    "Glob": 2,
+    "SendMessage": 6,
+    "TaskUpdate": 8,
+    "Edit": 36,
+    "Grep": 6,
+    "Bash": 6
+  },
+  "languages": {
+    "Markdown": 2,
+    "Python": 53
+  },
+  "git_commits": 4,
+  "git_pushes": 0,
+  "input_tokens": 181,
+  "output_tokens": 3484,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are teammate api-worker on team infographic-structured-output.  Read your full instructions at:   /Users/georgewestbrook/Programming/novosapien/ns-conten…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    452.078,
+    444.531,
+    2.059,
+    1140.509,
+    2.077,
+    277.238,
+    2.136,
+    2.2
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 190,
+  "lines_removed": 31,
+  "files_modified": 10,
+  "message_hours": [
+    15,
+    16,
+    16,
+    16,
+    16,
+    21,
+    21,
+    21,
+    21,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T15:54:59.430Z",
+    "2026-02-10T16:03:08.461Z",
+    "2026-02-10T16:10:38.058Z",
+    "2026-02-10T16:12:22.367Z",
+    "2026-02-10T16:31:26.144Z",
+    "2026-02-10T21:14:19.485Z",
+    "2026-02-10T21:20:14.071Z",
+    "2026-02-10T21:24:55.063Z",
+    "2026-02-10T21:41:51.596Z",
+    "2026-02-10T21:41:57.072Z"
+  ]
+}

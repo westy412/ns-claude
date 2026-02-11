@@ -1,0 +1,49 @@
+{
+  "session_id": "9bcabc96-5770-4d56-ba7b-e826175cf8eb",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-01-30T22:11:20.680Z",
+  "duration_minutes": 25,
+  "user_message_count": 3,
+  "assistant_message_count": 29,
+  "tool_counts": {
+    "Bash": 7,
+    "mcp__linear__update_issue": 1,
+    "mcp__linear__create_comment": 1,
+    "Edit": 3
+  },
+  "languages": {
+    "Markdown": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 237,
+  "output_tokens": 57,
+  "first_prompt": "Yes, the funkin is appearing. You manually run it.",
+  "summary": "Twitter Token Refresh System Complete, Phase 4 Next",
+  "user_interruptions": 0,
+  "user_response_times": [
+    81.436,
+    81.436
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 15,
+  "lines_removed": 7,
+  "files_modified": 1,
+  "message_hours": [
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-01-30T22:27:12.593Z",
+    "2026-01-30T22:35:46.469Z",
+    "2026-01-30T22:35:46.469Z"
+  ]
+}

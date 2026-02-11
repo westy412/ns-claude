@@ -1,0 +1,46 @@
+{
+  "session_id": "ad9447af-8374-4fc1-beee-06b535b24223",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-09T12:06:50.806Z",
+  "duration_minutes": 5,
+  "user_message_count": 2,
+  "assistant_message_count": 22,
+  "tool_counts": {
+    "Read": 9,
+    "Glob": 1,
+    "Write": 1,
+    "Bash": 1,
+    "TaskUpdate": 1,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Markdown": 7,
+    "Python": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 32,
+  "output_tokens": 82,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> Create the file src/signatures/ideation.py in the project at /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-age…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    8.346
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 548,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T12:06:50.806Z",
+    "2026-02-09T12:11:14.816Z"
+  ]
+}

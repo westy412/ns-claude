@@ -1,0 +1,53 @@
+{
+  "session_id": "b906ba83-cb1b-4f01-ac8b-bc72f3990337",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-08T14:34:46.837Z",
+  "duration_minutes": 11,
+  "user_message_count": 5,
+  "assistant_message_count": 31,
+  "tool_counts": {
+    "Bash": 2,
+    "Read": 4,
+    "TaskList": 2,
+    "TaskUpdate": 3,
+    "SendMessage": 3,
+    "Glob": 2,
+    "Write": 1
+  },
+  "languages": {
+    "Python": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 49,
+  "output_tokens": 187,
+  "first_prompt": "<teammate-message teammate_id=\"ideation-sigs\" color=\"purple\"> {\"type\":\"task_assignment\",\"taskId\":\"8\",\"subject\":\"Phase 2: ideation-pipeline-module — 5-stage ideation pipeline\",\"description\":\"Create src…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    437.282,
+    29.214
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 71,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    14,
+    14,
+    14,
+    14,
+    14
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T14:34:46.837Z",
+    "2026-02-08T14:35:49.165Z",
+    "2026-02-08T14:43:13.718Z",
+    "2026-02-08T14:44:42.859Z",
+    "2026-02-08T14:45:14.965Z"
+  ]
+}

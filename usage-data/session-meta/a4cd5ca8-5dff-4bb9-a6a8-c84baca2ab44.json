@@ -1,0 +1,42 @@
+{
+  "session_id": "a4cd5ca8-5dff-4bb9-a6a8-c84baca2ab44",
+  "project_path": "/Users/georgewestbrook",
+  "start_time": "2026-02-06T14:51:06.801Z",
+  "duration_minutes": 15,
+  "user_message_count": 2,
+  "assistant_message_count": 35,
+  "tool_counts": {
+    "Bash": 22,
+    "TaskUpdate": 2,
+    "SendMessage": 2,
+    "TaskList": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 53,
+  "output_tokens": 1278,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are part of the folder-analysis team. Your task is to analyze the following personal and system folders in /Users/georgewestbrook/: - Desktop/ - Document…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 13,
+  "tool_error_categories": {
+    "Other": 10,
+    "Command Failed": 3
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    14,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-06T14:51:06.801Z",
+    "2026-02-06T15:06:22.002Z"
+  ]
+}

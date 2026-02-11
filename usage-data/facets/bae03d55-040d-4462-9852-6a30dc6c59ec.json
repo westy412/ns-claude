@@ -1,0 +1,25 @@
+{
+  "underlying_goal": "Align campaign Kanban and detail page layouts to match the posts page styling, and add published post counts to campaign cards/tables",
+  "goal_categories": {
+    "ui_layout_alignment": 1,
+    "feature_addition": 1,
+    "ui_refinement": 1,
+    "commit_changes": 1,
+    "update_linear_issue": 1
+  },
+  "outcome": "fully_achieved",
+  "user_satisfaction_counts": {
+    "happy": 1,
+    "satisfied": 1,
+    "likely_satisfied": 1
+  },
+  "claude_helpfulness": "essential",
+  "session_type": "iterative_refinement",
+  "friction_counts": {
+    "misunderstood_request": 1
+  },
+  "friction_detail": "Initially displayed published post count as 'X out of Y' format when user wanted two separate numbers with distinct icons.",
+  "primary_success": "multi_file_changes",
+  "brief_summary": "User wanted campaign pages to mirror posts page layout and add published post counts; Claude delivered all changes across 8+ files in frontend and backend with minor display format correction.",
+  "session_id": "bae03d55-040d-4462-9852-6a30dc6c59ec"
+}

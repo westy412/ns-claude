@@ -1,0 +1,73 @@
+{
+  "session_id": "0679dd8d-069c-431d-8392-4d5e28457a3a",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien",
+  "start_time": "2026-02-10T21:08:31.420Z",
+  "duration_minutes": 163,
+  "user_message_count": 12,
+  "assistant_message_count": 62,
+  "tool_counts": {
+    "Glob": 6,
+    "Bash": 5,
+    "Read": 8,
+    "Write": 1,
+    "Edit": 4,
+    "Grep": 2
+  },
+  "languages": {
+    "Markdown": 13
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 124,
+  "output_tokens": 2231,
+  "first_prompt": "@DEVELOPMENT-WORKFLOW.md Okay, please read this. We're going to create a version 2 of this and just familiarise yourself with it. Then I am going to give you some other.. reference material which will…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    37.488,
+    31.532,
+    41.654,
+    56.842,
+    964.931,
+    154.11,
+    3211.498
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Other": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1382,
+  "lines_removed": 82,
+  "files_modified": 1,
+  "message_hours": [
+    21,
+    21,
+    21,
+    21,
+    21,
+    21,
+    21,
+    22,
+    22,
+    22,
+    22,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T21:08:31.420Z",
+    "2026-02-10T21:08:31.420Z",
+    "2026-02-10T21:08:31.420Z",
+    "2026-02-10T21:09:31.690Z",
+    "2026-02-10T21:10:20.546Z",
+    "2026-02-10T21:14:49.675Z",
+    "2026-02-10T21:15:39.273Z",
+    "2026-02-10T22:31:40.617Z",
+    "2026-02-10T22:32:55.011Z",
+    "2026-02-10T22:51:27.774Z",
+    "2026-02-10T22:55:40.877Z",
+    "2026-02-10T23:49:45.758Z"
+  ]
+}

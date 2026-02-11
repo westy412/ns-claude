@@ -1,0 +1,9 @@
+[
+  {
+    "from": "lm-config-analyzer",
+    "text": "{\"type\":\"shutdown_approved\",\"requestId\":\"shutdown-1770673742759@lm-config-analyzer\",\"from\":\"lm-config-analyzer\",\"timestamp\":\"2026-02-09T22:14:32.420Z\"}",
+    "timestamp": "2026-02-09T22:14:32.420Z",
+    "color": "green",
+    "read": false
+  }
+]

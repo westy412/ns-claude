@@ -1,0 +1,17 @@
+{
+  "underlying_goal": "Understand how to set up Sentry for their content workforce repositories, including integration process, pricing/scaling, and timing recommendations",
+  "goal_categories": {
+    "information_seeking": 3
+  },
+  "outcome": "mostly_achieved",
+  "user_satisfaction_counts": {
+    "likely_satisfied": 2
+  },
+  "claude_helpfulness": "very_helpful",
+  "session_type": "exploration",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "good_explanations",
+  "brief_summary": "User wanted guidance on Sentry setup, pricing, and timing for their repositories, and Claude provided structured explanations covering all aspects.",
+  "session_id": "da5d6e95-bacf-4316-9eee-03d381373582"
+}

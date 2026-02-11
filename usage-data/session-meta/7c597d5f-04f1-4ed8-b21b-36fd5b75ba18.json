@@ -1,0 +1,43 @@
+{
+  "session_id": "7c597d5f-04f1-4ed8-b21b-36fd5b75ba18",
+  "project_path": "/Users/georgewestbrook",
+  "start_time": "2026-02-06T14:51:24.427Z",
+  "duration_minutes": 15,
+  "user_message_count": 2,
+  "assistant_message_count": 35,
+  "tool_counts": {
+    "Bash": 24,
+    "TaskUpdate": 1,
+    "SendMessage": 2,
+    "TaskList": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 4197,
+  "output_tokens": 98,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are part of the folder-analysis team. Your task is to analyze the following development-related folders in /Users/georgewestbrook/: - CascadeProjects/ -…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.304
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    14,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-06T14:51:24.427Z",
+    "2026-02-06T15:06:28.421Z"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "session_id": "3adb6ca9-4d2b-4d1e-bfc7-a9e61b3b224e",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-agents",
+  "start_time": "2026-01-29T00:13:55.292Z",
+  "duration_minutes": 1,
+  "user_message_count": 1,
+  "assistant_message_count": 13,
+  "tool_counts": {
+    "Grep": 2,
+    "Read": 1,
+    "Edit": 1
+  },
+  "languages": {
+    "Python": 2
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 863,
+  "output_tokens": 25,
+  "first_prompt": "Carousel iteration workflow failed: type object 'ClientType' has no attribute 'CRITIC' Traceback (most recent call last):   File \"/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1,
+  "lines_removed": 1,
+  "files_modified": 1,
+  "message_hours": [
+    0
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T00:13:55.292Z"
+  ]
+}

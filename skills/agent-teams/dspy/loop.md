@@ -56,6 +56,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,  # REQUIRED: prevents indefinite hangs
         )
     return _shared_lm
 
@@ -63,6 +64,10 @@ def get_shared_lm():
 # =============================================================================
 # SIGNATURES
 # =============================================================================
+# STRUCTURED OUTPUT RULE: Use typed output fields (bool, int, list[str],
+# dict[str, Any]) or Pydantic BaseModel/RootModel as OutputField types.
+# NEVER use str fields with JSON parsing instructions.
+# See frameworks/dspy/CHEATSHEET.md Critical Rules.
 
 class CreatorSignature(dspy.Signature):
     """
@@ -462,6 +467,10 @@ if __name__ == "__main__":
 
 ## DSPy-Specific Notes
 
+> **Structured Output Rule:** When defining signatures for Creator, Critic, and Iterator agents, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+
+- **forward() + aforward() — Both REQUIRED:** `forward()` enables DSPy prompt optimization (GEPA/MIPROv2) — runs a simplified single-pass loop. `aforward()` is for production with full iteration, retry logic, and timing. Always implement both.
+
 - **ChainOfThought for Creator:** Creative content generation benefits from visible reasoning. Use `dspy.ChainOfThought` for the Creator.
 
 - **Predict for Critic/Iterator:** Evaluation (checklist) and targeted fixes don't need reasoning chains. Use `dspy.Predict` for efficiency.
@@ -476,9 +485,96 @@ if __name__ == "__main__":
 
 - **Cross-Pollination:** Critic sees Iterator's improvements as "user" messages. Iterator sees Critic's feedback as "user" messages. This enables each to build on the other's context.
 
+### When to Use dspy.History
+
+`dspy.History` is powerful but NOT always appropriate. Use this decision table:
+
+| Loop Type | Use dspy.History? | Rationale |
+|-----------|-------------------|-----------|
+| **Conversational refinement** (Creator → Critic → Iterator) | **YES** | Agents need context of prior rounds to avoid repeating feedback and to build on improvements |
+| **Quality retry loops** (run → check → retry if bad) | **NO** | Each retry should be independent. Use explicit feedback fields instead of history accumulation |
+| **Search loops** (search → evaluate → refine query) | **YES** | Search agent needs to know what queries already failed to avoid repeating them |
+| **Scoring/evaluation** (score → threshold check) | **NO** | Scoring is stateless — same input should produce same score regardless of history |
+
+**Conversational refinement (USE History):**
+```python
+# Critic accumulates context of all prior evaluations
+critic_history.messages.append({
+    "role": "assistant",
+    "content": format_critic_output(critic_result)
+})
+# Iterator sees all prior feedback to avoid regression
+iterator_history.messages.append({
+    "role": "user",
+    "content": format_critic_output(critic_result)
+})
+```
+
+**Quality retry (DO NOT use History — use explicit feedback):**
+```python
+# Each retry gets fresh context with explicit feedback only
+for attempt in range(max_retries):
+    result = await call_with_retry(
+        self.generator,
+        agent_name=f"generator_attempt_{attempt}",
+        input_data=input_data,
+        previous_feedback=feedback if attempt > 0 else "",  # Explicit, not History
+    )
+    if quality_check(result):
+        break
+    feedback = f"Previous attempt failed: {diagnose(result)}"
+```
+
 ---
 
 ## Key Patterns
+
+### 0. Multi-Model Singleton Pattern
+
+When Creator needs a stronger model than Critic/Iterator:
+
+```python
+_flash_lm = None
+_pro_lm = None
+
+def get_flash_lm():
+    """Flash model for evaluation/iteration (fast, cheap)."""
+    global _flash_lm
+    if _flash_lm is None:
+        _flash_lm = dspy.LM(
+            os.getenv("FLASH_MODEL", "gemini/gemini-2.5-flash"),
+            api_key=os.getenv("API_KEY"),
+            max_parallel_requests=2000,
+            timeout=120,
+        )
+    return _flash_lm
+
+def get_pro_lm():
+    """Pro model for creative generation (slower, better)."""
+    global _pro_lm
+    if _pro_lm is None:
+        _pro_lm = dspy.LM(
+            os.getenv("PRO_MODEL", "gemini/gemini-2.5-pro"),
+            api_key=os.getenv("API_KEY"),
+            max_parallel_requests=100,
+            timeout=120,
+        )
+    return _pro_lm
+```
+
+**Model tier guidance for loops:**
+| Role | Model | Rationale |
+|------|-------|-----------|
+| Creator | Pro | Creative synthesis needs stronger reasoning |
+| Critic | Flash | Evaluation is structured extraction |
+| Iterator | Flash | Targeted fixes, not creative generation |
+
+```python
+# In __init__:
+self.creator.set_lm(pro_lm)    # Creative synthesis → Pro
+self.critic.set_lm(flash_lm)   # Evaluation → Flash
+self.iterator.set_lm(flash_lm) # Targeted fixes → Flash
+```
 
 ### 1. Separate History Initialization
 

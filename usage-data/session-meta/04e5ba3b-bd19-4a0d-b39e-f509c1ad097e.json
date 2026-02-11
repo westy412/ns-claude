@@ -1,0 +1,61 @@
+{
+  "session_id": "04e5ba3b-bd19-4a0d-b39e-f509c1ad097e",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-29T14:13:32.951Z",
+  "duration_minutes": 96,
+  "user_message_count": 8,
+  "assistant_message_count": 43,
+  "tool_counts": {
+    "Read": 3,
+    "Task": 3,
+    "Glob": 3,
+    "Write": 1,
+    "Edit": 2,
+    "Skill": 1
+  },
+  "languages": {
+    "Markdown": 6
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 299,
+  "output_tokens": 104,
+  "first_prompt": "We haven't got a discovery needed I know what I need to do.So effectively what we need to be able to do is have a custom format for XP posts, so tweets and Twitter threads. If you look in the spec cal…",
+  "summary": "Twitter/X Platform Integration Spec",
+  "user_interruptions": 0,
+  "user_response_times": [
+    92.855,
+    60.253,
+    17.523,
+    440.01
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 765,
+  "lines_removed": 30,
+  "files_modified": 2,
+  "message_hours": [
+    14,
+    14,
+    15,
+    15,
+    15,
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T14:13:32.951Z",
+    "2026-01-29T14:13:32.951Z",
+    "2026-01-29T15:26:44.606Z",
+    "2026-01-29T15:32:33.046Z",
+    "2026-01-29T15:37:00.014Z",
+    "2026-01-29T15:37:47.818Z",
+    "2026-01-29T15:48:31.161Z",
+    "2026-01-29T15:48:43.808Z"
+  ]
+}

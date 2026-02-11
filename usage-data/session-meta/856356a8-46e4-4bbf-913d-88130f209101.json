@@ -1,0 +1,52 @@
+{
+  "session_id": "856356a8-46e4-4bbf-913d-88130f209101",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-08T21:23:06.784Z",
+  "duration_minutes": 8,
+  "user_message_count": 3,
+  "assistant_message_count": 21,
+  "tool_counts": {
+    "TaskList": 1,
+    "TaskUpdate": 2,
+    "Read": 1,
+    "Glob": 2,
+    "Task": 3,
+    "Write": 1,
+    "SendMessage": 3
+  },
+  "languages": {
+    "JSON": 1,
+    "Markdown": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 35,
+  "output_tokens": 619,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are synthesizing all audit findings into an actionable report.  YOUR TASK (Task #5): Read all findings from teammates and create a comprehensive issues r…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    3.781,
+    14.052
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "File Not Found": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 311,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    21,
+    21,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T21:23:06.784Z",
+    "2026-02-08T21:30:48.774Z",
+    "2026-02-08T21:31:09.827Z"
+  ]
+}

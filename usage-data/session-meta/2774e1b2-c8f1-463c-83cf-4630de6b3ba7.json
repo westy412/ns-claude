@@ -1,0 +1,42 @@
+{
+  "session_id": "2774e1b2-c8f1-463c-83cf-4630de6b3ba7",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-agents",
+  "start_time": "2026-01-29T16:17:26.506Z",
+  "duration_minutes": 5,
+  "user_message_count": 2,
+  "assistant_message_count": 13,
+  "tool_counts": {
+    "Edit": 2,
+    "mcp__linear__create_comment": 1,
+    "Skill": 1,
+    "Glob": 1
+  },
+  "languages": {
+    "Markdown": 2
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 3739,
+  "output_tokens": 23,
+  "first_prompt": "We're just about to run out of context, so please make sure to update the spec with any changes given what I've just said.Oh, okay, so it's just front end that works. Yeah, so we just want per we just…",
+  "summary": "Frontend implementation for iterative hook refinement",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 7,
+  "lines_removed": 4,
+  "files_modified": 1,
+  "message_hours": [
+    16,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T16:21:08.285Z",
+    "2026-01-29T16:21:46.685Z"
+  ]
+}

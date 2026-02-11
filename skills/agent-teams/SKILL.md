@@ -120,6 +120,64 @@ LOOP:
 
 ---
 
+## Nesting: Composing Teams of Teams
+
+Teams can be nested to any depth. Each level has its own pattern, team.md, and agent-config.yaml.
+
+### 2-Level Nesting (Common)
+
+A parent team orchestrates child teams:
+```
+research-pipeline/ (pipeline)
+├── team.md, agent-config.yaml
+├── content-refinement/ (loop)
+│   ├── team.md, agent-config.yaml
+│   └── agents/
+└── parallel-research/ (fan-in-fan-out)
+    ├── team.md, agent-config.yaml
+    └── agents/
+```
+
+### 3-Level Nesting (Complex Systems)
+
+A root team orchestrates phase teams, which orchestrate sub-teams:
+```
+root-pipeline/ (pipeline)                     ← Level 1: Root
+├── team.md, agent-config.yaml
+├── research-team/ (fan-in-fan-out)           ← Level 2: Phase team
+│   ├── team.md, agent-config.yaml
+│   ├── agents/                               ← Direct agents at level 2
+│   │   ├── platform-synthesizer.md
+│   │   └── signal-blender.md
+│   ├── keyword-loop/ (loop)                  ← Level 3: Sub-team
+│   │   ├── team.md, agent-config.yaml
+│   │   └── agents/
+│   └── analytics-team/ (fan-in-fan-out)      ← Level 3: Sub-team
+│       ├── team.md, agent-config.yaml
+│       └── agents/
+└── ideation-team/ (pipeline)                 ← Level 2: Phase team
+    ├── team.md, agent-config.yaml
+    └── agents/
+```
+
+### Nesting Rules
+
+1. **Each level has its own pattern** — A pipeline parent can have loop and fan-in-fan-out children. Patterns are independent at each level.
+2. **Each team folder has its own agent-config.yaml** — Parent config includes `sub-teams` key listing child folders. Child configs are self-contained.
+3. **Parent team.md documents orchestration** — How it invokes children, what data flows between them, the import/composition chain.
+4. **Mixed patterns are normal** — A fan-in-fan-out parent can orchestrate loop children AND fan-in-fan-out children. Each child uses its own pattern internally.
+5. **A team can have BOTH sub-teams AND direct agents** — Agents at a level are distinct from agents inside sub-teams (e.g., synthesizer agents at level 2 that aggregate sub-team outputs).
+
+### Parent team.md Orchestration Documentation
+
+When generating team.md for a parent with sub-teams, include:
+- **How it invokes children** — parallel (asyncio.gather) or sequential
+- **Each child's pattern** — annotated in the Sub-Teams table
+- **The import/composition chain** — how parent.forward() calls child.forward()
+- **Data flow between levels** — what the parent passes down and what it receives back
+
+---
+
 ## Workflow
 
 1. **Ask framework preference** — LangGraph or DSPy

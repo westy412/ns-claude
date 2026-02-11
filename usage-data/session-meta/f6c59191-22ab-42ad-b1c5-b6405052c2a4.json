@@ -1,0 +1,45 @@
+{
+  "session_id": "f6c59191-22ab-42ad-b1c5-b6405052c2a4",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T12:33:22.600Z",
+  "duration_minutes": 5,
+  "user_message_count": 2,
+  "assistant_message_count": 17,
+  "tool_counts": {
+    "TaskGet": 1,
+    "Read": 6,
+    "Edit": 2
+  },
+  "languages": {
+    "Markdown": 7,
+    "YAML": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 146,
+  "output_tokens": 585,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are on team \"spec-update\". Your task is Task #5: Update all files in `spec/research-team/x-trending/`.  Read the task details with TaskGet first.  **Work…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    6.321
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 9,
+  "lines_removed": 15,
+  "files_modified": 1,
+  "message_hours": [
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T12:33:22.600Z",
+    "2026-02-10T12:38:04.746Z"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "session_id": "111528f1-4b41-4ada-8759-5616bead7178",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-08T14:30:36.774Z",
+  "duration_minutes": 2,
+  "user_message_count": 2,
+  "assistant_message_count": 20,
+  "tool_counts": {
+    "Read": 2,
+    "TaskUpdate": 2,
+    "Edit": 4,
+    "SendMessage": 2,
+    "TaskList": 1
+  },
+  "languages": {
+    "Markdown": 6
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 36,
+  "output_tokens": 26,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are `cheatsheet-updater` on team `structured-output-fix`. Your task is Task #1.  ## MISSION Elevate DSPy structured output guidance to a CRITICAL RULE in…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.035
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 106,
+  "lines_removed": 0,
+  "files_modified": 2,
+  "message_hours": [
+    14,
+    14
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T14:30:36.774Z",
+    "2026-02-08T14:32:02.950Z"
+  ]
+}

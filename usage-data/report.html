@@ -119,16 +119,16 @@
 <body>
   <div class="container">
     <h1>Claude Code Insights</h1>
-    <p class="subtitle">30,564 messages across 5605 sessions | 2025-12-31 to 2026-02-03</p>
+    <p class="subtitle">1,367 messages across 159 sessions (649 total) | 2026-02-01 to 2026-02-10</p>
 
     
     <div class="at-a-glance">
       <div class="glance-title">At a Glance</div>
       <div class="glance-sections">
-        <div class="glance-section"><strong>What's working:</strong> You've built a sophisticated workflow around prompt engineering as a first-class discipline — versioning, restructuring, and regenerating prompts systematically rather than tweaking ad-hoc. You're also one of the rare users leveraging browser-based MCP tooling to validate UI changes and debug frontend issues directly through Claude, which gives you a tight feedback loop across your full-stack projects. <a href="#section-wins" class="see-more">Impressive Things You Did →</a></div>
-        <div class="glance-section"><strong>What's hindering you:</strong> On Claude's side, it's making destructive changes without safeguards (like deleting your prompt files mid-refactor) and frequently misdiagnosing the actual problem — jumping into a fix before truly understanding the bug, then confirming things work when they don't. On your side, sessions regularly end in a partially-done state because tasks aren't scoped tightly enough to reach a working result, and external dependencies like missing Supabase buckets aren't validated upfront, which derails implementation mid-stream. <a href="#section-friction" class="see-more">Where Things Go Wrong →</a></div>
-        <div class="glance-section"><strong>Quick wins to try:</strong> Try setting up <strong>hooks</strong> to auto-snapshot files before edits or commits — this would have prevented the deleted-prompts incident and similar destructive changes. Also consider creating <strong>custom slash commands</strong> for your prompt regeneration and review workflows, since those are among your most frequent tasks and would benefit from a standardized, repeatable process. <a href="#section-features" class="see-more">Features to Try →</a></div>
-        <div class="glance-section"><strong>Ambitious workflows:</strong> As models get more capable, you'll be able to run autonomous refactors where Claude spawns a sub-agent to snapshot and validate files before any destructive operation — eliminating the course corrections that eat your time today. Even more powerful: parallel debugging agents that simultaneously investigate frontend state, backend APIs, and external service configs so you converge on root causes in minutes instead of burning a whole session chasing the wrong hypothesis. <a href="#section-horizon" class="see-more">On the Horizon →</a></div>
+        <div class="glance-section"><strong>What's working:</strong> You've built an impressive multi-agent orchestration workflow — spawning team-lead and teammate agents that coordinate in parallel across dozens of tasks, like rolling out infographic support across three repos in a single session. You're also running a disciplined spec-driven development cycle where architecture docs are written, implemented against, audited, and archived, which keeps your growing system coherent. The combination of these patterns lets you ship full-stack features end-to-end (spec → API → frontend → commit) at a pace that's hard to match. <a href="#section-wins" class="see-more">Impressive Things You Did →</a></div>
+        <div class="glance-section"><strong>What's hindering you:</strong> On Claude's side, it frequently starts with the wrong scope or approach — targeting the wrong component, drawing premature conclusions, or making destructive edits like deleting prompt files during a refactor — which forces you into repeated course corrections. On your side, multi-agent sessions are hitting context window limits at critical moments (blocking entire teams), and when Claude investigates something like an API integration, stale or unverified findings sometimes propagate across sessions because conclusions get written before they're actually tested. <a href="#section-friction" class="see-more">Where Things Go Wrong →</a></div>
+        <div class="glance-section"><strong>Quick wins to try:</strong> Try building <strong>custom slash commands</strong> (Custom Skills) for your most common agent patterns — team-lead orchestration prompts, spec-writing templates, and teammate-spawn instructions — so you don't have to re-specify the workflow each time and can bake in guardrails like &quot;back up files before refactoring&quot; and &quot;checkpoint at 60% context usage.&quot; You could also explore <strong>headless mode</strong> to kick off your multi-agent spec restructuring or analysis swarms from scripts, letting you launch and monitor parallel agent teams without babysitting each one interactively. <a href="#section-features" class="see-more">Features to Try →</a></div>
+        <div class="glance-section"><strong>Ambitious workflows:</strong> As models get more capable, your team-lead agent should be able to autonomously detect when a worker is stalling or approaching context limits, respawn it with a compressed handover, and reassign incomplete tasks — eliminating the manual nudges that currently interrupt your flow. Your multi-agent analysis pattern is also ripe for a structured swarm approach where each analyst writes to a strict output schema and a synthesizer consumes only those artifacts, cutting out the expensive TaskList polling and preventing the contradictory-findings problem you hit with cross-session investigations. <a href="#section-horizon" class="see-more">On the Horizon →</a></div>
       </div>
     </div>
     
@@ -145,11 +145,11 @@
     </nav>
 
     <div class="stats-row">
-      <div class="stat"><div class="stat-value">30,564</div><div class="stat-label">Messages</div></div>
-      <div class="stat"><div class="stat-value">+2,884,956/-577,047</div><div class="stat-label">Lines</div></div>
-      <div class="stat"><div class="stat-value">20927</div><div class="stat-label">Files</div></div>
-      <div class="stat"><div class="stat-value">33</div><div class="stat-label">Days</div></div>
-      <div class="stat"><div class="stat-value">926.2</div><div class="stat-label">Msgs/Day</div></div>
+      <div class="stat"><div class="stat-value">1,367</div><div class="stat-label">Messages</div></div>
+      <div class="stat"><div class="stat-value">+76,255/-4,194</div><div class="stat-label">Lines</div></div>
+      <div class="stat"><div class="stat-value">542</div><div class="stat-label">Files</div></div>
+      <div class="stat"><div class="stat-value">9</div><div class="stat-label">Days</div></div>
+      <div class="stat"><div class="stat-value">151.9</div><div class="stat-label">Msgs/Day</div></div>
     </div>
 
     
@@ -158,42 +158,42 @@
       
         <div class="project-area">
           <div class="area-header">
-            <span class="area-name">DSPy Agent Codebase Refactoring</span>
-            <span class="area-count">~1 sessions</span>
+            <span class="area-name">Multi-Agent Architecture &amp; Spec Restructuring</span>
+            <span class="area-count">~20 sessions</span>
           </div>
-          <div class="area-desc">Restructuring a DSPy-based agent codebase including signatures, prompts, and FastAPI components. Claude assisted with large-scale refactoring but accidentally deleted important prompt files during the process, requiring regeneration and significant course corrections from the user.</div>
+          <div class="area-desc">Large-scale restructuring of architecture specification files across multiple modules (X Keyword, X Creator, LinkedIn Creator, X Trending, Industry Research) using multi-agent team workflows with team-lead orchestration. Claude was used extensively as teammate agents (parent-updater, archiver, code-updater, skill-updater) to read, rewrite, and archive dozens of spec files in parallel, with coordination via TaskList polling and SendMessage tools. Several sessions hit context window limits or edit tool failures that blocked progress, particularly when agents were assigned large file update batches.</div>
         </div>
       
         <div class="project-area">
           <div class="area-header">
-            <span class="area-name">AI Image Generation Pipeline</span>
-            <span class="area-count">~2 sessions</span>
+            <span class="area-name">Infographic Feature Development</span>
+            <span class="area-count">~8 sessions</span>
           </div>
-          <div class="area-desc">Debugging and improving an AI image generation system, particularly around reference image handling — both the upload UI/storage (Supabase bucket configuration) and ensuring the agent pipeline actually incorporates reference images during generation. Claude helped implement UI for reference image uploads and traced the pipeline but hit infrastructure and debugging challenges.</div>
+          <div class="area-desc">End-to-end implementation of infographic support across three repositories, including structured output design, agent architecture, frontend components (template selector, format detection, InfographicEditor, ContentTab wiring), API endpoint routing, and draft/iteration agent creation. Claude orchestrated multi-worker agent teams to complete up to 15 tasks in parallel, handled TypeScript compilation, and made individual commits per task. Scope evolved significantly through user guidance, and one critical agent task was blocked by context window overflow requiring respawn.</div>
         </div>
       
         <div class="project-area">
           <div class="area-header">
-            <span class="area-name">Web Application UI &amp; Frontend Development</span>
-            <span class="area-count">~2 sessions</span>
+            <span class="area-name">External Post Tracking &amp; Analytics</span>
+            <span class="area-count">~7 sessions</span>
           </div>
-          <div class="area-desc">Building and redesigning settings pages, carousel PDF generation features, and other frontend components in a TypeScript web application. Claude implemented full UI flows with multiple new pages and diagnosed state management bugs like carousel PDF generation state being lost on navigation.</div>
+          <div class="area-desc">Design and implementation of an external post tracking feature spanning spec creation, data layer (types, API client, proxy routes, hooks), database models/migrations/schemas/endpoints, and frontend UI with tabs, inline editing, dialog components, and analytics page integration. Claude was used for codebase research, spec writing, Linear issue creation, and iterative UI development. CSS layout issues with overlapping columns required multiple fix iterations, and feature placement was course-corrected from the posts page to the analytics page.</div>
         </div>
       
         <div class="project-area">
           <div class="area-header">
-            <span class="area-name">Analytics &amp; Database Schema Work</span>
-            <span class="area-count">~1 sessions</span>
+            <span class="area-name">DSPy Pipeline Debugging &amp; Timeout Fixes</span>
+            <span class="area-count">~12 sessions</span>
           </div>
-          <div class="area-desc">Validating and fixing analytics database schema SQL queries against a spec file. Claude identified schema mismatches between the spec and actual implementation and began correcting them, though the session was interrupted before completion.</div>
+          <div class="area-desc">Investigation and resolution of timeout vulnerabilities, infinite loop risks, and hanging conditions across a DSPy-based agent pipeline, including ReAct agent refactoring to manual tool-handling patterns, retry mechanism analysis, LM singleton config audits, and applying timeout fixes across multiple files. Claude was used both as individual analyst agents and coordinated teammate agents to synthesize findings and create fix plans. Key wins included reducing agent runtime from 180s+ to ~45s, though OAuth token expirations and authentication errors disrupted some testing sessions.</div>
         </div>
       
         <div class="project-area">
           <div class="area-header">
-            <span class="area-name">Social Media Integration Debugging</span>
-            <span class="area-count">~1 sessions</span>
+            <span class="area-name">AI Image Generation &amp; Social Media Integration</span>
+            <span class="area-count">~9 sessions</span>
           </div>
-          <div class="area-desc">Investigating persistent Twitter/X posting failures despite auto-reauthentication being implemented. Claude conducted thorough investigation through the codebase but ultimately couldn't resolve the issue, concluding it was likely a Twitter API tier limitation rather than a code bug.</div>
+          <div class="area-desc">Work on reference image incorporation into AI-generated content, settings page styling, Supabase storage integration, Twitter/X OAuth authentication fixes, Apify actor cost auditing, and Gemini Search grounding research with DSPy. Claude traced pipelines, debugged API tier limitations, implemented OAuth 1.0a fixes, identified cost-saving actor replacements, and produced handover documents. Friction included storage bucket configuration issues, contradictory findings left in task documents across sessions, and unresolvable Twitter API limitations.</div>
         </div>
       
     </div>
@@ -203,34 +203,34 @@
       <div class="chart-card">
         <div class="chart-title">What You Wanted</div>
         <div class="bar-row">
-        <div class="bar-label">Skill Document Review And Update</div>
+        <div class="bar-label">Code Editing</div>
         <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
-        <div class="bar-value">141</div>
+        <div class="bar-value">10</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Codebase Refactoring</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
-        <div class="bar-value">141</div>
+        <div class="bar-label">Code Generation</div>
+        <div class="bar-track"><div class="bar-fill" style="width:90%;background:#2563eb"></div></div>
+        <div class="bar-value">9</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Regenerate Prompts</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
-        <div class="bar-value">141</div>
+        <div class="bar-label">Code Changes</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#2563eb"></div></div>
+        <div class="bar-value">5</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Restructure Prompts To Individual Files</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
-        <div class="bar-value">141</div>
+        <div class="bar-label">Code Analysis</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#2563eb"></div></div>
+        <div class="bar-value">5</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Debugging</div>
-        <div class="bar-track"><div class="bar-fill" style="width:65.95744680851064%;background:#2563eb"></div></div>
-        <div class="bar-value">93</div>
+        <div class="bar-label">Coordination</div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%;background:#2563eb"></div></div>
+        <div class="bar-value">4</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Question Answering</div>
-        <div class="bar-track"><div class="bar-fill" style="width:51.06382978723404%;background:#2563eb"></div></div>
-        <div class="bar-value">72</div>
+        <div class="bar-label">Feature Implementation</div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%;background:#2563eb"></div></div>
+        <div class="bar-value">4</div>
       </div>
       </div>
       <div class="chart-card">
@@ -238,32 +238,32 @@
         <div class="bar-row">
         <div class="bar-label">Read</div>
         <div class="bar-track"><div class="bar-fill" style="width:100%;background:#0891b2"></div></div>
-        <div class="bar-value">46347</div>
-      </div>
-<div class="bar-row">
-        <div class="bar-label">Bash</div>
-        <div class="bar-track"><div class="bar-fill" style="width:98.10127947871491%;background:#0891b2"></div></div>
-        <div class="bar-value">45467</div>
+        <div class="bar-value">1431</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Edit</div>
-        <div class="bar-track"><div class="bar-fill" style="width:72.08449306319719%;background:#0891b2"></div></div>
-        <div class="bar-value">33409</div>
+        <div class="bar-track"><div class="bar-fill" style="width:69.81132075471697%;background:#0891b2"></div></div>
+        <div class="bar-value">999</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Write</div>
-        <div class="bar-track"><div class="bar-fill" style="width:23.505296998726994%;background:#0891b2"></div></div>
-        <div class="bar-value">10894</div>
+        <div class="bar-label">Bash</div>
+        <div class="bar-track"><div class="bar-fill" style="width:67.43535988819008%;background:#0891b2"></div></div>
+        <div class="bar-value">965</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Glob</div>
-        <div class="bar-track"><div class="bar-fill" style="width:20.234319373422228%;background:#0891b2"></div></div>
-        <div class="bar-value">9378</div>
+        <div class="bar-label">TaskList</div>
+        <div class="bar-track"><div class="bar-fill" style="width:31.027253668763105%;background:#0891b2"></div></div>
+        <div class="bar-value">444</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Grep</div>
-        <div class="bar-track"><div class="bar-fill" style="width:17.677519580555376%;background:#0891b2"></div></div>
-        <div class="bar-value">8193</div>
+        <div class="bar-label">SendMessage</div>
+        <div class="bar-track"><div class="bar-fill" style="width:26.20545073375262%;background:#0891b2"></div></div>
+        <div class="bar-value">375</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">TaskUpdate</div>
+        <div class="bar-track"><div class="bar-fill" style="width:24.737945492662476%;background:#0891b2"></div></div>
+        <div class="bar-value">354</div>
       </div>
       </div>
     </div>
@@ -272,52 +272,57 @@
       <div class="chart-card">
         <div class="chart-title">Languages</div>
         <div class="bar-row">
-        <div class="bar-label">TypeScript</div>
+        <div class="bar-label">Markdown</div>
         <div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div>
-        <div class="bar-value">33535</div>
+        <div class="bar-value">1291</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Python</div>
-        <div class="bar-track"><div class="bar-fill" style="width:94.85015655285522%;background:#10b981"></div></div>
-        <div class="bar-value">31808</div>
-      </div>
-<div class="bar-row">
-        <div class="bar-label">Markdown</div>
-        <div class="bar-track"><div class="bar-fill" style="width:55.586700462203666%;background:#10b981"></div></div>
-        <div class="bar-value">18641</div>
-      </div>
-<div class="bar-row">
-        <div class="bar-label">Shell</div>
-        <div class="bar-track"><div class="bar-fill" style="width:4.797972267779931%;background:#10b981"></div></div>
-        <div class="bar-value">1609</div>
+        <div class="bar-track"><div class="bar-fill" style="width:71.72734314484896%;background:#10b981"></div></div>
+        <div class="bar-value">926</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">YAML</div>
-        <div class="bar-track"><div class="bar-fill" style="width:4.079320113314448%;background:#10b981"></div></div>
-        <div class="bar-value">1368</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.738187451587915%;background:#10b981"></div></div>
+        <div class="bar-value">229</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">TypeScript</div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.498838109992253%;background:#10b981"></div></div>
+        <div class="bar-value">213</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">JSON</div>
-        <div class="bar-track"><div class="bar-fill" style="width:1.6281496943491875%;background:#10b981"></div></div>
-        <div class="bar-value">546</div>
+        <div class="bar-track"><div class="bar-fill" style="width:2.168861347792409%;background:#10b981"></div></div>
+        <div class="bar-value">28</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Shell</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0.69713400464756%;background:#10b981"></div></div>
+        <div class="bar-value">9</div>
       </div>
       </div>
       <div class="chart-card">
         <div class="chart-title">Session Types</div>
         <div class="bar-row">
-        <div class="bar-label">Iterative Refinement</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
-        <div class="bar-value">234</div>
-      </div>
-<div class="bar-row">
         <div class="bar-label">Single Task</div>
-        <div class="bar-track"><div class="bar-fill" style="width:24.786324786324787%;background:#8b5cf6"></div></div>
-        <div class="bar-value">58</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">29</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Multi Task</div>
-        <div class="bar-track"><div class="bar-fill" style="width:19.65811965811966%;background:#8b5cf6"></div></div>
-        <div class="bar-value">46</div>
+        <div class="bar-track"><div class="bar-fill" style="width:58.620689655172406%;background:#8b5cf6"></div></div>
+        <div class="bar-value">17</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Iterative Refinement</div>
+        <div class="bar-track"><div class="bar-fill" style="width:31.03448275862069%;background:#8b5cf6"></div></div>
+        <div class="bar-value">9</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Exploration</div>
+        <div class="bar-track"><div class="bar-fill" style="width:3.4482758620689653%;background:#8b5cf6"></div></div>
+        <div class="bar-value">1</div>
       </div>
       </div>
     </div>
@@ -325,9 +330,10 @@
     
     <h2 id="section-usage">How You Use Claude Code</h2>
     <div class="narrative">
-      <p>You are a <strong>prolific, high-volume Claude Code user</strong> running an extraordinary number of sessions—over 5,600—across a relatively short period, with 30,000+ messages and over 1,000 commits. Your workflow centers on <strong>handing off complex, multi-file tasks</strong> to Claude and expecting it to navigate large codebases autonomously, using heavy Read (46K), Bash (45K), and Edit (33K) tool invocations. You work across Python, TypeScript, and Markdown-heavy projects, often dealing with DSPy agents, FastAPI backends, and frontend UI work simultaneously. A distinctive pattern is your use of <strong>session handoffs and spec-driven development</strong>—you pass context from one session to the next and rely on specification files to guide Claude's work, as seen in sessions where you handed over agent specs or analytics schema validation tasks.</p>
-<p>However, your experience is marked by <strong>significant friction and frequent course corrections</strong>. In 375 instances Claude took the wrong approach, and frustration levels are notably high (234 frustrated vs. 354 satisfied). You've encountered recurring issues where Claude <strong>makes destructive changes without safeguards</strong>—deleting prompt files during refactors, misdiagnosing the root cause of bugs, or confirming features work when they don't. You tend to <strong>let Claude run autonomously</strong> rather than micromanaging each step, but this hands-off style means problems compound before you catch them. When things go wrong, you step in with direct corrections and expect Claude to recover, as when you pointed out deleted prompts and demanded regeneration. Your TodoWrite usage (7,140 calls) and the chrome-computer MCP tool (5,409 calls) suggest you're orchestrating complex workflows that span code editing, browser-based testing, and structured task management, often pushing Claude to its limits across multiple domains in a single session.</p>
-      <div class="key-insight"><strong>Key pattern:</strong> You operate as a high-throughput delegator who hands off ambitious, spec-driven tasks and lets Claude run autonomously, but frequently has to intervene with course corrections when Claude takes destructive or misguided approaches.</div>
+      <p>You are a <strong>power user running sophisticated multi-agent orchestration workflows</strong> at an extraordinary pace — 159 sessions across just 10 days, with heavy use of Task, TaskList, TaskUpdate, and SendMessage tools that reveal you're operating Claude as a team-lead spawning worker agents for parallel execution. Your interaction style is fundamentally <strong>delegation-oriented</strong>: you define specs, assign tasks to agent teammates, and monitor progress rather than writing code yourself. When things work, they work beautifully — 29 fully achieved sessions, many marked &quot;essential,&quot; with clean multi-file commits across Python, TypeScript, and YAML codebases. You clearly have a well-developed mental model of your architecture (DSPy agents, FastAPI, Supabase, infographic pipelines) and you've built custom skills and workflows to make Claude conform to your patterns.</p>
+<p>However, your ambition frequently pushes against Claude's limits, and <strong>you course-correct aggressively when Claude goes off-track</strong>. The &quot;wrong_approach&quot; friction (22 instances) is your most common issue — Claude scopes work too narrowly, deletes files it shouldn't, confirms things work when they don't, or takes the wrong architectural direction. You respond with pointed interruptions and redirections: correcting Claude when it assumed a feature belonged on the posts page instead of analytics, catching when it left stale incorrect findings in a task document, and flagging when it deleted prompt files during a refactor without backup. You also hit <strong>context window limits repeatedly</strong> (4 instances plus prompt-too-long errors), a natural consequence of your large-scale orchestration sessions where agents process dozens of spec files. When blocked, your style is pragmatic — a quick &quot;carry on plz&quot; rather than detailed re-explanation.</p>
+<p>Your workflow reveals someone who <strong>iterates through architecture at the spec level first</strong>, then delegates implementation to agent teams. You write formal specs, create Linear issues, build handover documents, and archive completed work systematically. The 6 instances of rejected actions and 7 misunderstood requests show you maintain tight quality control — you don't let Claude run unchecked even in automated workflows. Your dissatisfaction (10 dissatisfied + 10 frustrated) clusters around sessions where Claude failed to edit files due to permission issues or got stuck in polling loops, suggesting your biggest frustration is <strong>wasted compute on mechanical failures</strong> rather than intellectual disagreements.</p>
+      <div class="key-insight"><strong>Key pattern:</strong> You operate Claude as a multi-agent team lead, delegating parallelized implementation tasks via specs and orchestration workflows, while aggressively course-correcting when agents take wrong approaches or exceed context limits.</div>
     </div>
     
 
@@ -336,41 +342,41 @@
       <div class="chart-title">User Response Time Distribution</div>
       <div class="bar-row">
         <div class="bar-label">2-10s</div>
-        <div class="bar-track"><div class="bar-fill" style="width:63.952627683197626%;background:#6366f1"></div></div>
-        <div class="bar-value">2592</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div>
+        <div class="bar-value">268</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">10-30s</div>
-        <div class="bar-track"><div class="bar-fill" style="width:96.32371083148286%;background:#6366f1"></div></div>
-        <div class="bar-value">3904</div>
+        <div class="bar-track"><div class="bar-fill" style="width:69.02985074626866%;background:#6366f1"></div></div>
+        <div class="bar-value">185</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">30s-1m</div>
-        <div class="bar-track"><div class="bar-fill" style="width:94.05378731803602%;background:#6366f1"></div></div>
-        <div class="bar-value">3812</div>
+        <div class="bar-track"><div class="bar-fill" style="width:46.64179104477612%;background:#6366f1"></div></div>
+        <div class="bar-value">125</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">1-2m</div>
-        <div class="bar-track"><div class="bar-fill" style="width:92.4500370096225%;background:#6366f1"></div></div>
-        <div class="bar-value">3747</div>
+        <div class="bar-track"><div class="bar-fill" style="width:48.134328358208954%;background:#6366f1"></div></div>
+        <div class="bar-value">129</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">2-5m</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div>
-        <div class="bar-value">4053</div>
+        <div class="bar-track"><div class="bar-fill" style="width:53.35820895522389%;background:#6366f1"></div></div>
+        <div class="bar-value">143</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">5-15m</div>
-        <div class="bar-track"><div class="bar-fill" style="width:55.58845299777943%;background:#6366f1"></div></div>
-        <div class="bar-value">2253</div>
+        <div class="bar-track"><div class="bar-fill" style="width:39.55223880597015%;background:#6366f1"></div></div>
+        <div class="bar-value">106</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">>15m</div>
-        <div class="bar-track"><div class="bar-fill" style="width:21.71231186775228%;background:#6366f1"></div></div>
-        <div class="bar-value">880</div>
+        <div class="bar-track"><div class="bar-fill" style="width:18.65671641791045%;background:#6366f1"></div></div>
+        <div class="bar-value">50</div>
       </div>
       <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
-        Median: 64.0s &bull; Average: 186.9s
+        Median: 41.2s &bull; Average: 181.6s
       </div>
     </div>
 
@@ -380,15 +386,15 @@
       
         <div style="display: flex; gap: 24px; margin: 12px 0;">
           <div style="text-align: center;">
-            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">505</div>
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">217</div>
             <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">Overlap Events</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">291</div>
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">138</div>
             <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">Sessions Involved</div>
           </div>
           <div style="text-align: center;">
-            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">9%</div>
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">58%</div>
             <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">Of Messages</div>
           </div>
         </div>
@@ -417,81 +423,81 @@
         <div id="hour-histogram">
       <div class="bar-row">
         <div class="bar-label">Morning (6-12)</div>
-        <div class="bar-track"><div class="bar-fill" style="width:10.232967628335366%;background:#8b5cf6"></div></div>
-        <div class="bar-value">1511</div>
+        <div class="bar-track"><div class="bar-fill" style="width:21.54046997389034%;background:#8b5cf6"></div></div>
+        <div class="bar-value">165</div>
       </div>
 
       <div class="bar-row">
         <div class="bar-label">Afternoon (12-18)</div>
-        <div class="bar-track"><div class="bar-fill" style="width:87.90464580793716%;background:#8b5cf6"></div></div>
-        <div class="bar-value">12980</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">766</div>
       </div>
 
       <div class="bar-row">
         <div class="bar-label">Evening (18-24)</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
-        <div class="bar-value">14766</div>
+        <div class="bar-track"><div class="bar-fill" style="width:56.26631853785901%;background:#8b5cf6"></div></div>
+        <div class="bar-value">431</div>
       </div>
 
       <div class="bar-row">
         <div class="bar-label">Night (0-6)</div>
-        <div class="bar-track"><div class="bar-fill" style="width:8.851415413788432%;background:#8b5cf6"></div></div>
-        <div class="bar-value">1307</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0.6527415143603132%;background:#8b5cf6"></div></div>
+        <div class="bar-value">5</div>
       </div></div>
       </div>
       <div class="chart-card">
         <div class="chart-title">Tool Errors Encountered</div>
         <div class="bar-row">
-        <div class="bar-label">Command Failed</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
-        <div class="bar-value">4925</div>
-      </div>
-<div class="bar-row">
         <div class="bar-label">Other</div>
-        <div class="bar-track"><div class="bar-fill" style="width:28.954314720812185%;background:#dc2626"></div></div>
-        <div class="bar-value">1426</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">137</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">User Rejected</div>
-        <div class="bar-track"><div class="bar-fill" style="width:15.065989847715736%;background:#dc2626"></div></div>
-        <div class="bar-value">742</div>
+        <div class="bar-track"><div class="bar-fill" style="width:48.9051094890511%;background:#dc2626"></div></div>
+        <div class="bar-value">67</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Command Failed</div>
+        <div class="bar-track"><div class="bar-fill" style="width:46.715328467153284%;background:#dc2626"></div></div>
+        <div class="bar-value">64</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">File Not Found</div>
-        <div class="bar-track"><div class="bar-fill" style="width:12.121827411167512%;background:#dc2626"></div></div>
-        <div class="bar-value">597</div>
+        <div class="bar-track"><div class="bar-fill" style="width:22.62773722627737%;background:#dc2626"></div></div>
+        <div class="bar-value">31</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Edit Failed</div>
-        <div class="bar-track"><div class="bar-fill" style="width:2.8223350253807107%;background:#dc2626"></div></div>
-        <div class="bar-value">139</div>
+        <div class="bar-track"><div class="bar-fill" style="width:8.02919708029197%;background:#dc2626"></div></div>
+        <div class="bar-value">11</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">File Changed</div>
-        <div class="bar-track"><div class="bar-fill" style="width:1.8071065989847714%;background:#dc2626"></div></div>
-        <div class="bar-value">89</div>
+        <div class="bar-track"><div class="bar-fill" style="width:4.37956204379562%;background:#dc2626"></div></div>
+        <div class="bar-value">6</div>
       </div>
       </div>
     </div>
 
     
     <h2 id="section-wins">Impressive Things You Did</h2>
-    <p class="section-intro">You're running a massive Claude Code operation across 5,600+ sessions with over 1,000 commits, primarily building Python and TypeScript applications with sophisticated agent architectures.</p>
+    <p class="section-intro">Over 10 days in February, you ran 159 sessions with heavy multi-agent orchestration, completing the majority of goals across a complex Python/TypeScript codebase with impressive parallelization.</p>
     <div class="big-wins">
       
         <div class="big-win">
-          <div class="big-win-title">Systematic Prompt Engineering Pipeline</div>
-          <div class="big-win-desc">You've built a disciplined workflow around managing and regenerating prompts as individual files, treating them as first-class artifacts in your codebase. Your top goals show you consistently restructure, regenerate, and review prompts — indicating a mature approach to maintaining AI agent behavior through version-controlled prompt management rather than ad-hoc tweaking.</div>
+          <div class="big-win-title">Multi-Agent Team Orchestration at Scale</div>
+          <div class="big-win-desc">You've built a sophisticated team-lead/teammate-spawn workflow where Claude agents coordinate in parallel across dozens of tasks — from architecture spec restructuring to full-stack feature implementation. Your use of TaskList, Task, TaskUpdate, and SendMessage tools (over 1,400 combined calls) shows you've internalized a scalable delegation pattern that lets you tackle 15+ subtasks in a single session, like your infographic structured output rollout across 3 repos.</div>
         </div>
       
         <div class="big-win">
-          <div class="big-win-title">Browser-Augmented Development with MCP</div>
-          <div class="big-win-desc">You're heavily leveraging the Claude-in-Chrome MCP tool with over 5,400 invocations, which means you've integrated browser-based computer use into your development loop. This lets you validate UI changes, debug frontend issues, and interact with web applications directly through Claude — a power-user workflow that most developers haven't adopted yet.</div>
+          <div class="big-win-title">Full-Stack Feature Delivery Pipeline</div>
+          <div class="big-win-desc">You consistently drive features from spec writing through implementation to commit, spanning API endpoints, database migrations, frontend components, and documentation — all in coordinated sessions. Your external post tracking feature is a great example: you went from brainstorming UX placement, to writing a formal spec, to building the full data layer and UI with iterative refinements, shipping 55 commits across the period.</div>
         </div>
       
         <div class="big-win">
-          <div class="big-win-title">Multi-File Refactoring at Scale</div>
-          <div class="big-win-desc">Your most successful pattern is coordinating large multi-file changes across your codebase, with 187 instances of successful multi-file edits. Combined with heavy use of TodoWrite for task tracking and balanced Read/Edit/Write tool usage, you're effectively using Claude as an orchestrator for complex refactors across your DSPy agent and TypeScript projects.</div>
+          <div class="big-win-title">Architecture Redesign Through Systematic Specs</div>
+          <div class="big-win-desc">You used Claude to systematically restructure architecture specifications across dozens of files for multiple modules (X Keyword, Industry Research, LinkedIn Creator, X Trending), applying consistent patterns and then archiving completed specs. This disciplined approach to documentation-driven development — where specs are written, implemented against, audited for completion, and archived — keeps your multi-agent system coherent as it scales.</div>
         </div>
       
     </div>
@@ -503,21 +509,31 @@
         <div class="bar-row">
         <div class="bar-label">Multi-file Changes</div>
         <div class="bar-track"><div class="bar-fill" style="width:100%;background:#16a34a"></div></div>
-        <div class="bar-value">187</div>
+        <div class="bar-value">30</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Good Explanations</div>
+        <div class="bar-track"><div class="bar-fill" style="width:23.333333333333332%;background:#16a34a"></div></div>
+        <div class="bar-value">7</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Good Debugging</div>
-        <div class="bar-track"><div class="bar-fill" style="width:68.98395721925134%;background:#16a34a"></div></div>
-        <div class="bar-value">129</div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.666666666666664%;background:#16a34a"></div></div>
+        <div class="bar-value">5</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Proactive Help</div>
-        <div class="bar-track"><div class="bar-fill" style="width:10.695187165775401%;background:#16a34a"></div></div>
-        <div class="bar-value">20</div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%;background:#16a34a"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Fast/Accurate Search</div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%;background:#16a34a"></div></div>
+        <div class="bar-value">3</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Correct Code Edits</div>
-        <div class="bar-track"><div class="bar-fill" style="width:1.06951871657754%;background:#16a34a"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:6.666666666666667%;background:#16a34a"></div></div>
         <div class="bar-value">2</div>
       </div>
       </div>
@@ -525,43 +541,53 @@
         <div class="chart-title">Outcomes</div>
         <div class="bar-row">
         <div class="bar-label">Not Achieved</div>
-        <div class="bar-track"><div class="bar-fill" style="width:38.50267379679144%;background:#8b5cf6"></div></div>
-        <div class="bar-value">72</div>
+        <div class="bar-track"><div class="bar-fill" style="width:27.586206896551722%;background:#8b5cf6"></div></div>
+        <div class="bar-value">8</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Partially Achieved</div>
-        <div class="bar-track"><div class="bar-fill" style="width:42.24598930481284%;background:#8b5cf6"></div></div>
-        <div class="bar-value">79</div>
+        <div class="bar-track"><div class="bar-fill" style="width:20.689655172413794%;background:#8b5cf6"></div></div>
+        <div class="bar-value">6</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Mostly Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:41.37931034482759%;background:#8b5cf6"></div></div>
+        <div class="bar-value">12</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Fully Achieved</div>
         <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
-        <div class="bar-value">187</div>
+        <div class="bar-value">29</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Unclear</div>
+        <div class="bar-track"><div class="bar-fill" style="width:3.4482758620689653%;background:#8b5cf6"></div></div>
+        <div class="bar-value">1</div>
       </div>
       </div>
     </div>
 
     
     <h2 id="section-friction">Where Things Go Wrong</h2>
-    <p class="section-intro">Your sessions are plagued by destructive refactoring mistakes, misdiagnosed problems that waste debugging time, and incomplete work that frequently gets cut off before reaching a working state.</p>
+    <p class="section-intro">Your heavy use of multi-agent orchestration workflows is undermined by context window blowouts, wrong initial approaches that require repeated course corrections, and stale or contradictory information propagating across sessions.</p>
     <div class="friction-categories">
       
         <div class="friction-category">
-          <div class="friction-title">Destructive Changes Without Safeguards</div>
-          <div class="friction-desc">Claude is making irreversible changes to your codebase—deleting files and overwriting content—without first backing things up or confirming with you. You should explicitly instruct Claude to preserve originals before any refactoring or bulk file operations.</div>
-          <ul class="friction-examples"><li>Claude deleted your comprehensive prompt files during a DSPy codebase refactor without backing them up, forcing you to spend time regenerating them from scratch after catching the mistake</li><li>With 141 instances of excessive_changes friction and a high Edit/Write tool ratio, Claude is repeatedly making sweeping modifications that create more cleanup work than they solve</li></ul>
+          <div class="friction-title">Context Window Exhaustion Blocking Critical Work</div>
+          <div class="friction-desc">You're running into context window and prompt-too-long errors at the worst possible moments—during complex multi-agent tasks where a blocked worker stalls the entire team. Breaking large tasks into smaller, independently completable units and proactively compacting context before hitting limits would prevent these costly respawns.</div>
+          <ul class="friction-examples"><li>Your infographic draft agent task (#9) hit repeated 'Prompt is too long' errors causing context overflow, which blocked the entire team and required a full respawn of the worker agent</li><li>During the Pattern 1 module restructuring across 4 modules, you hit prompt length limits three times near the end of the session, requiring manual nudges ('carry on plz') to push through completion</li></ul>
         </div>
       
         <div class="friction-category">
-          <div class="friction-title">Misdiagnosed Problems Leading to Wasted Effort</div>
-          <div class="friction-desc">Claude frequently starts solving the wrong problem—misunderstanding your actual bug or prematurely confirming something works when it doesn't. You could reduce this by front-loading a clearer problem statement and asking Claude to restate the issue before diving into code.</div>
-          <ul class="friction-examples"><li>When debugging reference image generation, Claude initially thought the bug was about images not appearing after upload rather than the agent not using reference images during generation, wasting significant investigation time</li><li>Claude confirmed the Twitter auto-reauthentication feature was implemented and working, but it still failed in practice, leading to extensive debugging that ultimately revealed an external API tier limitation it could have checked earlier</li></ul>
+          <div class="friction-title">Wrong Initial Approach Requiring Repeated User Corrections</div>
+          <div class="friction-desc">Claude frequently starts down the wrong path—misunderstanding scope, targeting the wrong component, or drawing incorrect conclusions—and you end up spending significant time course-correcting. Providing more upfront context about intent, scope boundaries, and where features live in the architecture would reduce these expensive misdirections.</div>
+          <ul class="friction-examples"><li>When designing infographic structured output, Claude initially scoped the work too narrowly to just a template selector, and you had to redirect multiple times to expand scope to structured output, agent restructuring, and proper spec format</li><li>Claude initially concluded DSPy grounding with Gemini Search didn't work and left that incorrect finding in the task document, causing a parallel session to receive contradictory stale information before you caught the error</li></ul>
         </div>
       
         <div class="friction-category">
-          <div class="friction-title">Sessions Ending Before Reaching a Working State</div>
-          <div class="friction-desc">A significant portion of your sessions end with partially-achieved outcomes where Claude has diagnosed or started a fix but never delivers working code. You should consider scoping tasks more narrowly or setting explicit checkpoints so Claude prioritizes getting to a runnable state before the session ends.</div>
-          <ul class="friction-examples"><li>The analytics DB schema validation session was interrupted before Claude finished fixing the mismatches it identified, leaving you with a half-corrected spec file</li><li>The carousel PDF state bug session ended after Claude created a Linear issue and diagnosed the problem but never actually implemented the fix, turning what should have been a code change into just documentation</li></ul>
+          <div class="friction-title">Destructive or Oversized Edits Without Safeguards</div>
+          <div class="friction-desc">Claude sometimes makes irreversible changes—deleting important files during refactors or producing edits too large for the tool to handle—forcing expensive rework. You could mitigate this by instructing Claude to back up files before refactoring and to chunk large edits into smaller sequential operations.</div>
+          <ul class="friction-examples"><li>During the DSPy agent codebase refactor, Claude deleted comprehensive prompt files without backing them up, got lost in wrong directories, and had to regenerate all prompts from scratch after you pointed out the mistake</li><li>Multiple spec file update sessions (x-trending, x-creator, linkedin-creator, archiver) failed entirely because Claude's edit tool calls were too large or failed on permission, and you had to interrupt all four sessions before any files were successfully updated</li></ul>
         </div>
       
     </div>
@@ -573,35 +599,60 @@
         <div class="bar-row">
         <div class="bar-label">Wrong Approach</div>
         <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
-        <div class="bar-value">375</div>
+        <div class="bar-value">22</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Buggy Code</div>
-        <div class="bar-track"><div class="bar-fill" style="width:49.86666666666667%;background:#dc2626"></div></div>
-        <div class="bar-value">187</div>
+        <div class="bar-track"><div class="bar-fill" style="width:40.909090909090914%;background:#dc2626"></div></div>
+        <div class="bar-value">9</div>
       </div>
 <div class="bar-row">
-        <div class="bar-label">Excessive Changes</div>
-        <div class="bar-track"><div class="bar-fill" style="width:37.6%;background:#dc2626"></div></div>
-        <div class="bar-value">141</div>
+        <div class="bar-label">Misunderstood Request</div>
+        <div class="bar-track"><div class="bar-fill" style="width:31.818181818181817%;background:#dc2626"></div></div>
+        <div class="bar-value">7</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">User Rejected Action</div>
+        <div class="bar-track"><div class="bar-fill" style="width:27.27272727272727%;background:#dc2626"></div></div>
+        <div class="bar-value">6</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Context Window Exceeded</div>
+        <div class="bar-track"><div class="bar-fill" style="width:18.181818181818183%;background:#dc2626"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Authentication Errors</div>
+        <div class="bar-track"><div class="bar-fill" style="width:18.181818181818183%;background:#dc2626"></div></div>
+        <div class="bar-value">4</div>
       </div>
       </div>
       <div class="chart-card">
         <div class="chart-title">Inferred Satisfaction (model-estimated)</div>
         <div class="bar-row">
         <div class="bar-label">Frustrated</div>
-        <div class="bar-track"><div class="bar-fill" style="width:66.10169491525424%;background:#eab308"></div></div>
-        <div class="bar-value">234</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.24137931034483%;background:#eab308"></div></div>
+        <div class="bar-value">10</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Dissatisfied</div>
-        <div class="bar-track"><div class="bar-fill" style="width:52.824858757062145%;background:#eab308"></div></div>
-        <div class="bar-value">187</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.24137931034483%;background:#eab308"></div></div>
+        <div class="bar-value">10</div>
       </div>
 <div class="bar-row">
         <div class="bar-label">Likely Satisfied</div>
         <div class="bar-track"><div class="bar-fill" style="width:100%;background:#eab308"></div></div>
-        <div class="bar-value">354</div>
+        <div class="bar-value">58</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Satisfied</div>
+        <div class="bar-track"><div class="bar-fill" style="width:37.93103448275862%;background:#eab308"></div></div>
+        <div class="bar-value">22</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Happy</div>
+        <div class="bar-track"><div class="bar-fill" style="width:3.4482758620689653%;background:#eab308"></div></div>
+        <div class="bar-value">2</div>
       </div>
       </div>
     </div>
@@ -617,36 +668,66 @@
       </div>
       
         <div class="claude-md-item">
-          <input type="checkbox" id="cmd-0" class="cmd-checkbox" checked data-text="Add as a top-level section near the beginning of CLAUDE.md, right after any project overview\n\n## File Safety Rules
-NEVER delete or overwrite files during refactoring without first creating backups. When restructuring prompt files, config files, or any content-heavy files, copy originals to a backup location before making changes. Always confirm with the user before removing files that contain substantive content.">
+          <input type="checkbox" id="cmd-0" class="cmd-checkbox" checked data-text="Add under a ## Safety / Destructive Operations section at the top level of CLAUDE.md\n\nNever delete or overwrite existing files during refactoring without first creating a backup or confirming with the user. When restructuring code, preserve all prompt files, templates, and configuration content.">
           <label for="cmd-0">
-            <code class="cmd-code">## File Safety Rules
-NEVER delete or overwrite files during refactoring without first creating backups. When restructuring prompt files, config files, or any content-heavy files, copy originals to a backup location before making changes. Always confirm with the user before removing files that contain substantive content.</code>
+            <code class="cmd-code">Never delete or overwrite existing files during refactoring without first creating a backup or confirming with the user. When restructuring code, preserve all prompt files, templates, and configuration content.</code>
             <button class="copy-btn" onclick="copyCmdItem(0)">Copy</button>
           </label>
-          <div class="cmd-why">Claude deleted comprehensive prompt files during a refactor without backing them up, forcing expensive regeneration — this is a recurring risk given the heavy refactoring and prompt restructuring work in this codebase.</div>
+          <div class="cmd-why">Claude deleted comprehensive prompt files during a refactor without backing them up, requiring regeneration from scratch — a destructive mistake that cost significant time.</div>
         </div>
       
         <div class="claude-md-item">
-          <input type="checkbox" id="cmd-1" class="cmd-checkbox" checked data-text="Add under a ## Debugging section in CLAUDE.md\n\n## Debugging Protocol
-When debugging, always start by precisely restating the user's problem description back to them before investigating. Do NOT assume what the bug is — ask clarifying questions if the problem could be interpreted multiple ways. Focus on the user's exact symptom, not adjacent issues.">
+          <input type="checkbox" id="cmd-1" class="cmd-checkbox" checked data-text="Add under a ## Multi-Agent / Teammate Behavior section\n\nWhen working as a teammate agent, avoid excessive TaskList polling. Check task status at most once every 30 seconds. If blocked, report the blocker and wait for a message rather than polling in a loop.">
           <label for="cmd-1">
-            <code class="cmd-code">## Debugging Protocol
-When debugging, always start by precisely restating the user's problem description back to them before investigating. Do NOT assume what the bug is — ask clarifying questions if the problem could be interpreted multiple ways. Focus on the user's exact symptom, not adjacent issues.</code>
+            <code class="cmd-code">When working as a teammate agent, avoid excessive TaskList polling. Check task status at most once every 30 seconds. If blocked, report the blocker and wait for a message rather than polling in a loop.</code>
             <button class="copy-btn" onclick="copyCmdItem(1)">Copy</button>
           </label>
-          <div class="cmd-why">Multiple sessions show Claude misdiagnosing the actual problem (e.g., thinking images weren't appearing vs. agent not using reference images, confirming a feature works when it didn't), wasting significant time on wrong approaches.</div>
+          <div class="cmd-why">Multiple sessions showed Claude burning hundreds of tool calls polling TaskList while waiting for blocked tasks, wasting context window and compute.</div>
         </div>
       
         <div class="claude-md-item">
-          <input type="checkbox" id="cmd-2" class="cmd-checkbox" checked data-text="Add under a ## Development Workflow or ## Pre-Implementation Checklist section\n\n## Infrastructure Verification
-Before implementing features that depend on external services (Supabase buckets, API tiers, OAuth tokens), verify that the required infrastructure exists and is properly configured FIRST. Run a quick check (e.g., list buckets, test API endpoint) before writing feature code.">
+          <input type="checkbox" id="cmd-2" class="cmd-checkbox" checked data-text="Add under a ## Context Management section\n\nWhen context window is getting large (50%+ consumed), proactively summarize progress, commit completed work, and prepare a handover document before hitting limits. Never wait until 'Prompt is too long' errors appear.">
           <label for="cmd-2">
-            <code class="cmd-code">## Infrastructure Verification
-Before implementing features that depend on external services (Supabase buckets, API tiers, OAuth tokens), verify that the required infrastructure exists and is properly configured FIRST. Run a quick check (e.g., list buckets, test API endpoint) before writing feature code.</code>
+            <code class="cmd-code">When context window is getting large (50%+ consumed), proactively summarize progress, commit completed work, and prepare a handover document before hitting limits. Never wait until 'Prompt is too long' errors appear.</code>
             <button class="copy-btn" onclick="copyCmdItem(2)">Copy</button>
           </label>
-          <div class="cmd-why">Sessions repeatedly hit runtime failures from missing infrastructure (Supabase storage bucket not found, Twitter API tier limitations) after significant implementation work was already done.</div>
+          <div class="cmd-why">Context window overflow was a recurring friction across 4+ sessions — blocking teams, requiring respawns, and losing progress.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-3" class="cmd-checkbox" checked data-text="Add under a ## Documentation / Findings section\n\nWhen writing findings or investigation results to shared documents, always update ALL prior references to those findings. Never leave stale/contradictory information in task documents or handover docs.">
+          <label for="cmd-3">
+            <code class="cmd-code">When writing findings or investigation results to shared documents, always update ALL prior references to those findings. Never leave stale/contradictory information in task documents or handover docs.</code>
+            <button class="copy-btn" onclick="copyCmdItem(3)">Copy</button>
+          </label>
+          <div class="cmd-why">Claude concluded a feature didn't work, then discovered it did work but failed to update the original task document, causing another session to receive contradictory stale information.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-4" class="cmd-checkbox" checked data-text="Add under a ## Planning / Scoping section\n\nBefore beginning implementation, confirm the full scope with the user. Do not assume narrow scope — ask whether related concerns (structured output, agent restructuring, spec format, etc.) should be included. Reference any relevant skills or spec-building patterns.">
+          <label for="cmd-4">
+            <code class="cmd-code">Before beginning implementation, confirm the full scope with the user. Do not assume narrow scope — ask whether related concerns (structured output, agent restructuring, spec format, etc.) should be included. Reference any relevant skills or spec-building patterns.</code>
+            <button class="copy-btn" onclick="copyCmdItem(4)">Copy</button>
+          </label>
+          <div class="cmd-why">Multiple sessions showed Claude scoping work too narrowly, requiring the user to redirect and expand scope repeatedly.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-5" class="cmd-checkbox" checked data-text="Add under a ## Code Editing Best Practices section\n\nWhen editing spec files or large files, keep edit operations small and targeted. If an edit fails due to size or string matching, break it into smaller chunks rather than retrying the same large edit.">
+          <label for="cmd-5">
+            <code class="cmd-code">When editing spec files or large files, keep edit operations small and targeted. If an edit fails due to size or string matching, break it into smaller chunks rather than retrying the same large edit.</code>
+            <button class="copy-btn" onclick="copyCmdItem(5)">Copy</button>
+          </label>
+          <div class="cmd-why">Multiple sessions (5+) had edit tool failures due to overly large edit operations, with some sessions failing entirely because Claude couldn't successfully apply any edits.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-6" class="cmd-checkbox" checked data-text="Add under a ## Project Overview section at the top of CLAUDE.md\n\nThis project primarily uses Python and Markdown, with some TypeScript and YAML. The Python codebase uses DSPy for agent development and FastAPI for APIs. Always use async patterns when working with DSPy agents.">
+          <label for="cmd-6">
+            <code class="cmd-code">This project primarily uses Python and Markdown, with some TypeScript and YAML. The Python codebase uses DSPy for agent development and FastAPI for APIs. Always use async patterns when working with DSPy agents.</code>
+            <button class="copy-btn" onclick="copyCmdItem(6)">Copy</button>
+          </label>
+          <div class="cmd-why">The language distribution and multiple sessions involving DSPy/FastAPI patterns show this is core context Claude needs upfront to avoid wrong approaches.</div>
         </div>
       
     </div>
@@ -657,23 +738,20 @@ Before implementing features that depend on external services (Supabase buckets,
       
         <div class="feature-card">
           <div class="feature-title">Hooks</div>
-          <div class="feature-oneliner">Auto-run shell commands at specific lifecycle events like before editing or after committing.</div>
-          <div class="feature-why"><strong>Why for you:</strong> With 375 'wrong_approach' friction events and Claude deleting files during refactors, a pre-edit hook that auto-creates backups of files before modification would prevent the most painful pattern in your sessions. You could also add a post-edit hook to run type checks given your heavy TypeScript/Python usage.</div>
+          <div class="feature-oneliner">Shell commands that auto-run at specific lifecycle events like pre-commit or post-edit.</div>
+          <div class="feature-why"><strong>Why for you:</strong> You had friction with git commits accidentally including pre-staged files, CSS issues requiring multiple fix attempts, and TypeScript compilation errors. Auto-running `git diff --cached`, `tsc --noEmit`, or linters after edits would catch these before they snowball.</div>
           
           <div class="feature-examples">
             <div class="feature-example">
               <div class="example-code-row">
-                <code class="example-code">// Add to .claude/settings.json
+                <code class="example-code">// .claude/settings.json
 {
   &quot;hooks&quot;: {
-    &quot;PreToolUse&quot;: [{
-      &quot;matcher&quot;: &quot;Edit|Write&quot;,
-      &quot;hook&quot;: &quot;cp \&quot;$CLAUDE_FILE_PATH\&quot; \&quot;$CLAUDE_FILE_PATH.bak\&quot; 2&gt;/dev/null || true&quot;
-    }],
-    &quot;PostToolUse&quot;: [{
-      &quot;matcher&quot;: &quot;Edit|Write&quot;,
-      &quot;hook&quot;: &quot;if [[ \&quot;$CLAUDE_FILE_PATH\&quot; == *.ts ]]; then npx tsc --noEmit \&quot;$CLAUDE_FILE_PATH\&quot; 2&gt;&amp;1 | head -20; fi&quot;
-    }]
+    &quot;postToolUse&quot;: {
+      &quot;bash&quot;: {
+        &quot;command&quot;: &quot;if echo \&quot;$CC_BASH_COMMAND\&quot; | grep -q 'git commit'; then echo '⚠️  Review staged files:'; git diff --cached --name-only; fi&quot;
+      }
+    }
   }
 }</code>
                 <button class="copy-btn" onclick="copyText(this)">Copy</button>
@@ -685,22 +763,21 @@ Before implementing features that depend on external services (Supabase buckets,
       
         <div class="feature-card">
           <div class="feature-title">Custom Skills</div>
-          <div class="feature-oneliner">Reusable markdown-defined prompts that run with a single /command.</div>
-          <div class="feature-why"><strong>Why for you:</strong> Your top goals include 'skill_document_review_and_update', 'regenerate_prompts', and 'restructure_prompts_to_individual_files' — these are literally repetitive workflows that should be codified as skills instead of re-explained each session. A /refactor-prompts skill could encode the backup-first, validate-after pattern you need.</div>
+          <div class="feature-oneliner">Reusable prompts as markdown files triggered with a single /command.</div>
+          <div class="feature-why"><strong>Why for you:</strong> You already use teammate-spawn skills and spec-building patterns extensively, but Claude repeatedly missed loading them or forgot patterns. Codifying your most common workflows — spec creation, teammate orchestration, architecture restructuring — as explicit /skills ensures consistency across all 159 sessions.</div>
           
           <div class="feature-examples">
             <div class="feature-example">
               <div class="example-code-row">
-                <code class="example-code"># Create .claude/skills/refactor-prompts/SKILL.md with:
+                <code class="example-code"># .claude/skills/spec/SKILL.md
+## Spec Builder
+1. Read the full feature request and ask clarifying scope questions before starting
+2. Check for existing specs in /specs/ to follow the established format
+3. Include: overview, phases (with parallelization notes), file changes, acceptance criteria
+4. Reference related agent patterns from /docs/architecture/
+5. Create a Linear issue after spec approval
 
-## Refactor Prompts Skill
-1. First, list all prompt files and save their paths to a manifest
-2. Create backups: `cp -r prompts/ prompts_backup_$(date +%s)/`
-3. Restructure each prompt into its own file under `prompts/individual/`
-4. Validate: compare file count and total line count against the manifest
-5. Only delete originals after user confirms the new structure is correct
-
-# Then just type: /refactor-prompts</code>
+Then run: /spec</code>
                 <button class="copy-btn" onclick="copyText(this)">Copy</button>
               </div>
             </div>
@@ -709,14 +786,18 @@ Before implementing features that depend on external services (Supabase buckets,
         </div>
       
         <div class="feature-card">
-          <div class="feature-title">Task Agents</div>
-          <div class="feature-oneliner">Claude spawns focused sub-agents for complex exploration or parallel work.</div>
-          <div class="feature-why"><strong>Why for you:</strong> Your sessions frequently involve multi-step debugging where Claude gets lost (navigating UI to find pages, tracing image pipelines, investigating API failures). Spawning a sub-agent to explore infrastructure prerequisites while the main agent works on implementation would prevent the late-discovery failures you keep hitting.</div>
+          <div class="feature-title">Headless Mode</div>
+          <div class="feature-oneliner">Run Claude non-interactively from scripts and CI/CD pipelines.</div>
+          <div class="feature-why"><strong>Why for you:</strong> You run many teammate agents that do straightforward file updates (spec restructuring, archive banners, timeout fixes across 8 files). Several of these failed interactively due to context limits or edit permission issues. Running them headless with scoped tools would be faster and more reliable, and you could batch multiple teammate tasks.</div>
           
           <div class="feature-examples">
             <div class="feature-example">
               <div class="example-code-row">
-                <code class="example-code">Try prompting: &quot;Use a sub-agent to verify all Supabase infrastructure (buckets, tables, RLS policies) required by the reference image feature exist and are configured correctly, while I describe the UI changes needed.&quot;</code>
+                <code class="example-code"># Batch spec file updates
+claude -p &quot;Read the plan in /specs/restructure-plan.md and apply all changes to the x-keyword module spec files. Make small targeted edits. Commit each file individually.&quot; --allowedTools &quot;Read,Edit,Bash&quot; --max-tokens 50000
+
+# Batch archive completed specs
+claude -p &quot;Read all specs in /specs/active/. If a spec has all acceptance criteria met, add an '## ARCHIVED' banner and move it to /specs/archived/. Update manifest.yaml.&quot; --allowedTools &quot;Read,Edit,Write,Bash&quot;</code>
                 <button class="copy-btn" onclick="copyText(this)">Copy</button>
               </div>
             </div>
@@ -732,14 +813,14 @@ Before implementing features that depend on external services (Supabase buckets,
     <div class="patterns-section">
       
         <div class="pattern-card">
-          <div class="pattern-title">Front-load infrastructure checks before implementation</div>
-          <div class="pattern-summary">Start every feature session by verifying external dependencies exist before writing any code.</div>
-          <div class="pattern-detail">Multiple sessions ended with runtime failures because infrastructure wasn't in place — a missing Supabase bucket, a Twitter API tier that doesn't support the needed endpoint. With 72 'not_achieved' outcomes and 187 'dissatisfied' ratings, a significant chunk of wasted effort comes from building on assumptions. Spending 2 minutes verifying infrastructure at the start saves 30+ minutes of debugging at the end.</div>
+          <div class="pattern-title">Pre-flight scope confirmation prevents rework</div>
+          <div class="pattern-summary">Start complex sessions with an explicit scoping prompt to avoid the repeated pattern of Claude assuming narrow scope and needing multiple course corrections.</div>
+          <div class="pattern-detail">Across your sessions, Claude frequently started with too narrow a scope — focusing on just a template selector when you wanted full structured output + agent restructuring, or assuming a feature lived on the posts page when it belonged on analytics. This cost you multiple redirections per session. A structured opening prompt forces alignment before any code is written, especially for your multi-file feature implementations which average 30 files per session.</div>
           
           <div class="copyable-prompt-section">
             <div class="prompt-label">Paste into Claude Code:</div>
             <div class="copyable-prompt-row">
-              <code class="copyable-prompt">Before we implement anything, let's verify all external dependencies first. Check that all required Supabase tables, buckets, and RLS policies exist. Test any external API endpoints we'll need. List what's missing before we write any code.</code>
+              <code class="copyable-prompt">Before writing any code, analyze the full scope of this request. List: 1) All files that will need changes, 2) All related concerns I might want included (e.g., agent restructuring, spec updates, type definitions), 3) Where in the UI/architecture this feature belongs based on existing patterns. Wait for my confirmation before proceeding.</code>
               <button class="copy-btn" onclick="copyText(this)">Copy</button>
             </div>
           </div>
@@ -747,14 +828,14 @@ Before implementing features that depend on external services (Supabase buckets,
         </div>
       
         <div class="pattern-card">
-          <div class="pattern-title">Require explicit problem restatement before debugging</div>
-          <div class="pattern-summary">Force Claude to restate the exact problem before investigating to prevent misdiagnosis.</div>
-          <div class="pattern-detail">Your friction data shows 375 'wrong_approach' events — the highest friction category by far. In session summaries, Claude repeatedly misidentified the root problem (images not appearing vs. agent not using references, confirming a feature works when it didn't). This wastes enormous time. By requiring Claude to restate and confirm the problem first, you catch misunderstandings before they compound.</div>
+          <div class="pattern-title">Proactive context window management for agent teams</div>
+          <div class="pattern-summary">When orchestrating multi-agent work, instruct agents to checkpoint progress and prepare handover docs at 60% context usage.</div>
+          <div class="pattern-detail">Your most impactful failures (4 sessions) came from context window overflow during teammate agent work — agents got stuck, blocked the team, and required respawns. Since you're running complex orchestration with TaskList/SendMessage (1,000+ combined calls), agents need explicit instructions to self-monitor. The cost of a respawn is much higher than the cost of an early checkpoint.</div>
           
           <div class="copyable-prompt-section">
             <div class="prompt-label">Paste into Claude Code:</div>
             <div class="copyable-prompt-row">
-              <code class="copyable-prompt">Before you start investigating, restate exactly what the bug is in your own words and what you think the expected vs actual behavior is. Wait for me to confirm before you start reading code.</code>
+              <code class="copyable-prompt">You are a teammate agent. CRITICAL RULE: After completing each task, commit your work immediately. If you notice responses getting slower or you've made 100+ tool calls, stop current work, write a handover summary to /tmp/handover-{task-id}.md listing completed work, remaining work, and key context, then notify the team lead. Do not wait for context overflow errors.</code>
               <button class="copy-btn" onclick="copyText(this)">Copy</button>
             </div>
           </div>
@@ -762,14 +843,14 @@ Before implementing features that depend on external services (Supabase buckets,
         </div>
       
         <div class="pattern-card">
-          <div class="pattern-title">Use checkpoint confirmations for destructive refactors</div>
-          <div class="pattern-summary">Break large refactors into phases with explicit user confirmation between each phase.</div>
-          <div class="pattern-detail">Your top goals include codebase refactoring, restructuring prompts, and skill document updates — all destructive operations. The worst session had Claude delete comprehensive prompt files with no backup, requiring full regeneration. With 141 'excessive_changes' friction events, Claude is making too many changes without checkpoints. Forcing phase-by-phase confirmation prevents cascading mistakes.</div>
+          <div class="pattern-title">Validate findings before documenting them</div>
+          <div class="pattern-summary">When investigating whether something works (API integrations, features), require Claude to verify findings with actual test execution before writing conclusions.</div>
+          <div class="pattern-detail">The Gemini Search grounding investigation was a clear example: Claude wrote that the integration didn't work, then later discovered it did work, but left stale contradictory information in shared docs. For your multi-agent setup where one agent's findings feed into another's work, incorrect documentation cascades into wasted effort across the entire team. This pattern likely applies to your Apify actor audits and Twitter API investigations too.</div>
           
           <div class="copyable-prompt-section">
             <div class="prompt-label">Paste into Claude Code:</div>
             <div class="copyable-prompt-row">
-              <code class="copyable-prompt">We're going to refactor this in phases. Phase 1: Create backups of all files we'll modify and list them. Phase 2: Make the structural changes. Phase 3: Validate nothing was lost. Do NOT proceed to the next phase without my explicit approval.</code>
+              <code class="copyable-prompt">Investigate whether [X integration] works. IMPORTANT: Do not write any conclusions to documents until you have run an actual test that proves or disproves functionality. Show me the test output first. Only after I confirm the finding, update the task document. If you previously wrote any contradictory findings, find and correct ALL of them.</code>
               <button class="copy-btn" onclick="copyText(this)">Copy</button>
             </div>
           </div>
@@ -782,28 +863,56 @@ Before implementing features that depend on external services (Supabase buckets,
 
     
     <h2 id="section-horizon">On the Horizon</h2>
-    <p class="section-intro">With 5,605 sessions and over 1,000 commits, your team is already deeply integrated with AI-assisted development—but the high friction rate (375 wrong-approach incidents) and 21% not-achieved outcomes reveal massive upside in shifting from reactive human correction to autonomous, self-validating workflows.</p>
+    <p class="section-intro">Your 10-day dataset reveals a sophisticated multi-agent orchestration practice that's already pushing the boundaries of AI-assisted development—and there's significant room to make these workflows more resilient, autonomous, and self-correcting.</p>
     <div class="horizon-section">
       
         <div class="horizon-card">
-          <div class="horizon-title">Autonomous Refactoring with Pre-Flight Safety Checks</div>
-          <div class="horizon-possible">Your #1 friction source is Claude deleting or overwriting important files during refactors—exactly the kind of mistake an autonomous pre-flight validation step would catch. Imagine Claude spawning a parallel agent that snapshots affected files, runs structural diffing, and gates destructive operations before they execute. Combined with test-driven iteration, refactors could complete end-to-end without human course corrections.</div>
-          <div class="horizon-tip"><strong>Getting started:</strong> Use Claude Code's TodoWrite for multi-step planning and Bash to create automated git stash/snapshot checkpoints before any destructive file operations. Consider a headless sub-agent pattern where one agent refactors while another validates no files were lost.</div>
-          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>Before making any changes to this codebase, do the following autonomously: 1) Create a git stash snapshot of all files you plan to modify or delete. 2) Write a TodoWrite checklist of every file that will be touched, with before/after descriptions. 3) After each refactoring step, run a Bash validation that confirms no files were deleted that are still imported/referenced elsewhere (use grep to check for imports). 4) If any referenced file was removed, immediately restore it from the stash and flag it. 5) Only proceed to the next step when validation passes. Apply this process to refactor the following: [describe refactor goal].</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+          <div class="horizon-title">Self-Healing Multi-Agent Pipelines with Automatic Respawn</div>
+          <div class="horizon-possible">Your data shows context window exhaustion and stuck agents are the top blockers in multi-agent workflows—one worker hit context limits and idled, blocking the entire team. Imagine a team-lead agent that continuously monitors worker health, detects stalled or overflowing agents, automatically respawns them with compressed context handover documents, and reassigns incomplete tasks—turning your current manual 'nudge it to continue' interventions into fully autonomous recovery loops. This could eliminate the 22 'wrong_approach' friction events and most 'context_window_exceeded' failures by catching them before they cascade.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Use Claude Code's Task/SubAgent spawning with explicit health-check loops and context budgeting. Build a team-lead prompt that includes respawn logic and handover document generation as first-class responsibilities.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>You are a team-lead orchestrator agent. You will spawn worker agents for the tasks below and monitor their progress. CRITICAL RULES: (1) Before spawning each worker, estimate context budget—if a task involves &gt;8 files or &gt;3000 lines, split it into sub-tasks across multiple workers. (2) Every 3 minutes of wall-clock time, check each worker's TaskUpdate status. If a worker has not updated in 2 cycles, or reports 'prompt too long' errors, immediately: (a) ask the worker to dump a handover summary of completed work, remaining work, and key file paths to a .handover.md file, (b) shut down the stalled worker, (c) spawn a fresh worker with the handover file as context. (3) Track all task completions in a progress.md file. (4) Never assign more than 5 files per worker. (5) When all tasks are done, produce a final summary commit. Here are the tasks: [TASK_LIST]</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
         </div>
       
         <div class="horizon-card">
-          <div class="horizon-title">Parallel Agent Debugging with Root-Cause Isolation</div>
-          <div class="horizon-possible">Debugging is your 5th most common goal but sessions frequently stall because Claude chases the wrong hypothesis—like confusing a UI display bug with an AI pipeline integration issue. Parallel agents could simultaneously investigate frontend state, backend API responses, and external service configurations, then converge on the actual root cause in minutes instead of an entire session. This turns multi-hour diagnostic marathons into structured, concurrent triage.</div>
-          <div class="horizon-tip"><strong>Getting started:</strong> Launch multiple Claude Code sessions or use TodoWrite to define parallel investigation tracks. Have one track trace the frontend state, another grep through backend logs via Bash, and a third validate external service configuration (like Supabase buckets or API tier limits) before writing any fix.</div>
-          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>I have a bug where [describe symptom]. Before proposing any fix, run three parallel investigation tracks and report findings from each: TRACK 1 - Frontend State: Read all relevant UI components and trace the data flow from user action to rendered output. Identify where the expected data disappears. TRACK 2 - Backend/API: Use Bash to grep server logs and trace the API request/response chain. Confirm whether the backend receives and returns the correct data. TRACK 3 - External Dependencies: Check that all external services (database tables, storage buckets, API keys, third-party API tier limitations) are correctly configured and accessible. After all three tracks report, synthesize a root cause diagnosis ranked by likelihood, then implement a fix only for the most probable cause. Run tests to confirm before moving to the next.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+          <div class="horizon-title">Test-Driven Autonomous Iteration for Code Changes</div>
+          <div class="horizon-possible">With 9 'buggy_code' friction events, 6 'user_rejected_action' instances, and Claude deleting important files during refactors, there's a clear opportunity for autonomous test-validate-fix loops. Instead of making changes and hoping they work, Claude can write targeted tests first, run them to establish a red baseline, implement the change, iterate against the test suite until green, and only then present the result—dramatically reducing the back-and-forth corrections that consumed your sessions. Combined with your Python and TypeScript stacks, this could turn 'mostly_achieved' outcomes into 'fully_achieved' consistently.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Structure prompts to enforce a TDD loop using Bash tool for test execution. For Python projects, leverage pytest; for TypeScript, use your existing test runner. Claude Code can autonomously run tests and iterate.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>Implement the following feature using strict test-driven development. Follow this exact loop and DO NOT skip steps:
+
+1. ANALYZE: Read all relevant source files and understand the current behavior. List the files you will modify.
+2. BACKUP: Before editing any existing file, copy its contents to a .backup file in the same directory.
+3. WRITE TESTS: Create or update test files that define the expected behavior. Include edge cases. Run the tests—they should FAIL (red).
+4. IMPLEMENT: Make the minimum code changes to pass the tests. After each edit, run the full test suite with `pytest -x` (or appropriate runner).
+5. ITERATE: If tests fail, read the error output carefully, fix the code, and re-run. Do NOT move on until all tests pass.
+6. VERIFY: Run linting (`ruff check .` or `tsc --noEmit`) and fix any issues.
+7. DIFF REVIEW: Run `git diff` and review every change. If you accidentally deleted or overwrote important code, restore from .backup files.
+8. COMMIT: Make atomic commits with descriptive messages.
+
+Feature to implement: [FEATURE_DESCRIPTION]
+Relevant files: [FILE_PATHS]</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
         </div>
       
         <div class="horizon-card">
-          <div class="horizon-title">Test-Driven Autonomous Feature Implementation Pipeline</div>
-          <div class="horizon-possible">With 46 feature implementation sessions and 46 UI redesign sessions, your team ships constantly—but sessions frequently end before completion due to runtime surprises like missing infrastructure or state management bugs. An autonomous pipeline where Claude first writes failing tests from the spec, then iterates code until all tests pass, would dramatically increase first-session completion rates. Claude could validate storage buckets exist, API endpoints respond, and state persists across navigation—all before declaring a feature done.</div>
-          <div class="horizon-tip"><strong>Getting started:</strong> Use Claude Code to generate a test suite from your spec files first, then have Claude iterate implementation in a loop: write code, run tests via Bash, read failures, edit code, repeat until green. Combine with TodoWrite to track implementation milestones against the spec.</div>
-          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>Implement the following feature using a strict test-driven autonomous loop: [paste spec or describe feature]. Step 1: Read the full spec and all related existing code. Write a TodoWrite checklist of every acceptance criterion. Step 2: For each criterion, write a failing test FIRST (use pytest for Python, vitest/jest for TypeScript). Include tests for: correct behavior, edge cases, infrastructure dependencies (e.g., verify database tables/storage buckets exist), and state persistence across navigation. Step 3: Run the full test suite with Bash. Step 4: Implement code to fix ONE failing test at a time. After each edit, re-run the suite. Do not move on until the current test passes and no previously passing tests regress. Step 5: After all tests pass, do a final validation: run the full suite, check for any TODO items remaining, and verify no files were left in a broken state. Report completion status against every checklist item.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+          <div class="horizon-title">Parallel Analysis Swarm with Structured Synthesis</div>
+          <div class="horizon-possible">You're already spawning 3-5 agent teams for architecture analysis and spec restructuring, but synthesis remains a bottleneck—your 'parent-updater' agent burned hundreds of TaskList polling calls, and findings from analysis agents sometimes contained stale or contradictory information (like the DSPy grounding confusion). A structured swarm pattern where each analyst writes findings to a strict schema, and a dedicated synthesizer agent consumes only those structured outputs, would eliminate the polling overhead, prevent stale-data propagation, and let you run 8-10 parallel analysts across your entire codebase simultaneously for audits, migration planning, or dependency analysis.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Use Claude Code's multi-agent Task spawning with file-based coordination instead of message polling. Each worker writes a structured JSON findings file; the synthesizer reads all findings files once workers signal completion via a manifest.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>You are a swarm orchestrator. Your job is to analyze [CODEBASE/TOPIC] by spawning parallel analyst agents and then synthesizing their findings.
+
+PHASE 1 - SPAWN ANALYSTS:
+Spawn one agent per module/directory below. Each agent MUST:
+- Read all files in their assigned scope
+- Write findings to `analysis/{module_name}.findings.json` with this exact schema: {&quot;module&quot;: string, &quot;files_analyzed&quot;: number, &quot;key_patterns&quot;: string[], &quot;issues_found&quot;: [{&quot;severity&quot;: &quot;high&quot;|&quot;medium&quot;|&quot;low&quot;, &quot;file&quot;: string, &quot;line&quot;: number, &quot;description&quot;: string, &quot;suggested_fix&quot;: string}], &quot;dependencies&quot;: string[], &quot;status&quot;: &quot;complete&quot;}
+- NOT poll TaskList—just write the file and shut down
+
+Modules to analyze:
+[MODULE_LIST]
+
+PHASE 2 - SYNTHESIZE (start only after all .findings.json files exist):
+- Read all findings files
+- Cross-reference dependencies to find circular or missing links
+- Deduplicate issues and rank by impact
+- Write `analysis/synthesis.md` with: executive summary, critical issues table, dependency graph (Mermaid), and prioritized action plan
+- Commit everything with message 'chore: parallel codebase analysis complete'</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
         </div>
       
     </div>
@@ -811,8 +920,8 @@ Before implementing features that depend on external services (Supabase buckets,
 
     
     <div class="fun-ending">
-      <div class="fun-headline">"Claude confidently deleted all the prompt files during a refactor, then had to sheepishly regenerate them from scratch after the user noticed they were gone"</div>
-      <div class="fun-detail">During a DSPy agent codebase restructuring, Claude got lost in wrong directories and accidentally wiped out comprehensive prompt files without backing them up. The user had to point out the mistake, triggering a full regeneration effort — making 'restructure_prompts_to_individual_files' and 'regenerate_prompts' two of the top goals for the entire dataset.</div>
+      <div class="fun-headline">"Claude polled its task list hundreds of times like a kid asking 'Are we there yet?' on a road trip"</div>
+      <div class="fun-detail">While acting as a 'parent-updater' teammate in a multi-agent workflow, Claude burned through hundreds of TaskList tool calls obsessively checking whether its blocked tasks had been completed by other agents — technically finishing the job, but at an absurd cost in patience and API calls.</div>
     </div>
     
 
@@ -858,7 +967,7 @@ Before implementing features that depend on external services (Supabase buckets,
       }
     }
     // Timezone selector for time of day chart (data is from our own analytics, not user input)
-    const rawHourCounts = {"0":1301,"1":6,"8":107,"9":53,"10":359,"11":992,"12":2622,"13":3440,"14":1361,"15":2052,"16":2266,"17":1239,"18":932,"19":1958,"20":829,"21":2147,"22":3749,"23":5151};
+    const rawHourCounts = {"0":5,"10":9,"11":156,"12":181,"13":105,"14":175,"15":167,"16":120,"17":18,"18":45,"19":18,"20":56,"21":122,"22":128,"23":62};
     function updateHourHistogram(offsetFromPT) {
       const periods = [
         { label: "Morning (6-12)", range: [6,7,8,9,10,11] },

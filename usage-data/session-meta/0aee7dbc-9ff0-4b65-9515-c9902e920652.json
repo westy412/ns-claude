@@ -1,0 +1,67 @@
+{
+  "session_id": "0aee7dbc-9ff0-4b65-9515-c9902e920652",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T16:12:03.118Z",
+  "duration_minutes": 87,
+  "user_message_count": 9,
+  "assistant_message_count": 40,
+  "tool_counts": {
+    "Task": 4,
+    "Write": 10,
+    "Bash": 3,
+    "Read": 1
+  },
+  "languages": {
+    "Markdown": 6,
+    "YAML": 5
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 104,
+  "output_tokens": 13676,
+  "first_prompt": "<task-notification> <task-id>a5e1f90</task-id> <status>completed</status> <summary>Agent \"Write linkedin-creator team spec\" completed</summary> <result>I apologize for the repeated attempts -- it appe…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    105.024,
+    2.009,
+    2.071,
+    2.057,
+    2.033,
+    2.009,
+    6.107,
+    14.509
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1170,
+  "lines_removed": 0,
+  "files_modified": 10,
+  "message_hours": [
+    17,
+    17,
+    17,
+    17,
+    17,
+    17,
+    17,
+    17,
+    17
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T17:31:55.475Z",
+    "2026-02-07T17:34:00.955Z",
+    "2026-02-07T17:34:49.013Z",
+    "2026-02-07T17:35:39.149Z",
+    "2026-02-07T17:35:58.406Z",
+    "2026-02-07T17:36:10.763Z",
+    "2026-02-07T17:37:04.515Z",
+    "2026-02-07T17:38:05.479Z",
+    "2026-02-07T17:38:13.881Z"
+  ]
+}

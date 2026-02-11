@@ -1,0 +1,47 @@
+{
+  "session_id": "6f64e0fe-b8f2-4b5c-ab4d-7caa1ff40692",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-03T11:25:19.556Z",
+  "duration_minutes": 67,
+  "user_message_count": 3,
+  "assistant_message_count": 36,
+  "tool_counts": {
+    "Read": 8,
+    "Edit": 6,
+    "Grep": 1,
+    "Bash": 5
+  },
+  "languages": {
+    "TypeScript": 14
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 47,
+  "output_tokens": 225,
+  "first_prompt": "One of the things is we don't want to show the elements that aren't necessarily relevant. So if all of those are being returned, that's perfect. Perfect. If not, then don't. Also, can we have the anal…",
+  "summary": "Hide zero metrics, move analytics top",
+  "user_interruptions": 0,
+  "user_response_times": [
+    7.358,
+    7.358
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 103,
+  "lines_removed": 108,
+  "files_modified": 2,
+  "message_hours": [
+    11,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T11:25:23.843Z",
+    "2026-02-03T12:31:26.532Z",
+    "2026-02-03T12:31:26.532Z"
+  ]
+}

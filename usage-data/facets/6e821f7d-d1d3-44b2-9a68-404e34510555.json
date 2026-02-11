@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Generate a handover document to persist session state for the next session",
+  "goal_categories": {
+    "warmup_minimal": 1
+  },
+  "outcome": "fully_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "moderately_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "proactive_help",
+  "brief_summary": "User triggered a handover procedure at the end of a brainstorming session; Claude generated the handover summary.",
+  "session_id": "6e821f7d-d1d3-44b2-9a68-404e34510555"
+}

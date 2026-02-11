@@ -1,0 +1,52 @@
+{
+  "session_id": "2d49ff5f-791c-441b-b959-5abf2c2167e4",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T16:27:51.998Z",
+  "duration_minutes": 249,
+  "user_message_count": 3,
+  "assistant_message_count": 24,
+  "tool_counts": {
+    "Task": 1,
+    "Write": 2,
+    "ExitPlanMode": 2,
+    "AskUserQuestion": 1,
+    "Read": 2,
+    "Edit": 2,
+    "Bash": 1
+  },
+  "languages": {
+    "Markdown": 2,
+    "Python": 2
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 52,
+  "output_tokens": 285,
+  "first_prompt": "i got this error\\ \\ pg.exceptions.InternalServerError: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size INFO:     127.0.0.1:55010 - \"GET /api/posts/4…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    267.358,
+    259.574
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 2
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 52,
+  "lines_removed": 4,
+  "files_modified": 3,
+  "message_hours": [
+    16,
+    16,
+    20
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T16:27:51.998Z",
+    "2026-02-03T16:38:12.788Z",
+    "2026-02-03T20:36:24.476Z"
+  ]
+}

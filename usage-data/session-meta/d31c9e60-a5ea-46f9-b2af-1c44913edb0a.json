@@ -1,0 +1,43 @@
+{
+  "session_id": "d31c9e60-a5ea-46f9-b2af-1c44913edb0a",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-09T20:28:37.926Z",
+  "duration_minutes": 106,
+  "user_message_count": 3,
+  "assistant_message_count": 8,
+  "tool_counts": {
+    "TaskList": 1,
+    "TaskUpdate": 1,
+    "Task": 3,
+    "SendMessage": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 14,
+  "output_tokens": 60,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> Research Langfuse tracing integration for DSPy workflows.  Claim task #4.  Web search for: 1. \"Langfuse DSPy integration\" — Find official docs 2. \"DSPy obser…",
+  "user_interruptions": 1,
+  "user_response_times": [],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    20,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T20:28:37.926Z",
+    "2026-02-09T22:14:15.406Z",
+    "2026-02-09T22:14:15.420Z"
+  ]
+}

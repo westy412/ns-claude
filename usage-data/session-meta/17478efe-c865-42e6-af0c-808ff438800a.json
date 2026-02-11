@@ -1,0 +1,50 @@
+{
+  "session_id": "17478efe-c865-42e6-af0c-808ff438800a",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-08T14:35:42.209Z",
+  "duration_minutes": 11,
+  "user_message_count": 2,
+  "assistant_message_count": 76,
+  "tool_counts": {
+    "Read": 14,
+    "Write": 5,
+    "Bash": 6,
+    "TaskUpdate": 5,
+    "SendMessage": 4,
+    "TaskList": 3,
+    "TaskGet": 2,
+    "Glob": 11,
+    "Grep": 2
+  },
+  "languages": {
+    "Python": 15,
+    "Markdown": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 84,
+  "output_tokens": 1549,
+  "first_prompt": "<teammate-message teammate_id=\"tools\" color=\"green\"> {\"type\":\"task_assignment\",\"taskId\":\"5\",\"subject\":\"Phase 2: research-loop-module — Generic search→analysis loop (5x instances)\",\"description\":\"Creat…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 4,
+  "tool_error_categories": {
+    "File Not Found": 1,
+    "Other": 3
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1047,
+  "lines_removed": 0,
+  "files_modified": 4,
+  "message_hours": [
+    14,
+    14
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T14:35:42.209Z",
+    "2026-02-08T14:46:11.475Z"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "session_id": "dbf73f71-a530-4b4f-8375-73458927ec2d",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-01-31T19:49:55.012Z",
+  "duration_minutes": 10,
+  "user_message_count": 4,
+  "assistant_message_count": 71,
+  "tool_counts": {
+    "Bash": 6,
+    "Read": 12,
+    "Glob": 3,
+    "Grep": 3,
+    "Edit": 3,
+    "WebSearch": 1,
+    "Write": 2
+  },
+  "languages": {
+    "Python": 17
+  },
+  "git_commits": 1,
+  "git_pushes": 0,
+  "input_tokens": 1130,
+  "output_tokens": 203,
+  "first_prompt": "{   \"error\": \"400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Unable to process input image. Please retry or report in https://developers.generativeai.google/guide/troubleshooting', 'status'…",
+  "summary": "SVG logo and Inngest image generation fixes",
+  "user_interruptions": 1,
+  "user_response_times": [
+    186.013,
+    13.372
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Command Failed": 2
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": true,
+  "uses_web_fetch": false,
+  "lines_added": 534,
+  "lines_removed": 25,
+  "files_modified": 5,
+  "message_hours": [
+    19,
+    19,
+    19,
+    19
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T19:50:55.038Z",
+    "2026-01-31T19:56:58.419Z",
+    "2026-01-31T19:59:44.966Z",
+    "2026-01-31T19:59:57.907Z"
+  ]
+}

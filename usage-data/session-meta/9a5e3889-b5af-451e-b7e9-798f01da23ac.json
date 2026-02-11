@@ -1,0 +1,39 @@
+{
+  "session_id": "9a5e3889-b5af-451e-b7e9-798f01da23ac",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-outbound-workforce/ns-cold-outreach-workforce",
+  "start_time": "2026-02-04T17:50:57.085Z",
+  "duration_minutes": 13,
+  "user_message_count": 2,
+  "assistant_message_count": 15,
+  "tool_counts": {
+    "Bash": 3,
+    "Task": 2
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 39,
+  "output_tokens": 1599,
+  "first_prompt": "okay please explore how i can set up and test this locallly for all services",
+  "user_interruptions": 0,
+  "user_response_times": [
+    429.545
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    17,
+    17
+  ],
+  "user_message_timestamps": [
+    "2026-02-04T17:50:57.085Z",
+    "2026-02-04T17:58:51.729Z"
+  ]
+}

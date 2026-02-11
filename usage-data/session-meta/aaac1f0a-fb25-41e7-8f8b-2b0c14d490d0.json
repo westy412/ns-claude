@@ -1,0 +1,55 @@
+{
+  "session_id": "aaac1f0a-fb25-41e7-8f8b-2b0c14d490d0",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-29T00:07:52.720Z",
+  "duration_minutes": 13,
+  "user_message_count": 5,
+  "assistant_message_count": 189,
+  "tool_counts": {
+    "Read": 31,
+    "Glob": 2,
+    "Edit": 43,
+    "Bash": 5,
+    "Grep": 2
+  },
+  "languages": {
+    "Markdown": 8,
+    "TypeScript": 65
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 17996,
+  "output_tokens": 664,
+  "first_prompt": "Session Handover…",
+  "summary": "SPEC-09 Phase 1.4 frontend implementation with PDF version scoping fix",
+  "user_interruptions": 0,
+  "user_response_times": [
+    32.59,
+    32.59,
+    79.777,
+    26.102
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 349,
+  "lines_removed": 134,
+  "files_modified": 16,
+  "message_hours": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T00:07:52.720Z",
+    "2026-01-29T00:16:31.033Z",
+    "2026-01-29T00:16:31.033Z",
+    "2026-01-29T00:18:22.517Z",
+    "2026-01-29T00:20:04.290Z"
+  ]
+}

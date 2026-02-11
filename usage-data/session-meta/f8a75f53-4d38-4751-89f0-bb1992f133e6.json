@@ -1,0 +1,60 @@
+{
+  "session_id": "f8a75f53-4d38-4751-89f0-bb1992f133e6",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-09T15:40:46.860Z",
+  "duration_minutes": 4,
+  "user_message_count": 5,
+  "assistant_message_count": 29,
+  "tool_counts": {
+    "TaskList": 2,
+    "TaskUpdate": 2,
+    "Read": 3,
+    "Write": 2,
+    "Skill": 1,
+    "Glob": 1,
+    "Bash": 1,
+    "SendMessage": 4
+  },
+  "languages": {
+    "Python": 4,
+    "Markdown": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 45,
+  "output_tokens": 304,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> Fix the async implementation in analytics_team/__init__.py  Check TaskList, claim task #3.  Read: 1. /Users/georgewestbrook/Programming/novosapien/ns-content…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    13.57,
+    2.145,
+    2.169,
+    23.386
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 1,
+    "File Not Found": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 676,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    15,
+    15,
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T15:40:46.860Z",
+    "2026-02-09T15:42:27.115Z",
+    "2026-02-09T15:43:37.215Z",
+    "2026-02-09T15:43:50.572Z",
+    "2026-02-09T15:44:24.446Z"
+  ]
+}

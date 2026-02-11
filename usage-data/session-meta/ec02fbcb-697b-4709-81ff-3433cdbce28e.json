@@ -1,0 +1,48 @@
+{
+  "session_id": "ec02fbcb-697b-4709-81ff-3433cdbce28e",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-08T21:36:51.057Z",
+  "duration_minutes": 27,
+  "user_message_count": 4,
+  "assistant_message_count": 17,
+  "tool_counts": {
+    "Read": 1,
+    "TaskList": 3,
+    "TaskUpdate": 2,
+    "SendMessage": 3
+  },
+  "languages": {
+    "Markdown": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 31,
+  "output_tokens": 94,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are analyzing whether teammates actually LOADED skills or just happened to match patterns.  PROJECT: /Users/georgewestbrook/Programming/novosapien/ns-con…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    1561.498,
+    10.436
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    21,
+    21,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T21:36:51.057Z",
+    "2026-02-08T21:37:39.881Z",
+    "2026-02-08T22:03:47.087Z",
+    "2026-02-08T22:04:05.113Z"
+  ]
+}

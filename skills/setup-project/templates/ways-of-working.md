@@ -635,18 +635,20 @@ The main context window has a finite size. When it fills up, the conversation ge
 
 ### Rules
 
-1. **Parallelize aggressively.** If you need codebase context AND web research, launch both simultaneously in a single message with multiple Task tool calls. Never do them sequentially when they're independent.
+1. **Always use Opus for subagents.** When spawning any subagent via the Task tool, always set `model: "opus"`. Never use Haiku or Sonnet for subagents — all subagents must run on Opus.
 
-2. **Never search files directly when a subagent can do it.** Open-ended searches (finding patterns, understanding architecture, locating relevant code) should go through `codebase-researcher`, not through direct Grep/Glob calls that pollute the main context.
+2. **Parallelize aggressively.** If you need codebase context AND web research, launch both simultaneously in a single message with multiple Task tool calls. Never do them sequentially when they're independent.
 
-3. **Use the right subagent for the job:**
+3. **Never search files directly when a subagent can do it.** Open-ended searches (finding patterns, understanding architecture, locating relevant code) should go through `codebase-researcher`, not through direct Grep/Glob calls that pollute the main context.
+
+4. **Use the right subagent for the job:**
    - Codebase understanding, file exploration, pattern discovery → `codebase-researcher`
    - External information, docs, best practices → `web-researcher`
    - Code quality, security, review → `code-reviewer`
 
-4. **Surface findings, don't dump.** When subagent results return, extract what's relevant and integrate it naturally. Don't paste entire research outputs into the conversation.
+5. **Surface findings, don't dump.** When subagent results return, extract what's relevant and integrate it naturally. Don't paste entire research outputs into the conversation.
 
-5. **Direct tools are fine for targeted reads.** If you already know the exact file and line range you need, use Read directly. Subagents are for exploration and research, not for reading a known file.
+6. **Direct tools are fine for targeted reads.** If you already know the exact file and line range you need, use Read directly. Subagents are for exploration and research, not for reading a known file.
 
 ### Example Patterns
 

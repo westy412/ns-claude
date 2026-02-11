@@ -1,0 +1,55 @@
+{
+  "session_id": "267d7045-b648-45a5-952c-ba9d59fd3550",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-01T12:30:51.730Z",
+  "duration_minutes": 6,
+  "user_message_count": 7,
+  "assistant_message_count": 15,
+  "tool_counts": {
+    "Bash": 1,
+    "mcp__linear__create_comment": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 1,
+  "input_tokens": 104,
+  "output_tokens": 47,
+  "first_prompt": "Hill, one, kill, one, kill, one, kill, one, hill, one, kill, one, kill, one, hill, one, kill, one, two, three, four, five, six, five, six, five, one, two, three, four, five, six, five, one, two, three…",
+  "summary": "Platform Color Coding Implementation Complete",
+  "user_interruptions": 0,
+  "user_response_times": [
+    21.043,
+    21.042,
+    21.042,
+    24.085,
+    16.832,
+    185.657
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T12:32:15.836Z",
+    "2026-02-01T12:32:48.848Z",
+    "2026-02-01T12:32:48.847Z",
+    "2026-02-01T12:32:48.847Z",
+    "2026-02-01T12:32:51.890Z",
+    "2026-02-01T12:33:20.721Z",
+    "2026-02-01T12:36:37.773Z"
+  ]
+}

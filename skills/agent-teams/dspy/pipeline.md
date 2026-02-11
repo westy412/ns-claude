@@ -62,6 +62,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,  # REQUIRED: prevents indefinite hangs
         )
     return _shared_lm
 
@@ -71,6 +72,11 @@ def get_shared_lm():
 # =============================================================================
 # Each signature defines a stage in the pipeline.
 # Rich docstrings improve output quality.
+#
+# STRUCTURED OUTPUT RULE: Use typed output fields (bool, int, list[str],
+# dict[str, Any]) or Pydantic BaseModel/RootModel as OutputField types.
+# NEVER use str fields with JSON parsing instructions.
+# See frameworks/dspy/CHEATSHEET.md Critical Rules.
 
 class Stage1Signature(dspy.Signature):
     """
@@ -389,15 +395,66 @@ if __name__ == "__main__":
 
 ## DSPy-Specific Notes
 
+> **Structured Output Rule:** When defining signatures for pipeline stages, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+
 - **Singleton LM Pattern:** All predictors share one LM instance via `set_lm()`. This is critical for connection pooling when running concurrent workflows.
 
-- **forward() vs aforward():** Use `forward()` for DSPy optimization (GEPA/MIPROv2) where all stages must execute. Use `aforward()` for production with retry logic.
+- **forward() + aforward() — Both REQUIRED:** `forward()` enables DSPy prompt optimization (GEPA/MIPROv2) — runs all stages synchronously without retry. `aforward()` is for production with retry logic and timing. Always implement both.
 
 - **Formatters:** Convert Prediction objects to markdown between stages. LLMs comprehend structured markdown better than nested dicts.
 
 - **Dual Data Flow:** Some stages receive formatted markdown (for narrative understanding), others receive structured fields (for algorithmic matching). Design based on what the downstream agent needs.
 
 - **Signature Docstrings:** Rich docstrings with workflow context improve output quality. Include enum valid values directly in the docstring.
+
+---
+
+## Multi-Model Singleton Pattern
+
+When different pipeline stages need different model tiers:
+
+```python
+_flash_lm = None
+_pro_lm = None
+
+def get_flash_lm():
+    """Flash model for extraction/classification (fast, cheap)."""
+    global _flash_lm
+    if _flash_lm is None:
+        _flash_lm = dspy.LM(
+            os.getenv("FLASH_MODEL", "gemini/gemini-2.5-flash"),
+            api_key=os.getenv("API_KEY"),
+            max_parallel_requests=2000,
+            timeout=120,
+        )
+    return _flash_lm
+
+def get_pro_lm():
+    """Pro model for synthesis/complex reasoning (slower, better)."""
+    global _pro_lm
+    if _pro_lm is None:
+        _pro_lm = dspy.LM(
+            os.getenv("PRO_MODEL", "gemini/gemini-2.5-pro"),
+            api_key=os.getenv("API_KEY"),
+            max_parallel_requests=100,
+            timeout=120,
+        )
+    return _pro_lm
+```
+
+**Model tier guidance for pipelines:**
+| Stage Type | Model | Rationale |
+|-----------|-------|-----------|
+| Extraction/classification (early stages) | Flash | Structured extraction, fast |
+| Enrichment/analysis (middle stages) | Flash or Pro | Depends on complexity |
+| Synthesis/ranking (final stages) | Pro | Complex multi-source reasoning |
+
+```python
+# In __init__:
+self.stage1.set_lm(flash_lm)   # Extraction → Flash
+self.stage2.set_lm(flash_lm)   # Enrichment → Flash
+self.stage3.set_lm(pro_lm)     # Final synthesis → Pro
+```
 
 ---
 

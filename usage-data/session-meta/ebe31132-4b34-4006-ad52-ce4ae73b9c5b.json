@@ -1,0 +1,60 @@
+{
+  "session_id": "ebe31132-4b34-4006-ad52-ce4ae73b9c5b",
+  "project_path": "/Users/georgewestbrook/.claude",
+  "start_time": "2026-02-05T23:21:31.777Z",
+  "duration_minutes": 1039,
+  "user_message_count": 4,
+  "assistant_message_count": 133,
+  "tool_counts": {
+    "Task": 7,
+    "EnterPlanMode": 2,
+    "Read": 13,
+    "Write": 2,
+    "ExitPlanMode": 3,
+    "AskUserQuestion": 1,
+    "Edit": 22,
+    "TaskCreate": 4,
+    "TaskUpdate": 11,
+    "Grep": 5
+  },
+  "languages": {
+    "YAML": 3,
+    "Markdown": 34
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 172,
+  "output_tokens": 18440,
+  "first_prompt": "Hey there, so Claude Code has just released a new feature for agent teams. Please research this and understand it because what we are going to be doing is updating some of our skills, specifically the…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    214.172,
+    437.017,
+    6.033
+  ],
+  "tool_errors": 4,
+  "tool_error_categories": {
+    "Other": 1,
+    "User Rejected": 2,
+    "Edit Failed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1429,
+  "lines_removed": 118,
+  "files_modified": 5,
+  "message_hours": [
+    23,
+    23,
+    23,
+    10
+  ],
+  "user_message_timestamps": [
+    "2026-02-05T23:21:31.777Z",
+    "2026-02-05T23:34:02.740Z",
+    "2026-02-05T23:43:33.028Z",
+    "2026-02-06T10:58:29.771Z"
+  ]
+}

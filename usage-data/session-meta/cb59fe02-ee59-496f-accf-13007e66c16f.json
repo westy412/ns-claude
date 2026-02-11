@@ -1,0 +1,43 @@
+{
+  "session_id": "cb59fe02-ee59-496f-accf-13007e66c16f",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T20:16:27.414Z",
+  "duration_minutes": 8,
+  "user_message_count": 2,
+  "assistant_message_count": 12,
+  "tool_counts": {
+    "Read": 1,
+    "Edit": 4,
+    "TaskUpdate": 1,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Markdown": 5
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 20,
+  "output_tokens": 404,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are teammate \"fix-selection\" on team \"luminous-wishing-planet\". Your task is Task #1.  Read the file: /Users/georgewestbrook/Programming/novosapien/ns-co…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.037
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 19,
+  "lines_removed": 19,
+  "files_modified": 1,
+  "message_hours": [
+    20,
+    20
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T20:16:27.414Z",
+    "2026-02-07T20:24:03.470Z"
+  ]
+}

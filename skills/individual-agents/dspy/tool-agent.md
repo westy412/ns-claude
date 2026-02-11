@@ -21,6 +21,58 @@ An agent that can reason about and invoke external tools to gather information o
 - Simple extraction/classification — use **Basic Agent** instead
 - Predictable tool sequence — consider explicit orchestration instead of ReAct
 
+## ReAct vs ChainOfThought + Manual Tool Handling
+
+> **This is a critical performance decision.** ReAct makes 5+ LLM calls per invocation (150-300s with Gemini). ChainOfThought + manual tool handling makes 1 LLM call + tool execution (20-40s). Default to ChainOfThought + manual tool handling for single-tool agents.
+
+| Scenario | Approach | Why |
+|----------|----------|-----|
+| Single tool, predictable use | ChainOfThought + ToolCalls | 1 LLM call, you execute the tool |
+| Multiple tools, dynamic selection | ReAct | LLM reasons about which tools to call |
+| Multi-step tool chains with reasoning between steps | ReAct | LLM needs to reason about intermediate results |
+| Known tool sequence | Explicit orchestration in `aforward()` | No LLM overhead for tool selection |
+
+### Preferred: ChainOfThought + Manual Tool Handling (Single-Tool Agents)
+
+```python
+import dspy
+
+class SearchSignature(dspy.Signature):
+    """Analyze the entity and decide search parameters."""
+    entity_context: str = dspy.InputField()
+    search_config: str = dspy.InputField()
+
+    tool_calls: dspy.ToolCalls = dspy.OutputField()
+    search_reasoning: str = dspy.OutputField(desc="Why these search terms")
+
+class SingleToolAgent(dspy.Module):
+    def __init__(self, shared_lm, search_fn):
+        if shared_lm is None:
+            raise ValueError("shared_lm required")
+
+        self.tools = {"search": dspy.Tool(search_fn)}
+        self.planner = dspy.ChainOfThought(SearchSignature)
+        self.planner.set_lm(shared_lm)
+
+    async def aforward(self, entity_context: str, search_config: str) -> dspy.Prediction:
+        # 1 LLM call: reason + decide tool params
+        plan = await self.planner.acall(
+            entity_context=entity_context,
+            search_config=search_config,
+        )
+
+        # Execute tool directly (no LLM overhead)
+        results = []
+        for call in plan.tool_calls.tool_calls:
+            result = call.execute(functions=self.tools)
+            results.append(result)
+
+        return dspy.Prediction(
+            raw_results=results,
+            search_reasoning=plan.search_reasoning,
+        )
+```
+
 ## Selection Criteria
 
 - If all info is in the prompt → **Basic Agent**
@@ -39,6 +91,8 @@ An agent that can reason about and invoke external tools to gather information o
 **Outputs:**
 - Output fields defined in the Signature
 - `trajectory` containing the full reasoning and tool call history
+
+> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
 
 ## Prompting Guidelines
 
@@ -123,6 +177,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "openai/gpt-4o-mini"),
             api_key=os.getenv("OPENAI_API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,
         )
     return _shared_lm
 
@@ -530,12 +585,13 @@ class ManualToolAgent(dspy.Module):
 
 ## ReAct vs Other DSPy Modules
 
-| Module | Tools | Reasoning | Use Case |
-|--------|-------|-----------|----------|
-| `Predict` | No | No | Direct mapping |
-| `ChainOfThought` | No | Yes | Complex reasoning |
-| `ReAct` | Yes | Yes | Tool-using agents |
-| `ProgramOfThought` | Code execution | Yes | Math/computation |
+| Module | Tools | Reasoning | LLM Calls | Use Case |
+|--------|-------|-----------|-----------|----------|
+| `Predict` | No | No | 1 | Direct mapping |
+| `ChainOfThought` | No | Yes | 1 | Complex reasoning |
+| `ChainOfThought` + `ToolCalls` | Yes (manual) | Yes | 1 + tool exec | Single-tool agents (preferred) |
+| `ReAct` | Yes (automatic) | Yes | 5+ | Multi-tool dynamic selection |
+| `ProgramOfThought` | Code execution | Yes | 1+ | Math/computation |
 
 ---
 

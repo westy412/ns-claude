@@ -1,0 +1,62 @@
+{
+  "session_id": "84977ab5-ada4-4eba-ab67-800348e13d85",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T22:12:44.351Z",
+  "duration_minutes": 40,
+  "user_message_count": 7,
+  "assistant_message_count": 105,
+  "tool_counts": {
+    "Task": 1,
+    "Read": 22,
+    "Grep": 9,
+    "mcp__linear__create_issue": 1,
+    "Edit": 10,
+    "Bash": 11
+  },
+  "languages": {
+    "TypeScript": 20,
+    "Python": 3,
+    "Markdown": 9
+  },
+  "git_commits": 3,
+  "git_pushes": 0,
+  "input_tokens": 147,
+  "output_tokens": 3507,
+  "first_prompt": "Okay, so one issue we have is when the user wants to generate a PDF in the US. LinkedIn carousel page it you click generate and if you go off the page it doesn't show that it's loading or in progress…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    22.567,
+    8.434,
+    1087.427,
+    10.279,
+    50.111,
+    23.501
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 48,
+  "lines_removed": 24,
+  "files_modified": 3,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T22:12:44.351Z",
+    "2026-02-03T22:16:10.059Z",
+    "2026-02-03T22:16:38.611Z",
+    "2026-02-03T22:36:13.628Z",
+    "2026-02-03T22:47:33.369Z",
+    "2026-02-03T22:48:42.922Z",
+    "2026-02-03T22:49:34.084Z"
+  ]
+}

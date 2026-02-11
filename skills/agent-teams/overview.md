@@ -96,3 +96,49 @@ LOOP:
 | Complexity | Simple | Compositional |
 
 Agent Teams are built FROM Individual Agents. Each node in a team pattern can be any of the individual agent types.
+
+---
+
+## Nesting & Composition
+
+The 4 core patterns can be nested to build complex systems. Any team node can itself be a team with its own pattern.
+
+### Nesting Levels
+
+| Level | Example | What It Contains |
+|-------|---------|-----------------|
+| Level 1 | Root pipeline | Phase teams, root-level config |
+| Level 2 | Phase team (e.g., research-phase) | Sub-teams + direct agents + phase orchestration |
+| Level 3 | Sub-team (e.g., keyword-search-loop) | Leaf agents that do actual work |
+
+### Mixed Patterns at Different Levels
+
+Patterns are independent at each level. Common combinations:
+
+| Parent Pattern | Child Patterns | Use Case |
+|---------------|----------------|----------|
+| Pipeline | Fan-in-fan-out → Pipeline | Research phase (parallel) then Ideation phase (sequential) |
+| Fan-in-fan-out | Loop, Loop, Fan-in-fan-out | Multiple research loops in parallel + analytics team |
+| Pipeline | Loop → Loop | Iterative research then iterative refinement |
+| Fan-in-fan-out | Pipeline, Pipeline | Multiple independent sequential workflows in parallel |
+
+### Import/Composition Chain
+
+In implementation, the nesting maps to module composition:
+```
+root.forward()
+  → phase_team.forward()       # Level 1 calls Level 2
+    → asyncio.gather(           # Level 2 orchestrates Level 3
+        sub_team_a.forward(),
+        sub_team_b.forward()
+      )
+    → synthesizer.forward()     # Level 2 direct agent
+  → next_phase.forward()
+```
+
+### Key Rules for Nesting
+
+1. Each level has its own `team.md` and `agent-config.yaml`
+2. Parent config lists children via `sub-teams` key
+3. A team can have both sub-teams AND direct agents at the same level
+4. Patterns at each level are independent — don't assume parent pattern propagates

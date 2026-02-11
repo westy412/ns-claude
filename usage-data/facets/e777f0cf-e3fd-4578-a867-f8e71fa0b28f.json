@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Unknown - user interrupted the request before any content was submitted",
+  "goal_categories": {
+    "warmup_minimal": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "unhelpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User interrupted the request before submitting any content; no interaction occurred.",
+  "session_id": "e777f0cf-e3fd-4578-a867-f8e71fa0b28f"
+}

@@ -1,0 +1,55 @@
+{
+  "session_id": "6488367a-1a6e-4fed-a7bf-39b72d5a9634",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-10T16:01:52.245Z",
+  "duration_minutes": 15,
+  "user_message_count": 4,
+  "assistant_message_count": 118,
+  "tool_counts": {
+    "Read": 15,
+    "TaskList": 4,
+    "Glob": 13,
+    "Grep": 6,
+    "Bash": 23,
+    "TaskUpdate": 2,
+    "Write": 1,
+    "Edit": 8,
+    "SendMessage": 4
+  },
+  "languages": {
+    "Markdown": 1,
+    "TypeScript": 23
+  },
+  "git_commits": 1,
+  "git_pushes": 0,
+  "input_tokens": 134,
+  "output_tokens": 3786,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are teammate ui-components on team ns-1161-external-posts-ui.  Read your full instructions at:   /Users/georgewestbrook/Programming/novosapien/ns-content…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.085,
+    2.138,
+    2.498
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 216,
+  "lines_removed": 10,
+  "files_modified": 2,
+  "message_hours": [
+    16,
+    16,
+    16,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T16:01:52.245Z",
+    "2026-02-10T16:12:33.678Z",
+    "2026-02-10T16:15:11.340Z",
+    "2026-02-10T16:16:41.981Z"
+  ]
+}

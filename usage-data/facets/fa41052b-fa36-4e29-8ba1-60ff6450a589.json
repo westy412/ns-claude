@@ -1,0 +1,18 @@
+{
+  "underlying_goal": "Add a button to the UI that allows users to manually fetch/refresh analytics for their social media posts",
+  "goal_categories": {
+    "feature_addition": 1,
+    "handover_documentation": 1
+  },
+  "outcome": "partially_achieved",
+  "user_satisfaction_counts": {
+    "likely_satisfied": 1
+  },
+  "claude_helpfulness": "moderately_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "multi_file_changes",
+  "brief_summary": "User asked to add a manual analytics refresh button; Claude began implementing it across LinkedIn and Twitter preview components but the session was interrupted before completion, and user requested a handover document.",
+  "session_id": "fa41052b-fa36-4e29-8ba1-60ff6450a589"
+}

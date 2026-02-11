@@ -1,0 +1,74 @@
+{
+  "session_id": "fb7a4be1-723c-434d-9b5a-9860bdb361ad",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-10T16:40:17.620Z",
+  "duration_minutes": 285,
+  "user_message_count": 10,
+  "assistant_message_count": 91,
+  "tool_counts": {
+    "Read": 27,
+    "Glob": 5,
+    "Bash": 9,
+    "Edit": 7,
+    "TaskUpdate": 3,
+    "Write": 7,
+    "SendMessage": 3
+  },
+  "languages": {
+    "Markdown": 3,
+    "Python": 38
+  },
+  "git_commits": 3,
+  "git_pushes": 0,
+  "input_tokens": 196,
+  "output_tokens": 6784,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> {\"type\":\"task_assignment\",\"taskId\":\"9\",\"subject\":\"Build infographic draft agent\",\"description\":\"Phase 4: Create `agents/linkedin/infographic/initial_draft/`…",
+  "user_interruptions": 2,
+  "user_response_times": [
+    58.922,
+    58.941,
+    60.15,
+    65.076,
+    65.076,
+    65.076,
+    124.857,
+    35.329,
+    5.165
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 1,
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1688,
+  "lines_removed": 4,
+  "files_modified": 9,
+  "message_hours": [
+    16,
+    21,
+    21,
+    21,
+    21,
+    21,
+    21,
+    21,
+    21,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T16:40:17.620Z",
+    "2026-02-10T21:12:51.363Z",
+    "2026-02-10T21:12:51.382Z",
+    "2026-02-10T21:12:52.591Z",
+    "2026-02-10T21:12:57.517Z",
+    "2026-02-10T21:12:57.517Z",
+    "2026-02-10T21:12:57.517Z",
+    "2026-02-10T21:13:57.298Z",
+    "2026-02-10T21:14:44.357Z",
+    "2026-02-10T21:25:08.525Z"
+  ]
+}

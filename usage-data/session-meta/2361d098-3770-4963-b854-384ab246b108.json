@@ -1,0 +1,54 @@
+{
+  "session_id": "2361d098-3770-4963-b854-384ab246b108",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-03T12:43:47.759Z",
+  "duration_minutes": 42,
+  "user_message_count": 4,
+  "assistant_message_count": 57,
+  "tool_counts": {
+    "Read": 4,
+    "Bash": 20,
+    "Grep": 2,
+    "Edit": 4,
+    "Skill": 1,
+    "mcp__linear__create_comment": 1
+  },
+  "languages": {
+    "Markdown": 5,
+    "Python": 3
+  },
+  "git_commits": 2,
+  "git_pushes": 0,
+  "input_tokens": 89,
+  "output_tokens": 387,
+  "first_prompt": "Session Handover                                                                                                                                                                      Context…",
+  "summary": "Analytics Fixes Phase 2: Twitter Integration & UI Enhancement",
+  "user_interruptions": 0,
+  "user_response_times": [
+    18.93,
+    593.5
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 8,
+  "lines_removed": 4,
+  "files_modified": 2,
+  "message_hours": [
+    12,
+    12,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T12:43:47.759Z",
+    "2026-02-03T12:49:22.983Z",
+    "2026-02-03T13:16:39.714Z",
+    "2026-02-03T13:16:42.500Z"
+  ]
+}

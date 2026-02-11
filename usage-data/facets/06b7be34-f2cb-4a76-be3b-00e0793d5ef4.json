@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "No clear goal was expressed; the user sent only cryptic single-word messages",
+  "goal_categories": {
+    "warmup_minimal": 1
+  },
+  "outcome": "not_achieved",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "unhelpful",
+  "session_type": "quick_question",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User sent two brief, unclear messages with no actionable request, and no meaningful work was accomplished.",
+  "session_id": "06b7be34-f2cb-4a76-be3b-00e0793d5ef4"
+}

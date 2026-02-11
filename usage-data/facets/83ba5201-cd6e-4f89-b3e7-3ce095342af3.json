@@ -1,0 +1,17 @@
+{
+  "underlying_goal": "Persist state (commit code changes) and create a handover document for the next session continuing image generation bug fixes",
+  "goal_categories": {
+    "session_handover": 1
+  },
+  "outcome": "mostly_achieved",
+  "user_satisfaction_counts": {
+    "likely_satisfied": 1
+  },
+  "claude_helpfulness": "very_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "multi_file_changes",
+  "brief_summary": "User asked Claude to persist state and create a handover for the next session; Claude committed changes across both repos and produced a handover summary.",
+  "session_id": "83ba5201-cd6e-4f89-b3e7-3ce095342af3"
+}

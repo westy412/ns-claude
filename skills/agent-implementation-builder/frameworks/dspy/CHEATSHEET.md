@@ -13,11 +13,15 @@ This cheat sheet contains critical rules, patterns, and anti-patterns for DSPy i
 | 1. Signatures in signatures.py | All DSPy Signatures live in signatures.py (NOT models.py) |
 | 2. Docstrings ARE Prompts | Signature docstrings are compiled into LLM calls - NO separate prompts.py |
 | 3. Singleton LM | Use module-level singleton for shared LM instance |
-| 4. Predict vs ChainOfThought | Predict for extraction/classification, CoT for creative synthesis |
+| 4. Predict vs ChainOfThought vs ReAct | Predict for extraction, CoT for creative synthesis, ReAct ONLY for multi-step tool chains |
 | 5. Enum Validation | Small enums: prompting. Large enums (20+): `Union` + fuzzy matching |
 | 6. Rich Docstrings | Workflow context + validation rules + anti-patterns |
 | 7. Formatters | Convert structured outputs to markdown between stages |
-| 8. Async Retry | Exponential backoff + rate limit handling |
+| 8. Async Retry + Timeout | Exponential backoff + rate limit handling + timeout on every acall() |
+| 9. asyncio.gather Fan-Out | Use `return_exceptions=True` for parallel module execution |
+| 10. Multi-Model Singletons | Separate `get_flash_lm()` / `get_pro_lm()` factories for tiered models |
+| 11. Optional InputFields | Use `default=None` + describe optionality in `desc` text |
+| 12. Typed Outputs, NEVER str+JSON | Use typed OutputFields or Pydantic models — NEVER `str` with "output as JSON" |
 
 ---
 
@@ -170,6 +174,7 @@ def get_shared_lm():
             "gemini/gemini-2.5-flash",
             api_key=os.getenv("GOOGLE_API_KEY"),
             max_parallel_requests=2000,  # Critical for concurrency
+            timeout=120,  # REQUIRED: prevents indefinite hangs
         )
     return _shared_lm
 
@@ -252,6 +257,27 @@ class MyPipeline(dspy.Module):
 ```
 
 **Why:** ChainOfThought adds a reasoning step that increases token usage and latency. For structured extraction (extracting specific fields from text) or classification (matching to predefined categories), the reasoning step provides minimal benefit. Reserve ChainOfThought for tasks where visible reasoning improves output quality.
+
+### Decision Table for Expert Panel Patterns
+
+Expert panels appear in two contexts with different requirements:
+
+| Stage | Task Type | Use | Rationale |
+|-------|-----------|-----|-----------|
+| **Expert Analysis** (Stage 1) | Identify themes, opportunities, warnings from research | `ChainOfThought` | Creative synthesis — extracting insights requires reasoning |
+| **Expert Scoring** (Stage 3) | Score ideas against rubric (0.0-1.0 per dimension) | `Predict` | Evaluation checklist — applying scoring criteria is extraction |
+
+**Example from ideation pipeline:**
+```python
+# Stage 1: Expert Panel — Analysis = ChainOfThought
+self.expert_panel = dspy.ChainOfThought(ExpertPanelSignature)
+
+# Stage 3: Expert Scoring — Evaluation = Predict
+self.expert_scoring = dspy.Predict(ExpertScoringSignature)
+```
+
+**Rule of thumb:** If the expert is DISCOVERING insights → ChainOfThought.
+If the expert is APPLYING a rubric to pre-existing ideas → Predict.
 
 ---
 
@@ -525,6 +551,10 @@ async def call_with_retry(
     - Rate limit (429): Wait 30 seconds, retry
     - Other errors: Exponential backoff (5s, 10s, 20s)
     - After max_retries: Raise with detailed error message
+
+    NOTE: Timeout protection is configured at the dspy.LM() level
+    (see Timeout Requirements section). This wrapper handles transient
+    failures with retry logic.
     """
     import random
 
@@ -582,48 +612,252 @@ for i in range(3):
         pass  # No wait, no logging
 ```
 
-**Why:** API calls fail due to rate limits, network issues, or transient errors. Without retry logic, a single failure aborts the entire workflow. Exponential backoff with jitter prevents thundering herd problems when multiple workflows retry simultaneously.
+**Why:** API calls fail due to rate limits, network issues, or transient errors. Without retry logic, a single failure aborts the entire workflow. Exponential backoff with jitter prevents thundering herd problems when multiple workflows retry simultaneously. Also ensure `timeout` is set on your `dspy.LM()` constructor (see Timeout Requirements section).
+
+---
+
+### 7. Use Typed Outputs, NEVER str+JSON
+
+**CRITICAL: Never use `str` OutputField with instructions like "output as JSON" or "return a JSON object". DSPy has native structured output support — use it.**
+
+**Simple typed outputs:**
+```python
+class EvaluationSignature(dspy.Signature):
+    """Evaluate content quality."""
+
+    content: str = dspy.InputField(desc="Content to evaluate")
+
+    # Simple types — use directly as OutputField types
+    passed: bool = dspy.OutputField(desc="True if content passes quality check")
+    score: int = dspy.OutputField(desc="Quality score 0-100")
+    confidence: float = dspy.OutputField(desc="Confidence level 0.0-1.0")
+    category: Literal["good", "mediocre", "poor"] = dspy.OutputField(
+        desc="EXACTLY one of: good, mediocre, poor"
+    )
+
+    # Lists and dicts — use typed collections
+    keywords: list[str] = dspy.OutputField(desc="Extracted keywords")
+    metadata: dict[str, Any] = dspy.OutputField(desc="Key-value metadata pairs")
+```
+
+**Complex structured outputs — use Pydantic BaseModel:**
+```python
+from pydantic import BaseModel, RootModel
+from typing import List
+
+# Single structured item
+class ContactInfo(BaseModel):
+    name: str
+    email: str
+    score: int
+
+# List of structured items — use RootModel
+class ContactList(RootModel[List[ContactInfo]]):
+    pass
+
+# In Signature — use Pydantic model as OutputField type
+class ExtractorSignature(dspy.Signature):
+    """Extract contacts from text."""
+
+    text: str = dspy.InputField(desc="Text containing contact information")
+    contacts: ContactList = dspy.OutputField(desc="Extracted contacts")
+
+# Access in code
+result = await agent.acall(text=text)
+contacts_data = result.contacts.model_dump()  # Convert to dict/list
+```
+
+**WRONG — DO NOT DO THIS:**
+```python
+class ExtractorSignature(dspy.Signature):
+    """Extract contacts. Output as JSON array."""
+
+    text: str = dspy.InputField(desc="Text to extract from")
+
+    # WRONG: str output with JSON instructions
+    contacts: str = dspy.OutputField(
+        desc="Return a JSON array of objects with name, email, score fields"
+    )
+
+    # WRONG: str output expecting structured data
+    analysis: str = dspy.OutputField(
+        desc="Return a JSON object with keys: summary, score, tags"
+    )
+```
+
+**Why:** DSPy natively handles typed outputs through its adapter layer. When you use `bool`, `int`, `list[str]`, or Pydantic models as OutputField types, DSPy ensures the LLM output is correctly parsed and validated. Using `str` with JSON instructions forces manual parsing, loses type safety, and is fragile — the LLM may return malformed JSON, markdown-wrapped JSON, or inconsistent formats.
+
+**Access patterns:**
+- Simple types: `result.passed` → `True`, `result.score` → `85`
+- Lists/dicts: `result.keywords` → `["ai", "ml"]`, `result.metadata` → `{"key": "val"}`
+- Pydantic models: `result.contacts.model_dump()` → `[{"name": "...", ...}]`
+
+**See also:** [Pydantic Models for Structured Outputs](#pydantic-models-for-structured-outputs) in Quick Patterns for full BaseModel/RootModel examples.
+
+---
+
+## Tool-Calling Patterns
+
+### When to use ReAct vs Manual Tool Handling
+
+| Pattern | Use When | LLM Calls | Latency |
+|---------|----------|-----------|---------|
+| `dspy.ReAct(sig, tools, max_iters=N)` | Multi-step reasoning requiring multiple tool calls in sequence | N+ per invocation | High (N * LLM latency) |
+| `dspy.ChainOfThought(sig)` + `dspy.ToolCalls` | Single tool call with reasoning about parameters | 1 | Low |
+| `dspy.Predict(sig)` + `dspy.ToolCalls` | Single tool call, no reasoning needed | 1 | Lowest |
+
+### Manual Tool Handling Pattern (Preferred for Single-Tool Agents)
+
+```python
+import dspy
+
+class SearchToolSignature(dspy.Signature):
+    """Select and configure the right tool for this search."""
+    search_intent: str = dspy.InputField()
+    available_tools: list[dspy.Tool] = dspy.InputField()
+    selected_tool_calls: dspy.ToolCalls = dspy.OutputField()
+
+# Wrap existing functions as tools
+tools = [dspy.Tool(my_search_function)]
+
+# Single LLM call to decide parameters
+agent = dspy.ChainOfThought(SearchToolSignature)
+response = agent(search_intent="...", available_tools=tools)
+
+# Execute tool calls manually
+for call in response.selected_tool_calls.tool_calls:
+    result = call.execute()
+```
+
+### Anti-Pattern: Using ReAct for Single-Tool Agents
+
+```python
+# BAD: ReAct with max_iters=5 makes 5+ LLM calls even for one tool
+agent = dspy.ReAct(SearchSig, tools=[search_fn], max_iters=5)
+# This will take 150-300 seconds with Gemini (30s * 5+ calls)
+
+# GOOD: ChainOfThought + manual execution = 1 LLM call
+agent = dspy.ChainOfThought(SearchToolSig)
+# This takes 20-40 seconds
+```
+
+**When to use each:**
+- **ReAct:** Multi-step tool chains where the LLM must reason between tool calls and decide what to call next
+- **ChainOfThought + ToolCalls:** Single tool call where the LLM decides parameters with reasoning
+- **Predict + ToolCalls:** Single tool call, straightforward parameter selection
+
+---
+
+## Timeout Requirements
+
+### Rule: All LLM calls MUST have timeout protection
+
+Timeout should be configured at the `dspy.LM()` constructor level. This ensures every LLM call through that instance has timeout protection without needing per-call wrapping.
+
+```python
+# BAD: No timeout on LM — calls can hang indefinitely
+_shared_lm = dspy.LM("gemini/gemini-2.5-flash", api_key=api_key)
+
+# GOOD: Timeout configured at LM level
+_shared_lm = dspy.LM("gemini/gemini-2.5-flash", api_key=api_key, timeout=120)
+```
+
+### Required Timeouts (add to every DSPy project)
+
+| Location | Pattern | Example |
+|----------|---------|---------|
+| `dspy.LM()` constructor | `timeout=N` parameter (REQUIRED) | `dspy.LM("gemini/flash", timeout=120)` |
+| Thread pool `.result()` | `.result(timeout=N)` | `pool.submit(asyncio.run, coro).result(timeout=150)` |
+| `call_with_retry()` | Retry wrapper handles transient failures | See Rule 6 above |
+
+### Updated Singleton LM Pattern (with Timeout)
+
+```python
+_shared_lm = None
+
+def get_shared_lm():
+    global _shared_lm
+    if _shared_lm is None:
+        _shared_lm = dspy.LM(
+            os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
+            api_key=os.getenv("API_KEY"),
+            max_parallel_requests=2000,
+            timeout=120,  # REQUIRED: prevents indefinite hangs
+        )
+    return _shared_lm
+```
+
+**Note:** Always set `timeout` on every `dspy.LM()` constructor. This is the primary defense against hung API calls. The `call_with_retry` wrapper (Rule 6) handles transient failures with retry logic.
 
 ---
 
 ## Anti-Patterns Summary
 
-### DO NOT: Create LM per module
+### Use singleton LM (not per-module LM instances)
 ```python
-# WRONG
-class MyModule(dspy.Module):
-    def __init__(self):
-        self.lm = dspy.LM("gemini/...")  # Creates separate HTTP client
+# Use shared singleton — prevents connection pool exhaustion
+shared_lm = get_shared_lm()
+self.agent.set_lm(shared_lm)
+
+# Instead of creating LM per module:
+# self.lm = dspy.LM("gemini/...")  # Creates separate HTTP client
 ```
 
-### DO NOT: Use ChainOfThought for extraction
+### Use Predict for extraction (not ChainOfThought)
 ```python
-# WRONG - Unnecessary overhead
-self.extractor = dspy.ChainOfThought(ExtractorSignature)
+# Use Predict for extraction/classification tasks — faster, cheaper
+self.extractor = dspy.Predict(ExtractorSignature)
+
+# Reserve ChainOfThought for creative synthesis tasks
+self.creator = dspy.ChainOfThought(CreatorSignature)
 ```
 
-### DO NOT: Use strict Literal types for LARGE enums without Union
+### Use Union types for large enums (20+ values)
 ```python
-# WRONG for large enums (20+ values) - Causes validation failures
-industry: Literal["B2B SaaS", "B2C Software", ...50 more...] = dspy.OutputField()
-
-# CORRECT for large enums - Union as safety net
+# For large enums — Union as safety net
 industry: Union[Literal[...], str] = dspy.OutputField()
 
-# NOTE: For small enums (3-10 values), strict Literal is fine with good prompting
-category: Literal["A", "B", "C", "D"] = dspy.OutputField()  # OK
+# For small enums (3-10 values) — strict Literal is fine with good prompting
+category: Literal["A", "B", "C", "D"] = dspy.OutputField()
 ```
 
-### DO NOT: Pass raw Predictions between stages
+### Use typed OutputFields (not str with JSON instructions)
 ```python
-# WRONG - LLMs struggle with nested objects
-stage2 = self.analyzer(previous=stage1_result)
+# Use typed outputs — DSPy handles validation natively
+contacts: ContactList = dspy.OutputField(desc="Extracted contacts")
+keywords: list[str] = dspy.OutputField(desc="Extracted keywords")
+score: int = dspy.OutputField(desc="Quality score 0-100")
+
+# Instead of str + JSON parsing:
+# contacts: str = dspy.OutputField(desc="Return a JSON array of {name, email}")
 ```
 
-### DO NOT: Skip retry logic
+### Format outputs between stages (not raw Predictions)
 ```python
-# WRONG - Single failure aborts workflow
-result = await agent.acall(**kwargs)
+# Format to markdown for downstream LLM consumption
+stage1_formatted = format_extraction_output(stage1_result)
+stage2 = self.analyzer(previous_analysis=stage1_formatted)
+
+# Instead of passing raw objects:
+# stage2 = self.analyzer(previous=stage1_result)
+```
+
+### Use call_with_retry wrapper (not bare acall)
+```python
+# Wrap calls with retry for production resilience
+result = await call_with_retry(self.agent, "agent_name", **kwargs)
+
+# Instead of bare calls:
+# result = await agent.acall(**kwargs)
+```
+
+### Use ChainOfThought + ToolCalls for single-tool agents (not ReAct)
+```python
+# Single tool call = ChainOfThought + manual execution (1 LLM call, 20-40s)
+agent = dspy.ChainOfThought(SearchToolSig)
+
+# Reserve ReAct for multi-step tool chains (N+ LLM calls, 150-300s)
+# agent = dspy.ReAct(SearchSig, tools=[search_fn], max_iters=5)
 ```
 
 ---
@@ -663,9 +897,36 @@ def get_shared_lm():
         _shared_lm = dspy.LM(
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("API_KEY"),
-            max_parallel_requests=2000
+            max_parallel_requests=2000,
+            timeout=120,
         )
     return _shared_lm
+```
+
+### Pydantic Models for Structured Outputs
+```python
+from pydantic import BaseModel, RootModel
+from typing import List
+
+# Single structured item
+class ContactInfo(BaseModel):
+    name: str
+    email: str
+    score: int
+
+# List of structured items - use RootModel
+class ContactList(RootModel[List[ContactInfo]]):
+    pass
+
+# In Signature
+class MySignature(dspy.Signature):
+    """..."""
+    # Use Pydantic model directly as type (NOT str with "output JSON")
+    contacts: ContactList = dspy.OutputField(description="Extracted contacts")
+
+# Access in code
+result = await agent.acall(text=text)
+contacts_data = result.contacts.model_dump()  # Convert to dict/list
 ```
 
 ### Basic Pipeline Structure
@@ -674,19 +935,186 @@ class MyPipeline(dspy.Module):
     def __init__(self, shared_lm):
         if shared_lm is None:
             raise ValueError("shared_lm required")
-
         self.stage1 = dspy.Predict(Stage1Signature)
         self.stage2 = dspy.Predict(Stage2Signature)
-
         self.stage1.set_lm(shared_lm)
         self.stage2.set_lm(shared_lm)
 
+    def forward(self, input_data: str):
+        """Synchronous version for DSPy optimization (GEPA, MIPROv2)."""
+        result1 = self.stage1(input=input_data)
+        formatted = format_output(result1)
+        result2 = self.stage2(context=formatted)
+        return dspy.Prediction(output=result2.output)
+
     async def aforward(self, input_data: str):
+        """Async version for production with retry logic."""
         result1 = await call_with_retry(self.stage1, "stage1", input=input_data)
         formatted = format_output(result1)
         result2 = await call_with_retry(self.stage2, "stage2", context=formatted)
         return dspy.Prediction(output=result2.output)
 ```
+
+**⚠️ CRITICAL:** Both methods are REQUIRED. `forward()` enables DSPy prompt optimization. `aforward()` is for production with retry/logging/parallel execution. Implement both.
+
+### Tool-Using Agents (ReAct vs Manual)
+
+> **Full reference:** [`frameworks/dspy/react.md`](react.md) and [Tool-Calling Patterns](#tool-calling-patterns) above
+
+**Default to ChainOfThought + manual tool handling.** Only use ReAct when multi-step tool chains are genuinely required (LLM must reason between tool calls and decide what to call next).
+
+```python
+# PREFERRED: Single-tool agents — ChainOfThought + ToolCalls (1 LLM call)
+class SearchToolSignature(dspy.Signature):
+    """Select and configure the right search tool."""
+    search_intent: str = dspy.InputField()
+    available_tools: list[dspy.Tool] = dspy.InputField()
+    selected_tool_calls: dspy.ToolCalls = dspy.OutputField()
+
+tools = [dspy.Tool(search_posts)]
+agent = dspy.ChainOfThought(SearchToolSignature)
+response = agent(search_intent="...", available_tools=tools)
+for call in response.selected_tool_calls.tool_calls:
+    result = call.execute()
+
+# ONLY FOR MULTI-STEP TOOL CHAINS: ReAct (N+ LLM calls)
+react = dspy.ReAct(
+    signature=SearchSignature,
+    tools=[search_posts],
+    max_iters=5  # Safety limit (default: 20, use 3-5 for costly tools)
+)
+react.set_lm(shared_lm)
+result = await react.acall(question="...")
+```
+
+**Decision guide:**
+- Single tool call, LLM decides parameters → ChainOfThought + ToolCalls
+- Multi-step tool chains with reasoning between calls → ReAct
+- Fixed/predictable tool sequence → call tools explicitly in `aforward()`
+
+---
+
+### asyncio.gather Fan-Out
+
+> **Full reference:** [`frameworks/dspy/async-patterns.md`](async-patterns.md)
+
+```python
+# Fan out N instances in parallel (with retry + timeout)
+results = await asyncio.gather(*[
+    call_with_retry(
+        self.expert,
+        f"expert_{perspective}",
+        timeout=180,
+        perspective=perspective,
+        instructions=instructions,
+        data=shared_data,
+    )
+    for perspective, instructions in self.perspectives
+], return_exceptions=True)  # Graceful degradation
+
+# Filter failures
+successful = [r for r in results if not isinstance(r, Exception)]
+```
+
+**Shared LM is safe for concurrent use** — `max_parallel_requests` handles connection pooling.
+
+---
+
+### Multi-Model Singleton
+
+> **Full reference:** [`frameworks/dspy/async-patterns.md`](async-patterns.md)
+
+```python
+# utils.py — separate factories for each model tier
+_flash_lm = None
+_pro_lm = None
+
+def get_flash_lm():
+    """Fast, cheap — for extraction, search, parallel fan-out."""
+    global _flash_lm
+    if _flash_lm is None:
+        _flash_lm = dspy.LM("gemini/gemini-2.5-flash", api_key=os.getenv("GOOGLE_API_KEY"),
+                             max_parallel_requests=2000, timeout=120)
+    return _flash_lm
+
+def get_pro_lm():
+    """Powerful — for synthesis, creative generation, complex reasoning."""
+    global _pro_lm
+    if _pro_lm is None:
+        _pro_lm = dspy.LM("gemini/gemini-2.5-pro", api_key=os.getenv("GOOGLE_API_KEY"),
+                           max_parallel_requests=100, timeout=120)
+    return _pro_lm
+
+# Assign different LMs to different predictors
+self.search_agent.set_lm(get_flash_lm())   # Fast operations
+self.synthesizer.set_lm(get_pro_lm())       # Complex reasoning
+```
+
+**Tier guide:** Flash for parallel/high-volume tasks, Pro for single critical operations.
+
+---
+
+### Optional InputField
+
+```python
+class MySignature(dspy.Signature):
+    """Process with optional inputs."""
+
+    required_input: str = dspy.InputField(desc="Always required")
+
+    # Optional field with default=None
+    previous_feedback: str = dspy.InputField(
+        desc="Optional feedback from prior iteration. If not provided, this is the first attempt.",
+        default=None
+    )
+```
+
+**IMPORTANT:** DSPy does NOT propagate `default` values into the prompt. The LLM won't know a field is optional unless you say so in the `desc`. Always describe the default behavior in the description text.
+
+**Workaround:** In your module's `aforward()`, explicitly pass the default when the caller omits the field:
+
+```python
+async def aforward(self, input_text: str, feedback: str = None):
+    return await self.predictor.acall(
+        input_text=input_text,
+        previous_feedback=feedback if feedback is not None else "",
+    )
+```
+
+**When to use Optional vs separate signatures:**
+- Use `default=None` when the field is sometimes present (e.g., retry feedback)
+- Use separate signatures when the input shapes are fundamentally different
+
+---
+
+### Loop Orchestration
+
+> **Full reference:** [`agent-teams/dspy/loop.md`](../../../agent-teams/dspy/loop.md)
+
+The loop pattern implements while-loop with quality-check → retry-with-feedback:
+
+```python
+while not completed and attempts < self.max_iterations:
+    # Critic evaluates current draft
+    critic_result = await self.critic.acall(current_draft=current_draft, ...)
+
+    if critic_result.completed:
+        break
+
+    # Iterator improves based on feedback
+    iteration_result = await self.iterator.acall(
+        current_draft=current_draft,
+        critic_feedback=critic_result.feedback, ...
+    )
+    current_draft = iteration_result.improved_draft
+    attempts += 1
+
+# After loop: return best attempt (approved or not)
+```
+
+Key patterns: separate `dspy.History` per agent role, multi-flag termination, graceful degradation after max iterations.
+
+---
 
 ### dspy.History for Loops
 ```python

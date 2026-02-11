@@ -1,0 +1,47 @@
+{
+  "session_id": "70e09cd0-fab0-4ecd-abc8-e00d4274a14c",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-01-29T23:40:55.535Z",
+  "duration_minutes": 6,
+  "user_message_count": 2,
+  "assistant_message_count": 30,
+  "tool_counts": {
+    "Edit": 3,
+    "Bash": 4,
+    "Grep": 2,
+    "Read": 2
+  },
+  "languages": {
+    "Markdown": 3,
+    "TypeScript": 2
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 190,
+  "output_tokens": 66,
+  "first_prompt": "Okay, before we do this, why do we have to have the basic tier? Can't we just have the free tier? Obviously, it's more limiting, but for testing, until we surpass in the limit, we don't really need. T…",
+  "summary": "Update spec, free tier, format guidelines",
+  "user_interruptions": 0,
+  "user_response_times": [
+    75.802
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Command Failed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 4,
+  "lines_removed": 4,
+  "files_modified": 1,
+  "message_hours": [
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T23:42:08.493Z",
+    "2026-01-29T23:46:29.250Z"
+  ]
+}

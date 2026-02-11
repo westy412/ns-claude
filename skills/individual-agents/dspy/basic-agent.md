@@ -17,7 +17,7 @@ A single-turn LLM call that maps input fields to output fields via a Signature. 
 
 - Task requires step-by-step reasoning traces — use **Reasoning Agent** (ChainOfThought) instead
 - Agent needs conversation history — use **Conversational Agent** (dspy.History) instead
-- Agent needs to call external tools — use **Tool Agent** (dspy.ReAct) instead
+- Agent needs to call external tools — use **Tool Agent** (ChainOfThought + ToolCalls for single-tool, ReAct for multi-tool) instead
 - Complex decisions that benefit from explicit reasoning — use **Reasoning Agent** instead
 
 ## Selection Criteria
@@ -36,6 +36,8 @@ A single-turn LLM call that maps input fields to output fields via a Signature. 
 **Outputs:**
 - Output fields defined in the Signature (accessed as `result.field_name`)
 - Pydantic validation ensures type correctness
+
+> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
 
 ## Prompting Guidelines
 
@@ -134,6 +136,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("GOOGLE_API_KEY"),
             max_parallel_requests=2000,  # Critical for concurrency
+            timeout=120,
         )
     return _shared_lm
 
@@ -285,6 +288,68 @@ async def production_extraction(extractor, company_name, website_content):
     return result
 ```
 
+### Complex Outputs with Pydantic Models
+
+For structured outputs with multiple items or nested data, use Pydantic BaseModel:
+
+```python
+from pydantic import BaseModel, RootModel
+from typing import List
+import dspy
+
+# Define your Pydantic models
+class ContactInfo(BaseModel):
+    name: str
+    email: str
+    score: int
+
+# For List outputs, use RootModel (enables proper serialization)
+class ContactList(RootModel[List[ContactInfo]]):
+    pass
+
+class ContactExtractor(dspy.Signature):
+    """Extract contact information from text."""
+
+    # Inputs
+    text: str = dspy.InputField(description="Text containing contact info")
+
+    # Outputs - use Pydantic models directly as types
+    summary: str = dspy.OutputField(description="Summary of extraction")
+    contacts: ContactList = dspy.OutputField(description="Extracted contacts")
+
+# Usage
+class ExtractorModule(dspy.Module):
+    def __init__(self, shared_lm):
+        self.extractor = dspy.Predict(ContactExtractor)
+        self.extractor.set_lm(shared_lm)
+
+    async def aforward(self, text: str):
+        result = await call_with_retry(
+            self.extractor,
+            agent_name="contact_extractor",
+            text=text
+        )
+
+        # Access Pydantic model directly
+        contacts = result.contacts  # This is a ContactList (RootModel)
+
+        # Convert to dict/list for serialization
+        contacts_data = contacts.model_dump()
+
+        # Access individual contacts
+        for contact in contacts.root:  # RootModel stores data in .root
+            print(f"{contact.name}: {contact.email} (score: {contact.score})")
+
+        return result
+```
+
+**Why Pydantic instead of "output JSON":**
+- Type safety at runtime
+- Automatic validation
+- Better IDE support
+- Clean serialization via `.model_dump()`
+- DSPy natively supports Pydantic models in OutputFields
+
 ### DSPy-Specific Notes
 
 - **Signature = Prompt + Schema:** The docstring IS the system prompt. Output fields define the schema.
@@ -292,6 +357,7 @@ async def production_extraction(extractor, company_name, website_content):
 - **Predict vs ChainOfThought:** Use Predict for this pattern. Reserve ChainOfThought for tasks needing visible reasoning.
 - **Sync vs Async:** Use `aforward()` / `acall()` for production concurrency. `forward()` / `__call__()` for simple scripts.
 - **Field access:** Access outputs via `result.field_name` directly (e.g., `result.industry`).
+- **Pydantic models:** Use `BaseModel` for single objects, `RootModel[List[T]]` for lists. Access with `.model_dump()` for dicts.
 
 ---
 

@@ -1,0 +1,44 @@
+{
+  "session_id": "a26fc812-474e-4b75-b243-2afe35b0071f",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-01-31T00:29:26.935Z",
+  "duration_minutes": 2,
+  "user_message_count": 3,
+  "assistant_message_count": 12,
+  "tool_counts": {
+    "Edit": 3
+  },
+  "languages": {
+    "TypeScript": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 96,
+  "output_tokens": 24,
+  "first_prompt": "Okay cool. Can we quickly move move it so that the order in the navigation bar is dashboard? posts campaigns calendar analytics ideas and then settings please actually can we have ideas above posts",
+  "summary": "Navigation reorder and sidebar collapse default",
+  "user_interruptions": 0,
+  "user_response_times": [
+    22.084,
+    32.481
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 7,
+  "lines_removed": 6,
+  "files_modified": 1,
+  "message_hours": [
+    0,
+    0,
+    0
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T00:30:00.711Z",
+    "2026-01-31T00:30:32.774Z",
+    "2026-01-31T00:31:22.125Z"
+  ]
+}

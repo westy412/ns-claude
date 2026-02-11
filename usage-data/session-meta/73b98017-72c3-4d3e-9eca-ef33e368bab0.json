@@ -1,0 +1,54 @@
+{
+  "session_id": "73b98017-72c3-4d3e-9eca-ef33e368bab0",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T16:07:56.285Z",
+  "duration_minutes": 16,
+  "user_message_count": 4,
+  "assistant_message_count": 58,
+  "tool_counts": {
+    "Read": 12,
+    "Skill": 3,
+    "SendMessage": 4,
+    "Glob": 4,
+    "TaskUpdate": 2,
+    "Write": 9,
+    "Bash": 2,
+    "TaskList": 1
+  },
+  "languages": {
+    "Markdown": 17,
+    "YAML": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 96,
+  "output_tokens": 410,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are teammate unique-updater on team arch-updaters.  Read your full instructions at:   /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    15.948,
+    2.247,
+    454.473
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1558,
+  "lines_removed": 0,
+  "files_modified": 9,
+  "message_hours": [
+    16,
+    16,
+    16,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T16:07:56.285Z",
+    "2026-02-10T16:08:20.346Z",
+    "2026-02-10T16:16:37.527Z",
+    "2026-02-10T16:24:21.728Z"
+  ]
+}

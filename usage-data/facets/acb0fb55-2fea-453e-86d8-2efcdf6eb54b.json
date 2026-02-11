@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "No clear goal expressed; user only greeted Claude twice",
+  "goal_categories": {
+    "warmup_minimal": 2
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "unhelpful",
+  "session_type": "quick_question",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User said 'hey' twice with no follow-up request; no substantive work was done.",
+  "session_id": "acb0fb55-2fea-453e-86d8-2efcdf6eb54b"
+}

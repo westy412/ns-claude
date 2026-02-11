@@ -1,0 +1,48 @@
+{
+  "session_id": "485fdd3b-5c44-4772-ba36-24073b92b298",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T12:32:56.826Z",
+  "duration_minutes": 5,
+  "user_message_count": 4,
+  "assistant_message_count": 18,
+  "tool_counts": {
+    "TaskGet": 1,
+    "Read": 2,
+    "Edit": 2,
+    "SendMessage": 1,
+    "TaskUpdate": 1
+  },
+  "languages": {
+    "Markdown": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 156,
+  "output_tokens": 357,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are on team \"spec-update\". Your task is Task #1: Archive the research-loop template and linkedin-keyword spec folders.  Read the task details with TaskGe…",
+  "user_interruptions": 2,
+  "user_response_times": [],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 10,
+  "lines_removed": 0,
+  "files_modified": 2,
+  "message_hours": [
+    12,
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T12:32:56.826Z",
+    "2026-02-10T12:38:00.511Z",
+    "2026-02-10T12:38:00.520Z",
+    "2026-02-10T12:38:00.774Z"
+  ]
+}

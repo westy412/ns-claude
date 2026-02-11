@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "No clear goal - user was just casually greeting/chatting with no specific task",
+  "goal_categories": {
+    "warmup_minimal": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "unhelpful",
+  "session_type": "quick_question",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User greeted Claude casually with no task, interrupted two responses, and the session ended without any work being done.",
+  "session_id": "3b11df02-4e44-48b9-b02f-9521bf2df380"
+}

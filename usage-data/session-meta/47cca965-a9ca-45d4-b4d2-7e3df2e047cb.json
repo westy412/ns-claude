@@ -1,0 +1,53 @@
+{
+  "session_id": "47cca965-a9ca-45d4-b4d2-7e3df2e047cb",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien",
+  "start_time": "2026-02-08T14:14:56.609Z",
+  "duration_minutes": 1,
+  "user_message_count": 7,
+  "assistant_message_count": 10,
+  "tool_counts": {
+    "Grep": 4
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 22,
+  "output_tokens": 94,
+  "first_prompt": "today's day is Sunday the 8th of February.",
+  "user_interruptions": 1,
+  "user_response_times": [
+    5.569,
+    32.949,
+    32.949,
+    32.949
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T14:14:56.609Z",
+    "2026-02-08T14:14:56.609Z",
+    "2026-02-08T14:15:05.494Z",
+    "2026-02-08T14:15:25.036Z",
+    "2026-02-08T14:15:57.916Z",
+    "2026-02-08T14:15:57.916Z",
+    "2026-02-08T14:15:57.916Z"
+  ]
+}

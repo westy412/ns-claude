@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Execute a handover procedure to persist session state and create a concise handover message for the next session",
+  "goal_categories": {
+    "handover_procedure": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "slightly_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "none",
+  "brief_summary": "User initiated a handover procedure but the session was cut short before completion, with only an initial bash command started.",
+  "session_id": "bc9621ee-289a-4877-a1c5-f1ec73003746"
+}

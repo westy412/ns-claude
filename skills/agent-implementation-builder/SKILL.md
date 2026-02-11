@@ -95,6 +95,25 @@ Cheat sheets contain critical rules, patterns, and anti-patterns for each framew
 
 **CONTEXT BUDGET RULE: Only invoke ONE child skill at a time, and ONLY when you reach the phase that needs it.** The only upfront reading is the framework cheatsheet (Phase 0, Step 3). Everything else is loaded just-in-time.
 
+### Who Loads Which Skills
+
+| Skill | Loaded By | When | Why |
+|-------|-----------|------|-----|
+| **Framework cheatsheet** | Main agent | Phase 0, Step 3 | Critical rules for all code generation |
+| **agent-teams** | Teammates (research, ideation, scaffold streams) | Before writing team modules | Team-specific orchestration patterns |
+| **individual-agents** | Teammates (research, ideation, signatures streams) | Before writing agent code | Agent type patterns |
+| **tools-and-utilities** | Teammates (tools stream) | Before writing tool functions | Tool design patterns |
+| **prompt-engineering** | Teammates (signatures stream, DSPy) OR prompt-creator sub-agents (LangGraph) | Before writing prompts/signatures | Prompt structure patterns |
+
+**CRITICAL: Main agent does NOT load child skills.** Loading all skills would consume
+~10K+ lines of context, leaving no room for spec files or code generation. Instead:
+- Main agent loads framework cheatsheet once (Phase 0)
+- Teammates load their specific child skills just-in-time when needed
+- This distributes context load across teammate contexts
+
+**In team mode:** Each teammate gets its own context window. Skills loaded by a teammate
+do NOT consume the main agent's context.
+
 | Skill | Invoke At | What It Provides |
 |-------|-----------|------------------|
 | `agent-teams` | Phase 1 (Team Scaffold) | Team orchestration patterns, graph structure examples |
@@ -330,6 +349,14 @@ class MyAgentSignature(dspy.Signature):
     output_field: str = dspy.OutputField(desc="What to return")
 ```
 
+**Structured Output — Critical Rule:**
+When generating DSPy signatures, NEVER use `str` output fields with JSON parsing instructions.
+- Use typed fields: `bool`, `int`, `float`, `list[str]`, `dict[str, Any]`, `Literal[...]`
+- Use Pydantic `BaseModel` for complex nested outputs, `RootModel[List[...]]` for lists of objects
+- Define Pydantic models in `models.py`, import them in `signatures.py`
+- Access results: `result.field_name` for typed fields, `result.field_name.model_dump()` for Pydantic models
+- See `frameworks/dspy/CHEATSHEET.md` Critical Rules §7 for full guidance and examples
+
 **Signature Organization:**
 - **Small teams (1-5 agents):** All signatures in team's `signatures.py`
 - **Large teams (6+ agents):** Consider grouping by role or stage within signatures.py, use comments as section headers
@@ -349,10 +376,27 @@ The manifest provides:
 3. **File list** — all spec files to read
 4. **Implementation order** — suggested sequence
 
-**Step 2:** Read `agent-config.yaml` for detailed configuration, including:
+**Step 2:** Read the ROOT `agent-config.yaml` for detailed configuration, including:
 - Framework being used (langgraph, dspy)
 - Agent types
 - Tool requirements
+- **`sub-teams` key** — if present, note child folders. Each child folder has its own `agent-config.yaml`. Read sub-team configs only when you reach that sub-team's implementation chunk.
+
+**Nested agent-config.yaml structure:** agent-config.yaml files mirror the directory structure — one per team folder at every level. The root config lists sub-teams with `folder` references. Each sub-team's config is self-contained with its own agents, pattern, and notes.
+
+```yaml
+# Root agent-config.yaml
+team:
+  name: research-phase
+  sub-teams:
+    - name: linkedin-keyword
+      folder: linkedin-keyword/    # Has its own agent-config.yaml
+    - name: analytics-team
+      folder: analytics-team/      # Has its own agent-config.yaml
+  agents:
+    - agent:
+        name: signal-blender       # Direct member of this team
+```
 
 **Step 3: READ THE FRAMEWORK CHEAT SHEET.**
 
@@ -461,6 +505,12 @@ Create team.py with:
 - Orchestration logic based on pattern (pipeline, router, fan-in-fan-out, loop)
 - Placeholder functions for each agent
 
+When creating team.py scaffold, include BOTH methods:
+
+- [ ] `forward()` — synchronous, no retry, for DSPy optimization
+- [ ] `aforward()` — async, with retry wrapper, for production
+- [ ] Validation: `raise ValueError` if `shared_lm` is None
+
 ```python
 # team.py scaffold example
 
@@ -535,6 +585,54 @@ For each agent that has tools:
 
 **Before invoking:** Ensure progress.md reflects Phase 2 completion (tools created).
 **After completing this phase:** Update progress.md with agent implementation status before proceeding to Phase 4.
+
+### Input/Output Validation Protocol (MANDATORY)
+
+Before implementing ANY signature, follow this protocol:
+
+**Step 1: Extract from Spec**
+Read the agent's spec file (agents/[name].md). Create two lists:
+
+INPUTS CHECKLIST:
+  [ ] input_field_1 (type: str, required: yes)
+  [ ] input_field_2 (type: dict, required: no, default: None)
+  [ ] ...
+
+OUTPUTS CHECKLIST:
+  [ ] output_field_1 (type: ResearchFindingList)
+  [ ] output_field_2 (type: bool)
+  [ ] ...
+
+**Step 2: Trace Upstream Data**
+For each input that comes from another component:
+1. Identify the upstream component (which module produces this?)
+2. Read that component's output spec
+3. Verify field names match EXACTLY
+4. If mismatch, flag for team lead
+
+Example:
+```
+Input: research_documents (from Research Phase)
+Upstream: ResearchPhase.aforward() output
+Trace: Does ResearchPhase return a field called "research_documents"?
+  ✓ Yes → src/research/team.py:233 returns ResearchPhaseOutput with 4 doc fields
+  ✗ No → Message team-lead: "Research phase output schema mismatch"
+```
+
+**Step 3: Implement Signature**
+Create the signature with ALL inputs and outputs from your checklists.
+
+**Step 4: Cross-Check**
+Before moving on:
+  [ ] Every spec input has a corresponding InputField
+  [ ] Every spec output has a corresponding OutputField
+  [ ] All OutputFields use typed models (NO str+JSON)
+  [ ] Optional inputs use default=None + optionality in desc
+  [ ] Model tier assignment matches spec (Flash vs Pro)
+
+**If ANY checkbox is unchecked, DO NOT PROCEED. Fix first.**
+
+---
 
 Fill in placeholder functions with actual implementations.
 
@@ -911,9 +1009,211 @@ async def get_status(job_id: str):
 
 ---
 
+## Team Mode Execution
+
+### When to Use Team Mode
+
+Use team mode when the execution plan has **parallel chunks across multiple streams** in any phase.
+
+**Example from manifest.yaml:**
+```yaml
+execution-plan:
+  phases:
+    - phase: 1
+      chunks:
+        - name: data-models
+          stream: models          # ← Different streams
+        - name: tools
+          stream: tools           # ← can work in parallel
+        - name: research-signatures
+          stream: signatures      # ← across Phase 1
+```
+
+If chunks share the same stream → single-agent mode (sequential).
+If chunks span different streams → team mode (parallel).
+
+---
+
+### Team Mode Workflow
+
+#### Step 1: Create Team and Task List
+
+```
+TeamCreate: team_name="[project]-impl", description="..."
+```
+
+For each chunk in execution plan, create a task:
+```
+TaskCreate:
+  subject: "Phase N: [chunk.name] — [chunk.description summary]"
+  description: "[chunk.description] + spec files + skills required + communication needs"
+  activeForm: "Implementing [chunk.name]"
+```
+
+Set phase dependencies via TaskUpdate:
+- Phase 1 tasks: no blockedBy
+- Phase 2 tasks: blockedBy = [all Phase 1 task IDs]
+- Phase 3 tasks: blockedBy = [all Phase 2 task IDs]
+
+---
+
+#### Step 2: Map Streams to Skills (MANDATORY)
+
+For each stream in execution plan, use this mapping:
+
+| Stream Type | Required Skills | Load When |
+|-------------|----------------|-----------|
+| **models** | (none — derive from specs) | N/A |
+| **tools** | tools-and-utilities | Phase 1 before writing tools |
+| **signatures** | prompt-engineering, individual-agents | Phase 1 before writing signatures |
+| **research** | agent-teams, individual-agents | Phase 2 before modules |
+| **ideation** | agent-teams, individual-agents | Phase 2 before modules |
+| **scaffold** | agent-teams | Phase 3+ before orchestration |
+
+If execution plan lists `stream.skills`, use those. Otherwise, use this default table.
+
+**⚠️ CRITICAL:** Skills are NOT optional. Every stream that writes agent code MUST load the corresponding skills.
+
+---
+
+#### Step 3: Generate Teammate Prompt Files
+
+For each stream with work, use the `agent-impl-teammate-spawn` skill to generate a structured prompt file:
+
+```
+Skill tool -> skill: "agent-impl-teammate-spawn"
+```
+
+This skill reads your manifest.yaml and agent-config.yaml to generate a prompt file for each stream at:
+```
+{project-path}/teammate-prompts/{team-name}/{stream-name}.md
+```
+
+Each generated file includes the exact skills to load, how to load them, tasks to work on, validation checklists, and communication requirements. Follow the skill's step-by-step instructions to generate one file per stream.
+
+---
+
+#### Step 4: Spawn Teammates with Minimal Prompts
+
+After generating all prompt files, spawn each teammate with a minimal prompt pointing to their file:
+
+```
+Task tool:
+  team_name: [project-name]
+  name: [stream-name]
+  subagent_type: general-purpose
+  model: opus (for complex streams like research/ideation)
+  prompt: |
+    You are teammate [stream-name] on team [project-name].
+
+    Read your full instructions at:
+      [project-path]/teammate-prompts/[team-name]/[stream-name].md
+
+    Follow ALL steps in order. DO NOT skip Step 1 (Load Required Skills).
+    After loading skills, confirm to team-lead via SendMessage.
+```
+
+---
+
+#### Step 5: Verify Skill Loading (MANDATORY — DO NOT SKIP)
+
+This is the enforcement mechanism. Without this step, teammates will skip skill loading and produce broken code. This has been proven: in NS-1158, 4/5 teammates skipped skills and produced incorrect implementations.
+
+After spawning all teammates:
+
+1. Wait for the first message from each teammate
+2. The message MUST confirm skill loading with the specific skill names (e.g., "Skills loaded: agent-teams, individual-agents")
+3. If the first message is about anything other than skill loading — the teammate skipped Step 1. Send them back:
+   > "STOP. You must load your required skills before doing any work. Go back to Step 1 in your prompt file. Use the Skill tool to load each skill listed there. Confirm to me when done."
+4. Do NOT assign tasks, do NOT allow work to begin, do NOT respond to implementation questions until skills are confirmed
+5. If a teammate claims a task without confirming skills — revoke it immediately and enforce loading
+| **scaffold/root** | owns root pipeline, FastAPI wrapper | agent-teams |
+
+**How to detect stream type:** Read `stream.owns` file list. Match file patterns to table above.
+
+**Example:**
+```yaml
+streams:
+  - name: research
+    owns: [src/research/]  # ← Owns team modules
+```
+→ Stream type: team/orchestration → Skills: agent-teams
+
+**⚠️ IMPORTANT:** Do NOT spawn teammates without determining their required skills.
+
+### Stream Communication Protocol
+
+Teammates must communicate when:
+1. Completing a chunk that produces data needed by other streams
+2. Encountering a missing input that should come from another stream
+3. Discovering a spec/implementation mismatch affecting multiple streams
+
+**When to send:**
+Check `execution-plan.communication` in manifest.yaml:
+
+```yaml
+communication:
+  - from: tools
+    to: [research, ideation]
+    after: phase-1
+    what: Tool function signatures
+```
+
+After completing the trigger event (phase-1 for tools stream), send via:
+```
+SendMessage:
+  type: message
+  recipient: [target-stream-name]
+  content: [what to send]
+  summary: "Phase 1 tools complete: function signatures available"
+```
+
+**What to send:** Function signatures, interface contracts, model schemas, breaking changes.
+
+**Team Lead Responsibilities:**
+- Monitor SendMessage traffic
+- Verify communication plan is followed
+- Relay messages if direct teammate-to-teammate fails
+
+### Team Lead Progress Management (Team Mode)
+
+As team lead, you MUST:
+
+**1. Create progress.md BEFORE spawning teammates**
+- Use template from templates/progress.md
+- Populate Execution Plan Snapshot with all chunks
+- Set initial status: all "pending"
+
+**2. Update progress.md after each phase completes**
+- Mark completed chunks as "done"
+- Update "Current Phase" and "Next Chunk"
+- Add session log entry
+
+**3. Monitor TaskList after each teammate message**
+```
+TaskList → check for newly unblocked tasks → assign to idle teammates
+```
+
+**4. Enforce cross-stream communication**
+- When a chunk completes, check execution-plan.communication
+- If communication required, verify SendMessage was sent
+- If not sent, prompt the teammate
+
+**5. Validate before proceeding to next phase**
+- All Phase N tasks must be "completed" before Phase N+1 starts
+- Check that all communication happened
+- Spot-check 1-2 files for import validity
+
+---
+
 ## Task Dependencies
 
-**When an execution plan exists in manifest.yaml**, use the phases and chunk dependencies from the plan instead of these default chains. The execution plan provides project-specific dependencies that override these defaults.
+**When an execution plan exists in manifest.yaml**, the execution plan is the SOLE source of truth for phasing. The plan defines:
+- **Phases** — ordered stages that execute sequentially (Phase 2 waits for Phase 1 to complete)
+- **Chunks** — units of work within a phase that can run in parallel across agent team teammates
+- **Streams** — work streams that own specific files; each teammate maps to a stream
+
+All default file-type phasing below is IGNORED when an execution plan exists. Do NOT reference these defaults (Scaffold → Tools → Agents → Prompts → Utils) in progress tracking, task creation, or teammate spawn prompts. Use the execution plan's phase names and chunk names instead.
 
 **Default LangGraph dependencies (when no execution plan):**
 ```
@@ -1149,6 +1449,189 @@ In **team mode**, each sub-team can be assigned to a different work stream's tea
 
 ---
 
+## Cross-Session Resumption
+
+Implementation of large systems (10+ agents, nested teams) will span multiple sessions. The `progress.md` file is the mechanism for cross-session continuity.
+
+**How to resume from progress.md:**
+
+1. Read `progress.md` — it contains resumption instructions at the top
+2. Check **Current Phase** and **Next Chunk** to know where to pick up
+3. Read the **Execution Plan Snapshot** to understand the full build order without re-parsing manifest.yaml
+4. Check **Stream Status** for per-stream progress
+5. Check **Open Questions / Blockers** for anything needing resolution
+6. Read the framework cheatsheet (path is in progress.md Status section)
+7. If team mode: re-create the team via `TeamCreate`, create remaining tasks from the Execution Plan Snapshot (only uncompleted chunks), and spawn teammates for streams with remaining work
+8. Continue from the **Next Chunk**
+
+**Keeping progress.md current:**
+
+- Update **Current Phase** and **Next Chunk** whenever you move to a new chunk
+- Update chunk status in the **Execution Plan Snapshot** (pending → in_progress → done)
+- Update **Stream Status** after each chunk completion
+- Add entries to **Session Log** at the start and end of each session
+- Add blockers to **Open Questions / Blockers** immediately when encountered
+- Update progress.md BEFORE ending a session — the next session depends on it
+
+---
+
+## Template-to-Instances — BLOCKING REQUIREMENT
+
+⚠️ **CRITICAL: This is NOT optional. Factory functions are FORBIDDEN for template instances.**
+
+When multiple sub-teams share the same structure but differ in configuration (e.g., 5 search loops each targeting a different platform), generate each instance as a **standalone, self-contained module**.
+
+**Pattern recognition:** A generic template spec is referenced by multiple sub-teams. Each sub-team has its own folder with its own `team.md` and `agent-config.yaml`, but the structure (agents, flow, pattern) is identical — only the configuration values differ (API keys, actor names, platform-specific parameters).
+
+❌ **WRONG — Factory Functions (DO NOT DO THIS):**
+```python
+# src/research/research_loop.py
+class ResearchLoop(dspy.Module):
+    def __init__(self, search_tools, search_instructions, ...):
+        # Generic implementation
+        pass
+
+def create_linkedin_keyword_loop(flash_lm):
+    return ResearchLoop(
+        search_tools=[search_linkedin_keyword],
+        search_instructions=_LINKEDIN_KEYWORD_SEARCH_INSTRUCTIONS,
+        ...
+    )
+
+def create_x_trending_loop(flash_lm):
+    return ResearchLoop(...)
+```
+
+**Why this is wrong:**
+- Violates isolation — changing one instance risks breaking others
+- Makes debugging harder — error could be in generic class or instance config
+- Prevents independent evolution — instances can't diverge over time
+- LLM maintaining one instance must understand all instances
+
+✅ **CORRECT — Self-Contained Modules:**
+```
+src/research/
+├── linkedin_keyword/
+│   ├── team.py          # LinkedInKeywordLoop(dspy.Module)
+│   ├── signatures.py    # LinkedInKeywordSearchSignature, LinkedInKeywordAnalysisSignature
+│   └── __init__.py
+├── x_trending/
+│   ├── team.py          # XTrendingLoop(dspy.Module)
+│   ├── signatures.py    # XTrendingSearchSignature, XTrendingAnalysisSignature
+│   └── __init__.py
+```
+
+Each instance is FULLY self-contained:
+- Own directory
+- Own team.py with instance-specific implementation
+- Own signatures.py with platform-specific prompts baked into docstrings
+- Own __init__.py
+- Zero imports from sibling instances
+- Can be understood and modified without reading siblings
+
+**If you find yourself writing factory functions, STOP. Generate separate modules instead.**
+
+**Generation rules:**
+
+1. Each instance gets its own directory with its own `team.py`, `signatures.py`, agent files — the full set
+2. **No shared imports between sibling instances** — each module is fully self-contained
+3. If one instance breaks, fixing it should never risk breaking siblings
+4. Each module must be understandable in isolation without cross-referencing the template or siblings
+
+**Efficient generation approach:**
+
+1. Read the first instance's spec fully and generate its complete module
+2. For subsequent instances, diff against the first: note what changes (actor config, platform name, model parameters) and what stays the same (structure, flow, pattern)
+3. Generate each subsequent instance as a standalone copy with its specific values substituted
+4. Do NOT create a shared base class or parameterized factory — the duplication is intentional for maintainability
+
+**Why duplication over abstraction:** An LLM maintaining `linkedin-keyword` should read one self-contained module, change it, and not risk breaking `x-trending`. Each instance can diverge independently over time without refactoring shared code.
+
+---
+
+## 3-Level Nesting
+
+For systems with 3+ levels of nesting (root pipeline → phase teams → sub-teams), understand the import and orchestration chain:
+
+**Example: 3-level hierarchy**
+
+```
+root pipeline.py                          # Level 1 — imports phase team modules
+├── research_team/team.py                 # Level 2 — imports sub-team modules
+│   ├── linkedin_keyword/team.py          # Level 3 — contains its own agents
+│   ├── x_trending/team.py               # Level 3
+│   ├── analytics_team/team.py           # Level 3
+│   └── ...
+└── ideation_team/team.py                # Level 2 — contains its own agents
+```
+
+**Import chain:** `root.forward() → phase_team.forward() → sub_team.forward() → agent.forward()`
+
+```python
+# Level 1: root pipeline.py
+from src.research_team.team import ResearchPhase
+from src.ideation_team.team import IdeationPipeline
+
+class RootPipeline(dspy.Module):
+    def __init__(self):
+        self.research = ResearchPhase()
+        self.ideation = IdeationPipeline()
+
+    async def aforward(self, **inputs):
+        research_output = await self.research.aforward(**inputs)
+        return await self.ideation.aforward(research=research_output, **inputs)
+```
+
+```python
+# Level 2: research_team/team.py (fan-in-fan-out orchestrating sub-teams)
+from src.research_team.linkedin_keyword.team import LinkedInKeywordLoop
+from src.research_team.x_trending.team import XTrendingLoop
+from src.research_team.analytics_team.team import AnalyticsTeam
+
+class ResearchPhase(dspy.Module):
+    def __init__(self):
+        self.linkedin_keyword = LinkedInKeywordLoop()
+        self.x_trending = XTrendingLoop()
+        self.analytics = AnalyticsTeam()
+        # ... more sub-teams
+
+    async def aforward(self, **inputs):
+        results = await asyncio.gather(
+            self.linkedin_keyword.aforward(**inputs),
+            self.x_trending.aforward(**inputs),
+            self.analytics.aforward(**inputs),
+            return_exceptions=True,
+        )
+        # Synthesize results...
+```
+
+```python
+# Level 3: research_team/linkedin_keyword/team.py (loop with its own agents)
+class LinkedInKeywordLoop(dspy.Module):
+    def __init__(self):
+        self.search = dspy.ReAct(SearchSignature, tools=[apify_search])
+        self.analysis = dspy.Predict(AnalysisSignature)
+
+    async def aforward(self, **inputs):
+        for i in range(max_iterations):
+            search_result = await self.search.aforward(**inputs)
+            analysis = await self.analysis.aforward(data=search_result)
+            if analysis.satisfied:
+                break
+        return analysis
+```
+
+**Mixed-pattern guidance:**
+
+When a parent team orchestrates children that use different patterns (e.g., fan-in-fan-out parent with loop children AND fan-in-fan-out children):
+
+- The parent's `team.py` uses `asyncio.gather()` to run all sub-teams in parallel
+- Each sub-team internally uses its own pattern (loops iterate, fan-out teams parallelize)
+- The parent does NOT need to know the internal pattern of its children — it only calls `sub_team.aforward()` and receives the output
+- Each sub-team is a self-contained `dspy.Module` that hides its internal orchestration
+
+---
+
 ## Team Mode Orchestration
 
 When the execution plan (from manifest.yaml) contains parallel phases with multiple work streams, use Claude Code agent teams to execute chunks in parallel.
@@ -1184,19 +1667,51 @@ Then set dependencies:
 
 ### Step 3: Spawn Teammates from Work Streams
 
-For each unique work stream in the execution plan, spawn a teammate using the Task tool with `team_name` parameter.
+For each unique work stream in the execution plan, use the `agent-impl-teammate-spawn` skill to generate prompt files, then spawn teammates with minimal prompts pointing to those files.
 
-**Critical: The spawn prompt IS the teammate's entire context.** Teammates do NOT inherit the lead's conversation history. Include everything they need:
+```
+Skill tool -> skill: "agent-impl-teammate-spawn"
+```
+
+Follow the skill's step-by-step instructions. It will:
+1. Read manifest.yaml and agent-config.yaml
+2. Generate a prompt file per stream at `{project}/teammate-prompts/{team}/{stream}.md`
+3. Each file includes the exact skills to load, how to load them, tasks, validation checklists
+
+Then spawn each teammate:
 
 ```
 Task tool:
   team_name: [project-name]
   name: [stream-name]
   subagent_type: general-purpose  (or prompt-creator for prompts stream)
-  prompt: [see Teammate Spawn Prompt Template below]
+  prompt: |
+    You are teammate [stream-name] on team [project-name].
+
+    Read your full instructions at:
+      [project-path]/teammate-prompts/[team-name]/[stream-name].md
+
+    Follow ALL steps in order. DO NOT skip Step 1 (Load Required Skills).
+    After loading skills, confirm to team-lead via SendMessage.
 ```
 
-### Step 4: Monitor Phase Execution
+### Step 4: Verify Skill Loading (MANDATORY — DO NOT SKIP)
+
+This is the enforcement mechanism. Without this step, teammates will skip skill loading and produce broken code. This has been proven: in NS-1158, 4/5 teammates skipped skills and produced incorrect implementations.
+
+After spawning all teammates:
+
+1. Wait for the first message from each teammate
+2. The message MUST confirm skill loading with the specific skill names (e.g., "Skills loaded: agent-teams, individual-agents")
+3. If the first message is about anything other than skill loading — the teammate skipped Step 1. Send them back:
+   > "STOP. You must load your required skills before doing any work. Go back to Step 1 in your prompt file. Use the Skill tool to load each skill listed there. Confirm to me when done."
+4. Do NOT assign tasks, do NOT allow work to begin, do NOT respond to implementation questions until skills are confirmed
+5. If a teammate claims a task without confirming skills — revoke it immediately and enforce loading
+
+**Enforcement rule:** If a teammate completes a file without confirming skill loading,
+assume it's wrong and request skill-guided review before accepting the work.
+
+### Step 5: Monitor Phase Execution
 
 - Teammates check TaskList for available (unblocked) tasks in their stream
 - All chunks in a phase execute in parallel across teammates
@@ -1204,7 +1719,7 @@ Task tool:
 - Phase barriers are enforced via `blockedBy` — Phase 2 tasks unblock when all Phase 1 tasks complete
 - The lead monitors progress via TaskList and handles any issues
 
-### Step 5: Handle Inter-Agent Communication
+### Step 6: Handle Inter-Agent Communication
 
 The `communication` section of the execution plan defines what needs to be shared:
 
@@ -1212,53 +1727,22 @@ The `communication` section of the execution plan defines what needs to be share
 - Example: tools stream sends function signatures to scaffold stream after Phase 1
 - The lead can relay information between teammates if direct messaging isn't sufficient
 
-### Step 6: Finalization
+### Step 7: Finalization
 
 After all phases complete:
 1. Lead validates all files exist and are internally consistent
 2. Run tests if defined in acceptance criteria
 3. Shutdown teammates via `SendMessage(shutdown_request)`
 4. Clean up team via `TeamDelete`
+5. Clean up teammate prompt files:
+   ```bash
+   rm -rf {project-path}/teammate-prompts/{team-name}/
+   rmdir {project-path}/teammate-prompts/ 2>/dev/null
+   ```
 
-### Teammate Spawn Prompt Template
+### Teammate Spawn Prompt Generation
 
-When spawning a teammate, provide this context:
-
-```
-"You are a teammate working on [project-name].
-
-YOUR WORK STREAM: [stream-name]
-YOUR RESPONSIBILITY: [stream responsibility from execution plan]
-YOUR FILES: You own and may edit these files ONLY:
-  [file list from stream.owns]
-DO NOT edit files outside your ownership — message the owning stream instead.
-
-SKILLS TO LOAD: Before starting work, use the Skill tool to load:
-  [list from stream.skills, e.g.:]
-  - skill: "agent-teams"
-  - skill: "individual-agents"
-
-SPEC LOCATION: [path to spec/ directory]
-FRAMEWORK: [langgraph or dspy]
-FRAMEWORK CHEATSHEET: [path to frameworks/[framework]/CHEATSHEET.md]
-  READ THIS BEFORE WRITING ANY CODE.
-
-WORKFLOW:
-1. Load your required skills (above)
-2. Read the framework cheatsheet
-3. Check TaskList for available (unblocked) tasks in your stream
-4. Claim a task with TaskUpdate (set status to in_progress)
-5. Read the relevant spec files for context
-6. Implement the chunk
-7. Mark task completed with TaskUpdate
-8. Check TaskList for next available task
-9. If a task requires info from another stream, use SendMessage to request it
-
-COMMUNICATION:
-  [Include relevant communication patterns from execution plan, e.g.:]
-  - After completing Phase 1 tools: Send function signatures to 'scaffold' stream
-  - After completing Phase 2 agents: Send state schema to 'prompts' stream"
-```
+Teammate prompts are generated by the `agent-impl-teammate-spawn` skill (see Step 3 above). The skill produces structured prompt files from manifest.yaml data. Do NOT write teammate prompts inline — always use the skill to generate them as files.
 
 ---
 

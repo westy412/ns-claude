@@ -224,6 +224,11 @@ if [ -n "$git_branch" ]; then
   printf '  🌿 %s%s%s' "$(git_color)" "$git_branch" "$(rst)"
 fi
 
+# Model name
+if [ -n "$model_name" ]; then
+  printf '  🤖 %s%s%s' "$(model_color)" "$model_name" "$(rst)"
+fi
+
 # State indicator (prominent, at end of line 1)
 if [ -n "$state_indicator" ]; then
   printf "    $state_indicator"

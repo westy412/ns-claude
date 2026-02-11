@@ -1,0 +1,37 @@
+{
+  "session_id": "ec897c05-746c-40aa-ba12-e7b73bf3ff55",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-03T16:33:02.569Z",
+  "duration_minutes": 3,
+  "user_message_count": 1,
+  "assistant_message_count": 14,
+  "tool_counts": {
+    "Edit": 1,
+    "Bash": 5
+  },
+  "languages": {
+    "TypeScript": 1
+  },
+  "git_commits": 1,
+  "git_pushes": 0,
+  "input_tokens": 22,
+  "output_tokens": 85,
+  "first_prompt": "No prompt",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 4,
+  "lines_removed": 1,
+  "files_modified": 1,
+  "message_hours": [
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T16:33:02.570Z"
+  ]
+}

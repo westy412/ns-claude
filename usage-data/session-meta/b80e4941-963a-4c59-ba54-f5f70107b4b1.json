@@ -1,0 +1,42 @@
+{
+  "session_id": "b80e4941-963a-4c59-ba54-f5f70107b4b1",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-09T15:23:15.561Z",
+  "duration_minutes": 15,
+  "user_message_count": 2,
+  "assistant_message_count": 24,
+  "tool_counts": {
+    "TaskList": 1,
+    "TaskUpdate": 2,
+    "Bash": 3,
+    "Grep": 8,
+    "SendMessage": 2
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 30,
+  "output_tokens": 346,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You're analyzing DSPy skill file availability.  TASK #2: Inventory actual DSPy skill files  Check TaskList, claim task #2, then:  1. Check agent-teams skill…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    381.852
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T15:23:15.561Z",
+    "2026-02-09T15:38:41.007Z"
+  ]
+}

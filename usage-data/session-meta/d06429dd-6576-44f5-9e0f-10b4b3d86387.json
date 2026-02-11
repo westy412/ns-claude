@@ -1,0 +1,44 @@
+{
+  "session_id": "d06429dd-6576-44f5-9e0f-10b4b3d86387",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-04T16:01:38.152Z",
+  "duration_minutes": 0,
+  "user_message_count": 2,
+  "assistant_message_count": 7,
+  "tool_counts": {
+    "Read": 2,
+    "Glob": 1,
+    "Bash": 1
+  },
+  "languages": {
+    "Python": 2
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 66,
+  "output_tokens": 756,
+  "first_prompt": "INFO:     127.0.0.1:63326 - \"GET /api/users/me HTTP/1.1\" 500 Internal Server Error ERROR:    Exception in ASGI application Traceback (most recent call last):   File \"/Users/georgewestbrook/Programming…",
+  "user_interruptions": 1,
+  "user_response_times": [],
+  "tool_errors": 4,
+  "tool_error_categories": {
+    "File Not Found": 1,
+    "Other": 2,
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    16,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-04T16:01:38.152Z",
+    "2026-02-04T16:01:58.435Z"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "session_id": "83ba5201-cd6e-4f89-b3e7-3ce095342af3",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-02-01T11:54:27.334Z",
+  "duration_minutes": 1,
+  "user_message_count": 2,
+  "assistant_message_count": 30,
+  "tool_counts": {
+    "Skill": 1,
+    "Bash": 12
+  },
+  "languages": {},
+  "git_commits": 2,
+  "git_pushes": 0,
+  "input_tokens": 254,
+  "output_tokens": 75,
+  "first_prompt": "No prompt",
+  "summary": "Image generation bugs: duplicate jobs and RLS visibility",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    11,
+    11
+  ],
+  "user_message_timestamps": [
+    "2026-02-01T11:54:27.334Z",
+    "2026-02-01T11:54:30.617Z"
+  ]
+}

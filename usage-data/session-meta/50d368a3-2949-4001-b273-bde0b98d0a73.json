@@ -1,0 +1,78 @@
+{
+  "session_id": "50d368a3-2949-4001-b273-bde0b98d0a73",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-30T00:10:51.475Z",
+  "duration_minutes": 705,
+  "user_message_count": 10,
+  "assistant_message_count": 141,
+  "tool_counts": {
+    "Task": 5,
+    "Read": 9,
+    "Grep": 5,
+    "Edit": 4,
+    "WebFetch": 6,
+    "WebSearch": 2,
+    "mcp__plugin_perplexity_perplexity__perplexity_search": 2,
+    "mcp__plugin_perplexity_perplexity__perplexity_ask": 2,
+    "Bash": 16,
+    "Write": 1
+  },
+  "languages": {
+    "TypeScript": 3,
+    "Python": 11
+  },
+  "git_commits": 2,
+  "git_pushes": 3,
+  "input_tokens": 1047,
+  "output_tokens": 313,
+  "first_prompt": "A quick bug I've encountered on the front end is a user shouldn't be able to approve a carousel if they haven't generated the PDF.",
+  "summary": "Fix Carousel PDF Publishing & Hook Guidelines",
+  "user_interruptions": 1,
+  "user_response_times": [
+    155.806,
+    430.867,
+    266.419,
+    1950.942,
+    20.608,
+    22.497,
+    25.882,
+    586.992,
+    241.205
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Other": 1,
+    "User Rejected": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": true,
+  "uses_web_search": true,
+  "uses_web_fetch": true,
+  "lines_added": 203,
+  "lines_removed": 9,
+  "files_modified": 5,
+  "message_hours": [
+    0,
+    0,
+    0,
+    0,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "user_message_timestamps": [
+    "2026-01-30T00:10:51.475Z",
+    "2026-01-30T00:15:38.628Z",
+    "2026-01-30T00:26:17.423Z",
+    "2026-01-30T00:33:37.781Z",
+    "2026-01-30T11:24:49.679Z",
+    "2026-01-30T11:29:09.626Z",
+    "2026-01-30T11:29:11.515Z",
+    "2026-01-30T11:30:23.468Z",
+    "2026-01-30T11:41:19.929Z",
+    "2026-01-30T11:46:43.101Z"
+  ]
+}

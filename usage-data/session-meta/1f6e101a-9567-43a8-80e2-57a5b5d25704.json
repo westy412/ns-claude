@@ -1,0 +1,55 @@
+{
+  "session_id": "1f6e101a-9567-43a8-80e2-57a5b5d25704",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-01-29T23:22:12.301Z",
+  "duration_minutes": 10,
+  "user_message_count": 6,
+  "assistant_message_count": 39,
+  "tool_counts": {
+    "Read": 11,
+    "Bash": 4,
+    "Glob": 1,
+    "Write": 1
+  },
+  "languages": {
+    "Markdown": 12
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 264,
+  "output_tokens": 95,
+  "first_prompt": "Can you have a look and compare the differences because we should Use the new version when it comes to git commits and work hierarchy.",
+  "summary": "Setup project with updated Ways of Working",
+  "user_interruptions": 1,
+  "user_response_times": [
+    95.027,
+    2.905,
+    11.504,
+    135.907
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 682,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    23,
+    23,
+    23,
+    23,
+    23,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-01-29T23:22:12.301Z",
+    "2026-01-29T23:22:12.301Z",
+    "2026-01-29T23:24:34.027Z",
+    "2026-01-29T23:24:46.486Z",
+    "2026-01-29T23:24:55.085Z",
+    "2026-01-29T23:28:44.705Z"
+  ]
+}

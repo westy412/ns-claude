@@ -1,0 +1,41 @@
+{
+  "session_id": "c1a5414d-9d10-403f-9ae2-835c97bca133",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-10T10:50:46.128Z",
+  "duration_minutes": 2,
+  "user_message_count": 1,
+  "assistant_message_count": 36,
+  "tool_counts": {
+    "Read": 22,
+    "Bash": 2,
+    "TaskUpdate": 1,
+    "SendMessage": 1,
+    "TaskList": 1
+  },
+  "languages": {
+    "Markdown": 1,
+    "Python": 20
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 42,
+  "output_tokens": 860,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are analyzing the current state of the ns-content-workforce-idea-agents project.  Your task: Examine the current codebase structure and implementation (T…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    10
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T10:50:46.128Z"
+  ]
+}

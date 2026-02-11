@@ -91,6 +91,28 @@ another-package>=2.0.0  # For [tool-name]
 |---------|--------------|-------|
 | [Service name] | [which tool/agent] | [setup instructions or link] |
 
+## Signatures
+
+Each team/sub-team folder gets its own signatures file (e.g., `signatures.py` for DSPy).
+Do NOT share signature files between sibling teams. Agent specs in this team reference
+this team's signatures only — not a parent or shared location.
+
+Even if multiple sibling teams start with identical signatures (e.g., template instances),
+each gets its own copy for independent evolution and LLM maintainability.
+
 ## Notes
 
 Any additional context, constraints, or considerations.
+
+<!-- =============================================================================
+TEMPLATE-TO-INSTANCES GUIDANCE
+If this team.md describes a TEMPLATE (generic pattern used by multiple instances):
+- Mark it clearly as "TEMPLATE — not instantiated directly"
+- Each instance MUST have its own fully explicit team.md with:
+  - All details inlined (not "see template" references)
+  - Platform/config-specific values filled in
+  - Its own agent-config.yaml with concrete values
+  - Its own agent spec files (not shared with template or siblings)
+- The impl-builder should be able to implement any instance by reading ONLY
+  that instance's folder — no cross-referencing the template required.
+============================================================================= -->

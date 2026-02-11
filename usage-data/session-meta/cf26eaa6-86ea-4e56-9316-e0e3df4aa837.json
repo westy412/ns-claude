@@ -1,0 +1,73 @@
+{
+  "session_id": "cf26eaa6-86ea-4e56-9316-e0e3df4aa837",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T16:12:29.855Z",
+  "duration_minutes": 16,
+  "user_message_count": 9,
+  "assistant_message_count": 50,
+  "tool_counts": {
+    "Task": 2,
+    "Read": 5,
+    "Write": 1,
+    "AskUserQuestion": 2,
+    "ExitPlanMode": 1,
+    "mcp__linear__create_issue": 2,
+    "mcp__linear__update_issue": 2,
+    "Edit": 3,
+    "Bash": 6,
+    "mcp__linear__create_comment": 1
+  },
+  "languages": {
+    "TypeScript": 8,
+    "Markdown": 1
+  },
+  "git_commits": 1,
+  "git_pushes": 1,
+  "input_tokens": 74,
+  "output_tokens": 327,
+  "first_prompt": "So we have a bug slash improvement for the post details page. So if a user is on a post and they click to go to another tab, so let's say they're on the content tab. refresh the page it takes them to…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    34.338,
+    47.972,
+    47.972,
+    47.972,
+    50.737,
+    118.731,
+    50.247,
+    53.251
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 92,
+  "lines_removed": 8,
+  "files_modified": 2,
+  "message_hours": [
+    16,
+    16,
+    16,
+    16,
+    16,
+    16,
+    16,
+    16,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T16:12:29.855Z",
+    "2026-02-03T16:21:51.823Z",
+    "2026-02-03T16:22:05.457Z",
+    "2026-02-03T16:22:05.457Z",
+    "2026-02-03T16:22:05.457Z",
+    "2026-02-03T16:22:08.222Z",
+    "2026-02-03T16:24:47.740Z",
+    "2026-02-03T16:26:12.034Z",
+    "2026-02-03T16:27:08.517Z"
+  ]
+}

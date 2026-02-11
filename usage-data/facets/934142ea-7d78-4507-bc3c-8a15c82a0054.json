@@ -1,0 +1,18 @@
+{
+  "underlying_goal": "Continue a previous session to update a spec with a reactive token refresh feature and then perform a proper handover procedure",
+  "goal_categories": {
+    "spec_update": 1,
+    "handover_procedure": 1
+  },
+  "outcome": "fully_achieved",
+  "user_satisfaction_counts": {
+    "likely_satisfied": 1
+  },
+  "claude_helpfulness": "very_helpful",
+  "session_type": "multi_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "correct_code_edits",
+  "brief_summary": "User asked Claude to continue a previous session by updating a spec with reactive token refresh and then perform a handover procedure, both of which were completed successfully.",
+  "session_id": "934142ea-7d78-4507-bc3c-8a15c82a0054"
+}

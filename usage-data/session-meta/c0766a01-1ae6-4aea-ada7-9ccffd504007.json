@@ -1,0 +1,46 @@
+{
+  "session_id": "c0766a01-1ae6-4aea-ada7-9ccffd504007",
+  "project_path": "/Users/georgewestbrook",
+  "start_time": "2026-02-02T12:31:22.615Z",
+  "duration_minutes": 1,
+  "user_message_count": 3,
+  "assistant_message_count": 8,
+  "tool_counts": {
+    "Bash": 1,
+    "Read": 1,
+    "Edit": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 64,
+  "output_tokens": 34,
+  "first_prompt": "Just a fucking random one, stop being an idiot",
+  "summary": "Shell Configuration and Non-Breaking File Changes",
+  "user_interruptions": 1,
+  "user_response_times": [
+    33.556,
+    24.776
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T12:31:34.895Z",
+    "2026-02-02T12:32:20.933Z",
+    "2026-02-02T12:32:50.927Z"
+  ]
+}

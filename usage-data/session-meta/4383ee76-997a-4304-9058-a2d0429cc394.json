@@ -1,0 +1,56 @@
+{
+  "session_id": "4383ee76-997a-4304-9058-a2d0429cc394",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-08T14:19:26.191Z",
+  "duration_minutes": 20,
+  "user_message_count": 4,
+  "assistant_message_count": 62,
+  "tool_counts": {
+    "Glob": 1,
+    "Read": 8,
+    "Write": 3,
+    "Bash": 4,
+    "Edit": 10,
+    "TaskUpdate": 1,
+    "SendMessage": 4,
+    "TaskList": 2
+  },
+  "languages": {
+    "Python": 20,
+    "JSON": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 533,
+  "output_tokens": 1464,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\" summary=\"Fix OutputFields: use Pydantic models not JSON strings\"> CRITICAL CORRECTION: You MUST use Pydantic BaseModel types for structured OutputFields, NOT…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.574,
+    12.956
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 1,
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1315,
+  "lines_removed": 22,
+  "files_modified": 2,
+  "message_hours": [
+    14,
+    14,
+    14,
+    14
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T14:19:26.191Z",
+    "2026-02-08T14:33:17.350Z",
+    "2026-02-08T14:39:17.644Z",
+    "2026-02-08T14:39:52.222Z"
+  ]
+}

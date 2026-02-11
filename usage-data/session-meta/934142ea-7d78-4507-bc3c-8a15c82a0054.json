@@ -1,0 +1,45 @@
+{
+  "session_id": "934142ea-7d78-4507-bc3c-8a15c82a0054",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-api",
+  "start_time": "2026-02-02T16:34:32.605Z",
+  "duration_minutes": 2,
+  "user_message_count": 2,
+  "assistant_message_count": 29,
+  "tool_counts": {
+    "Read": 1,
+    "Edit": 2,
+    "Skill": 1,
+    "Bash": 7
+  },
+  "languages": {
+    "Markdown": 3
+  },
+  "git_commits": 1,
+  "git_pushes": 0,
+  "input_tokens": 229,
+  "output_tokens": 38,
+  "first_prompt": "No prompt",
+  "summary": "Twitter OAuth reactive token refresh implementation",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Command Failed": 1,
+    "Other": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 60,
+  "lines_removed": 1,
+  "files_modified": 1,
+  "message_hours": [
+    16,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-02T16:34:32.606Z",
+    "2026-02-02T16:35:15.365Z"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "session_id": "9cd2a14b-513c-4764-a87b-c81a3156b4af",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T18:43:01.356Z",
+  "duration_minutes": 89,
+  "user_message_count": 12,
+  "assistant_message_count": 76,
+  "tool_counts": {
+    "Read": 13,
+    "Glob": 7,
+    "Bash": 2,
+    "Skill": 1,
+    "TeamCreate": 2,
+    "TaskCreate": 4,
+    "Task": 4,
+    "TaskUpdate": 4,
+    "TaskList": 2,
+    "SendMessage": 4,
+    "TeamDelete": 1,
+    "Write": 1
+  },
+  "languages": {
+    "YAML": 2,
+    "Markdown": 12
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 137,
+  "output_tokens": 3875,
+  "first_prompt": "Session Handover    Context    - Spec: No coordination repo spec — work driven by agent-spec-builder skill   - Linear Issue: None   - Branch: N/A (spec repo, no git)    What Was Done    Wave 1 (previo…",
+  "user_interruptions": 1,
+  "user_response_times": [
+    197.774,
+    2.03,
+    105.216,
+    2.038,
+    126.483,
+    7.38,
+    44.179
+  ],
+  "tool_errors": 9,
+  "tool_error_categories": {
+    "File Not Found": 3,
+    "Other": 6
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 119,
+  "lines_removed": 0,
+  "files_modified": 1,
+  "message_hours": [
+    18,
+    18,
+    18,
+    18,
+    18,
+    18,
+    18,
+    18,
+    19,
+    20,
+    20,
+    20
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T18:43:01.356Z",
+    "2026-02-07T18:43:21.011Z",
+    "2026-02-07T18:48:57.573Z",
+    "2026-02-07T18:49:08.992Z",
+    "2026-02-07T18:51:00.784Z",
+    "2026-02-07T18:51:10.417Z",
+    "2026-02-07T18:51:19.635Z",
+    "2026-02-07T18:53:29.059Z",
+    "2026-02-07T19:02:16.510Z",
+    "2026-02-07T20:09:43.033Z",
+    "2026-02-07T20:10:49.692Z",
+    "2026-02-07T20:11:26.491Z"
+  ]
+}

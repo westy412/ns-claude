@@ -1,0 +1,69 @@
+{
+  "session_id": "14f6534c-6c1d-4f9e-a296-a172cef24ff4",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T22:21:31.654Z",
+  "duration_minutes": 30,
+  "user_message_count": 7,
+  "assistant_message_count": 157,
+  "tool_counts": {
+    "Read": 14,
+    "Task": 3,
+    "EnterPlanMode": 1,
+    "Glob": 4,
+    "Write": 8,
+    "AskUserQuestion": 1,
+    "ExitPlanMode": 1,
+    "TaskCreate": 5,
+    "TaskUpdate": 9,
+    "Grep": 13,
+    "Skill": 2,
+    "Edit": 5,
+    "Bash": 18
+  },
+  "languages": {
+    "Markdown": 3,
+    "TypeScript": 24
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 205,
+  "output_tokens": 7882,
+  "first_prompt": "Please look in spec 11 image generation in the specs directory. Basically, the image generation is working, however, now what we need to do is work on the reference image implementation. In short, the…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    412.974,
+    46.081,
+    52.23,
+    291.243
+  ],
+  "tool_errors": 3,
+  "tool_error_categories": {
+    "Other": 2,
+    "Command Failed": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 1302,
+  "lines_removed": 5,
+  "files_modified": 9,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T22:21:31.654Z",
+    "2026-02-03T22:33:01.680Z",
+    "2026-02-03T22:37:38.026Z",
+    "2026-02-03T22:43:02.126Z",
+    "2026-02-03T22:45:43.959Z",
+    "2026-02-03T22:50:46.417Z",
+    "2026-02-03T22:50:50.899Z"
+  ]
+}

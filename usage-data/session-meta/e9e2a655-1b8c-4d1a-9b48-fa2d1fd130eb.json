@@ -1,0 +1,54 @@
+{
+  "session_id": "e9e2a655-1b8c-4d1a-9b48-fa2d1fd130eb",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-09T11:37:48.269Z",
+  "duration_minutes": 3,
+  "user_message_count": 4,
+  "assistant_message_count": 60,
+  "tool_counts": {
+    "TaskList": 1,
+    "TaskUpdate": 12,
+    "Read": 13,
+    "Glob": 3,
+    "Grep": 5,
+    "Edit": 5,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Markdown": 15,
+    "YAML": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 70,
+  "output_tokens": 408,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are fixing all 6 spec issues in the idea-agents spec.  SPEC LOCATION: /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workf…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    2.295,
+    12.076
+  ],
+  "tool_errors": 1,
+  "tool_error_categories": {
+    "File Changed": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 19,
+  "lines_removed": 2,
+  "files_modified": 4,
+  "message_hours": [
+    11,
+    11,
+    11,
+    11
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T11:37:48.269Z",
+    "2026-02-09T11:40:03.614Z",
+    "2026-02-09T11:40:10.089Z",
+    "2026-02-09T11:40:24.505Z"
+  ]
+}

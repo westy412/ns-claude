@@ -1,0 +1,33 @@
+{
+  "session_id": "e8e6e168-28a9-4271-9efd-7ff6b3d7331d",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-agents",
+  "start_time": "2026-02-03T15:51:27.747Z",
+  "duration_minutes": 0,
+  "user_message_count": 1,
+  "assistant_message_count": 1,
+  "tool_counts": {},
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 3,
+  "output_tokens": 2,
+  "first_prompt": "No prompt",
+  "summary": "DSPy Proactive Idea Generation Agent Spec Design",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T15:51:27.747Z"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "session_id": "6e22bd62-26f2-476e-912e-24f0a10aea12",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-09T20:28:23.705Z",
+  "duration_minutes": 81,
+  "user_message_count": 2,
+  "assistant_message_count": 23,
+  "tool_counts": {
+    "TaskList": 2,
+    "TaskUpdate": 2,
+    "Read": 8,
+    "Glob": 1,
+    "Grep": 1,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Python": 7,
+    "Markdown": 1
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 29,
+  "output_tokens": 449,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> Analyze ReAct agent configuration for potential infinite loops or hanging.  Check TaskList, claim task #1.  Read: 1. /Users/georgewestbrook/Programming/novos…",
+  "user_interruptions": 0,
+  "user_response_times": [],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    20,
+    21
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T20:28:23.705Z",
+    "2026-02-09T21:49:01.952Z"
+  ]
+}

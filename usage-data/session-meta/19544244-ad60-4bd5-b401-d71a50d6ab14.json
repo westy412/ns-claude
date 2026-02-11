@@ -1,0 +1,76 @@
+{
+  "session_id": "19544244-ad60-4bd5-b401-d71a50d6ab14",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-app",
+  "start_time": "2026-01-31T13:12:59.942Z",
+  "duration_minutes": 22,
+  "user_message_count": 11,
+  "assistant_message_count": 49,
+  "tool_counts": {
+    "Read": 3,
+    "Edit": 5,
+    "Bash": 6,
+    "mcp__linear__create_comment": 1,
+    "mcp__linear__update_issue": 3
+  },
+  "languages": {
+    "TypeScript": 5,
+    "Markdown": 3
+  },
+  "git_commits": 2,
+  "git_pushes": 0,
+  "input_tokens": 402,
+  "output_tokens": 74,
+  "first_prompt": "[Request interrupted by user for tool use]",
+  "summary": "Frontend Phase 1 Image Generation Complete",
+  "user_interruptions": 1,
+  "user_response_times": [
+    197.675,
+    197.675,
+    906.422,
+    917.078,
+    917.078,
+    917.078,
+    928.359,
+    928.359,
+    928.359,
+    931.594
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "Command Failed": 1,
+    "User Rejected": 1
+  },
+  "uses_task_agent": false,
+  "uses_mcp": true,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 68,
+  "lines_removed": 71,
+  "files_modified": 2,
+  "message_hours": [
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "user_message_timestamps": [
+    "2026-01-31T13:12:59.942Z",
+    "2026-01-31T13:18:39.050Z",
+    "2026-01-31T13:18:39.050Z",
+    "2026-01-31T13:34:22.040Z",
+    "2026-01-31T13:34:32.696Z",
+    "2026-01-31T13:34:32.696Z",
+    "2026-01-31T13:34:32.696Z",
+    "2026-01-31T13:34:43.977Z",
+    "2026-01-31T13:34:43.977Z",
+    "2026-01-31T13:34:43.977Z",
+    "2026-01-31T13:34:47.212Z"
+  ]
+}

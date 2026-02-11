@@ -1,0 +1,47 @@
+{
+  "session_id": "064609ea-45d7-4ad5-bfb9-09d9862fc204",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-08T22:47:20.446Z",
+  "duration_minutes": 14,
+  "user_message_count": 2,
+  "assistant_message_count": 21,
+  "tool_counts": {
+    "TaskList": 2,
+    "TaskUpdate": 2,
+    "Glob": 1,
+    "Bash": 1,
+    "Read": 1,
+    "Edit": 3,
+    "Grep": 1,
+    "SendMessage": 2
+  },
+  "languages": {
+    "Markdown": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 31,
+  "output_tokens": 553,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are updating the agent-spec-builder skill based on spec-builder-auditor findings.  YOUR TASK (Task #10): Apply 5 validation improvements to agent-spec-bu…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    347.062
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 70,
+  "lines_removed": 8,
+  "files_modified": 1,
+  "message_hours": [
+    22,
+    23
+  ],
+  "user_message_timestamps": [
+    "2026-02-08T22:47:20.446Z",
+    "2026-02-08T23:01:02.442Z"
+  ]
+}

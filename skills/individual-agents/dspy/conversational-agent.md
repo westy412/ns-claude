@@ -15,7 +15,7 @@ An agent that maintains conversation context across multiple turns using `dspy.H
 ## When to Avoid
 
 - Single-turn tasks — use **Basic Agent** (Predict) instead
-- Tasks requiring external tools — use **Tool Agent** (ReAct) instead
+- Tasks requiring external tools — use **Tool Agent** (ChainOfThought + ToolCalls for single-tool, ReAct for multi-tool) instead
 - No conversation context needed — use **Basic Agent** instead
 - History would grow too large — consider summarization or windowing
 
@@ -36,6 +36,8 @@ An agent that maintains conversation context across multiple turns using `dspy.H
 **Outputs:**
 - Output fields defined in the Signature
 - History object should be updated after each call
+
+> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
 
 ## Prompting Guidelines
 
@@ -137,6 +139,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "openai/gpt-4o-mini"),
             api_key=os.getenv("OPENAI_API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,
         )
     return _shared_lm
 
@@ -322,6 +325,7 @@ def get_shared_lm():
             os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash"),
             api_key=os.getenv("GOOGLE_API_KEY"),
             max_parallel_requests=2000,
+            timeout=120,
         )
     return _shared_lm
 

@@ -1,0 +1,54 @@
+{
+  "session_id": "4ca24432-02cc-424b-bfd9-edc73136c775",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-07T15:26:29.528Z",
+  "duration_minutes": 4,
+  "user_message_count": 4,
+  "assistant_message_count": 39,
+  "tool_counts": {
+    "Read": 8,
+    "Bash": 2,
+    "Task": 1,
+    "TaskOutput": 1,
+    "WebFetch": 8,
+    "WebSearch": 3
+  },
+  "languages": {
+    "Markdown": 5,
+    "YAML": 3
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 2407,
+  "output_tokens": 305,
+  "first_prompt": "Session Handover    Context    - Spec: ns-content-workforce-idea-agents/spec/ (Phases 1-5 complete, but with a gap)   - Discovery Doc: specs/discovery/research-and-ideation-architecture.md   - Linear…",
+  "user_interruptions": 2,
+  "user_response_times": [
+    4.417,
+    4.433,
+    3.533
+  ],
+  "tool_errors": 2,
+  "tool_error_categories": {
+    "User Rejected": 2
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": true,
+  "uses_web_fetch": true,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    15,
+    15,
+    15,
+    15
+  ],
+  "user_message_timestamps": [
+    "2026-02-07T15:26:29.528Z",
+    "2026-02-07T15:30:36.938Z",
+    "2026-02-07T15:30:36.954Z",
+    "2026-02-07T15:30:50.272Z"
+  ]
+}

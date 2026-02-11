@@ -1,0 +1,15 @@
+{
+  "underlying_goal": "Get a comprehensive analysis of the ns-content-workforce project by spawning multiple parallel agent tasks",
+  "goal_categories": {
+    "project_analysis": 1
+  },
+  "outcome": "unclear_from_transcript",
+  "user_satisfaction_counts": {},
+  "claude_helpfulness": "very_helpful",
+  "session_type": "single_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "proactive_help",
+  "brief_summary": "User asked to spawn an agent team to analyze the project; Claude created a 5-agent parallel analysis team, but the session ended before results were delivered.",
+  "session_id": "d4525321-0e17-41ed-a847-b85aba2a04ca"
+}

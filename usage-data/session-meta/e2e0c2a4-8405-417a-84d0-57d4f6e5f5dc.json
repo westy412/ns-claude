@@ -1,0 +1,63 @@
+{
+  "session_id": "e2e0c2a4-8405-417a-84d0-57d4f6e5f5dc",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-03T22:22:30.072Z",
+  "duration_minutes": 22,
+  "user_message_count": 7,
+  "assistant_message_count": 40,
+  "tool_counts": {
+    "Read": 15,
+    "Skill": 1,
+    "Task": 2,
+    "Bash": 1,
+    "Glob": 5
+  },
+  "languages": {
+    "Markdown": 11,
+    "YAML": 4
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 143617,
+  "output_tokens": 350,
+  "first_prompt": "Session Handover                                                                                                                                                                      Context…",
+  "user_interruptions": 3,
+  "user_response_times": [
+    12.138,
+    20.696,
+    23.953,
+    30.727,
+    716.238
+  ],
+  "tool_errors": 4,
+  "tool_error_categories": {
+    "User Rejected": 2,
+    "File Not Found": 1,
+    "Other": 1
+  },
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22
+  ],
+  "user_message_timestamps": [
+    "2026-02-03T22:22:30.072Z",
+    "2026-02-03T22:22:47.167Z",
+    "2026-02-03T22:23:20.713Z",
+    "2026-02-03T22:23:29.271Z",
+    "2026-02-03T22:23:32.528Z",
+    "2026-02-03T22:23:39.302Z",
+    "2026-02-03T22:44:08.465Z"
+  ]
+}

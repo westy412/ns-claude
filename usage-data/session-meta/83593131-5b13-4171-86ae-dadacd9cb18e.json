@@ -1,0 +1,49 @@
+{
+  "session_id": "83593131-5b13-4171-86ae-dadacd9cb18e",
+  "project_path": "/Users/georgewestbrook",
+  "start_time": "2026-02-04T12:31:08.211Z",
+  "duration_minutes": 6,
+  "user_message_count": 6,
+  "assistant_message_count": 11,
+  "tool_counts": {
+    "Bash": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 99,
+  "output_tokens": 1985,
+  "first_prompt": "plz save to donwloads",
+  "user_interruptions": 0,
+  "user_response_times": [
+    13.31,
+    108.573,
+    74.861,
+    67.335
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "user_message_timestamps": [
+    "2026-02-04T12:31:08.211Z",
+    "2026-02-04T12:31:08.211Z",
+    "2026-02-04T12:31:24.138Z",
+    "2026-02-04T12:33:45.088Z",
+    "2026-02-04T12:35:09.926Z",
+    "2026-02-04T12:36:51.654Z"
+  ]
+}

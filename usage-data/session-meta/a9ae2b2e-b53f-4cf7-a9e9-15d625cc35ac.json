@@ -1,0 +1,64 @@
+{
+  "session_id": "a9ae2b2e-b53f-4cf7-a9e9-15d625cc35ac",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+  "start_time": "2026-02-10T16:07:55.615Z",
+  "duration_minutes": 24,
+  "user_message_count": 8,
+  "assistant_message_count": 82,
+  "tool_counts": {
+    "Read": 15,
+    "Skill": 3,
+    "SendMessage": 5,
+    "Glob": 7,
+    "TaskUpdate": 2,
+    "Write": 16,
+    "Bash": 4
+  },
+  "languages": {
+    "Markdown": 24,
+    "YAML": 7
+  },
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 141,
+  "output_tokens": 1154,
+  "first_prompt": "<teammate-message teammate_id=\"team-lead\"> You are teammate pattern1-updater on team arch-updaters.  Read your full instructions at:   /Users/georgewestbrook/Programming/novosapien/ns-content-workforc…",
+  "user_interruptions": 0,
+  "user_response_times": [
+    15.281,
+    201.78,
+    474.154,
+    474.153,
+    474.153,
+    476.827
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": false,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 2685,
+  "lines_removed": 0,
+  "files_modified": 16,
+  "message_hours": [
+    16,
+    16,
+    16,
+    16,
+    16,
+    16,
+    16,
+    16
+  ],
+  "user_message_timestamps": [
+    "2026-02-10T16:07:55.615Z",
+    "2026-02-10T16:08:19.679Z",
+    "2026-02-10T16:20:59.455Z",
+    "2026-02-10T16:24:21.247Z",
+    "2026-02-10T16:32:15.509Z",
+    "2026-02-10T16:32:15.508Z",
+    "2026-02-10T16:32:15.508Z",
+    "2026-02-10T16:32:18.182Z"
+  ]
+}

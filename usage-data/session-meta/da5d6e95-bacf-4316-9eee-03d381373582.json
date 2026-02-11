@@ -1,0 +1,40 @@
+{
+  "session_id": "da5d6e95-bacf-4316-9eee-03d381373582",
+  "project_path": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce",
+  "start_time": "2026-02-09T20:13:12.887Z",
+  "duration_minutes": 10,
+  "user_message_count": 3,
+  "assistant_message_count": 10,
+  "tool_counts": {
+    "Task": 1
+  },
+  "languages": {},
+  "git_commits": 0,
+  "git_pushes": 0,
+  "input_tokens": 28,
+  "output_tokens": 85,
+  "first_prompt": "Can you please guide me through how we would set up Sentry for these repositories? What is the typical process? How would we integrate, etc. etc.",
+  "user_interruptions": 0,
+  "user_response_times": [
+    241.538
+  ],
+  "tool_errors": 0,
+  "tool_error_categories": {},
+  "uses_task_agent": true,
+  "uses_mcp": false,
+  "uses_web_search": false,
+  "uses_web_fetch": false,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "files_modified": 0,
+  "message_hours": [
+    20,
+    20,
+    20
+  ],
+  "user_message_timestamps": [
+    "2026-02-09T20:13:12.887Z",
+    "2026-02-09T20:13:44.372Z",
+    "2026-02-09T20:22:39.764Z"
+  ]
+}

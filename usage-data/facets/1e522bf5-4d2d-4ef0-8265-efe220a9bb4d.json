@@ -1,0 +1,17 @@
+{
+  "underlying_goal": "User wanted help with terminal setup issues: installing starship prompt and configuring tabs in Ghostty terminal",
+  "goal_categories": {
+    "terminal_setup": 2
+  },
+  "outcome": "partially_achieved",
+  "user_satisfaction_counts": {
+    "satisfied": 1
+  },
+  "claude_helpfulness": "moderately_helpful",
+  "session_type": "multi_task",
+  "friction_counts": {},
+  "friction_detail": "",
+  "primary_success": "good_explanations",
+  "brief_summary": "User needed help fixing a missing starship installation and configuring Ghostty terminal tabs; starship was resolved but the Ghostty question appears unanswered in the transcript.",
+  "session_id": "1e522bf5-4d2d-4ef0-8265-efe220a9bb4d"
+}
