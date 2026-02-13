@@ -245,7 +245,7 @@ Structured output is defined entirely through `OutputField` types and Pydantic m
 from pydantic import BaseModel, RootModel
 
 class ContactInfo(BaseModel):
-    name: str
+    name: str      # Required — no defaults. If LLM can't produce it, retry.
     email: str
     role: str
 
@@ -302,7 +302,7 @@ If preferences conflict with the current request, follow the current request.
 
 ## Tips and Tricks
 
-1. **Field descriptions are part of the prompt.** DSPy includes field descriptions in the compiled prompt. Make them specific and actionable — "2-3 sentence overview based on website content" is better than "overview."
+1. **Field descriptions are part of the prompt — describe PURPOSE, not structure.** DSPy includes field descriptions in the compiled prompt. Make them specific and actionable — "2-3 sentence overview based on website content" is better than "overview." When the output type is a Pydantic BaseModel, DSPy automatically injects the model's field schema into the compiled prompt. So the OutputField description should describe the PURPOSE of the output ("Feedback for the idea explaining strengths and areas for improvement"), NOT enumerate the model's attributes ("Object with score, reasoning, feedback, strengths, weaknesses fields"). The model handles structure; the description handles intent.
 
 2. **Longer docstrings produce better outputs.** Production signatures need 20+ lines of prompt content. Brief prompts like "Extract data from the input" produce poor results. Be comprehensive.
 
@@ -314,7 +314,7 @@ If preferences conflict with the current request, follow the current request.
 
 6. **Pydantic models in `models.py`, signatures in `signatures.py`.** Never mix these. Signatures import from models, not the other way around.
 
-7. **RootModel for list outputs.** Don't use `list[MyModel]` as an OutputField type — use `RootModel[list[MyModel]]`. Access the data via `.root` attribute.
+7. **RootModel for list outputs.** For list outputs, use `RootModel[list[MyModel]]` as the OutputField type. This gives DSPy the full schema of MyModel (field names, types) which it includes in the compiled prompt — the LLM sees exactly what fields to produce. NEVER use `list[dict]` — it gives DSPy zero schema information and the LLM won't know what fields to include. Access the data via `.root` attribute.
 
 8. **No output format instructions.** Never write "return a JSON object with fields..." in a DSPy prompt. The typed fields handle this. Adding output format instructions creates confusion between the prompt's instructions and DSPy's type-driven formatting.
 

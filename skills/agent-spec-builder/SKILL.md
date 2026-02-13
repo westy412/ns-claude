@@ -37,6 +37,9 @@ Use this skill when:
 6. **User approval required** — Before handoff to agent-impl-builder
 7. **Ask when unsure** — Never guess. If unclear about requirements, APIs, or approach, ask the user
 8. **Context-conscious loading** — Load child skills one at a time, only at the phase that needs them. Never invoke multiple skills preemptively. Persist all decisions to progress.md before moving to the next phase so a new session can resume without re-reading everything.
+9. **Ask on ambiguity** — When encountering unclear requirements, especially around hierarchical outputs (campaigns containing posts), field population mechanisms (how scores are assigned to nested objects), or diversity enforcement (hard constraint vs soft signal), ask the user rather than guessing. Ambiguity in the spec becomes bugs in the implementation.
+10. **Research data contracts** — Before defining input/output models, check if there's an existing API, database schema, or upstream service that defines the entities being processed. Understand what data actually flows through the system — field names, types, optional vs required. Use real data structures from the existing system, not imagined ones. If the project has an API spec, read it. If there's a database schema, reference it.
+11. **No code examples in specs** — Specs describe WHAT should happen (behavior, data flow, acceptance criteria), not HOW to implement it. Do not include Python code examples, pseudo-code implementations, or framework-specific patterns in specs. Schemas (Pydantic model definitions, API contracts) are acceptable because they describe data structure. But implementation code (how to call DSPy, how to set up retry logic) belongs in skills, not specs. If a spec's code example conflicts with a skill rule, the skill wins — so avoid the conflict by not putting code in specs.
 
 ---
 

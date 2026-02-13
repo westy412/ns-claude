@@ -1,0 +1,19 @@
+{
+  "products": [
+    {
+      "name": "Content Creation Workforce",
+      "page_id": "2dc7fe586c3b80f9a584dfc39cb4a6b4",
+      "database_id": "3057fe58-6c3b-8121-9317-e093935fae3b"
+    },
+    {
+      "name": "Inbound Sales Workforce",
+      "page_id": "2dc7fe586c3b808b810ec7f7e3eae6a8",
+      "database_id": "3057fe58-6c3b-811d-b7e9-d8cfe7381d15"
+    },
+    {
+      "name": "Outbound Sales Workforce",
+      "page_id": "2dc7fe586c3b80af8524f3d7eacdc1fc",
+      "database_id": "3057fe58-6c3b-81e6-aa4a-f0f355e60f0d"
+    }
+  ]
+}

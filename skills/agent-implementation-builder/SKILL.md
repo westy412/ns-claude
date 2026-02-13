@@ -38,6 +38,9 @@ Use this skill when:
 6. **Framework cheat sheets first** — Read framework rules before writing code
 7. **Ask when unsure** — Never guess. If spec is unclear or documentation is missing, ask the user
 8. **Context-conscious loading** — Load child skills one at a time, only at the phase that needs them. The framework cheatsheet is the only reference to load upfront (Phase 0). All other skills are loaded just-in-time per phase. Persist progress to progress.md before each new skill load.
+9. **Specs describe behavior, skills describe implementation** — Specs say WHAT should happen — behavior descriptions, data flow, acceptance criteria. Skills say HOW to implement it — framework patterns, code conventions, anti-patterns. If a spec includes code/pseudo-code that conflicts with a skill rule, follow the skill. Specs are not authoritative on implementation details. Schemas (data structures, API contracts) in specs are valid references; code examples are not.
+10. **Fix propagation — sweep the codebase** — When applying a pattern fix (e.g., fixing model validation, adding retry logic), search ALL instances of the same pattern in the codebase, not just the failing one. Process: 1) Fix the triggering instance, 2) Search for all instances of the same pattern (`grep -r "class.*BaseModel" src/` for models, grep for function signatures, etc.), 3) Apply the same fix to ALL qualifying instances, 4) Document the sweep scope in the commit message. Incomplete fixes cause recurring bugs.
+11. **Model-consumer lockstep** — When modifying a Pydantic model (adding/removing/renaming fields), you MUST update ALL consumers in the same commit. Process: 1) Change the model, 2) grep for all usages of the class name AND field names being changed across the codebase, 3) Update every consumer (formatters, serializers, downstream agents), 4) Commit model + all consumer changes together. Never commit a model change without updating its consumers.
 
 ---
 
@@ -113,6 +116,9 @@ Cheat sheets contain critical rules, patterns, and anti-patterns for each framew
 
 **In team mode:** Each teammate gets its own context window. Skills loaded by a teammate
 do NOT consume the main agent's context.
+
+*Important: iIF YOU ARE USING TEAM MODE MAKE SURE TO LOAD IN THE agent-impl-teammate-spawn skill*
+
 
 | Skill | Invoke At | What It Provides |
 |-------|-----------|------------------|
@@ -414,6 +420,8 @@ Read the `execution-plan` section from manifest.yaml:
 
 - **IF** the execution plan has phases with 2+ parallel chunks across different streams:
   → Use **TEAM MODE** (see "Team Mode Orchestration" section below)
+*Important: iIF YOU ARE USING TEAM MODE MAKE SURE TO LOAD IN THE agent-impl-teammate-spawn skill*
+
 - **IF** the execution plan is purely sequential, missing, or all chunks are in one stream:
   → Use **SINGLE-AGENT MODE** (current workflow — proceed to Phase 1)
 
@@ -1010,6 +1018,8 @@ async def get_status(job_id: str):
 ---
 
 ## Team Mode Execution
+
+*Important: iIF YOU ARE USING TEAM MODE MAKE SURE TO LOAD IN THE agent-impl-teammate-spawn skill*
 
 ### When to Use Team Mode
 

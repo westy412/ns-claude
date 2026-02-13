@@ -1,0 +1,34 @@
+{
+  "name": "idea-agents-impl",
+  "description": "Implementation of Research & Ideation DSPy agent system. 4-phase execution plan with parallel streams.",
+  "createdAt": 1770930988817,
+  "leadAgentId": "team-lead@idea-agents-impl",
+  "leadSessionId": "d0b00f54-6a01-4190-b54f-f5839ebbbe67",
+  "members": [
+    {
+      "agentId": "team-lead@idea-agents-impl",
+      "name": "team-lead",
+      "agentType": "team-lead",
+      "model": "claude-opus-4-6",
+      "joinedAt": 1770930988817,
+      "tmuxPaneId": "",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": []
+    },
+    {
+      "agentId": "models@idea-agents-impl",
+      "name": "models",
+      "agentType": "general-purpose",
+      "model": "claude-opus-4-6",
+      "prompt": "You are teammate \"models\" on team \"idea-agents-impl\".\n\n## Your Task\nCreate `src/models.py` with ALL Pydantic models used across the Research & Ideation system.\n\n## What To Read\n1. Read `spec/research-team/team.md` — look for data types, inputs/outputs, module outputs\n2. Read `spec/ideation-team/team.md` — look for ideation output types, scoring models\n3. Read `spec/manifest.yaml` execution-plan → data-models chunk for the full list\n\n## Models To Create (from manifest)\n- ResearchFinding, QualityCheck, ModuleOutput, PlatformDocument\n- ContentRef, EntityProfile, SearchConfig, ApifyActorConfig  \n- PostIdeaOutput, CampaignIdeaOutput, StandalonePostOutput, IdeationOutput\n- ExpertAnalysis, ExpertScore, PostScores, CampaignScores\n- Score calculation helpers\n\n## Critical Rules (DSPy Cheatsheet)\n- Required fields by default — NO blanket defaults like `= \"\"` or `= 0.0`\n- Only use `Optional[X] = None` for genuinely optional fields\n- Use `RootModel[list[MyModel]]` when you need list-of-model OutputFields\n- These models will be used as DSPy OutputField types — they need proper structure\n\n## Output\nWrite the file to: `/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/src/models.py`\n\nAlso create `src/__init__.py` (empty).\n\n## When Done\n1. Use TaskUpdate to mark task #1 as completed\n2. Send a message to team-lead with a summary of all models created and their key fields\n",
+      "color": "blue",
+      "planModeRequired": false,
+      "joinedAt": 1770931061127,
+      "tmuxPaneId": "%51",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": [],
+      "backendType": "tmux",
+      "isActive": true
+    }
+  ]
+}

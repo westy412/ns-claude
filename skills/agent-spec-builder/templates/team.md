@@ -36,6 +36,20 @@ What the team receives:
 What the team produces:
 - **[Output name]**: Description, format, who consumes it
 
+## Output Type Relationships
+
+When the team produces outputs with hierarchical or related types (e.g., a parent type containing child types), document the relationships:
+
+| Parent Type | Child Type | Relationship | Notes |
+|------------|-----------|--------------|-------|
+| [e.g., CampaignIdea] | [e.g., PostIdea] | [contains / references / inherits] | [e.g., "Each campaign contains 3-5 post ideas"] |
+
+**Questions to answer:**
+- Does the child type exist independently or only within the parent?
+- If the parent type has a score, do children inherit it or have their own scores?
+- If the parent type is narrative/thematic (e.g., a synthesis), does it need a list of sub-items, or is it a standalone synthesis without itemized components? Document WHY.
+- When are child objects created? (Same LLM call as parent? Separate stage? Post-processing?)
+
 ## Flow Diagram
 
 ```

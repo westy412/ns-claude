@@ -1,0 +1,49 @@
+{
+  "name": "skill-audit-fixes",
+  "description": "Fix contradictions between prompt-engineering and agent-implementation-builder skills, add DSPy file traversal, fix manifest template",
+  "createdAt": 1770993531491,
+  "leadAgentId": "team-lead@skill-audit-fixes",
+  "leadSessionId": "c458da4d-7401-4f17-ac4a-83e35355cccd",
+  "members": [
+    {
+      "agentId": "team-lead@skill-audit-fixes",
+      "name": "team-lead",
+      "agentType": "team-lead",
+      "model": "claude-opus-4-6",
+      "joinedAt": 1770993531491,
+      "tmuxPaneId": "",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": []
+    },
+    {
+      "agentId": "impl-builder-updater@skill-audit-fixes",
+      "name": "impl-builder-updater",
+      "agentType": "general-purpose",
+      "model": "claude-opus-4-6",
+      "prompt": "You are teammate impl-builder-updater on team skill-audit-fixes.\n\nRead your full instructions at:\n  /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/teammate-prompts/skill-audit-fixes/impl-builder-updater.md\n\nFollow all steps in order.",
+      "color": "blue",
+      "planModeRequired": false,
+      "joinedAt": 1770993637004,
+      "tmuxPaneId": "%65",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": [],
+      "backendType": "tmux",
+      "isActive": true
+    },
+    {
+      "agentId": "prompt-eng-updater@skill-audit-fixes",
+      "name": "prompt-eng-updater",
+      "agentType": "general-purpose",
+      "model": "claude-opus-4-6",
+      "prompt": "You are teammate prompt-eng-updater on team skill-audit-fixes.\n\nRead your full instructions at:\n  /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/teammate-prompts/skill-audit-fixes/prompt-eng-updater.md\n\nFollow all steps in order.",
+      "color": "green",
+      "planModeRequired": false,
+      "joinedAt": 1770993639477,
+      "tmuxPaneId": "%66",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": [],
+      "backendType": "tmux",
+      "isActive": true
+    }
+  ]
+}

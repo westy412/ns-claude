@@ -297,6 +297,21 @@ class OutputSchema(BaseModel):
 }
 ```
 
+#### Nested Object Population
+
+For hierarchical outputs (e.g., campaigns containing posts, reports containing sections):
+
+| Nested Field | How Populated | Stage |
+|-------------|---------------|-------|
+| [field_name] | [mechanism] | [which pipeline stage] |
+
+**Questions to answer for each nested object:**
+- How are scores assigned to items within the nested object? (Inherited from parent? Independently scored? Post-processed?)
+- Are nested items generated during the same LLM call as the parent, or in a separate stage?
+- If nested items have IDs, how are they resolved?
+
+**If any nested field's population mechanism is unclear, flag it for user clarification before finalizing the spec.**
+
 ### Memory
 **Type:** None | Conversation History | Session State
 
@@ -321,6 +336,23 @@ If reasoning needed, why:
 |--------|-------------|--------|-------------|
 | [name] | What it produces | JSON/text/schema | Agent Y/API/User |
 
+## Field Ownership
+
+For each output field, specify how it gets its value:
+
+| Field | Ownership | Description |
+|-------|-----------|-------------|
+| [field_name] | LLM-produced | The LLM generates this value (e.g., title, summary, reasoning) |
+| [field_name] | Code-resolved | Code populates this after LLM output (e.g., database IDs, foreign keys, computed scores) |
+| [field_name] | Pass-through | Copied directly from input without modification (e.g., entity_id, config values) |
+
+**Why this matters:** LLMs cannot reliably produce opaque identifiers (UUIDs, database IDs) unless those IDs are provided in the input context. Fields that require exact ID reproduction or computation must be marked as code-resolved so the implementation builder adds a post-processing step.
+
+**Rules:**
+- If an output field contains an ID that comes from the database/API, specify whether the LLM should reproduce it from input context (LLM-produced with validation) or whether code resolves it (code-resolved)
+- If a field requires computation (aggregate scores, weighted averages), mark it as code-resolved
+- If a nested object has fields with mixed ownership (e.g., title is LLM-produced but id is code-resolved), document each field separately
+
 ## Context Flow
 
 **Upstream:** (what sends data to this agent)
@@ -342,6 +374,19 @@ If reasoning needed, why:
 ### Key Behaviors
 - [Specific behavior 1]
 - [Specific behavior 2]
+
+### Diversity Dimensions (for selection/curation agents)
+
+If this agent selects, ranks, or curates from a larger set, specify the diversity dimensions it should enforce. Without explicit dimensions, selection agents tend to converge on the most obvious or frequent pattern in the data.
+
+| Dimension | Constraint Type | Rule |
+|-----------|----------------|------|
+| [e.g., topic variety] | Hard / Soft | [e.g., "at least 3 distinct topics in top 5"] |
+| [e.g., source balance] | Hard / Soft | [e.g., "no single source > 40% of selections"] |
+
+**For each dimension:** Specify whether it's a hard constraint (must meet threshold or fail) or a soft signal (prefer diversity but don't enforce).
+
+**If this agent is NOT a selection/curation agent, delete this section.**
 
 ### Edge Cases
 

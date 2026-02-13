@@ -1,0 +1,19 @@
+{
+  "name": "spec-analysis",
+  "description": "Analyze spec accuracy vs implementation issues",
+  "createdAt": 1770827271600,
+  "leadAgentId": "team-lead@spec-analysis",
+  "leadSessionId": "5cb5482f-ad65-4813-88f4-dbe19a8c9891",
+  "members": [
+    {
+      "agentId": "team-lead@spec-analysis",
+      "name": "team-lead",
+      "agentType": "analysis-team",
+      "model": "claude-sonnet-4-5-20250929[1m]",
+      "joinedAt": 1770827271600,
+      "tmuxPaneId": "",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": []
+    }
+  ]
+}

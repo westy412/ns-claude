@@ -145,12 +145,12 @@ class BadSignature(dspy.Signature):
 
 # ✅ RIGHT — Pydantic model with RootModel for lists
 class ExpertScore(BaseModel):
-    idea_id: str
-    score: float
-    reasoning: str
-    feedback: str
-    strengths: list[str]
-    weaknesses: list[str]
+    idea_id: str          # Required — LLM must produce this or retry
+    score: float          # Required
+    reasoning: str        # Required
+    feedback: str         # Required
+    strengths: list[str]  # Required
+    weaknesses: list[str] # Required
 
 class ExpertScoreList(RootModel[List[ExpertScore]]):
     """List of expert scores, one per idea."""
@@ -733,6 +733,16 @@ class MessageCreator(dspy.Module):
 - Clean serialization via `.model_dump()`
 - Better IDE support and autocomplete
 - No string parsing needed
+
+### Output Validation Philosophy
+
+Pydantic model fields for LLM output should be **required by default**. Do NOT add blanket defaults (`str = ""`, `float = 0.0`) to every field as a safety net. If validation fails because the LLM didn't produce a required field, that's a signal the prompt/description needs fixing — not that the field needs a default.
+
+- **Required fields** (`name: str`) — the LLM must produce this. DSPy retries on validation failure.
+- **Optional fields** (`tags: Optional[list[str]] = None`) — genuinely optional supplementary data.
+- **Never** use defaults to mask LLM output failures. Empty strings and zero scores flowing through the pipeline cause silent downstream bugs.
+
+Use `list[MyModel]` (via `RootModel[list[MyModel]]`) instead of `list[dict]` for structured list outputs. The Pydantic model gives DSPy the field schema, which it includes in the prompt — the LLM knows exactly what to produce.
 
 ### Multi-Stage Reasoning Programs
 

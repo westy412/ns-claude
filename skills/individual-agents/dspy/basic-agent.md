@@ -299,9 +299,9 @@ import dspy
 
 # Define your Pydantic models
 class ContactInfo(BaseModel):
-    name: str
-    email: str
-    score: int
+    name: str    # Required — LLM must produce this or retry
+    email: str   # Required
+    score: int   # Required
 
 # For List outputs, use RootModel (enables proper serialization)
 class ContactList(RootModel[List[ContactInfo]]):
@@ -349,6 +349,16 @@ class ExtractorModule(dspy.Module):
 - Better IDE support
 - Clean serialization via `.model_dump()`
 - DSPy natively supports Pydantic models in OutputFields
+
+### Output Validation Philosophy
+
+Pydantic model fields for LLM output should be **required by default**. Do NOT add blanket defaults (`str = ""`, `float = 0.0`) to every field as a safety net. If validation fails because the LLM didn't produce a required field, that's a signal the prompt/description needs fixing — not that the field needs a default.
+
+- **Required fields** (`name: str`) — the LLM must produce this. DSPy retries on validation failure.
+- **Optional fields** (`tags: Optional[list[str]] = None`) — genuinely optional supplementary data.
+- **Never** use defaults to mask LLM output failures. Empty strings and zero scores flowing through the pipeline cause silent downstream bugs.
+
+Use `list[MyModel]` (via `RootModel[list[MyModel]]`) instead of `list[dict]` for structured list outputs. The Pydantic model gives DSPy the field schema, which it includes in the prompt — the LLM knows exactly what to produce.
 
 ### DSPy-Specific Notes
 

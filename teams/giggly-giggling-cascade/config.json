@@ -1,0 +1,34 @@
+{
+  "name": "giggly-giggling-cascade",
+  "description": "Implementation of Research & Ideation Pipeline (DSPy) - Phase 1 Foundation work across models, tools, and signatures streams",
+  "createdAt": 1770931634412,
+  "leadAgentId": "team-lead@giggly-giggling-cascade",
+  "leadSessionId": "b8590228-600a-416f-8e13-1006453f6f46",
+  "members": [
+    {
+      "agentId": "team-lead@giggly-giggling-cascade",
+      "name": "team-lead",
+      "agentType": "team-lead",
+      "model": "claude-opus-4-6",
+      "joinedAt": 1770931634412,
+      "tmuxPaneId": "",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": []
+    },
+    {
+      "agentId": "signatures@giggly-giggling-cascade",
+      "name": "signatures",
+      "agentType": "general-purpose",
+      "model": "opus",
+      "prompt": "You are teammate \"signatures\" on team \"giggly-giggling-cascade\".\n\nRead your full instructions at:\n  /Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents/teammate-prompts/idea-agents-impl/signatures.md\n\nFollow ALL steps in order. DO NOT skip Step 1 (Load Required Skills).\nAfter loading skills, confirm to team-lead via SendMessage.",
+      "color": "yellow",
+      "planModeRequired": false,
+      "joinedAt": 1770931883691,
+      "tmuxPaneId": "%54",
+      "cwd": "/Users/georgewestbrook/Programming/novosapien/ns-content-workforce/ns-content-workforce-idea-agents",
+      "subscriptions": [],
+      "backendType": "tmux",
+      "isActive": false
+    }
+  ]
+}

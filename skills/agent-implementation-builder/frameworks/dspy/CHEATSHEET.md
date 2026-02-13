@@ -22,6 +22,12 @@ This cheat sheet contains critical rules, patterns, and anti-patterns for DSPy i
 | 10. Multi-Model Singletons | Separate `get_flash_lm()` / `get_pro_lm()` factories for tiered models |
 | 11. Optional InputFields | Use `default=None` + describe optionality in `desc` text |
 | 12. Typed Outputs, NEVER str+JSON | Use typed OutputFields or Pydantic models — NEVER `str` with "output as JSON" |
+| 13. Always Return dspy.Prediction | Every `forward()`/`aforward()` MUST return `dspy.Prediction`, NEVER dict/tuple |
+| 14. Use list[MyModel] Not list[dict] | Define Pydantic models for structured list outputs — `RootModel[list[MyModel]]` for OutputFields |
+| 15. Validate and Retry, Never Degrade | Validate output type at each stage, retry on failure, never pass empty defaults |
+| 16. Required Fields by Default | Pydantic fields for LLM output are required unless genuinely optional — no blanket defaults |
+| 17. Model-Consumer Lockstep | When modifying a Pydantic model, update ALL consumers in the same commit |
+| 18. Complete Sweep Rule | When fixing a bug class, sweep ALL instances in the codebase |
 
 ---
 
@@ -92,9 +98,9 @@ from pydantic import BaseModel
 
 class ComplexOutput(BaseModel):
     """Complex nested output structure."""
-    field1: str
-    field2: int
-    nested: dict
+    field1: str   # Required — no defaults. See Rule 11.
+    field2: int   # Required
+    nested: dict  # Required
 ```
 
 ```python
@@ -647,9 +653,9 @@ from typing import List
 
 # Single structured item
 class ContactInfo(BaseModel):
-    name: str
-    email: str
-    score: int
+    name: str    # Required — no defaults. If LLM can't produce it, retry. See Rule 11.
+    email: str   # Required
+    score: int   # Required
 
 # List of structured items — use RootModel
 class ContactList(RootModel[List[ContactInfo]]):
@@ -693,6 +699,242 @@ class ExtractorSignature(dspy.Signature):
 - Pydantic models: `result.contacts.model_dump()` → `[{"name": "...", ...}]`
 
 **See also:** [Pydantic Models for Structured Outputs](#pydantic-models-for-structured-outputs) in Quick Patterns for full BaseModel/RootModel examples.
+
+---
+
+### 8. Always Return dspy.Prediction
+
+**CRITICAL: Every `forward()` and `aforward()` method MUST return `dspy.Prediction`. NEVER return a dict, tuple, or raw values.**
+
+**CORRECT:**
+```python
+class MyPipeline(dspy.Module):
+    def forward(self, input_data: str):
+        result = self.agent(input=input_data)
+        return dspy.Prediction(output=result.output)
+
+    async def aforward(self, input_data: str):
+        result = await call_with_retry(self.agent, "agent", input=input_data)
+        return dspy.Prediction(
+            output=result.output,
+            score=result.score,
+        )
+```
+
+**WRONG — DO NOT DO THIS:**
+```python
+class MyPipeline(dspy.Module):
+    def forward(self, input_data: str):
+        result = self.agent(input=input_data)
+        # WRONG: Returning a dict
+        return {"output": result.output}
+
+    async def aforward(self, input_data: str):
+        result = await call_with_retry(self.agent, "agent", input=input_data)
+        # WRONG: Returning a tuple
+        return result.output, result.score
+```
+
+**Why:** DSPy's optimization framework (GEPA, MIPROv2) expects `dspy.Prediction` objects from `forward()`. Returning dicts or tuples breaks DSPy's tracing, metric evaluation, and prompt optimization. Even when the spec says "returns dict", always return `dspy.Prediction` — skills override spec implementation details.
+
+---
+
+### 9. Use list[MyModel] Not list[dict]
+
+**For LLM output fields that contain structured data, always define a Pydantic model. Use `list[MyModel]` (wrapped in `RootModel` for OutputFields), NEVER `list[dict]`.**
+
+**CORRECT:**
+```python
+from pydantic import BaseModel, RootModel
+
+class Reference(BaseModel):
+    title: str
+    url: str
+    summary: str
+
+class ReferenceList(RootModel[list[Reference]]):
+    pass
+
+class ResearchSignature(dspy.Signature):
+    """Extract references from the source material."""
+
+    source: str = dspy.InputField(desc="Source text to extract from")
+    # OutputField desc describes PURPOSE — the model handles structure
+    references: ReferenceList = dspy.OutputField(
+        desc="Extracted references from the source material"
+    )
+```
+
+**WRONG — DO NOT DO THIS:**
+```python
+class ResearchSignature(dspy.Signature):
+    """Extract references."""
+
+    source: str = dspy.InputField(desc="Source text")
+    # WRONG: list[dict] gives DSPy zero schema information
+    references: list[dict] = dspy.OutputField(
+        desc="List of references with title, url, summary fields"
+    )
+```
+
+**Why:** Pydantic models force DSPy to include the model's field schema (field names, types) in the compiled prompt. The LLM sees exactly what fields to produce. `list[dict]` gives zero schema information — the LLM has to guess what fields to include based only on the description string, which is fragile and error-prone.
+
+Note how the CORRECT OutputField description describes PURPOSE ("Extracted references from the source material"), not structure — the model handles structure. This is a key principle: **OutputField descriptions describe intent, Pydantic models describe structure.**
+
+---
+
+### 10. Validate Output and Retry — Never Degrade Gracefully
+
+**When a pipeline stage produces the wrong type, that's a failure — retry the stage. NEVER pass "No data available" or empty defaults through the pipeline pretending things are fine.**
+
+**CORRECT:**
+```python
+async def aforward(self, input_data: str):
+    # Stage 1: call with retry (handles transient failures)
+    result = await call_with_retry(self.stage1, "stage1", input=input_data)
+
+    # Validate output matches expected schema
+    if not hasattr(result, 'analysis') or result.analysis is None:
+        raise ValueError(
+            f"stage1 produced invalid output: expected 'analysis' field, "
+            f"got {type(result)} with fields {dir(result)}"
+        )
+
+    # Stage 2: receives validated output
+    formatted = format_output(result)
+    result2 = await call_with_retry(self.stage2, "stage2", context=formatted)
+    return dspy.Prediction(output=result2.output)
+```
+
+**WRONG — DO NOT DO THIS:**
+```python
+async def aforward(self, input_data: str):
+    result = await self.stage1.acall(input=input_data)
+
+    # WRONG: Silently degrading on failure
+    if result is None:
+        return dspy.Prediction(output="No data available.")
+
+    # WRONG: Fallback chains that mask failures
+    content = finding.detail or finding.content or finding.summary or ""
+```
+
+**Why:** Empty strings and "No data available" placeholders flow through the pipeline silently, producing garbage downstream. A failure at stage 1 should be caught and retried — not papered over. Use `call_with_retry` (Rule 6) for transient failures. If retries are exhausted, raise a clear error so the problem is visible and fixable.
+
+---
+
+### 11. Required Fields by Default — No Blanket Defaults
+
+**Pydantic model fields used for LLM output are REQUIRED unless genuinely optional. Do NOT add `= ""` or `= 0.0` or `= Field(default_factory=list)` to every field as a safety net.**
+
+**CORRECT:**
+```python
+class IdeaOutput(BaseModel):
+    title: str          # Required — LLM must produce this or retry
+    summary: str        # Required
+    score: float        # Required
+    tags: Optional[list[str]] = None  # Genuinely optional supplementary data
+```
+
+**WRONG — DO NOT DO THIS:**
+```python
+class IdeaOutput(BaseModel):
+    # WRONG: Blanket defaults mask LLM output failures
+    title: str = ""
+    summary: str = ""
+    score: float = 0.0
+    tags: list[str] = Field(default_factory=list)
+```
+
+**Why:** If the LLM can't produce a required field, that's a signal the prompt/description needs fixing — not that the field needs a default. Blanket defaults cause silent downstream bugs: empty titles get scored, zero scores get selected, and the pipeline appears to work while producing garbage. DSPy's retry mechanism handles validation failures when required fields are missing — let it do its job.
+
+**Decision guide:**
+- **Required** (`name: str`) — the LLM must produce this. DSPy retries on validation failure.
+- **Optional** (`tags: Optional[list[str]] = None`) — genuinely optional supplementary data (metadata, tags, auxiliary info).
+- **Never** use defaults to mask LLM output failures.
+
+---
+
+### 12. Model-Consumer Lockstep Updates
+
+**When modifying a Pydantic model, you MUST update ALL consumers in the same commit.**
+
+**Process:**
+1. Change the model (add/rename/remove fields)
+2. `grep -r "ClassName" src/` to find all imports and usages of the class name
+3. `grep -r "field_name" src/` for each field being changed
+4. Update every consumer (formatters, serializers, downstream agents, tests)
+5. Commit all changes together — model + consumers in one atomic commit
+
+**CORRECT:**
+```python
+# Commit: "Rename ResearchFinding.content to ResearchFinding.detail"
+# Includes: models.py + formatters.py + team.py + tests/
+
+# models.py — field renamed
+class ResearchFinding(BaseModel):
+    detail: str  # Renamed from 'content'
+
+# formatters.py — consumer updated in same commit
+def format_finding(finding: ResearchFinding) -> str:
+    return f"## Finding\n{finding.detail}\n"  # Updated to use .detail
+```
+
+**WRONG — DO NOT DO THIS:**
+```python
+# Commit 1: models.py only — consumers still reference old field
+class ResearchFinding(BaseModel):
+    detail: str  # Renamed from 'content'
+
+# formatters.py — NOT updated, breaks at runtime
+def format_finding(finding: ResearchFinding) -> str:
+    return f"## Finding\n{finding.content}\n"  # AttributeError!
+```
+
+**Why:** When model fields are renamed or restructured but consumers aren't updated, the code breaks at runtime with `AttributeError`. This is especially dangerous in DSPy pipelines where the error may only surface during LLM calls with specific data patterns. Atomic commits ensure the model and its consumers stay in sync.
+
+---
+
+### 13. Complete Sweep Rule
+
+**When fixing a class of bug (e.g., model validation, missing fields), sweep ALL instances in the codebase — not just the failing one.**
+
+**Process:**
+1. Fix the triggering instance
+2. `grep -r "class.*BaseModel" src/` to find all models (or the relevant pattern)
+3. For each model, check if the same fix applies
+4. Apply the fix to ALL qualifying instances
+5. Document the sweep in the commit message
+
+**CORRECT:**
+```bash
+# Example: Fixing OutputField descriptions across all signatures
+# Step 1: Fix the failing signature
+# Step 2: Find all signatures
+grep -r "class.*dspy.Signature" src/
+
+# Step 3-4: Check each and fix all that have the same issue
+# Step 5: Commit message documents the sweep
+
+# Commit message:
+# "Fix OutputField descriptions across all signatures
+#
+# WHAT:
+# - Fixed description in SelectionSignature (triggering bug)
+# - Swept all 8 signatures in src/ideation/signatures.py
+# - Swept all 4 signatures in src/research/signatures.py
+# - Fixed 3 additional signatures with same pattern
+#
+# SWEEP: grep -r 'class.*dspy.Signature' src/ — checked 12, fixed 4"
+```
+
+**WRONG — DO NOT DO THIS:**
+```python
+# Fixing only the one model that failed while 3 others in the same file
+# have the exact same issue — leads to repeated bug reports
+```
+
+**Why:** Incomplete fixes are a recurring source of bugs. When one model in a file needs a fix, other models in the same file (and across the project) likely need the same fix. Sweeping all instances prevents the "whack-a-mole" pattern where the same class of bug surfaces repeatedly in different locations.
 
 ---
 
@@ -910,9 +1152,9 @@ from typing import List
 
 # Single structured item
 class ContactInfo(BaseModel):
-    name: str
-    email: str
-    score: int
+    name: str    # Required — no defaults. If LLM can't produce it, retry. See Rule 11.
+    email: str   # Required
+    score: int   # Required
 
 # List of structured items - use RootModel
 class ContactList(RootModel[List[ContactInfo]]):
