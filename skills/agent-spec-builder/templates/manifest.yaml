@@ -233,19 +233,25 @@ execution-plan:
   # continuity. The implementation agent decides actual agent types at runtime.
   # Skills tell each stream's agent what skills to load before working.
   #
+  # IMPORTANT: Each team stream owns its FULL directory — modules, signatures,
+  # AND prompts. Do NOT create a separate "signatures" or "prompts" stream.
+  # The teammate that builds the module also writes its signatures.py and
+  # prompts/*.md files, because they have the most context. Include
+  # prompt-engineering in each team stream's skills list.
+  #
   # streams:
   #   - name: scaffold
   #     responsibility: Orchestration, utilities, service wrapper
-  #     owns: [src/*/team.py, src/*/utils.py, main.py, .env.example]
-  #     skills: [agent-teams, individual-agents]
+  #     owns: [src/pipeline.py, src/utils/, main.py, .env.example]
+  #     skills: [agent-teams]
   #   - name: tools
   #     responsibility: Tool implementation from agent spec documentation
-  #     owns: [src/*/tools.py]
+  #     owns: [src/tools/]
   #     skills: [tools-and-utilities]
-  #   - name: prompts
-  #     responsibility: Agent prompt generation
-  #     owns: [src/*/prompts.py]
-  #     skills: [prompt-engineering]
+  #   - name: my-team
+  #     responsibility: Team modules, signatures, and prompts
+  #     owns: [src/my_team/]
+  #     skills: [agent-teams, individual-agents, prompt-engineering]
 
   # Phases — sequential barriers. All chunks in a phase run in parallel.
   # Chunk-level dependencies can also be specified via depends_on.
@@ -254,16 +260,16 @@ execution-plan:
   # to read for that chunk. This tells the impl-builder which files contain the
   # requirements for each unit of work. All paths are relative to spec/.
   #
+  # NOTE: Signatures and prompts are built as part of each team's module chunks,
+  # NOT in a separate phase. Each team chunk produces:
+  #   - team.py (orchestration)
+  #   - signatures.py (DSPy Signature classes with empty docstrings)
+  #   - prompts/*.md (prompt content loaded into __doc__ at runtime)
+  #
   # phases:
   #   - phase: 1
   #     name: Foundation
   #     chunks:
-  #       - name: team-scaffold
-  #         stream: scaffold
-  #         description: Create team.py with orchestration logic and placeholder agents
-  #         spec-files:
-  #           - content-review-loop/team.md
-  #           - content-review-loop/agent-config.yaml
   #       - name: tools
   #         stream: tools
   #         description: Implement tool definitions from agent specs
@@ -272,30 +278,22 @@ execution-plan:
   #           - content-review-loop/agents/critic.md
   #
   #   - phase: 2
-  #     name: Agent Implementation
+  #     name: Team Implementation
   #     chunks:
-  #       - name: implement-agents
-  #         stream: scaffold
-  #         description: Fill in agent implementation functions in team.py
+  #       - name: implement-team
+  #         stream: my-team
+  #         description: |
+  #           Build team module, signatures, and prompts:
+  #           - team.py with orchestration logic
+  #           - signatures.py with typed InputField/OutputField definitions
+  #           - prompts/*.md with XML-tagged prompt content per agent
   #         spec-files:
+  #           - content-review-loop/team.md
+  #           - content-review-loop/agent-config.yaml
   #           - content-review-loop/agents/creator.md
   #           - content-review-loop/agents/critic.md
   #
   #   - phase: 3
-  #     name: Prompts
-  #     chunks:
-  #       - name: prompt-creator
-  #         stream: prompts
-  #         description: Generate creator agent prompt
-  #         spec-files:
-  #           - content-review-loop/agents/creator.md
-  #       - name: prompt-critic
-  #         stream: prompts
-  #         description: Generate critic agent prompt
-  #         spec-files:
-  #           - content-review-loop/agents/critic.md
-  #
-  #   - phase: 4
   #     name: Finalization
   #     chunks:
   #       - name: utilities
@@ -319,10 +317,6 @@ execution-plan:
   #
   # communication:
   #   - from: tools
-  #     to: scaffold
+  #     to: my-team
   #     after: phase-1
   #     what: Tool function signatures and return types for agent implementations
-  #   - from: scaffold
-  #     to: prompts
-  #     after: phase-2
-  #     what: Agent function structures and state schemas for prompt context

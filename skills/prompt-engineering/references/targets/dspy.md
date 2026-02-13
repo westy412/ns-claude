@@ -318,6 +318,49 @@ If preferences conflict with the current request, follow the current request.
 
 8. **No output format instructions.** Never write "return a JSON object with fields..." in a DSPy prompt. The typed fields handle this. Adding output format instructions creates confusion between the prompt's instructions and DSPy's type-driven formatting.
 
+## Runtime Loading Pattern
+
+The prompt `.md` files produced by this skill are loaded into DSPy Signatures at Python import time using `__doc__` reassignment. Each team module co-locates its signatures and prompts:
+
+```
+src/my_team/
+├── team.py           # Team orchestration module
+├── signatures.py     # DSPy Signature classes (empty docstrings)
+└── prompts/          # Prompt .md files (loaded into __doc__)
+    ├── creator.md
+    └── critic.md
+```
+
+### Loading Code Pattern
+
+```python
+from pathlib import Path
+
+_PROMPTS_DIR = Path(__file__).parent / "prompts"
+
+def _load_prompt(filename: str) -> str:
+    """Load prompt content from a co-located markdown file."""
+    return (_PROMPTS_DIR / filename).read_text()
+
+class MyAgentSignature(dspy.Signature):
+    """"""  # Empty — prompt loaded from prompts/my_agent.md at import time
+
+    input_data: str = dspy.InputField(desc="Description of input")
+    analysis: MyOutput = dspy.OutputField(desc="Structured output")
+
+# Load rich prompt content at module import time
+# DSPy reads __doc__ when dspy.Predict(Signature) or dspy.ChainOfThought(Signature) is called
+MyAgentSignature.__doc__ = _load_prompt("my_agent.md")
+```
+
+### Why This Works
+
+- **Python allows `__doc__` reassignment after class creation** — this is standard Python behavior, not a hack
+- **DSPy reads `__doc__` at module instantiation time** — when `dspy.Predict(Sig)` or `dspy.ChainOfThought(Sig)` is called in `__init__`, well after import completes
+- **Preserves DSPy optimization compatibility** — GEPA/MIPROv2 see `__doc__` as a normal string; optimization works identically
+- **Separation of concerns** — Python code (fields, types, validation) stays in `.py` files; prompt content (behavioral instructions, examples, constraints) stays in `.md` files
+- **Prompt iteration without code changes** — content writers can modify `.md` files without touching the signature's typed interface
+
 ## Checklist
 
 ### signatures.py

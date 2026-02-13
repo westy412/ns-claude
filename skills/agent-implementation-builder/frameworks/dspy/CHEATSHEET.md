@@ -11,7 +11,7 @@ This cheat sheet contains critical rules, patterns, and anti-patterns for DSPy i
 | Rule | One-Line Description |
 |------|---------------------|
 | 1. Signatures in signatures.py | All DSPy Signatures live in signatures.py (NOT models.py) |
-| 2. Docstrings ARE Prompts | Signature docstrings are compiled into LLM calls - NO separate prompts.py |
+| 2. Prompts in Separate .md Files | Signatures have empty docstrings; prompts live in `prompts/{agent}.md` loaded via `__doc__` |
 | 3. Singleton LM | Use module-level singleton for shared LM instance |
 | 4. Predict vs ChainOfThought vs ReAct | Predict for extraction, CoT for creative synthesis, ReAct ONLY for multi-step tool chains |
 | 5. Enum Validation | Small enums: prompting. Large enums (20+): `Union` + fuzzy matching |
@@ -40,7 +40,10 @@ This cheat sheet contains critical rules, patterns, and anti-patterns for DSPy i
 **File Structure:**
 ```
 src/team-name/
-├── signatures.py    # All DSPy Signature classes - REQUIRED
+├── signatures.py    # DSPy Signature classes (empty docstrings) - REQUIRED
+├── prompts/         # Rich prompt content loaded at runtime
+│   ├── agent_a.md
+│   └── agent_b.md
 ├── models.py        # Pydantic models (optional, for complex outputs)
 ├── tools.py         # Tool functions (if agents use tools)
 ├── utils.py         # Singleton LM + formatters + retry - REQUIRED
@@ -49,27 +52,21 @@ src/team-name/
 
 **CORRECT:**
 ```python
-# signatures.py - ALL signatures go here
+# signatures.py - Signature classes with EMPTY docstrings + runtime prompt loading
 
 import dspy
+from pathlib import Path
 from typing import Literal
 
+_PROMPTS_DIR = Path(__file__).parent / "prompts"
+
+def _load_prompt(filename: str) -> str:
+    """Load prompt content from a co-located markdown file."""
+    return (_PROMPTS_DIR / filename).read_text()
+
+
 class AgentASignature(dspy.Signature):
-    """
-    THIS DOCSTRING IS THE PROMPT.
-
-    DSPy compiles this docstring directly into the LLM call.
-    Do NOT create a separate prompts.py file.
-
-    === YOUR ROLE IN THE WORKFLOW ===
-    You are Agent A in a pipeline. You receive raw input and extract
-    structured data for downstream agents.
-
-    === YOUR TASK ===
-    Extract the following fields from the input text...
-
-    [... Comprehensive prompt continues ...]
-    """
+    """"""  # Empty — loaded from prompts/agent_a.md
 
     raw_input: str = dspy.InputField(desc="Input text to analyze")
     category: Literal["A", "B", "C"] = dspy.OutputField(
@@ -78,17 +75,60 @@ class AgentASignature(dspy.Signature):
 
 
 class AgentBSignature(dspy.Signature):
-    """
-    THIS DOCSTRING IS THE PROMPT.
-
-    === YOUR ROLE IN THE WORKFLOW ===
-    You are Agent B. You receive formatted output from Agent A...
-
-    [... Comprehensive prompt continues ...]
-    """
+    """"""  # Empty — loaded from prompts/agent_b.md
 
     agent_a_output: str = dspy.InputField(desc="Formatted output from Agent A")
     result: str = dspy.OutputField(desc="Final result")
+
+
+# Load rich prompt content from markdown at module import time.
+# DSPy reads __doc__ when Predict/ChainOfThought is instantiated.
+AgentASignature.__doc__ = _load_prompt("agent_a.md")
+AgentBSignature.__doc__ = _load_prompt("agent_b.md")
+```
+
+```xml
+<!-- prompts/agent_a.md — Rich prompt content with XML tags -->
+
+<who_you_are>
+You are the FIRST analysis agent in a 7-stage pipeline.
+Your output becomes the foundation that all downstream agents build upon.
+</who_you_are>
+
+<context>
+Workflow:
+- Stage 1: YOU (AgentA) — Extract structured data from input
+- Stage 2: AgentB — Process your output for downstream use
+- Stage 3: Synthesizer — Combine all agent outputs
+
+Everything downstream depends on YOUR accuracy.
+</context>
+
+<task>
+1. Read the provided input text carefully
+2. Extract the relevant category from the VALID VALUES list
+3. Compile the structured analysis result
+
+All claims must be traceable to the provided input.
+Do not fabricate or infer beyond what is explicitly stated.
+</task>
+
+<quality_standards>
+- All claims traceable to provided input
+- No fabrication — only extract what is explicitly stated
+- Choose the MOST SPECIFIC category that applies
+</quality_standards>
+
+<anti_patterns>
+- Do NOT output variations of enum values (e.g., "a" instead of "A")
+- Do NOT fabricate information absent from the input
+- Do NOT produce vague reasoning without specifics
+</anti_patterns>
+
+<important_notes>
+- If the input is empty or unintelligible, set category to the safest fallback
+- Do NOT use em-dash characters in output fields
+</important_notes>
 ```
 
 ```python
@@ -125,15 +165,21 @@ class AgentASignature(dspy.Signature):  # WRONG LOCATION
 ```
 
 ```python
-# WRONG: Creating prompts.py for DSPy
-# prompts.py
-AGENT_A_PROMPT = """..."""  # WRONG - DSPy doesn't use this pattern
+# WRONG: Inline docstring prompts instead of separate .md files
+class AgentASignature(dspy.Signature):
+    """
+    === YOUR ROLE ===
+    You are Agent A...
+
+    === YOUR TASK ===
+    Extract data...
+    """  # WRONG — prompts belong in prompts/agent_a.md, not inline
 ```
 
 ```python
-# WRONG: Brief docstrings
+# WRONG: Brief docstrings instead of separate .md prompt files
 class AgentASignature(dspy.Signature):
-    """Extract data."""  # WRONG - Too brief, DSPy needs comprehensive instructions
+    """Extract data."""  # WRONG - Too brief, and prompts should be in prompts/*.md
 
     raw_input: str = dspy.InputField()
     output: str = dspy.OutputField()
@@ -141,22 +187,25 @@ class AgentASignature(dspy.Signature):
 
 **Why:**
 
-1. **signatures.py is the correct location** - Separates signature definitions (contracts) from Pydantic models (data structures) and team orchestration (logic).
+1. **signatures.py is the correct location** — Separates signature definitions (contracts) from Pydantic models (data structures) and team orchestration (logic).
 
-2. **Docstrings ARE prompts** - DSPy compiles signature docstrings directly into the LLM prompt. Creating separate prompts.py files creates confusion about which prompt is actually used and wastes context.
+2. **Prompts live in separate .md files** — Rich prompt content belongs in `prompts/{agent_name}.md` files, loaded into `Signature.__doc__` at import time via `__doc__` reassignment. This separates the typed interface (Python) from behavioral instructions (markdown), enables prompt iteration without touching Python code, and produces cleaner version control diffs.
 
-3. **Comprehensive docstrings required** - Brief docstrings like "Extract data" produce poor outputs. Include workflow context, quality standards, constraints, and anti-patterns directly in the docstring.
+3. **Empty docstrings on Signature classes** — The class is defined with `""""""` (empty docstring). The `_load_prompt()` helper reads the `.md` file and assigns it to `SignatureClass.__doc__` after the class definition. DSPy reads `__doc__` when `Predict`/`ChainOfThought` is instantiated, well after import time.
 
-4. **No prompt-creator sub-agents for DSPy** - Since prompts are docstrings, write them directly when creating signatures.py. Using prompt-creator sub-agents adds unnecessary complexity and may produce prompts that don't integrate properly with the signature structure.
+4. **Prompt .md files use XML tags** — Use `<who_you_are>`, `<context>`, `<task>`, `<quality_standards>`, `<anti_patterns>`, `<important_notes>` XML tags for section structure. These provide ~15% better model comprehension than plaintext delimiters like `=== SECTION ===`.
+
+5. **prompt-engineering skill applies to DSPy** — Since prompts are in separate `.md` files, the prompt-engineering skill's guidelines for XML structure, role-specific sections, and quality standards apply directly. Teammates creating DSPy prompts should follow the prompt-engineering file traversal path.
 
 **File placement summary:**
 
 | File | DSPy | LangGraph |
 |------|------|-----------|
-| signatures.py | YES - contains all signatures with docstring prompts | NO |
-| prompts.py | NO - don't create | YES - separate prompt strings |
-| models.py | Optional - only for complex Pydantic outputs | Optional - same |
-| utils.py | YES - singleton LM + formatters required | Optional |
+| signatures.py | YES — signature classes with empty docstrings | NO |
+| prompts/*.md | YES — rich prompt content loaded via `__doc__` | NO (prompts.py instead) |
+| prompts.py | NO — don't create | YES — separate prompt strings |
+| models.py | Optional — only for complex Pydantic outputs | Optional — same |
+| utils.py | YES — singleton LM + formatters required | Optional |
 
 ---
 

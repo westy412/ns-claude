@@ -125,7 +125,7 @@ do NOT consume the main agent's context.
 | `agent-teams` | Phase 1 (Team Scaffold) | Team orchestration patterns, graph structure examples |
 | `tools-and-utilities` | Phase 2 (Tools) | Tool implementation patterns, utility organization |
 | `individual-agents` | Phase 3 (Agent Implementations) | Agent implementation patterns per type |
-| `prompt-engineering` | Phase 4 (Prompts) | Invoked by prompt-creator sub-agent (LangGraph only) |
+| `prompt-engineering` | Phase 4 (Prompts) | Loaded by teammates writing prompts (LangGraph: `prompts.py`, DSPy: `prompts/*.md` files) |
 
 **How to invoke (one at a time):**
 ```
@@ -272,7 +272,7 @@ LangGraph follows the structure shown above:
 
 **CRITICAL: DSPy has DIFFERENT file organization than LangGraph.**
 
-DSPy uses signature docstrings AS the prompts. There is NO separate prompts.py file.
+DSPy uses a two-file pattern: Signature classes in `signatures.py` have **empty docstrings**, and rich prompt content lives in co-located `prompts/{agent_name}.md` files that get loaded into `Signature.__doc__` at import time.
 
 **Single team:**
 ```
@@ -284,7 +284,10 @@ project-name/
 └── src/
     └── content-review-loop/
         ├── team.py          # Orchestration module
-        ├── signatures.py    # DSPy Signatures (prompts are in docstrings)
+        ├── signatures.py    # DSPy Signatures (empty docstrings)
+        ├── prompts/
+        │   ├── creator.md   # Rich prompt content loaded at runtime
+        │   └── critic.md
         ├── models.py        # Pydantic models (if needed for complex outputs)
         ├── tools.py         # Tool definitions (if needed)
         └── utils.py         # Utilities + formatters (if needed)
@@ -305,11 +308,17 @@ project-name/
         ├── content-refinement/
         │   ├── team.py
         │   ├── signatures.py
+        │   ├── prompts/
+        │   │   ├── creator.md
+        │   │   └── critic.md
         │   ├── tools.py
         │   └── utils.py
         └── parallel-research/
             ├── team.py
             ├── signatures.py
+            ├── prompts/
+            │   ├── researcher.md
+            │   └── merger.md
             ├── tools.py
             └── utils.py
 ```
@@ -318,42 +327,45 @@ project-name/
 
 | File | What Goes Here | Required? |
 |------|----------------|-----------|
-| `signatures.py` | All DSPy Signature classes with rich docstrings | YES (always for DSPy) |
+| `signatures.py` | DSPy Signature classes with empty docstrings + `_load_prompt()` helper | YES (always for DSPy) |
+| `prompts/*.md` | Rich prompt content (XML-tagged sections) loaded via `__doc__` at import | YES (one per agent) |
 | `models.py` | Pydantic BaseModel classes for complex nested outputs | If needed |
 | `team.py` | dspy.Module class with Predict/ChainOfThought instances | YES |
 | `tools.py` | Tool functions returning dicts (NOT @tool decorated) | If agents use tools |
 | `utils.py` | Singleton LM factories, formatters, retry wrapper | YES (formatters needed between stages) |
 | `prompts.py` | ❌ **DO NOT CREATE** for DSPy | NO |
 
-**Why no prompts.py for DSPy:**
-DSPy Signatures use their docstrings as prompts. The docstring is compiled directly into the LLM call. Creating separate prompts.py creates confusion about which prompt is actually used.
+**How prompts work in DSPy (two-file pattern):**
 
-**Where prompts live in DSPy:**
 ```python
-# signatures.py
+# signatures.py — typed interface with empty docstrings
+
+import dspy
+from pathlib import Path
+
+_PROMPTS_DIR = Path(__file__).parent / "prompts"
+
+def _load_prompt(filename: str) -> str:
+    """Load prompt content from a co-located markdown file."""
+    return (_PROMPTS_DIR / filename).read_text()
+
 
 class MyAgentSignature(dspy.Signature):
-    """
-    ← THIS DOCSTRING IS THE PROMPT
-
-    === YOUR ROLE IN THE WORKFLOW ===
-    You are the [role] agent in a [pattern] pipeline.
-
-    === YOUR TASK ===
-    [Detailed task description]
-
-    === QUALITY STANDARDS ===
-    - Standard 1
-    - Standard 2
-
-    === CONSTRAINTS ===
-    - Never do X
-    - Always do Y
-    """
+    """"""  # Empty — loaded from prompts/my_agent.md
 
     input_field: str = dspy.InputField(desc="What this input contains")
     output_field: str = dspy.OutputField(desc="What to return")
+
+
+# Load at import time — DSPy reads __doc__ when Predict/ChainOfThought is instantiated
+MyAgentSignature.__doc__ = _load_prompt("my_agent.md")
 ```
+
+**Why separate .md files (not inline docstrings):**
+- Prompts are editable without touching Python code — prompt engineers iterate on `.md` files without modifying typed interfaces
+- Version control clarity — prompt changes vs I/O contract changes show up as separate diffs
+- prompt-engineering skill applies directly — XML-tagged sections, role guidance, and quality standards from the skill work naturally with `.md` files
+- DSPy optimization compatible — GEPA/MIPROv2 see `__doc__` as a normal string
 
 **Structured Output — Critical Rule:**
 When generating DSPy signatures, NEVER use `str` output fields with JSON parsing instructions.
@@ -366,7 +378,7 @@ When generating DSPy signatures, NEVER use `str` output fields with JSON parsing
 **Signature Organization:**
 - **Small teams (1-5 agents):** All signatures in team's `signatures.py`
 - **Large teams (6+ agents):** Consider grouping by role or stage within signatures.py, use comments as section headers
-- **Nested teams:** Each sub-team has its own `signatures.py`; shared signatures can go in root-level `models.py` if reused
+- **Nested teams:** Each sub-team has its own `signatures.py` + `prompts/` directory; shared signatures can go in root-level `models.py` if reused
 
 ---
 
@@ -652,7 +664,7 @@ For each agent:
 
 ### Phase 4: Prompts/Signatures
 
-**Note:** For LangGraph, the `prompt-engineering` skill is loaded by prompt-creator sub-agents in their own context windows, NOT by the main agent. Do not invoke `prompt-engineering` directly — it would waste main-agent context. The sub-agent spawn template (below) handles this. For DSPy, write signature docstrings directly without sub-agents.
+**Note:** The `prompt-engineering` skill is loaded by **teammates** writing prompts, NOT by the main agent. Do not invoke `prompt-engineering` directly — it would waste main-agent context. For LangGraph, teammates edit `prompts.py` directly. For DSPy, teammates write `prompts/{agent_name}.md` files that get loaded into signature docstrings at runtime.
 
 **Framework-specific approaches:**
 
@@ -696,62 +708,44 @@ The sub-agent:
 - Main agent just waits for completion
 - Cleaner context management
 
-#### DSPy: signatures.py
+#### DSPy: signatures.py + prompts/*.md
 
-**CRITICAL: DSPy does NOT use prompts.py. Prompts ARE signature docstrings.**
+**CRITICAL: DSPy uses a two-file pattern. Signatures have empty docstrings; prompts live in separate `.md` files.**
 
-**Strategy:** Write signatures.py directly. Do NOT spawn prompt-creator sub-agents.
+**Strategy:** Create `signatures.py` with empty docstrings and `_load_prompt()` helper, then create `prompts/{agent_name}.md` files with rich XML-tagged prompt content. Teammates load the `prompt-engineering` skill when writing the `.md` files.
 
-**Step 1: Create signatures.py with all DSPy Signature classes**
+**Step 1: Create signatures.py with empty docstrings + prompt loader**
 
 ```python
 # signatures.py
 
 import dspy
+from pathlib import Path
 from typing import Literal, Union
 
+_PROMPTS_DIR = Path(__file__).parent / "prompts"
+
+def _load_prompt(filename: str) -> str:
+    """Load prompt content from a co-located markdown file."""
+    return (_PROMPTS_DIR / filename).read_text()
+
+
 class CreatorSignature(dspy.Signature):
-    """
-    ← THIS DOCSTRING IS THE PROMPT - Write comprehensive instructions here
-
-    === YOUR ROLE IN THE WORKFLOW ===
-    You are the Creator agent in a loop pattern. You generate initial content
-    that the Critic will review. You will see the Critic's feedback in your
-    conversation history when called for iteration.
-
-    === YOUR TASK ===
-    Generate creative content based on the input theme and any previous feedback.
-
-    [... Full prompt content goes here ...]
-
-    === QUALITY STANDARDS ===
-    - Be specific and actionable
-    - Incorporate critic feedback when available
-
-    === CONSTRAINTS ===
-    - Never ignore feedback
-    - Always improve on previous iteration
-    """
+    """"""  # Empty — loaded from prompts/creator.md
 
     # Inputs
     theme: str = dspy.InputField(desc="Content theme to write about")
-    history: dspy.History = dspy.InputField(desc="Conversation history with critic feedback")
+    previous_feedback: str = dspy.InputField(
+        desc="Optional feedback from prior iteration. If not provided, this is the first attempt.",
+        default=None
+    )
 
     # Outputs
     content: str = dspy.OutputField(desc="Generated content")
 
 
 class CriticSignature(dspy.Signature):
-    """
-    ← THIS DOCSTRING IS THE PROMPT
-
-    === YOUR ROLE IN THE WORKFLOW ===
-    You are the Critic agent. Review content created by the Creator and provide
-    structured feedback. If content passes your criteria, approve it. Otherwise,
-    suggest specific improvements.
-
-    [... Full prompt content goes here ...]
-    """
+    """"""  # Empty — loaded from prompts/critic.md
 
     content: str = dspy.InputField(desc="Content to review")
     criteria: str = dspy.InputField(desc="Quality criteria")
@@ -759,29 +753,82 @@ class CriticSignature(dspy.Signature):
     feedback: str = dspy.OutputField(desc="Specific improvement suggestions")
     passed: bool = dspy.OutputField(desc="True if content meets criteria")
     score: int = dspy.OutputField(desc="Quality score 0-100")
+
+
+# Load rich prompt content from markdown at module import time.
+# DSPy reads __doc__ when Predict/ChainOfThought is instantiated.
+CreatorSignature.__doc__ = _load_prompt("creator.md")
+CriticSignature.__doc__ = _load_prompt("critic.md")
 ```
 
-**Step 2: Write rich docstrings**
+**Step 2: Create prompts/*.md files with XML-tagged content**
 
-For each signature:
-1. Read the agent spec (e.g., `agents/creator.md`)
-2. Extract: Purpose, Key Tasks, Inputs, Outputs, Behavioral Requirements
-3. Write a comprehensive docstring following DSPy conventions:
-   - Start with workflow context (which stage, what comes before/after)
-   - Describe the specific task
-   - Include quality standards and rubrics
-   - List constraints and anti-patterns
-   - For enum fields, list valid values IN THE DOCSTRING
-4. Use XML-style section headers for clarity: `=== SECTION NAME ===`
+For each agent, create a `prompts/{agent_name}.md` file using XML tags:
+
+```xml
+<!-- prompts/creator.md -->
+
+<who_you_are>
+You are a creative content generator in a quality-retry loop.
+You produce initial content that a Critic will evaluate.
+</who_you_are>
+
+<context>
+Workflow:
+- Stage 1: YOU (Creator) — Generate content based on theme
+- Stage 2: Critic — Evaluate and provide feedback
+- Repeat: You receive feedback and improve
+
+When previous_feedback is provided, you are on a retry iteration.
+Incorporate the feedback to improve your output.
+</context>
+
+<task>
+1. Read the theme and any previous feedback
+2. Generate creative content that addresses the theme
+3. If feedback is present, specifically address each point raised
+4. Ensure output meets quality standards below
+</task>
+
+<quality_standards>
+- Be specific and actionable, not generic
+- Incorporate all critic feedback when available
+- Each iteration must show measurable improvement
+</quality_standards>
+
+<anti_patterns>
+- Do NOT ignore previous feedback
+- Do NOT repeat the same content across iterations
+- Do NOT produce generic filler content
+</anti_patterns>
+
+<important_notes>
+- If no previous_feedback is provided, this is the first attempt
+- Always improve on previous iteration when feedback exists
+</important_notes>
+```
+
+**DSPy Prompt-Writing File Traversal:**
+
+When writing DSPy `prompts/*.md` files, teammates should read these reference files in order:
+
+| Order | File | Purpose |
+|-------|------|---------|
+| 1 | `agent-implementation-builder/frameworks/dspy/CHEATSHEET.md` | Signature patterns and DSPy-specific rules |
+| 2 | `prompt-engineering/references/targets/dspy.md` | DSPy-specific sections to keep/skip/add |
+| 3 | `prompt-engineering/references/frameworks/single-turn.md` | XML section structure template |
+| 4 | `prompt-engineering/references/roles/{role}.md` | Role-specific section guidance |
+| 5 | `prompt-engineering/references/modifiers/{applicable}.md` | Modifier adaptations for DSPy |
+| 6 | `prompt-engineering/references/guidelines/prompt-writing.md` | Quality checklist |
 
 **Do NOT:**
-- ❌ Create prompts.py for DSPy projects
-- ❌ Spawn prompt-creator sub-agents for DSPy
-- ❌ Put prompts anywhere except signature docstrings
-- ❌ Use brief docstrings like "Extract data" - they must be comprehensive
+- ❌ Create `prompts.py` for DSPy projects
+- ❌ Write inline docstring prompts — use `prompts/*.md` files loaded via `__doc__`
+- ❌ Use `=== SECTION ===` headers — use XML tags (`<who_you_are>`, `<task>`, etc.)
+- ❌ Use brief docstrings like "Extract data" — prompts must be 20+ lines of substantive content
 
 **Why this matters:**
-DSPy compiles signature docstrings directly into LLM prompts. A weak docstring = weak outputs. The docstring is the ONLY place to provide instructions to the agent. There is no separate prompt file.
+DSPy reads `Signature.__doc__` when `Predict`/`ChainOfThought` is instantiated. The `_load_prompt()` helper reads `.md` files at import time and assigns them to `__doc__`. This gives you the best of both worlds: typed Python interfaces in `signatures.py` and rich, maintainable prompt content in `.md` files that benefit from the full prompt-engineering skill guidelines.
 
 ### Phase 5: Utilities
 
@@ -1244,7 +1291,7 @@ agent implementations (can be parallel per agent if tools complete)
 
 **Default DSPy dependencies (when no execution plan):**
 ```
-signatures.py (write signature docstrings directly - NO prompt-creator sub-agents)
+signatures.py + prompts/*.md (empty docstrings + separate .md prompt files)
        ↓
     tools.py (if needed)
        ↓
@@ -1769,7 +1816,7 @@ Teammate prompts are generated by the `agent-impl-teammate-spawn` skill (see Ste
 
 **DSPy (per team including nested):**
 
-1. **signatures.py** — All DSPy Signature classes with comprehensive docstrings (prompts are HERE)
+1. **signatures.py + prompts/*.md** — Signature classes (empty docstrings) + co-located prompt .md files loaded via `__doc__`
 2. **tools.py** — Tool functions returning dicts (if needed)
 3. **utils.py** — Singleton LM factories, formatters, retry wrapper (REQUIRED)
 4. **models.py** — Pydantic models for complex nested outputs (if needed)
@@ -1777,9 +1824,10 @@ Teammate prompts are generated by the `agent-impl-teammate-spawn` skill (see Ste
 6. **main.py** — FastAPI wrapper (root level only)
 
 **Key DSPy differences:**
-- signatures.py is created FIRST and contains all prompts as docstrings
-- NO prompts.py file
-- NO prompt-creator sub-agents
+- signatures.py has empty docstrings; rich prompts are in `prompts/{agent_name}.md` files
+- prompts/*.md files use XML tags (`<who_you_are>`, `<task>`, etc.) and are loaded at import time via `__doc__` reassignment
+- NO prompts.py file — use `prompts/` directory with `.md` files instead
+- prompt-engineering skill IS used for DSPy (teammates load it when writing `.md` prompt files)
 - utils.py is REQUIRED (not optional) — must have singleton LM + formatters
 - models.py only for complex Pydantic outputs, NOT for signatures
 

@@ -459,6 +459,18 @@ Apply these to any role to add specific capabilities:
 5. **Fill template** — Use the framework template, guided by role-specific advice, adapted per target reference
 6. **Review** — Check against target-specific checklist and common pitfalls
 
+### DSPy-Specific Reading Order
+
+When writing prompts for DSPy agents, read these files in this order:
+
+1. **Always read first:** `references/guidelines/prompt-writing.md` — quality standards and anti-patterns
+2. **Target:** `references/targets/dspy.md` — DSPy-specific adaptations (sections to keep/skip/add, runtime loading pattern)
+3. **Framework:** `references/frameworks/single-turn.md` OR `references/frameworks/conversational.md` — XML section structure template
+4. **Role:** `references/roles/{role}.md` — section-by-section guidance for your agent's role
+5. **Modifiers:** `references/modifiers/{applicable}.md` — tool, structured output, memory, or reasoning adaptations
+
+This produces a `prompts/{agent_name}.md` file that gets loaded into the Signature's `__doc__` at import time.
+
 ### Multi-Agent Systems (Parallel Generation)
 
 When building multiple agents at once, use `prompt-creator` sub-agents for parallel prompt generation. This works whether you are calling this skill directly or as a teammate in an agent team — the sub-agent pattern keeps each prompt's generation in its own context window.
