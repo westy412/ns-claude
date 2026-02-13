@@ -789,6 +789,8 @@ Building a **competitive research agent**:
 
 ## Prompt Engineering Guidelines
 
+Quick reference for prompt writing. For comprehensive techniques, quality checklists, anti-patterns, and testing guidance, see `references/guidelines/prompt-writing.md`.
+
 ### Structure
 
 **Use XML tags for sections**
