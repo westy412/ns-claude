@@ -54,6 +54,26 @@
         "installedAt": "2026-01-09T17:49:54.176Z",
         "lastUpdated": "2026-01-09T17:49:54.176Z"
       }
+    ],
+    "agent-sdk-dev@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-plugins-official/agent-sdk-dev/261ce4fba4f2",
+        "version": "261ce4fba4f2",
+        "installedAt": "2026-02-16T20:56:01.120Z",
+        "lastUpdated": "2026-02-17T20:55:23.554Z",
+        "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
+      }
+    ],
+    "agent-sdk-dev@claude-code-plugins": [
+      {
+        "scope": "user",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-code-plugins/agent-sdk-dev/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-02-16T21:26:29.164Z",
+        "lastUpdated": "2026-02-16T21:26:29.164Z",
+        "gitCommitSha": "8c09097e8c2565c4c9c107cb9ad1cfcb87366368"
+      }
     ]
   }
 }

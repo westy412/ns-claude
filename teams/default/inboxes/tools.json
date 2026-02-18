@@ -1,0 +1,8 @@
+[
+  {
+    "from": "team-lead",
+    "text": "{\"type\":\"shutdown_request\",\"requestId\":\"shutdown-1771022034729@tools\",\"from\":\"team-lead\",\"reason\":\"Your work is complete. Shutting down the team for handover to next session. Thank you for the tools implementation.\",\"timestamp\":\"2026-02-13T22:33:54.729Z\"}",
+    "timestamp": "2026-02-13T22:33:54.729Z",
+    "read": false
+  }
+]
