@@ -24,24 +24,49 @@ print(result["messages"][-1].content)
 
 ---
 
-## `create_deep_agent` API Signature
+## `create_deep_agent` Full API Signature
 
 ```python
-create_deep_agent(
-    name: str | None = None,
+from deepagents import create_deep_agent
+
+agent = create_deep_agent(
     model: str | BaseChatModel | None = None,
-    tools: Sequence[BaseTool | Callable | dict[str, Any]] | None = None,
+    tools: Sequence[BaseTool | Callable | dict] | None = None,
     *,
-    system_prompt: str | SystemMessage | None = None
+    system_prompt: str | SystemMessage | None = None,
+    middleware: Sequence[AgentMiddleware] = (),
+    subagents: list[SubAgent | CompiledSubAgent] | None = None,
+    skills: list[str] | None = None,
+    memory: list[str] | None = None,
+    response_format: ResponseFormat | None = None,
+    context_schema: type[Any] | None = None,
+    checkpointer: Checkpointer | None = None,
+    store: BaseStore | None = None,
+    backend: BackendProtocol | BackendFactory | None = None,
+    interrupt_on: dict[str, bool | InterruptOnConfig] | None = None,
+    debug: bool = False,
+    name: str | None = None,
+    cache: BaseCache | None = None,
 ) -> CompiledStateGraph
 ```
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `name` | `str \| None` | `None` | Optional name for the agent |
-| `model` | `str \| BaseChatModel \| None` | `None` | Model identifier string or `BaseChatModel` instance. Defaults to `claude-sonnet-4-5-20250929` |
-| `tools` | `Sequence[BaseTool \| Callable \| dict] \| None` | `None` | Additional tools the agent can use |
-| `system_prompt` | `str \| SystemMessage \| None` | `None` | Custom instructions that prepend to the built-in system prompt |
+## Parameter Guide
+
+| Parameter | Type | Default | Purpose |
+|-----------|------|---------|---------|
+| `model` | `str \| BaseChatModel` | `claude-sonnet-4-5-20250929` | LLM to use (must support tool calling) |
+| `tools` | `Sequence[...]` | `[]` | Custom tools added to built-in tools |
+| `system_prompt` | `str \| SystemMessage` | `None` | Prepended to BASE_AGENT_PROMPT |
+| `middleware` | `Sequence[AgentMiddleware]` | `()` | Custom middleware added after defaults |
+| `subagents` | `list[SubAgent \| CompiledSubAgent]` | `None` | Specialized agents for delegation |
+| `skills` | `list[str]` | `None` | Filesystem paths to skill directories |
+| `memory` | `list[str]` | `None` | Filesystem paths to memory files |
+| `checkpointer` | `Checkpointer` | `None` | State persistence (required for HITL) |
+| `store` | `BaseStore` | `None` | Cross-thread persistent storage |
+| `backend` | `BackendProtocol \| BackendFactory` | `StateBackend` | Filesystem operation backend |
+| `interrupt_on` | `dict[str, ...]` | `None` | Per-tool HITL approval config |
+| `debug` | `bool` | `False` | Enable debug logging |
+| `name` | `str` | `None` | Agent name for observability |
 
 ---
 
@@ -50,17 +75,17 @@ create_deep_agent(
 **Default model:** `claude-sonnet-4-5-20250929`. Use `provider:model` format to switch.
 
 ```python
-# OpenAI
-agent = create_deep_agent(model="openai:gpt-5.2")
-
 # Anthropic (default)
 agent = create_deep_agent(model="claude-sonnet-4-5-20250929")
 
-# Azure OpenAI
-agent = create_deep_agent(model="azure_openai:gpt-4.1")
+# OpenAI
+agent = create_deep_agent(model="openai:gpt-5.2")
 
 # Google Generative AI
 agent = create_deep_agent(model="google_genai:gemini-2.5-flash-lite")
+
+# Azure OpenAI
+agent = create_deep_agent(model="azure_openai:gpt-4.1")
 
 # AWS Bedrock
 agent = create_deep_agent(
@@ -85,6 +110,8 @@ from langchain.chat_models import init_chat_model
 model = init_chat_model("gpt-5", temperature=0.5)
 agent = create_deep_agent(model=model)
 ```
+
+**Critical:** Deep agents require an LLM that supports tool calling. Models without tool-calling support will fail.
 
 ---
 
@@ -124,9 +151,22 @@ agent = create_deep_agent(tools=[internet_search])
 Deep agents have a built-in system prompt covering planning, file system tools, and subagents. Custom system prompts **prepend** to this -- they do not replace it.
 
 ```python
-research_instructions = """You are an expert researcher. Your job is to conduct thorough research, and then write a polished report."""
+# GOOD: Focus on domain-specific behavior
+agent = create_deep_agent(
+    system_prompt=(
+        "You are a financial research analyst. "
+        "When researching companies, always check SEC filings first. "
+        "Write structured reports with sections: Overview, Financials, Risks."
+    ),
+)
 
-agent = create_deep_agent(system_prompt=research_instructions)
+# BAD: Duplicating built-in instructions
+agent = create_deep_agent(
+    system_prompt=(
+        "You have access to a filesystem. Use write_file to save files. "
+        "You can create todos with write_todos..."  # Already in BASE_AGENT_PROMPT
+    ),
+)
 ```
 
 ---
@@ -149,6 +189,45 @@ Every deep agent automatically has these tools (do not pass them in `tools`):
 
 ---
 
+## Invocation Patterns
+
+```python
+# Synchronous
+result = agent.invoke(
+    {"messages": [{"role": "user", "content": "Analyze this dataset"}]},
+    config={"configurable": {"thread_id": "thread-123"}}
+)
+
+# Streaming (recommended for long-running tasks)
+for event in agent.stream(
+    {"messages": [{"role": "user", "content": "Write a research report"}]},
+    config={"configurable": {"thread_id": "thread-123"}},
+    stream_mode="updates",
+):
+    print(event)
+
+# Async
+result = await agent.ainvoke(
+    {"messages": [{"role": "user", "content": "Research competitors"}]},
+    config={"configurable": {"thread_id": "thread-123"}}
+)
+```
+
+## Async Variant
+
+```python
+from deepagents import async_create_deep_agent
+
+# Identical to create_deep_agent but passes is_async=True
+# Affects SubAgentMiddleware tool execution and subagent invocation
+agent = await async_create_deep_agent(
+    model="anthropic:claude-sonnet-4-20250514",
+    tools=[search_web],
+)
+```
+
+---
+
 ## How It Works
 
 When invoked, a deep agent follows this autonomous loop:
@@ -161,36 +240,61 @@ When invoked, a deep agent follows this autonomous loop:
 
 ---
 
-## Quickstart Example: Research Agent
+## Production Example
 
 ```python
-import os
-from typing import Literal
-from tavily import TavilyClient
 from deepagents import create_deep_agent
+from langchain.chat_models import init_chat_model
+from langchain.tools import tool
+from langgraph.checkpoint.postgres import PostgresSaver
 
-tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
-
-def internet_search(query: str, max_results: int = 5,
-    topic: Literal["general", "news", "finance"] = "general",
-    include_raw_content: bool = False):
-    """Run a web search"""
-    return tavily_client.search(query, max_results=max_results,
-        include_raw_content=include_raw_content, topic=topic)
-
-research_instructions = """You are an expert researcher. Your job is to conduct thorough research and then write a polished report.
-
-## `internet_search`
-Use this to run an internet search for a given query. You can specify the max number of results to return, the topic, and whether raw content should be included."""
+@tool
+def search_web(query: str) -> str:
+    """Search the web for information."""
+    return "search results..."
 
 agent = create_deep_agent(
-    tools=[internet_search],
-    system_prompt=research_instructions
+    model=init_chat_model("anthropic:claude-sonnet-4-20250514"),
+    tools=[search_web],
+    system_prompt=(
+        "You are an expert research assistant. "
+        "Always write findings to the filesystem and create a structured report."
+    ),
+    checkpointer=PostgresSaver.from_conn_string("postgresql://..."),
+    name="research-agent",
+    debug=False,
 )
-
-result = agent.invoke({"messages": [{"role": "user", "content": "What is langgraph?"}]})
-print(result["messages"][-1].content)
 ```
+
+---
+
+## Default Middleware Stack
+
+When you call `create_deep_agent()`, the following middleware is automatically attached:
+
+1. **TodoListMiddleware** - Planning and task tracking
+2. **FilesystemMiddleware** - File read/write/ls/search operations
+3. **SubAgentMiddleware** - Sub-agent delegation via `task` tool
+4. **SummarizationMiddleware** - Context compression for long conversations
+5. **AnthropicPromptCachingMiddleware** - Token optimization (Anthropic models)
+6. **PatchToolCallsMiddleware** - Fixes interrupted tool call history
+
+Conditionally added:
+- **SkillsMiddleware** - When `skills` argument is provided
+- **HumanInTheLoopMiddleware** - When `interrupt_on` argument is provided
+
+---
+
+## Deep Agents CLI
+
+Try Deep Agents from the terminal:
+
+```bash
+uv tool install deepagents-cli
+deepagents
+```
+
+The CLI adds conversation resume, web search, remote sandboxes, persistent memory, custom skills, and human-in-the-loop approval.
 
 ---
 
@@ -206,16 +310,42 @@ print(result["messages"][-1].content)
 
 ---
 
-## Deep Agents CLI
+## Anti-Patterns
 
-Try Deep Agents from the terminal:
+```python
+# WRONG: No thread_id in config
+result = agent.invoke({"messages": [...]})  # No persistence across turns
 
-```bash
-uv tool install deepagents-cli
-deepagents
+# WRONG: Recreating agent per request
+def handle_request(message):
+    agent = create_deep_agent(...)  # Expensive! Create once, reuse
+    return agent.invoke({"messages": [message]})
+
+# WRONG: Using invoke for long-running tasks
+result = agent.invoke(...)  # Blocks until complete, no visibility
+
+# CORRECT: Stream for long tasks
+for event in agent.stream(..., stream_mode="updates"):
+    process(event)
+
+# WRONG: Mixing sync and async
+agent = create_deep_agent(...)  # Sync agent
+await agent.ainvoke(...)  # May cause issues with SubAgentMiddleware
+
+# CORRECT: Use async_create_deep_agent for async contexts
+agent = await async_create_deep_agent(...)
+await agent.ainvoke(...)
 ```
 
-The CLI adds conversation resume, web search, remote sandboxes, persistent memory, custom skills, and human-in-the-loop approval.
+## Checklist
+
+- [ ] Model explicitly specified (don't rely on default)
+- [ ] `system_prompt` focuses on domain behavior, not tool instructions
+- [ ] `checkpointer` configured for production (SqliteSaver/PostgresSaver)
+- [ ] `thread_id` passed in config for every invocation
+- [ ] Streaming used for long-running agent tasks
+- [ ] `async_create_deep_agent` used in async contexts
+- [ ] Agent created once and reused across requests
 
 ---
 

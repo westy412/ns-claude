@@ -11,6 +11,8 @@ Skills are reusable agent capabilities providing specialized workflows and domai
 3. **Read** -- If match found, agent reads the full `SKILL.md`
 4. **Execute** -- Agent follows instructions and accesses supporting files
 
+**Key insight:** Skills reduce startup token cost. Instead of loading 10,000 tokens of instructions upfront, the agent only loads what it needs when it needs it.
+
 ---
 
 ## SKILL.md Format
@@ -48,6 +50,12 @@ This skill explains how to...
 skills/
 ├── langgraph-docs/
 │   └── SKILL.md
+├── research/
+│   ├── SKILL.md           # Main instructions (required)
+│   ├── templates/         # Optional: report templates
+│   │   └── report.md
+│   └── examples/          # Optional: example outputs
+│       └── sample.md
 └── arxiv_search/
     ├── SKILL.md
     └── arxiv_search.py
@@ -145,20 +153,15 @@ Skill state is fully isolated in both directions.
 
 ---
 
-## Agent Visibility
+## Skills vs Tools vs Sub-Agents
 
-A "Skills System" section is automatically injected into the agent's system prompt at startup, showing each skill's name, description, and path. The agent uses this to perform the Match → Read → Execute workflow based on skill descriptions.
+| Concept | What It Provides | When to Use |
+|---------|-----------------|-------------|
+| **Tool** | A function the agent can call | Specific actions (search, write, calculate) |
+| **Skill** | Instructions and procedures | Domain expertise, methodology, templates |
+| **Sub-Agent** | An isolated agent with its own context | Context isolation, specialization |
 
-**Best practice:** Write clear, specific descriptions in your `SKILL.md` frontmatter — matching decisions rely solely on descriptions.
-
----
-
-## Path Specifications
-
-- Use **forward slashes** for all skill paths (including on Windows)
-- Paths are relative to the backend's root
-- StateBackend: virtual filesystem keys must start with `/`
-- FilesystemBackend: paths can be absolute or relative to `root_dir`
+Skills define **procedures**; sub-agents **execute** complex multi-step work. Your sub-agents can use skills to effectively manage their context windows.
 
 ---
 
@@ -173,8 +176,52 @@ A "Skills System" section is automatically injected into the agent's system prom
 
 ---
 
+## Agent Visibility
+
+A "Skills System" section is automatically injected into the agent's system prompt at startup, showing each skill's name, description, and path. The agent uses this to perform the Match -> Read -> Execute workflow based on skill descriptions.
+
+**Best practice:** Write clear, specific descriptions in your `SKILL.md` frontmatter -- matching decisions rely solely on descriptions.
+
+---
+
+## Path Specifications
+
+- Use **forward slashes** for all skill paths (including on Windows)
+- Paths are relative to the backend's root
+- StateBackend: virtual filesystem keys must start with `/`
+- FilesystemBackend: paths can be absolute or relative to `root_dir`
+
+---
+
+## Anti-Patterns
+
+```python
+# WRONG: Loading all skills upfront in system_prompt
+agent = create_deep_agent(
+    system_prompt=open("skills/research/SKILL.md").read() +
+                  open("skills/writing/SKILL.md").read() +
+                  open("skills/analysis/SKILL.md").read(),
+    # Massive upfront context cost! Use skills parameter instead
+)
+
+# WRONG: Skills without filesystem access
+agent = create_deep_agent(
+    skills=["skills/research"],
+    # Default StateBackend - skill files may not be accessible
+)
+```
+
+## Checklist
+
+- [ ] Skills defined with clear SKILL.md files
+- [ ] Skills loaded via `skills` parameter (not system_prompt)
+- [ ] Skills directories accessible on the configured backend
+- [ ] Clear, specific descriptions in SKILL.md frontmatter
+
+---
+
 ## Documentation Links
 
-- [Skills Overview](https://docs.langchain.com/oss/python/deepagents/skills) — Official Deep Agents skills system documentation
-- [Agent Skills Specification](https://agentskills.io/specification) — The specification that skills follow
-- [Using Skills with Deep Agents](https://blog.langchain.com/using-skills-with-deep-agents/) — Blog post covering practical usage patterns
+- [Skills Overview](https://docs.langchain.com/oss/python/deepagents/skills) -- Official Deep Agents skills system documentation
+- [Agent Skills Specification](https://agentskills.io/specification) -- The specification that skills follow
+- [Using Skills with Deep Agents](https://blog.langchain.com/using-skills-with-deep-agents/) -- Blog post covering practical usage patterns

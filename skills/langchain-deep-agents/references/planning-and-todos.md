@@ -4,7 +4,7 @@ Built-in `write_todos` tool for structured task decomposition and progress track
 
 ## The Core Principle
 
-Deep agents include a planning tool (`write_todos`) borrowed from the Claude Code pattern. It enables agents to break down complex tasks into discrete steps, track progress, and adapt plans as new information emerges. This is a "context engineering hack" — it organizes the approach without executing anything.
+Deep agents include a planning tool (`write_todos`) borrowed from the Claude Code pattern. It enables agents to break down complex tasks into discrete steps, track progress, and adapt plans as new information emerges. This is a "context engineering hack" -- it organizes the approach without executing anything.
 
 ## How It Works
 
@@ -12,8 +12,8 @@ The `TodoListMiddleware` injects the `write_todos` tool and system prompt guidan
 
 ```
 User: "Research competitor landscape and write a report"
-    │
-    ▼
+    |
+    v
 Agent calls write_todos([
     {"task": "Research competitor A", "status": "pending"},
     {"task": "Research competitor B", "status": "pending"},
@@ -21,8 +21,8 @@ Agent calls write_todos([
     {"task": "Synthesize findings", "status": "pending"},
     {"task": "Write final report", "status": "pending"},
 ])
-    │
-    ▼
+    |
+    v
 Agent works through tasks, updating status as it goes
 ```
 
@@ -77,14 +77,14 @@ Planning shines when combined with sub-agent delegation:
 
 ```
 Agent creates plan:
-  1. [in_progress] Research market size → delegate to researcher
-  2. [pending] Research competitors → delegate to researcher
-  3. [pending] Analyze pricing models → delegate to analyst
-  4. [pending] Write final report → delegate to writer
+  1. [in_progress] Research market size -> delegate to researcher
+  2. [pending] Research competitors -> delegate to researcher
+  3. [pending] Analyze pricing models -> delegate to analyst
+  4. [pending] Write final report -> delegate to writer
 
 After step 1 completes:
   1. [completed] Research market size
-  2. [in_progress] Research competitors → delegate to researcher
+  2. [in_progress] Research competitors -> delegate to researcher
   3. [pending] Analyze pricing models
   4. [pending] Write final report
 ```
@@ -125,7 +125,7 @@ middleware = TodoListMiddleware(
 
 ## Planning vs Execution
 
-The planning tool is purely organizational — it doesn't execute anything. This separation is intentional:
+The planning tool is purely organizational -- it doesn't execute anything. This separation is intentional:
 
 | Concern | Tool |
 |---------|------|

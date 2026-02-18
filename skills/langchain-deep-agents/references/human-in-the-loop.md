@@ -16,6 +16,8 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 checkpointer = SqliteSaver.from_conn_string("agent.db")
 ```
 
+---
+
 ## Basic Setup
 
 ```python
@@ -34,13 +36,15 @@ agent = create_deep_agent(
 )
 ```
 
+---
+
 ## interrupt_on Configuration
 
 ### Simple Boolean
 
 ```python
 interrupt_on={
-    "send_email": True,   # Pause for approval with all decision options
+    "send_email": True,   # Pause with all decisions available (approve, edit, reject)
     "get_weather": False,  # Auto-execute, no pause
 }
 ```
@@ -58,39 +62,50 @@ interrupt_on={
 }
 ```
 
-**Decision types:**
-- `approve` — Execute the tool call as-is
-- `edit` — Modify tool arguments before execution
-- `reject` — Cancel the tool call entirely
+### Decision Types
+
+| Decision | Effect |
+|----------|--------|
+| `"approve"` | Execute the tool with the original arguments |
+| `"edit"` | Modify tool arguments before execution |
+| `"reject"` | Skip executing this tool call entirely |
+
+---
 
 ## Execution Flow
 
 ```
 Agent decides to call send_email(to="user@example.com", body="...")
-    │
-    ▼
+    |
+    v
 HumanInTheLoopMiddleware detects send_email is in interrupt_on
-    │
-    ▼
+    |
+    v
 Agent PAUSES (state saved to checkpointer)
-    │
-    ▼
+    |
+    v
 Application presents tool call to human for review
-    │
-    ▼
+    |
+    v
 Human decides: approve / edit / reject
-    │
-    ▼
+    |
+    v
 Application resumes agent with decision
-    │
-    ▼
+    |
+    v
 Agent continues (executes tool or handles rejection)
 ```
 
-## Implementing the Resume Loop
+---
+
+## Resuming After Interrupt
+
+Use `Command(resume=...)` to resume after an interrupt:
 
 ```python
-config = {"configurable": {"thread_id": "thread-123"}}
+from langgraph.types import Command
+
+config = {"configurable": {"thread_id": "task-123"}}
 
 # Initial invocation
 result = agent.invoke(
@@ -107,12 +122,14 @@ if result.get("action_requests"):
         # Get human decision
         decision = get_human_decision(request)  # Your UI logic
 
-        # Resume with decision
-        result = agent.invoke(
-            {"decisions": [decision]},
-            config=config,  # MUST use same thread_id
-        )
+    # Resume with decision using Command
+    result = agent.invoke(
+        Command(resume={"decisions": [{"type": "approve"}]}),
+        config=config,  # MUST use same thread_id
+    )
 ```
+
+---
 
 ## Streaming with HITL
 
@@ -128,17 +145,18 @@ for event in agent.stream(
         # Agent is paused, waiting for approval
         for request in event["action_requests"]:
             decision = await get_human_approval(request)
-            # Resume will happen on next stream call
         break
 
 # Resume after approval
 for event in agent.stream(
-    {"decisions": [{"approve": True}]},
+    Command(resume={"decisions": [{"type": "approve"}]}),
     config=config,
     stream_mode="updates",
 ):
     print(event)
 ```
+
+---
 
 ## Common Patterns
 
@@ -187,9 +205,47 @@ agent = create_deep_agent(
 )
 ```
 
+---
+
+## Subagent Interrupts
+
+Subagents can have their own `interrupt_on` config that **overrides** the parent:
+
+```python
+agent = create_deep_agent(
+    interrupt_on={"delete_file": True},
+    subagents=[{
+        "name": "file-manager",
+        "tools": [delete_file, read_file],
+        "interrupt_on": {
+            "delete_file": True,
+            "read_file": True,  # Override: gate reads in this subagent
+        }
+    }],
+    checkpointer=checkpointer
+)
+```
+
+---
+
+## Using interrupt() Directly
+
+Tools can call `interrupt()` directly from within tool code for custom approval flows:
+
+```python
+from langgraph.types import interrupt
+
+@tool
+def request_approval(action: str) -> str:
+    approval = interrupt({"type": "approval_request", "action": action})
+    return "APPROVED" if approval.get("approved") else "REJECTED"
+```
+
+---
+
 ## Multiple Tool Calls in One Turn
 
-When the agent makes multiple tool calls in a single turn, the decisions list must match the order of `action_requests`:
+When the agent makes multiple tool calls in a single turn, all interrupts are **batched** into a single interrupt -- provide one decision per action in order:
 
 ```python
 # Agent wants to:
@@ -199,14 +255,22 @@ When the agent makes multiple tool calls in a single turn, the decisions list mu
 
 # Resume with decisions in matching order:
 result = agent.invoke(
-    {"decisions": [
-        {"approve": True},      # Approve email to Alice
-        {"edit": {"to": "bob-new@co.com"}},  # Edit Bob's email
-        {"reject": True},       # Reject file deletion
-    ]},
+    Command(resume={"decisions": [
+        {"type": "approve"},      # Approve email to Alice
+        {"type": "edit", "args": {"to": "bob-new@co.com"}},  # Edit Bob's email
+        {"type": "reject"},       # Reject file deletion
+    ]}),
     config=config,
 )
 ```
+
+---
+
+## What to Gate
+
+Gate tools with **irreversible side effects**: file deletion, sending messages, database writes, financial transactions. Read-only tools generally don't need gates.
+
+---
 
 ## Anti-Patterns
 
@@ -230,7 +294,7 @@ interrupt_on={
 # Invoke:
 result = agent.invoke(messages, config={"configurable": {"thread_id": "t1"}})
 # Resume with DIFFERENT thread_id:
-result = agent.invoke(decisions, config={"configurable": {"thread_id": "t2"}})
+result = agent.invoke(Command(resume=decisions), config={"configurable": {"thread_id": "t2"}})
 # Agent starts fresh, doesn't find the paused state!
 
 # WRONG: Decisions list order mismatch
@@ -247,3 +311,11 @@ result = agent.invoke(decisions, config={"configurable": {"thread_id": "t2"}})
 - [ ] UI implemented to present tool calls for human review
 - [ ] Read-only tools excluded from interrupts (auto-execute)
 - [ ] Sub-agent delegation (`task` tool) considered for interrupts
+- [ ] `Command(resume=...)` used for resuming after interrupt
+
+---
+
+## Documentation Links
+
+- [Deep Agents Human-in-the-Loop](https://docs.langchain.com/oss/python/deepagents/human-in-the-loop) -- `interrupt_on` config, decision types, subagent interrupts, `interrupt()` primitive
+- [Deep Agents Customization (Middleware)](https://docs.langchain.com/oss/python/deepagents/customization) -- Default stack, conditional middleware

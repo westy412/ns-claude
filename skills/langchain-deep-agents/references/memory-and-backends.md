@@ -6,12 +6,12 @@ Deep agent tools operate on virtual file systems. Every agent has a backend that
 
 ## Backend Overview
 
-| Backend | Persistence | Scope | Primary Use |
-|---------|-------------|-------|-------------|
-| `StateBackend` | Ephemeral | Single thread | Default; scratch work |
-| `FilesystemBackend` | Local disk | Machine-wide | Direct local file access |
-| `StoreBackend` | Cross-thread | All threads (via Store) | Long-term memory |
-| `CompositeBackend` | Mixed | Configurable per path | Short-term + long-term combined |
+| Backend | Storage | Persistence | Security | Use Case |
+|---------|---------|-------------|----------|----------|
+| **StateBackend** | LangGraph state | Ephemeral (thread-local) | Safe | Default; development, simple tasks |
+| **FilesystemBackend** | Real disk | Permanent | Risky | CLI tools, sandboxed environments |
+| **StoreBackend** | LangGraph BaseStore | Cross-thread persistent | Safe | Long-term memory, user preferences |
+| **CompositeBackend** | Routes to others | Mixed | Depends on config | Short-term + long-term combined |
 
 ---
 
@@ -20,12 +20,22 @@ Deep agent tools operate on virtual file systems. Every agent has a backend that
 Ephemeral filesystem in LangGraph state. Persists only for a single thread.
 
 ```python
-agent = create_deep_agent()
+from deepagents import create_deep_agent
 
-# Equivalent:
+# StateBackend is the default - no configuration needed
+agent = create_deep_agent(
+    model="anthropic:claude-sonnet-4-20250514",
+)
+
+# Explicit configuration (equivalent to default)
 from deepagents.backends import StateBackend
-agent = create_deep_agent(backend=(lambda rt: StateBackend(rt)))
+
+agent = create_deep_agent(
+    backend=lambda rt: StateBackend(rt),
+)
 ```
+
+**When to use:** Development, testing, short-lived tasks where file persistence is unnecessary.
 
 ---
 
@@ -35,48 +45,91 @@ Direct read/write access to the local filesystem. Use with caution.
 
 ```python
 from deepagents.backends import FilesystemBackend
-agent = create_deep_agent(backend=FilesystemBackend(root_dir=".", virtual_mode=True))
+
+agent = create_deep_agent(
+    backend=FilesystemBackend(root_dir=".", virtual_mode=True),
+)
 ```
 
-- `virtual_mode=True`: Sandboxes paths — blocks `..`, `~`, and absolute paths outside `root_dir`; prevents symlink traversal
+- `virtual_mode=True`: Sandboxes paths -- blocks `..`, `~`, and absolute paths outside `root_dir`; prevents symlink traversal
 - `virtual_mode=False` (default): **No security even with `root_dir` set**
 - **Always use `virtual_mode=True`** and scope `root_dir` tightly
 
 > **Security warnings:** FilesystemBackend grants direct read/write access. Agents can read secrets (API keys, `.env` files). Combined with network tools, this enables SSRF/exfiltration. Modifications are permanent. Appropriate for local dev CLIs and CI/CD pipelines. **Not appropriate for web servers or HTTP APIs.** Use Human-in-the-Loop middleware and sandbox backends for production.
 
+**When to use:** CLI tools, sandboxed containers (Docker, Modal, Runloop, Daytona). Never in web servers or HTTP APIs without sandboxing.
+
 ---
 
-## StoreBackend
+## StoreBackend (Persistent)
 
-Long-term storage persisted across threads.
+Cross-thread persistent storage using LangGraph's BaseStore. Files survive across different threads and sessions.
 
 ```python
-from langgraph.store.memory import InMemoryStore
+from deepagents import create_deep_agent
 from deepagents.backends import StoreBackend
-agent = create_deep_agent(backend=(lambda rt: StoreBackend(rt)), store=InMemoryStore())
+from langgraph.store.memory import InMemoryStore
+
+store = InMemoryStore()  # Use PostgresStore in production
+
+agent = create_deep_agent(
+    model="anthropic:claude-sonnet-4-20250514",
+    store=store,
+    backend=lambda rt: StoreBackend(rt),
+)
 ```
 
 On LangSmith Deployment, omit `store` -- the platform provides one.
 
+**When to use:** Production systems where agents need to remember information across conversations.
+
 ---
 
-## CompositeBackend
+## CompositeBackend (Hybrid)
 
-Routes paths to different backends. Recommended for agents needing both scratch space and persistent memory.
+Routes different path prefixes to different backends. The production pattern for combining ephemeral working files with persistent memory.
 
 ```python
 from deepagents import create_deep_agent
 from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
 from langgraph.store.memory import InMemoryStore
 
-composite_backend = lambda rt: CompositeBackend(
-    default=StateBackend(rt),
-    routes={"/memories/": StoreBackend(rt)}
+store = InMemoryStore()  # Use PostgresStore in production
+
+agent = create_deep_agent(
+    model="anthropic:claude-sonnet-4-20250514",
+    store=store,
+    backend=lambda rt: CompositeBackend(
+        default=StateBackend(rt),           # Working files: ephemeral
+        routes={"/memories/": StoreBackend(rt)}  # Memory files: persistent
+    ),
 )
-agent = create_deep_agent(backend=composite_backend, store=InMemoryStore())
 ```
 
-**Path routing:** `/memories/` prefix routes to StoreBackend. Everything else goes to StateBackend. Longer prefixes override shorter ones. CompositeBackend strips the route prefix before storing (`/memories/preferences.txt` stored as `/preferences.txt`). Query operations (`ls`, `glob`, `grep`) aggregate results across backends and preserve original prefixed paths.
+**Path routing:**
+- Files prefixed with `/memories/` go to StoreBackend (persistent, cross-thread)
+- All other files go to StateBackend (ephemeral, thread-local)
+- Longer prefixes win: `/memories/projects/` can override `/memories/`
+- CompositeBackend strips the route prefix before storing (`/memories/preferences.txt` stored as `/preferences.txt`)
+- Query operations (`ls`, `glob`, `grep`) aggregate results across backends and preserve original prefixed paths
+
+---
+
+## Backend Factory Pattern
+
+Backends that need runtime access (StateBackend, StoreBackend) use a factory callable:
+
+```python
+# Factory: receives ToolRuntime at agent initialization
+backend=lambda rt: StateBackend(rt)
+
+# Instance: doesn't need runtime (FilesystemBackend)
+backend=FilesystemBackend(root_dir="/workspace")
+```
+
+You can pass either:
+- A `BackendProtocol` instance (e.g., `FilesystemBackend(...)`)
+- A `BackendFactory` callable: `Callable[[ToolRuntime], BackendProtocol]`
 
 ---
 
@@ -84,7 +137,7 @@ agent = create_deep_agent(backend=composite_backend, store=InMemoryStore())
 
 The `memory` parameter on `create_deep_agent` specifies virtual file paths (typically AGENTS.md files) that provide persistent context to the agent. How you populate those files depends on the backend:
 
-**StateBackend** — pass files at invoke time:
+**StateBackend** -- pass files at invoke time:
 ```python
 from deepagents.backends.utils import create_file_data
 
@@ -102,7 +155,7 @@ result = agent.invoke(
 )
 ```
 
-**StoreBackend** — pre-populate the store:
+**StoreBackend** -- pre-populate the store:
 ```python
 store = InMemoryStore()
 store.put(
@@ -118,7 +171,7 @@ agent = create_deep_agent(
 )
 ```
 
-**FilesystemBackend** — point to a local file:
+**FilesystemBackend** -- point to a local file:
 ```python
 agent = create_deep_agent(
     backend=FilesystemBackend(root_dir="/path/to/project"),
@@ -129,26 +182,72 @@ agent = create_deep_agent(
 
 ---
 
+## FileData Schema
+
+```python
+{"content": ["line 1", "line 2"], "created_at": "...", "modified_at": "..."}
+
+# Helper:
+from deepagents.backends.utils import create_file_data
+file_data = create_file_data("Hello\nWorld")
+```
+
+---
+
 ## Long-Term Memory Setup
+
+Memory enables agents to persist information across conversations (threads). While checkpointers save conversation state per-thread, memory provides **cross-thread** persistence.
+
+### Memory Architecture
+
+```
+Thread 1 (Mon): Agent learns user prefers concise reports
+    |
+    v
+Agent writes to /memories/user-preferences.md
+    |
+    v
+StoreBackend persists this file
+    |
+    v
+Thread 2 (Wed): New conversation, new thread_id
+    |
+    v
+Agent reads /memories/user-preferences.md
+    |
+    v
+Agent automatically uses concise report format
+```
+
+### Production Memory Setup
 
 ```python
 from deepagents import create_deep_agent
 from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
-from langgraph.store.memory import InMemoryStore
-from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.postgres import PostgresSaver
+from langgraph.store.postgres import PostgresStore
 
-checkpointer = MemorySaver()
-
-def make_backend(runtime):
-    return CompositeBackend(
-        default=StateBackend(runtime),
-        routes={"/memories/": StoreBackend(runtime)}
-    )
+# Production-grade persistent storage
+checkpointer = PostgresSaver.from_conn_string("postgresql://...")
+store = PostgresStore.from_conn_string("postgresql://...")
 
 agent = create_deep_agent(
-    store=InMemoryStore(),
-    backend=make_backend,
-    checkpointer=checkpointer
+    model="anthropic:claude-sonnet-4-20250514",
+    checkpointer=checkpointer,
+    store=store,
+    backend=lambda rt: CompositeBackend(
+        default=StateBackend(rt),
+        routes={
+            "/memories/": StoreBackend(rt),         # User preferences, knowledge
+            "/memories/projects/": StoreBackend(rt), # Per-project persistent data
+        }
+    ),
+    memory=["/memories/"],  # Tell agent about memory locations
+    system_prompt=(
+        "Save important findings to /memories/ for future reference. "
+        "Use working files (no prefix) for intermediate drafts. "
+        "Check /memories/ at the start of each conversation for context."
+    ),
 )
 ```
 
@@ -200,18 +299,6 @@ items = await client.store.search_items((assistant_id, "filesystem"))
 
 ---
 
-## FileData Schema
-
-```python
-{"content": ["line 1", "line 2"], "created_at": "...", "modified_at": "..."}
-
-# Helper:
-from deepagents.backends.utils import create_file_data
-file_data = create_file_data("Hello\nWorld")
-```
-
----
-
 ## Store Implementations
 
 | Store | Persistence | Use Case |
@@ -233,6 +320,50 @@ store.setup()
 
 ---
 
+## Memory vs Checkpointer
+
+| Feature | Checkpointer | Memory (Store) |
+|---------|-------------|----------------|
+| Scope | Per-thread | Cross-thread |
+| Content | Messages, tool calls, state | Files, notes, preferences |
+| Purpose | Conversation continuity | Long-term knowledge |
+| Persistence | Thread lifetime | Indefinite |
+
+Both are needed for a fully persistent agent. Use the checkpointer for conversation state and memory for learned knowledge.
+
+---
+
+## Security Checklist
+
+| Environment | Recommended Backend | Safeguards |
+|-------------|-------------------|------------|
+| Development | StateBackend | None needed (ephemeral) |
+| Web Server / API | StateBackend or StoreBackend | Never use FilesystemBackend |
+| CLI Tool | FilesystemBackend + `virtual_mode=True` | Restrict `root_dir` |
+| Sandbox (Docker, Modal) | FilesystemBackend | Container isolation |
+| Production | CompositeBackend | HITL middleware for writes |
+
+---
+
+## Decision Flow
+
+```
+What environment are you in?
++-- Development/Testing
+|   +-- StateBackend (default, no config needed)
++-- Production Web API
+|   +-- Need cross-thread memory?
+|   |   +-- YES -> CompositeBackend (State + Store)
+|   |   +-- NO -> StateBackend
+|   +-- NEVER use FilesystemBackend
++-- CLI Tool
+|   +-- FilesystemBackend(root_dir=".", virtual_mode=True)
++-- Sandboxed Container
+    +-- FilesystemBackend (container provides isolation)
+```
+
+---
+
 ## Use Cases
 
 | Pattern | Memory Path | Description |
@@ -241,6 +372,58 @@ store.setup()
 | Self-improving instructions | `/memories/instructions.txt` | Agent updates own instructions |
 | Knowledge base | `/memories/knowledge/` | Accumulated knowledge |
 | Research projects | `/memories/research/` | State across sessions |
+
+---
+
+## Anti-Patterns
+
+```python
+# WRONG: FilesystemBackend without virtual_mode
+backend = FilesystemBackend(root_dir="/app")  # Agent can escape root_dir!
+
+# WRONG: FilesystemBackend in web server
+agent = create_deep_agent(
+    backend=FilesystemBackend(root_dir="/"),
+)
+
+# WRONG: InMemoryStore in production
+from langgraph.store.memory import InMemoryStore
+store = InMemoryStore()  # Data lost on restart! Use PostgresStore
+
+# WRONG: No route prefix planning in CompositeBackend
+backend = CompositeBackend(
+    default=StateBackend(rt),
+    routes={"/": StoreBackend(rt)}  # Everything persists, defeats purpose
+)
+
+# WRONG: Memory without persistent backend
+agent = create_deep_agent(
+    backend=lambda rt: StateBackend(rt),  # Ephemeral!
+    memory=["/memories/"],
+    # Memory files lost after thread ends
+)
+
+# WRONG: No system prompt guidance for memory
+agent = create_deep_agent(
+    backend=lambda rt: CompositeBackend(
+        default=StateBackend(rt),
+        routes={"/memories/": StoreBackend(rt)},
+    ),
+    # Agent doesn't know to check /memories/ or what to save
+)
+```
+
+## Checklist
+
+- [ ] Backend explicitly chosen (don't rely on default for production)
+- [ ] `virtual_mode=True` on any FilesystemBackend
+- [ ] PostgresStore for production StoreBackend (not InMemoryStore)
+- [ ] CompositeBackend route prefixes planned with clear separation
+- [ ] HITL middleware enabled for write operations in sensitive environments
+- [ ] No FilesystemBackend in web servers or HTTP APIs
+- [ ] System prompt guides agent on memory read/write patterns
+- [ ] Memory backed by StoreBackend or persistent storage
+- [ ] Memory vs checkpointer distinction understood and both configured
 
 ---
 

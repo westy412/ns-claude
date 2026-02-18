@@ -27,12 +27,18 @@ Choose the appropriate reference based on your task:
 
 | Task | Reference File | Description |
 |------|----------------|-------------|
-| **Create an agent** | [getting-started.md](./references/getting-started.md) | Installation, `create_deep_agent` API, models, tools, system prompts, quickstart |
-| **Add subagents** | [subagents.md](./references/subagents.md) | SubAgent dict, CompiledSubAgent, general-purpose subagent, skills inheritance, streaming |
-| **Configure memory** | [memory-and-backends.md](./references/memory-and-backends.md) | StateBackend, FilesystemBackend, StoreBackend, CompositeBackend, long-term memory |
-| **Add skills** | [skills-system.md](./references/skills-system.md) | SKILL.md format, progressive disclosure, backend-specific usage, subagent skills |
+| **Create an agent** | [getting-started.md](./references/getting-started.md) | Installation, full `create_deep_agent` API, models, tools, system prompts, invocation patterns, quickstart |
+| **Add subagents** | [subagents.md](./references/subagents.md) | SubAgent dict, CompiledSubAgent, general-purpose subagent, design patterns, skills inheritance, streaming |
+| **Configure memory & backends** | [memory-and-backends.md](./references/memory-and-backends.md) | StateBackend, FilesystemBackend, StoreBackend, CompositeBackend, FileData, LangSmith, long-term memory |
+| **Add skills** | [skills-system.md](./references/skills-system.md) | SKILL.md format, progressive disclosure, backend-specific usage, subagent skills, skills vs tools |
 | **Use sandboxes** | [sandboxes.md](./references/sandboxes.md) | Modal, Runloop, Daytona -- isolated code execution environments |
-| **Middleware / HITL** | [middleware-and-hitl.md](./references/middleware-and-hitl.md) | Middleware stack, custom middleware, human-in-the-loop, context management |
+| **Configure middleware** | [middleware.md](./references/middleware.md) | Middleware protocol, default stack, custom middleware, `@wrap_tool_call`, execution flow |
+| **Human-in-the-loop** | [human-in-the-loop.md](./references/human-in-the-loop.md) | `interrupt_on`, decisions, resume with `Command`, subagent overrides, `interrupt()` |
+| **Planning & todos** | [planning-and-todos.md](./references/planning-and-todos.md) | `write_todos` tool, task decomposition, adaptive planning |
+| **Streaming** | [streaming.md](./references/streaming.md) | 6 stream modes, real-time events, subagent streaming, async streaming |
+| **Persistence** | [persistence.md](./references/persistence.md) | Checkpointers, thread management, crash recovery, SqliteSaver vs PostgresSaver |
+| **File organization** | [file-organization.md](./references/file-organization.md) | Project structure, module layout, YAML configs |
+| **Architecture patterns** | [architecture-patterns.md](./references/architecture-patterns.md) | Single agent, research agent, content builder, hybrid memory, approval pipeline |
 
 > **Maintenance Note**: If any patterns in the reference files are found to be incorrect during implementation, update the corresponding reference file with the correct pattern.
 
@@ -70,12 +76,26 @@ LangChain Deep Agents is an **agent harness** -- the same core tool-calling loop
 ### create_deep_agent Signature
 
 ```python
-create_deep_agent(
-    name: str | None = None,
+from deepagents import create_deep_agent
+
+agent = create_deep_agent(
     model: str | BaseChatModel | None = None,
-    tools: Sequence[BaseTool | Callable | dict[str, Any]] | None = None,
+    tools: Sequence[BaseTool | Callable | dict] | None = None,
     *,
-    system_prompt: str | SystemMessage | None = None
+    system_prompt: str | SystemMessage | None = None,
+    middleware: Sequence[AgentMiddleware] = (),
+    subagents: list[SubAgent | CompiledSubAgent] | None = None,
+    skills: list[str] | None = None,
+    memory: list[str] | None = None,
+    response_format: ResponseFormat | None = None,
+    context_schema: type[Any] | None = None,
+    checkpointer: Checkpointer | None = None,
+    store: BaseStore | None = None,
+    backend: BackendProtocol | BackendFactory | None = None,
+    interrupt_on: dict[str, bool | InterruptOnConfig] | None = None,
+    debug: bool = False,
+    name: str | None = None,
+    cache: BaseCache | None = None,
 ) -> CompiledStateGraph
 ```
 
@@ -150,6 +170,78 @@ agent = create_deep_agent(
 
 ---
 
+## Anti-Patterns (Quick Reference)
+
+```python
+# WRONG: Not passing a model - relies on default silently
+agent = create_deep_agent()  # Uses claude-sonnet-4 by default, be explicit
+
+# WRONG: Creating agents without a checkpointer in production
+agent = create_deep_agent(model="anthropic:claude-sonnet-4-20250514")
+# Missing checkpointer - no persistence, no HITL support
+
+# WRONG: Overloading the main agent instead of delegating
+agent = create_deep_agent(
+    tools=[tool1, tool2, ..., tool50],  # Too many tools, context bloat
+)
+# Use sub-agents for context isolation instead
+
+# WRONG: Using FilesystemBackend without virtual_mode in production
+from deepagents.backends import FilesystemBackend
+backend = FilesystemBackend(root_dir="/")  # Full filesystem access, no security
+
+# WRONG: Putting all logic in system_prompt instead of middleware
+agent = create_deep_agent(
+    system_prompt="<5000 words of instructions>"  # Use middleware for context engineering
+)
+
+# WRONG: Using MemorySaver in production
+from langgraph.checkpoint.memory import MemorySaver
+agent = create_deep_agent(checkpointer=MemorySaver())  # In-memory only, use SqliteSaver/PostgresSaver
+```
+
+## Common Imports
+
+```python
+# Deep Agents Core
+from deepagents import create_deep_agent, async_create_deep_agent
+
+# Model Initialization
+from langchain.chat_models import init_chat_model
+
+# Middleware
+from deepagents.middleware.subagents import SubAgentMiddleware
+from deepagents.middleware.filesystem import FilesystemMiddleware
+from deepagents.middleware.todolist import TodoListMiddleware
+from deepagents.middleware.summarization import SummarizationMiddleware
+from deepagents.middleware.hitl import HumanInTheLoopMiddleware
+from deepagents.middleware.tool_selector import LLMToolSelectorMiddleware
+
+# Backends
+from deepagents.backends import (
+    StateBackend,
+    StoreBackend,
+    FilesystemBackend,
+    CompositeBackend,
+)
+
+# Sub-Agents
+from deepagents import CompiledSubAgent
+
+# LangGraph Runtime
+from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.postgres import PostgresSaver
+from langgraph.store.memory import InMemoryStore
+
+# Tools
+from langchain.tools import tool
+
+# Async
+import asyncio
+```
+
+---
+
 ## Documentation Links
 
 - **Docs**: https://docs.langchain.com/oss/python/deepagents/overview
@@ -157,3 +249,9 @@ agent = create_deep_agent(
 - **API Reference**: https://reference.langchain.com/python/deepagents/
 - **JS/TS**: https://github.com/langchain-ai/deepagentsjs
 - **CLI**: https://docs.langchain.com/oss/python/deepagents/cli
+
+## Related Skills
+
+- **dspy**: DSPy framework patterns for declarative agent design
+- **agent-spec-builder**: Design complete agent systems with framework-agnostic specs
+- **agent-implementation-builder**: Build full agent teams from specifications

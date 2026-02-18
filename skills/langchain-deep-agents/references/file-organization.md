@@ -151,7 +151,7 @@ agent = create_deep_agent(
 )
 ```
 
-Skills are **progressively disclosed** — only loaded when the agent determines they're relevant to the current task. This reduces token usage at startup.
+Skills are **progressively disclosed** -- only loaded when the agent determines they're relevant to the current task. This reduces token usage at startup.
 
 ### 6. NO Separate Prompt Files
 

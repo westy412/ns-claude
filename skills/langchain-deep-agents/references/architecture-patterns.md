@@ -17,10 +17,10 @@ Common agent architectures built with Deep Agents SDK.
 ### Single Agent (Simple Tool Loop)
 
 ```
-User → Agent → [Tool Calls] → Response
-              └─ write_todos
-              └─ read_file / write_file
-              └─ custom_tools
+User -> Agent -> [Tool Calls] -> Response
+              +- write_todos
+              +- read_file / write_file
+              +- custom_tools
 ```
 
 The simplest pattern. One agent with tools, planning, and filesystem access.
@@ -40,7 +40,7 @@ agent = create_deep_agent(
 ### Research Agent (Search + File Write)
 
 ```
-User → Agent → [Plan] → [Search × N] → [Write Notes] → [Write Report] → Response
+User -> Agent -> [Plan] -> [Search x N] -> [Write Notes] -> [Write Report] -> Response
 ```
 
 Agent plans research, executes searches, writes findings to filesystem, produces structured output.
@@ -73,12 +73,12 @@ agent = create_deep_agent(
 ### Content Builder (Multi-Subagent Pipeline)
 
 ```
-User → Coordinator → task(researcher) → task(writer) → task(designer) → Response
-           │              │                  │               │
-           │         Searches web      Reads notes     Creates assets
-           │         Writes notes      Writes draft    Writes images
-           │
-           └─ Orchestrates pipeline, reviews output
+User -> Coordinator -> task(researcher) -> task(writer) -> task(designer) -> Response
+           |              |                  |               |
+           |         Searches web      Reads notes     Creates assets
+           |         Writes notes      Writes draft    Writes images
+           |
+           +- Orchestrates pipeline, reviews output
 ```
 
 Main agent coordinates specialized sub-agents that each handle one phase.
@@ -123,10 +123,10 @@ agent = create_deep_agent(
 ### Hybrid Memory Agent (Persistent + Ephemeral)
 
 ```
-User → Agent → Check /memories/ → Plan → Execute → Save findings to /memories/
-                    │                                       │
-                    └── Cross-thread persistent ────────────┘
-                    │
+User -> Agent -> Check /memories/ -> Plan -> Execute -> Save findings to /memories/
+                    |                                       |
+                    +-- Cross-thread persistent -------------+
+                    |
                Working files (ephemeral, thread-local)
 ```
 
@@ -161,8 +161,8 @@ agent = create_deep_agent(
 ### Approval Pipeline (HITL)
 
 ```
-User → Agent → Plan → [Auto: read, search] → [HITL: write, send, delete] → Response
-                                                      │
+User -> Agent -> Plan -> [Auto: read, search] -> [HITL: write, send, delete] -> Response
+                                                      |
                                                 Human approves/rejects
 ```
 
@@ -191,19 +191,19 @@ agent = create_deep_agent(
 
 ```
 What is your primary use case?
-├── Simple Q&A or task completion
-│   └── Single Agent
-├── Research and report writing
-│   ├── Short research (5 min)
-│   │   └── Research Agent (single agent + search)
-│   └── Deep research (30+ min)
-│       └── Content Builder (researcher + writer sub-agents)
-├── Long-running assistant with memory
-│   └── Hybrid Memory Agent
-├── Sensitive operations requiring approval
-│   └── Approval Pipeline
-└── Complex multi-phase workflow
-    └── Content Builder (customize sub-agents per phase)
++-- Simple Q&A or task completion
+|   +-- Single Agent
++-- Research and report writing
+|   +-- Short research (5 min)
+|   |   +-- Research Agent (single agent + search)
+|   +-- Deep research (30+ min)
+|       +-- Content Builder (researcher + writer sub-agents)
++-- Long-running assistant with memory
+|   +-- Hybrid Memory Agent
++-- Sensitive operations requiring approval
+|   +-- Approval Pipeline
++-- Complex multi-phase workflow
+    +-- Content Builder (customize sub-agents per phase)
 ```
 
 ## Pattern Combinations
@@ -212,10 +212,10 @@ Patterns can be combined:
 
 ```
 Hybrid Memory + Content Builder + Approval Pipeline
-    │
-    ├── Persistent memory across sessions
-    ├── Specialized sub-agents for each phase
-    └── HITL approval for external communications
+    |
+    +-- Persistent memory across sessions
+    +-- Specialized sub-agents for each phase
+    +-- HITL approval for external communications
 ```
 
 ## Common Configurations
@@ -230,7 +230,8 @@ Hybrid Memory + Content Builder + Approval Pipeline
 
 ## See Also
 
-- [Middleware Types](middleware-types.md) - Middleware that powers each pattern
-- [Sub-Agents](../sub-agents.md) - Sub-agent delegation patterns
-- [Backends](../backends.md) - Storage configuration for each pattern
-- [Streaming & Persistence](../streaming-and-persistence.md) - Production persistence setup
+- [Middleware](middleware.md) - Middleware that powers each pattern
+- [Subagents](subagents.md) - Sub-agent delegation patterns
+- [Memory and Backends](memory-and-backends.md) - Storage configuration for each pattern
+- [Streaming](streaming.md) - Real-time event output during execution
+- [Persistence](persistence.md) - Checkpointers and durable state storage
