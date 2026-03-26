@@ -1,20 +1,20 @@
 ---
 name: review-agent-spec
-description: Comprehensive review of agent specs from agent-spec-builder. Runs 15 structural checks, traces source material coverage against discovery/brainstorm docs, and performs ambiguity analysis with 9 categories (6 general + 3 agent-specific). Saves review to the spec's reviews/ folder.
-allowed-tools: Read Glob Grep AskUserQuestion Write
+description: Comprehensive review of agent specs from agent-spec-builder. Spawns 3 parallel review agents (structural, source tracing, ambiguity) via teammate-spawn. 9-category ambiguity analysis (6 general + 3 agent-specific). Saves consolidated review to the spec's reviews/ folder.
+allowed-tools: Read Glob Grep AskUserQuestion Write Skill TeamCreate TaskCreate TaskUpdate TaskList TaskGet SendMessage
 ---
 
 # Review Agent Spec
 
 ## Purpose
 
-Validate a completed agent spec before handoff to implementation. Three dimensions:
+Validate a completed agent spec before handoff to implementation. Three dimensions, each run by a dedicated agent in its own context window:
 
 1. **Structural correctness** — manifest integrity, team folder completeness, data flow consistency, anti-patterns
 2. **Source material fidelity** — does the spec capture everything from discovery/brainstorm/research?
 3. **Ambiguity for autonomous agents** — could an implementation agent misinterpret this and build the wrong thing?
 
-Agent specs have more implicit assumptions than general specs — agent boundaries, tool behavior, orchestration logic, and data flow between agents all create additional surfaces for ambiguity. This review is especially thorough on those dimensions.
+Agent specs have more implicit assumptions than general specs — agent boundaries, tool behavior, orchestration logic, and data flow between agents all create additional surfaces for ambiguity.
 
 ---
 
@@ -54,53 +54,65 @@ Read all located source materials before proceeding.
 
 ---
 
-## Step 2: Run Structural Checks
+## Step 2: Spawn Review Team
 
-Load `references/structural-checks.md`.
+Load the `teammate-spawn` skill to generate teammate prompt files.
 
-Execute all 15 checks against the spec. Record PASS/WARN/FAIL for each.
+**Team composition (3 agents):**
 
-Checks 14 (DSPy path validation) and 15 (instance parity) are conditional — skip if not applicable and mark as N/A.
+| Agent | Dimension | Reference | Summary |
+|-------|-----------|-----------|---------|
+| `structural-checker` | Structural Checks | `references/structural-checks.md` | 15 structural validation checks (incl. data flow, manifest sync) |
+| `source-tracer` | Source Tracing | `references/source-tracing.md` | Cross-reference spec against discovery + agent-specific mappings |
+| `ambiguity-analyzer` | Ambiguity Analysis | `references/ambiguity-analysis.md` | 9-category ambiguity detection (6 general + 3 agent-specific) |
+
+**Setup sequence:**
+
+1. Load the `teammate-spawn` skill: `Skill tool → skill: "teammate-spawn"`
+2. Create a team via `TeamCreate`
+3. Create one task per dimension via `TaskCreate`
+4. Generate teammate prompt files — each prompt must include:
+   - Path to the spec folder (with manifest.yaml)
+   - Paths to all source materials (discovery, brainstorm, research)
+   - The specific reference file content for their dimension
+   - The findings format they must report back in
+   - Instruction: **read-only investigation, do NOT modify any files**
+5. Spawn all 3 agents in parallel
+
+**Each agent's prompt must contain:**
+- The spec folder path and list of all spec files (from manifest.yaml)
+- The full discovery document content (or path to read it)
+- The specific checks/methodology from their reference file
+- The exact output format expected (tables from their reference)
+- Instruction to send findings back via `SendMessage`
+
+**Why separate context windows:** Agent specs are larger than general specs (multiple files across team/agent structure). Each dimension needs the full spec + source materials + methodology. Running all three in one context would severely degrade quality.
 
 ---
 
-## Step 3: Run Source Material Tracing
+## Step 3: Collect Results
 
-Load `references/source-tracing.md`.
-
-Cross-reference every requirement, decision, constraint, and scope item from the discovery document (and any brainstorm/research documents) against the spec.
-
-**Agent-specific tracing includes:**
-- Do discovery requirements map to specific agents? (Which agent handles which requirement?)
-- Do scope decisions align with agent boundaries?
-- Do decisions about tools/integrations from discovery appear in agent tool definitions?
-- Do data flow decisions from discovery match the agent data flow specs?
-
-Produce:
-- Traceability matrix
-- Coverage gaps (classified by importance: CRITICAL/MODERATE/MINOR)
-- Misinterpretations (where spec diverges from source intent)
+1. Monitor all 3 agents until complete
+2. Each agent reports structured findings back via `SendMessage`
+3. Collect all findings
 
 ---
 
-## Step 4: Run Ambiguity Analysis
+## Step 4: Consolidate and Cross-Reference
 
-Load `references/ambiguity-analysis.md`.
+**Cross-reference source tracing and ambiguity results:**
+If the source tracer found a gap (something in discovery not in spec) AND the ambiguity analyzer flagged the same area as ambiguous — classify it as a **source tracing gap** (the answer exists in discovery but wasn't carried to the spec), not an ambiguity. This prevents double-counting.
 
-**Important:** Cross-reference with source tracing results from Step 3. If the discovery document answers a question the spec leaves ambiguous, classify that as a **source tracing gap** (Step 3), not an ambiguity finding. This prevents double-counting.
+**Merge findings into a single report** using `templates/review-output.md`:
+- Section 1: Structural Checks (from structural-checker)
+- Section 2: Source Material Tracing with requirement-to-agent mapping (from source-tracer)
+- Section 3: Ambiguity Analysis with agent-specific categories (from ambiguity-analyzer, deduplicated)
+- Section 4: Overall Summary with per-dimension verdicts
 
-Analyze using all 9 categories (6 general + 3 agent-specific):
-1. Multiple interpretations
-2. Undefined edge cases
-3. Implicit assumptions
-4. Vague scope boundaries
-5. Contradictory requirements
-6. Missing failure/recovery scenarios
-7. **Agent boundary ambiguity** — unclear which agent handles what
-8. **Tool behavior ambiguity** — tool behavior/error modes undefined
-9. **Orchestration ambiguity** — retry/failure cascade/parallel execution unclear
-
-Produce findings with **specific, answerable clarification questions** for each ambiguity.
+**Apply overall verdict:**
+- Any FAIL in any dimension → Overall FAIL
+- No FAILs but WARNs → Overall WARN
+- All PASS → Overall PASS
 
 ---
 
@@ -111,6 +123,7 @@ Produce findings with **specific, answerable clarification questions** for each 
 1. Create `reviews/` folder in the **parent** spec directory (not inside spec/) if it does not exist
 2. Determine next review number: glob `reviews/review-*.md`, parse the highest number, add 1. Start at `001` if none exist.
 3. Write review to `reviews/review-NNN.md` using `templates/review-output.md`
+4. Clean up team: shutdown teammates, delete team
 
 **Present to user:**
 - Overall verdict (PASS/WARN/FAIL per dimension)
@@ -125,12 +138,13 @@ Produce findings with **specific, answerable clarification questions** for each 
 
 ## Key Principles
 
+- **Parallel execution in separate contexts** — each dimension gets its own agent with full context, preventing quality degradation
 - **Agent specs have more implicit assumptions** — agent boundaries, tool behavior, and orchestration logic all create additional ambiguity surfaces. Be especially thorough on Categories 7-9.
 - **Source tracing is the highest-value dimension** — missing discovery items cause scope drift during implementation
 - **Ambiguity findings must be actionable** — every finding includes a specific clarification question
-- **Source tracing runs before ambiguity analysis** — prevents false positives
+- **Cross-reference before consolidating** — deduplicate between source tracing and ambiguity findings
 - **Save reviews automatically** — non-destructive audit trail
-- **All 15 structural checks are preserved** — no regression from the original review-spec skill
+- **Read-only investigation** — review agents do NOT modify the spec or any files
 
 ---
 
@@ -152,7 +166,6 @@ This skill expects (and reinforces) the following folder structure:
     reviews/              # review outputs (this skill writes here)
       review-001.md
     feedback/             # placeholder for implementation verification
-      implementation.md
 ```
 
 ---
