@@ -22,7 +22,7 @@ From the spec's Skills section and chunk-level skill listings, load skills just-
 
 - At Phase 0: Load top-level skills from the Skills section
 - At each subsequent phase: Load chunk-level skills before starting that chunk
-- **Context budget:** Only load ONE skill at a time. If a new skill is needed, persist progress to `progress-{spec-name}.md` first
+- **Context budget:** Only load ONE skill at a time. If a new skill is needed, persist progress to `the feature folder's `progress.md`` first
 
 ### Step 2: Work Through Phases Sequentially
 
@@ -34,7 +34,7 @@ For each phase in the execution plan:
    b. Read relevant reference files and spec details
    c. Execute the sub-tasks
    d. Verify the chunk's outcome is met
-   e. Update `progress-{spec-name}.md` — mark chunk as `done`
+   e. Update `the feature folder's `progress.md`` — mark chunk as `done`
 3. After all chunks in the phase complete, move to the next phase
 
 ### Step 3: Handle Dependencies
@@ -49,7 +49,7 @@ If a chunk has a specific `Depends On` referencing another chunk, verify that ch
 
 ## Progress Tracking
 
-Update `progress-{spec-name}.md` after each chunk:
+Update `the feature folder's `progress.md`` after each chunk:
 
 1. Mark the completed chunk as `done` in the Execution Plan Snapshot
 2. Update "Current Phase" and "Next Chunk"

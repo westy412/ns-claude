@@ -6,7 +6,7 @@
 
 ## When to Record Feedback
 
-Record feedback in `progress-{spec-name}.md`'s Implementation Notes section when:
+Record feedback in `the feature folder's `progress.md``'s Implementation Notes section when:
 - User says generated code is wrong
 - A pattern was used incorrectly
 - Code doesn't follow project conventions
@@ -40,7 +40,7 @@ This prevents the same mistake from appearing in later chunks or phases.
 
 ### Step 4: Record in Progress Document
 
-Add the feedback to `progress-{spec-name}.md` → Implementation Notes → Decisions Made:
+Add the feedback to `the feature folder's `progress.md`` → Implementation Notes → Decisions Made:
 
 ```markdown
 ### Decisions Made

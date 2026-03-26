@@ -82,22 +82,25 @@ Whatever the spec defines — this skill is technology-agnostic. The spec's type
 
 | Step | What | Reference |
 |------|------|-----------|
-| Parse Spec | Read and parse `/specs/[name].md` | `references/spec-parsing.md` |
-| Initialize | Phase 0 setup, create progress-{spec-name}.md, determine execution mode | `references/workflow.md` |
+| Parse Spec | Read and parse the spec from the feature folder | `references/spec-parsing.md` |
+| Initialize | Phase 0 setup, locate or populate `progress.md` in feature folder, determine execution mode | `references/workflow.md` |
 | Team Mode | Parallel execution with teammates (2+ streams) | `references/team-mode.md` |
 | Single-Agent Mode | Sequential execution (1 stream or simple specs) | `references/single-agent-mode.md` |
 | Completion | Verify acceptance criteria, output completion promise | `references/workflow.md` |
 
 ### Phase 0: Parse Spec and Initialize (Fixed)
 
-1. Read the spec file
-2. Parse all sections (see `references/spec-parsing.md`)
-3. Load top-level skills from the Skills section (one at a time)
-4. Determine execution mode
-5. Initialize project (if needed)
-6. Create `progress-{spec-name}.md` from template (spec-specific, not generic)
-7. Update spec status to `in-progress`
-8. Proceed to team mode or single-agent mode
+1. Receive the spec folder path (e.g., `[workforce-root]/specs/YYYY-MM-DD-feature-name/`)
+2. Read the spec file (`spec.md` in the feature folder)
+3. Parse all sections (see `references/spec-parsing.md`)
+4. Load top-level skills from the Skills section (one at a time)
+5. Determine execution mode
+6. Initialize project (if needed)
+7. Locate or populate the feature folder's `progress.md`:
+   - If `progress.md` exists: read it, append the `## Implementation` section if missing
+   - If not: create from `templates/progress.md`
+8. Update status to `implementation` in progress.md, update spec status to `in-progress`
+9. Proceed to team mode or single-agent mode
 
 Full details: `references/workflow.md`
 
@@ -149,9 +152,9 @@ Full details: `references/sub-agents.md`
 
 ## Progress Tracking
 
-**Create `progress-{spec-name}.md` BEFORE starting implementation (Phase 0).**
+**Locate or populate `progress.md` in the feature folder BEFORE starting implementation (Phase 0).**
 
-**IMPORTANT:** Each spec gets its own progress file (e.g., `progress-content-engine.md`). Multiple specs may be in progress simultaneously.
+**IMPORTANT:** All skills share ONE `progress.md` at `[workforce-root]/specs/YYYY-MM-DD-feature-name/progress.md`. The implementation builder writes to the `## Implementation` section within it. Do NOT create a separate progress file.
 
 | Topic | Reference |
 |-------|-----------|
@@ -163,7 +166,7 @@ Full details: `references/sub-agents.md`
 
 ## Feedback Loop
 
-When you receive feedback about generated code, record the pattern in `progress-{spec-name}.md` to prevent the same mistake across chunks and sessions.
+When you receive feedback about generated code, record the pattern in the feature folder's `progress.md` (Implementation Notes section) to prevent the same mistake across chunks and sessions.
 
 Full process: `references/feedback-loop.md`
 
@@ -177,7 +180,7 @@ Full process: `references/feedback-loop.md`
 
 ## Templates
 
-- `templates/progress.md` — Progress tracking template (save as `progress-{spec-name}.md` in repo root)
+- `templates/progress.md` — Unified progress template (used to populate the feature folder's `progress.md`)
 
 ---
 

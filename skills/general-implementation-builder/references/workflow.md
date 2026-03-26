@@ -69,22 +69,27 @@ Verify the repo exists. If not, ask the user.
 
 If the spec requires project initialization (new project, dependencies, etc.), handle it based on the spec's requirements and architecture section. This is technology-agnostic — the spec and its skills define what initialization looks like.
 
-### Step 6: Create Progress Document
+### Step 6: Locate or Populate Progress Document
 
-Create a spec-specific progress file in the project root using `templates/progress.md`.
+The progress document lives in the feature folder, shared by all skills working on this feature.
 
-**IMPORTANT:** Use a spec-specific filename. Multiple specs may be in progress simultaneously.
+**IMPORTANT:** All skills read and write ONE `progress.md` at `{feature-folder}/progress.md`. The implementation builder writes to the `## Implementation` section.
 
-1. Read the template
-2. Derive the progress filename from the spec name (e.g., spec `/specs/content-engine.md` → `progress-content-engine.md`)
-3. Populate with data from the parsed spec:
+1. Derive the feature folder from the spec path (parent directory of `spec.md`)
+2. Check if `{feature-folder}/progress.md` EXISTS
+3. **If YES:** Read it completely. Check if it has an `## Implementation` section.
+   - If the Implementation section exists → you're resuming, skip to Step 8
+   - If the Implementation section is missing → append it from `templates/progress.md` (only the Implementation section onwards)
+4. **If NO:** Create from `templates/progress.md` — populate all sections
+5. Populate the Implementation section with data from the parsed spec:
    - All streams from Work Streams table
    - All phases and chunks from Execution Plan
    - Spec file path
    - Execution mode (team or single-agent)
-4. Write to `{repo-root}/progress-{spec-name}.md`
+6. Update the Artifacts table with what exists in the feature folder
+7. Update Pipeline History with a new row for implementation start
 
-This file is the single source of truth for cross-session resumption for this specific spec.
+This file is the single source of truth for the entire feature lifecycle.
 
 ### Step 7: Update Spec Status
 
@@ -105,7 +110,7 @@ After Phase 0, all phases come directly from the spec's execution plan. The buil
 1. Phases execute **sequentially** — Phase 2 starts only after ALL Phase 1 chunks complete
 2. Chunks within a phase execute **in parallel** (team mode) or **sequentially** (single-agent mode)
 3. Each chunk maps to a task in the task list
-4. Update `progress-{spec-name}.md` after each chunk completion
+4. Update the feature folder's `progress.md` (Implementation section) after each chunk completion
 5. Follow the Communication table for inter-stream data sharing
 
 **What drives each chunk:**
@@ -136,7 +141,7 @@ Only when ALL acceptance criteria pass:
 
 1. Output the completion promise string from the spec (wrapped in `<promise>` tags)
 2. Update the spec's Meta table: `Status: in-progress` → `Status: complete`
-3. Update `progress-{spec-name}.md`: set all chunks to `done`, add final session log entry
+3. Update the feature folder's `progress.md`: set all chunks to `done`, add final session log entry, update Next Action with handoff to `/general-implementation-verifier`
 
 ### Step 3: Clean Up (Team Mode Only)
 
@@ -155,7 +160,7 @@ If team mode was used:
 
 If you're starting a NEW session on an existing implementation:
 
-1. Read `progress-{spec-name}.md` — it contains resumption instructions at the top (find the right one by matching the spec you're implementing)
+1. Read the feature folder's `progress.md` — check the `## Implementation` section for resumption instructions
 2. Check **Current Phase** and **Next Chunk** to know where to pick up
 3. Read the **Execution Plan Snapshot** to understand build order
 4. Check **Stream Status** for per-stream progress

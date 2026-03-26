@@ -4,39 +4,38 @@
 
 ---
 
-## Creating Progress Document
+## Locating the Progress Document
 
-Create a spec-specific progress file during Phase 0, BEFORE starting any implementation work.
+The progress document lives in the feature folder, shared by all skills.
 
-**IMPORTANT:** Use a spec-specific filename, not a generic `progress.md`. Multiple specs may be in progress simultaneously, so each needs its own progress file.
+### Location
 
-### Naming Convention
+Progress is ALWAYS at `{feature-folder}/progress.md` — the feature folder is the parent directory of the spec file.
 
-Derive the progress filename from the spec name:
-- Spec: `/specs/content-engine.md` → Progress: `{repo-root}/progress-content-engine.md`
-- Spec: `/specs/auth-system.md` → Progress: `{repo-root}/progress-auth-system.md`
+Examples:
+- Spec: `~/content-workforce/specs/2026-03-26-content-engine/spec.md` → Progress: `~/content-workforce/specs/2026-03-26-content-engine/progress.md`
+- Spec: `~/inbound-workforce/specs/2026-03-26-auth-system/spec.md` → Progress: `~/inbound-workforce/specs/2026-03-26-auth-system/progress.md`
 
-### Steps:
+### Locate or Populate (Phase 0)
 
-1. **Read the template:** `templates/progress.md`
-2. **Derive the progress filename** from the spec name (e.g., `progress-{spec-name}.md`)
-3. **Populate from the parsed spec:**
-   - All streams from the Work Streams table
-   - All phases and chunks from the Execution Plan
-   - Spec file path
-   - Execution mode (team or single-agent)
-4. **Write to:** `{repo-root}/progress-{spec-name}.md`
+1. Derive the feature folder from the spec path (parent directory of `spec.md`)
+2. **If `progress.md` EXISTS:** Read it. Check for `## Implementation` section.
+   - If `## Implementation` exists → you're resuming, skip to execution
+   - If `## Implementation` is missing → append the Implementation section from `templates/progress.md`
+3. **If `progress.md` DOES NOT exist:** Create from `templates/progress.md`, populate all sections
 
-### Populating the Execution Plan Snapshot:
+### Populating the Implementation Section
 
-For each phase in the spec, create a table:
+From the parsed spec, populate:
+
+**Execution Plan Snapshot** — for each phase:
 
 ```markdown
 #### Phase 1 — [Phase Name]
 
-| Chunk | Stream | Status | Notes |
-|-------|--------|--------|-------|
-| [chunk-name] | [stream] | pending | |
+| Chunk | Stream | Status | Commit | Notes |
+|-------|--------|--------|--------|-------|
+| [chunk-name] | [stream] | pending | | |
 ```
 
 For Phase 2+, add the Blocked By column:
@@ -44,17 +43,15 @@ For Phase 2+, add the Blocked By column:
 ```markdown
 #### Phase 2 — [Phase Name]
 
-| Chunk | Stream | Status | Blocked By | Notes |
-|-------|--------|--------|------------|-------|
-| [chunk-name] | [stream] | pending | Phase 1 | |
+| Chunk | Stream | Status | Blocked By | Commit | Notes |
+|-------|--------|--------|------------|--------|-------|
+| [chunk-name] | [stream] | pending | Phase 1 | | |
 ```
 
-### Populating Stream Status:
-
-For each stream, list its chunks across all phases:
+**Stream Status** — for each stream:
 
 ```markdown
-### [Stream Name]
+#### [Stream Name]
 
 **Owns:** [file list from spec]
 **Skills:** [skills from spec]
@@ -65,24 +62,32 @@ For each stream, list its chunks across all phases:
 | 2 | [chunk-name] | pending | |
 ```
 
+**Also update:**
+- Meta → Status: `implementation`
+- Artifacts table → add entries for existing files
+- Pipeline History → add row for implementation start
+- Next Action → clear any previous handoff, note implementation is in progress
+
 ---
 
 ## Updating Progress
 
-Update `progress-{spec-name}.md` at these moments:
+Update the feature folder's `progress.md` at these moments:
 
 | Event | What to Update |
 |-------|----------------|
 | Starting a chunk | Chunk status: `pending` → `in_progress` |
-| Completing a chunk | Chunk status: `in_progress` → `done`, add Key Output |
+| Completing a chunk | Chunk status: `in_progress` → `done`, add Commit hash, add Key Output |
 | Phase boundary | Current Phase, Next Chunk |
 | Encountering a blocker | Add to Open Questions / Blockers |
 | Making a design decision | Add to Implementation Notes → Decisions Made |
 | Deviating from spec | Add to Implementation Notes → Deviations from Spec |
+| Completing a file | Add to Completed Files with commit hash |
 | Starting a session | Add Session Log entry |
 | Ending a session | Update Session Log with summary |
+| All phases complete | Update Next Action with handoff to `/general-implementation-verifier` |
 
-**CRITICAL: Update `progress-{spec-name}.md` BEFORE ending a session.** The next session depends on it.
+**CRITICAL: Update the feature folder's `progress.md` BEFORE ending a session.** The next session depends on it.
 
 ---
 
@@ -90,7 +95,7 @@ Update `progress-{spec-name}.md` at these moments:
 
 When starting a NEW session on an existing implementation:
 
-1. **Read `progress-{spec-name}.md`** — it contains resumption instructions at the top
+1. **Read the feature folder's `progress.md`** — check the `## Implementation` section for resumption instructions
 2. **Check Current Phase and Next Chunk** to know where to pick up
 3. **Read the Execution Plan Snapshot** to understand the full build order without re-parsing the spec
 4. **Check Stream Status** for per-stream progress
@@ -120,3 +125,22 @@ If the previous session used team mode:
 | `done` | Completed successfully |
 | `blocked` | Cannot proceed — see Open Questions / Blockers |
 | `skipped` | Intentionally skipped (e.g., not needed) |
+
+---
+
+## Commit Tracking
+
+When a chunk is completed, record the commit hash in the Execution Plan Snapshot:
+
+```markdown
+| setup-database | backend | done | abc1234 | Schema + migrations |
+```
+
+Also update the Completed Files list:
+
+```markdown
+- [x] src/db/schema.py — commit: abc1234
+- [x] src/db/migrations/001.py — commit: abc1234
+```
+
+This creates traceability from spec requirements → chunks → commits, which the verification skill uses to trace what was built and when.

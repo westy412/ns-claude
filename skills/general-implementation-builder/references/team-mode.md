@@ -172,7 +172,7 @@ If any teammate's prompt includes skills to load:
 2. Check for newly unblocked tasks
 3. If a teammate is idle and tasks are available, assign them
 4. Handle questions or blockers from teammates
-5. Update `progress-{spec-name}.md` after each phase completes
+5. Update the feature folder's `progress.md` after each phase completes
 
 ---
 
@@ -226,14 +226,15 @@ After all phases complete:
 
 As team lead, you MUST:
 
-**1. Create `progress-{spec-name}.md` BEFORE spawning teammates**
-- Use template from `templates/progress.md`
-- Name the file based on the spec (e.g., `progress-content-engine.md`)
-- Populate Execution Plan Snapshot with all chunks from the spec
+**1. Locate or populate the feature folder's `progress.md` BEFORE spawning teammates**
+- The feature folder is the parent directory of the spec file (e.g., `[workforce-root]/specs/YYYY-MM-DD-feature-name/`)
+- If `progress.md` exists: read it, check for an `## Implementation` section. If missing, append the implementation section from `templates/progress.md`
+- If `progress.md` does not exist: create it from `templates/progress.md`
+- Populate the Implementation section's Execution Plan Snapshot with all chunks from the spec
 - Set initial status: all "pending"
 
-**2. Update `progress-{spec-name}.md` after each phase completes**
-- Mark completed chunks as "done"
+**2. Update the feature folder's `progress.md` after each phase completes**
+- Mark completed chunks as "done" with commit hashes
 - Update "Current Phase" and "Next Chunk"
 - Add session log entry
 
