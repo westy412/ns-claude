@@ -4,7 +4,7 @@
 
 **If you are resuming this implementation in a new session, follow these steps:**
 
-1. Read THIS file (`progress.md`) completely — it is your entry point
+1. Read THIS file completely — it is your entry point for this specific spec
 2. Read the spec file listed in "Spec Location" below
 3. Check the **Current Phase** and **Next Chunk** below to know where to pick up
 4. Read the **Execution Plan Snapshot** to understand the full build order without re-parsing the spec

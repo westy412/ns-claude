@@ -189,10 +189,11 @@ At Phase 4 complete:
 
 A complete specification folder containing:
 1. `progress.md` — Handover document with all decisions and progress
-2. `agent-config.yaml` — Machine-readable configuration
-3. `team.md` — Team overview and orchestration
-4. `{agent}.md` files — Detailed spec for each agent
-5. `manifest.yaml` — System hierarchy + **execution plan** for implementation
+2. `overview.md` — System-level context, architecture, key decisions, reading guide
+3. `agent-config.yaml` — Machine-readable configuration
+4. `team.md` — Team overview and orchestration
+5. `{agent}.md` files — Detailed spec for each agent
+6. `manifest.yaml` — System hierarchy + **execution plan** for implementation
 
 This feeds into the `agent-impl-builder` skill.
 
@@ -213,6 +214,7 @@ All templates are in `templates/` folder:
 | Template | Purpose |
 |----------|---------|
 | `templates/manifest.yaml` | Entry point for impl-builder (hierarchy + file list) |
+| `templates/overview.md` | System-level overview, architecture, decisions, reading guide |
 | `templates/progress.md` | Progress and handover tracking |
 | `templates/agent-config.yaml` | Configuration file with examples |
 | `templates/team.md` | Team specification |

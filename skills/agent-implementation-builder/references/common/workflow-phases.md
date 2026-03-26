@@ -14,6 +14,18 @@ The manifest provides:
 3. **File list** — all spec files to read
 4. **Implementation order** — suggested sequence
 
+**Step 1.5:** If `spec/overview.md` exists, read it next for system-level context.
+
+The overview provides:
+1. **System purpose** — why this system exists, what problem it solves
+2. **Architecture** — how teams connect, data flow between components
+3. **Key decisions** — design choices and rationale from discovery
+4. **Integration points** — upstream/downstream systems, API contracts
+5. **Shared infrastructure** — cross-cutting components (with links to detail docs)
+6. **Reading guide** — recommended order for reading remaining spec files
+
+The overview is the narrative complement to manifest.yaml. The manifest tells you WHAT files exist; the overview tells you WHY and HOW they connect.
+
 **Step 2:** Read the ROOT `agent-config.yaml` for detailed configuration, including:
 - Framework being used (langgraph, dspy)
 - Agent types
@@ -48,16 +60,21 @@ Based on the framework in agent-config.yaml, read the corresponding cheat sheet:
 
 **Step 4.5: Determine execution mode.**
 
+> **⛔ CRITICAL GATE — This decision changes your entire role.**
+
 Read the `execution-plan` section from manifest.yaml:
 
 - **IF** the execution plan has phases with 2+ parallel chunks across different streams:
-  → Use **TEAM MODE** (see `references/common/team-mode.md`)
-  *Important: IF YOU ARE USING TEAM MODE MAKE SURE TO LOAD IN THE agent-impl-teammate-spawn skill*
+  → **⛔ TEAM MODE. STOP HERE — do NOT proceed to Step 5 or any implementation.**
+  1. Load `agent-impl-teammate-spawn` skill: `Skill tool -> skill: "agent-impl-teammate-spawn"`
+  2. Read `references/common/team-mode.md` for the full team workflow
+  3. Follow the team-mode.md steps: TeamCreate → TaskCreate → generate teammate prompts → spawn teammates
+  4. **You are now team lead. You do NOT write implementation code. Teammates do.**
 
 - **IF** the execution plan is purely sequential, missing, or all chunks are in one stream:
-  → Use **SINGLE-AGENT MODE** (proceed to Phase 1)
+  → Use **SINGLE-AGENT MODE** (proceed to Step 5)
 
-Team mode uses Claude Code agent teams to execute chunks in parallel. Each work stream gets its own teammate agent with independent context. Single-agent mode works through phases sequentially.
+Team mode uses Claude Code agent teams to execute chunks in parallel. Each work stream gets its own teammate agent with independent context. The team lead's job is orchestration: creating tasks, spawning teammates, monitoring progress, and relaying communication. Single-agent mode works through phases sequentially with the lead implementing directly.
 
 **Step 5: Initialize project with uv.**
 
@@ -69,7 +86,7 @@ cd [project-name]
 uv init
 
 # Create src directory structure
-mkdir -p src/[team-name]
+mkdir -p src/[team_name]
 ```
 
 **Step 6: Add core dependencies.**

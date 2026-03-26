@@ -36,7 +36,7 @@ Choose the appropriate reference based on your task:
 | **Human-in-the-loop** | [human-in-the-loop.md](./references/human-in-the-loop.md) | `interrupt_on`, decisions, resume with `Command`, subagent overrides, `interrupt()` |
 | **Planning & todos** | [planning-and-todos.md](./references/planning-and-todos.md) | `write_todos` tool, task decomposition, adaptive planning |
 | **Streaming** | [streaming.md](./references/streaming.md) | 6 stream modes, real-time events, subagent streaming, async streaming |
-| **Persistence** | [persistence.md](./references/persistence.md) | Checkpointers, thread management, crash recovery, SqliteSaver vs PostgresSaver |
+| **Persistence** | [persistence.md](./references/persistence.md) | Checkpointers, thread management, crash recovery, MemorySaver vs PostgresSaver vs AsyncPostgresSaver |
 | **File organization** | [file-organization.md](./references/file-organization.md) | Project structure, module layout, YAML configs |
 | **Architecture patterns** | [architecture-patterns.md](./references/architecture-patterns.md) | Single agent, research agent, content builder, hybrid memory, approval pipeline |
 
@@ -55,7 +55,7 @@ LangChain Deep Agents is an **agent harness** -- the same core tool-calling loop
 | Pillar | Built-in Tool | Purpose |
 |--------|--------------|---------|
 | **Planning** | `write_todos` | Task decomposition and progress tracking |
-| **File System** | `ls`, `read_file`, `write_file`, `edit_file`, `glob`, `grep` | Context management via virtual filesystem |
+| **File System** | `ls`, `read_file`, `write_file`, `edit_file`, `glob`, `grep` | Context management via virtual filesystem (backend methods: `ls_info`, `read`, `write`, `edit`, `glob_info`, `grep_raw`) |
 | **Subagents** | `task` | Delegate work with isolated context windows |
 | **Context Management** | `SummarizationMiddleware` | Auto-compression when conversations grow long |
 
@@ -157,16 +157,18 @@ agent = create_deep_agent(
 
 ---
 
-## Default Middleware Stack
+## Default Middleware Stack (Verified: deepagents 0.4.1)
 
-| Middleware | Purpose |
-|-----------|---------|
-| `TodoListMiddleware` | Task planning |
-| `FilesystemMiddleware` | File operations |
-| `SubAgentMiddleware` | Subagent coordination |
-| `SummarizationMiddleware` | Context compression |
-| `AnthropicPromptCachingMiddleware` | Token efficiency |
-| `PatchToolCallsMiddleware` | Interrupted tool call fixes |
+| Middleware | Module | Purpose |
+|-----------|--------|---------|
+| `FilesystemMiddleware` | `deepagents.middleware.filesystem` | File operations |
+| `SubAgentMiddleware` | `deepagents.middleware.subagents` | Subagent coordination |
+| `SummarizationMiddleware` | `deepagents.middleware.summarization` | Context compression |
+| `MemoryMiddleware` | `deepagents.middleware.memory` | Memory file management |
+| `SkillsMiddleware` | `deepagents.middleware.skills` | Progressive skill loading (when `skills` provided) |
+| `PatchToolCallsMiddleware` | `deepagents.middleware.patch_tool_calls` | Interrupted tool call fixes |
+
+**Note**: `TodoListMiddleware`, `HumanInTheLoopMiddleware`, and `LLMToolSelectorMiddleware` do **not exist** in deepagents 0.4.x.
 
 ---
 
@@ -197,25 +199,24 @@ agent = create_deep_agent(
 
 # WRONG: Using MemorySaver in production
 from langgraph.checkpoint.memory import MemorySaver
-agent = create_deep_agent(checkpointer=MemorySaver())  # In-memory only, use SqliteSaver/PostgresSaver
+agent = create_deep_agent(checkpointer=MemorySaver())  # In-memory only, use PostgresSaver/AsyncPostgresSaver
 ```
 
 ## Common Imports
 
 ```python
-# Deep Agents Core
-from deepagents import create_deep_agent, async_create_deep_agent
+# Deep Agents Core (create_deep_agent is SYNCHRONOUS, returns CompiledStateGraph)
+from deepagents import create_deep_agent
 
 # Model Initialization
 from langchain.chat_models import init_chat_model
 
-# Middleware
-from deepagents.middleware.subagents import SubAgentMiddleware
+# Middleware (verified in deepagents 0.4.1)
 from deepagents.middleware.filesystem import FilesystemMiddleware
-from deepagents.middleware.todolist import TodoListMiddleware
+from deepagents.middleware.subagents import SubAgentMiddleware
 from deepagents.middleware.summarization import SummarizationMiddleware
-from deepagents.middleware.hitl import HumanInTheLoopMiddleware
-from deepagents.middleware.tool_selector import LLMToolSelectorMiddleware
+from deepagents.middleware.memory import MemoryMiddleware
+from deepagents.middleware.skills import SkillsMiddleware
 
 # Backends
 from deepagents.backends import (
@@ -228,10 +229,16 @@ from deepagents.backends import (
 # Sub-Agents
 from deepagents import CompiledSubAgent
 
-# LangGraph Runtime
-from langgraph.checkpoint.sqlite import SqliteSaver
-from langgraph.checkpoint.postgres import PostgresSaver
+# LangGraph Runtime - Checkpointers
+from langgraph.checkpoint.memory import MemorySaver          # Dev/tests only
+from langgraph.checkpoint.postgres import PostgresSaver       # Production (sync)
+from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver  # Production (async)
+
+# LangGraph Runtime - Stores
 from langgraph.store.memory import InMemoryStore
+
+# MCP Adapters
+from langchain_mcp_adapters.client import MultiServerMCPClient
 
 # Tools
 from langchain.tools import tool
@@ -239,6 +246,9 @@ from langchain.tools import tool
 # Async
 import asyncio
 ```
+
+> **Note**: `async_create_deep_agent` does **not exist** in deepagents 0.4.x. Use `create_deep_agent` (sync) — the returned graph supports async invocation via `ainvoke`/`astream`.
+> `SqliteSaver` does **not exist** in current LangGraph checkpoint packages. Use `MemorySaver` for dev or `PostgresSaver`/`AsyncPostgresSaver` for production.
 
 ---
 

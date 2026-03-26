@@ -71,17 +71,20 @@ If the spec requires project initialization (new project, dependencies, etc.), h
 
 ### Step 6: Create Progress Document
 
-Create `progress.md` in the project root using `templates/progress.md`.
+Create a spec-specific progress file in the project root using `templates/progress.md`.
+
+**IMPORTANT:** Use a spec-specific filename. Multiple specs may be in progress simultaneously.
 
 1. Read the template
-2. Populate with data from the parsed spec:
+2. Derive the progress filename from the spec name (e.g., spec `/specs/content-engine.md` → `progress-content-engine.md`)
+3. Populate with data from the parsed spec:
    - All streams from Work Streams table
    - All phases and chunks from Execution Plan
    - Spec file path
    - Execution mode (team or single-agent)
-3. Write to `{repo-root}/progress.md`
+4. Write to `{repo-root}/progress-{spec-name}.md`
 
-This file is the single source of truth for cross-session resumption.
+This file is the single source of truth for cross-session resumption for this specific spec.
 
 ### Step 7: Update Spec Status
 
@@ -102,7 +105,7 @@ After Phase 0, all phases come directly from the spec's execution plan. The buil
 1. Phases execute **sequentially** — Phase 2 starts only after ALL Phase 1 chunks complete
 2. Chunks within a phase execute **in parallel** (team mode) or **sequentially** (single-agent mode)
 3. Each chunk maps to a task in the task list
-4. Update progress.md after each chunk completion
+4. Update `progress-{spec-name}.md` after each chunk completion
 5. Follow the Communication table for inter-stream data sharing
 
 **What drives each chunk:**
@@ -133,7 +136,7 @@ Only when ALL acceptance criteria pass:
 
 1. Output the completion promise string from the spec (wrapped in `<promise>` tags)
 2. Update the spec's Meta table: `Status: in-progress` → `Status: complete`
-3. Update progress.md: set all chunks to `done`, add final session log entry
+3. Update `progress-{spec-name}.md`: set all chunks to `done`, add final session log entry
 
 ### Step 3: Clean Up (Team Mode Only)
 
@@ -152,7 +155,7 @@ If team mode was used:
 
 If you're starting a NEW session on an existing implementation:
 
-1. Read `progress.md` — it contains resumption instructions at the top
+1. Read `progress-{spec-name}.md` — it contains resumption instructions at the top (find the right one by matching the spec you're implementing)
 2. Check **Current Phase** and **Next Chunk** to know where to pick up
 3. Read the **Execution Plan Snapshot** to understand build order
 4. Check **Stream Status** for per-stream progress

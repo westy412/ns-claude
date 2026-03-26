@@ -83,7 +83,7 @@ Whatever the spec defines — this skill is technology-agnostic. The spec's type
 | Step | What | Reference |
 |------|------|-----------|
 | Parse Spec | Read and parse `/specs/[name].md` | `references/spec-parsing.md` |
-| Initialize | Phase 0 setup, create progress.md, determine execution mode | `references/workflow.md` |
+| Initialize | Phase 0 setup, create progress-{spec-name}.md, determine execution mode | `references/workflow.md` |
 | Team Mode | Parallel execution with teammates (2+ streams) | `references/team-mode.md` |
 | Single-Agent Mode | Sequential execution (1 stream or simple specs) | `references/single-agent-mode.md` |
 | Completion | Verify acceptance criteria, output completion promise | `references/workflow.md` |
@@ -95,7 +95,7 @@ Whatever the spec defines — this skill is technology-agnostic. The spec's type
 3. Load top-level skills from the Skills section (one at a time)
 4. Determine execution mode
 5. Initialize project (if needed)
-6. Create progress.md from template
+6. Create `progress-{spec-name}.md` from template (spec-specific, not generic)
 7. Update spec status to `in-progress`
 8. Proceed to team mode or single-agent mode
 
@@ -149,7 +149,9 @@ Full details: `references/sub-agents.md`
 
 ## Progress Tracking
 
-**Create `progress.md` BEFORE starting implementation (Phase 0).**
+**Create `progress-{spec-name}.md` BEFORE starting implementation (Phase 0).**
+
+**IMPORTANT:** Each spec gets its own progress file (e.g., `progress-content-engine.md`). Multiple specs may be in progress simultaneously.
 
 | Topic | Reference |
 |-------|-----------|
@@ -161,7 +163,7 @@ Full details: `references/sub-agents.md`
 
 ## Feedback Loop
 
-When you receive feedback about generated code, record the pattern in progress.md to prevent the same mistake across chunks and sessions.
+When you receive feedback about generated code, record the pattern in `progress-{spec-name}.md` to prevent the same mistake across chunks and sessions.
 
 Full process: `references/feedback-loop.md`
 
@@ -175,7 +177,7 @@ Full process: `references/feedback-loop.md`
 
 ## Templates
 
-- `templates/progress.md` — Progress tracking template for cross-session resumption
+- `templates/progress.md` — Progress tracking template (save as `progress-{spec-name}.md` in repo root)
 
 ---
 

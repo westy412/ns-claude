@@ -24,6 +24,16 @@ Teammates DO NOT inherit the team lead's context. When spawned, the prompt IS th
 
 If the generated prompt does not explicitly tell the teammate what skills to load and how to load them, the implementation WILL fail. This is not a suggestion — it is the entire reason this skill exists.
 
+## Model policy
+
+**Always use Opus.** Every teammate MUST be spawned with `model: "opus"` unless the user has explicitly requested a different model for that specific teammate.
+
+- **Opus** — the default. Use this 99.9% of the time. Do not downgrade without explicit user instruction.
+- **Sonnet** — only if the user explicitly says to use Sonnet for a specific teammate. Never choose Sonnet on your own.
+- **Haiku** — **NEVER use Haiku. Under no circumstance.** Even if the user asks for Haiku, push back and recommend Opus or Sonnet instead. Haiku does not produce adequate quality for teammate work.
+
+If in doubt, use Opus.
+
 ## Quick start
 
 For each stream that needs a teammate:
@@ -131,7 +141,7 @@ For the `{{validation-checklist}}` variable, use the appropriate framework check
 - [ ] ToolNode added as a separate graph node — NOT created inside agent functions
 - [ ] Graph compiled before use
 - [ ] All node functions return State dict
-- [ ] Model tier matches spec (Haiku vs Sonnet vs Opus)
+- [ ] Model tier matches spec (Opus preferred, Sonnet only if explicitly specified — never Haiku)
 - [ ] Prompt template matches agent role from spec
 - [ ] All imports work: `uv run python -c "from ... import ..."`
 - [ ] Sent required data to downstream streams per Communication Requirements
@@ -153,7 +163,7 @@ Task tool:
   team_name: {team-name}
   name: {stream-name}
   subagent_type: general-purpose
-  model: opus (for complex streams) or sonnet
+  model: "opus"
   prompt: |
     You are teammate {stream-name} on team {team-name}.
 

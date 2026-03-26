@@ -211,9 +211,9 @@ agent = create_deep_agent(
 
 When using `create_deep_agent`, sub-agents automatically receive:
 
-1. **TodoListMiddleware** - Sub-agents can plan their own work
-2. **FilesystemMiddleware** - Sub-agents can read/write files
-3. **SummarizationMiddleware** - Long sub-agent conversations get compressed
+1. **FilesystemMiddleware** - Sub-agents can read/write files
+2. **SummarizationMiddleware** - Long sub-agent conversations get compressed
+3. **MemoryMiddleware** - Memory file management
 
 Plus any custom middleware specified in the subagent definition.
 

@@ -44,6 +44,30 @@ Use this skill when:
 
 ---
 
+## MANDATORY: Team Mode Check (DO NOT SKIP)
+
+> **⛔ HARD STOP — Read this BEFORE writing ANY implementation code.**
+>
+> After reading `manifest.yaml` in Phase 0, check the `execution-plan` section:
+>
+> **Does it have parallel chunks across 2+ different streams in ANY phase?**
+>
+> - **YES → You are in TEAM MODE.** You MUST:
+>   1. Load the `agent-impl-teammate-spawn` skill using `Skill tool -> skill: "agent-impl-teammate-spawn"`
+>   2. Create a team with `TeamCreate`
+>   3. Create tasks with `TaskCreate` for every chunk in the execution plan
+>   4. Generate teammate prompt files using the agent-impl-teammate-spawn skill
+>   5. Spawn teammates — one per stream — to do the actual implementation
+>   6. **DO NOT write implementation code yourself.** Your role is team lead: create tasks, spawn teammates, monitor progress, relay communication, validate output.
+>
+> - **NO → Single-agent mode.** Proceed through phases sequentially yourself.
+>
+> **If you skip this check and start writing code yourself when the execution plan has parallel streams, you are violating the skill workflow. STOP and set up the team.**
+>
+> The entire point of team mode is that teammates get their own context windows, load their own skills, and work in parallel. The team lead doing the work defeats the purpose and will produce worse results because skills won't be loaded properly.
+
+---
+
 ## When to Ask for Feedback
 
 **Always ask the user when:**
@@ -110,7 +134,7 @@ Use this skill when:
 
 **In team mode:** Each teammate gets its own context window. Skills loaded by a teammate do NOT consume the main agent's context.
 
-*Important: IF YOU ARE USING TEAM MODE MAKE SURE TO LOAD IN THE agent-impl-teammate-spawn skill*
+> **⛔ TEAM MODE REMINDER:** If the execution plan has parallel streams, you MUST use team mode. Load `agent-impl-teammate-spawn` skill (`Skill tool -> skill: "agent-impl-teammate-spawn"`), generate teammate prompt files, and spawn teammates. Do NOT implement code yourself — that is the teammates' job. See the "MANDATORY: Team Mode Check" section above.
 
 **Loading rules:**
 1. Phase 0: Read ONLY the framework cheatsheet. DO NOT invoke any child skills yet.
@@ -131,7 +155,8 @@ Spec folder from agent-spec-builder:
 project-name/
 └── spec/
     ├── manifest.yaml        # ENTRY POINT - read this first
-    ├── progress.md          # Design decisions and context
+    ├── overview.md          # System context, architecture, decisions
+    ├── progress.md          # Spec-builder internal (session tracking)
     ├── agent-config.yaml    # Machine-readable configuration
     └── my-agent.md          # Agent spec
 ```
@@ -141,7 +166,8 @@ project-name/
 project-name/
 └── spec/
     ├── manifest.yaml        # ENTRY POINT - read this first
-    ├── progress.md
+    ├── overview.md          # System context, architecture, decisions
+    ├── progress.md          # Spec-builder internal (session tracking)
     └── content-review-loop/ # Team folder (self-contained)
         ├── team.md
         ├── agent-config.yaml # This team's config
@@ -155,7 +181,8 @@ project-name/
 project-name/
 └── spec/
     ├── manifest.yaml        # ENTRY POINT - hierarchy + file list
-    ├── progress.md
+    ├── overview.md          # System context, architecture, decisions
+    ├── progress.md          # Spec-builder internal (session tracking)
     └── research-pipeline/   # Root team folder
         ├── team.md
         ├── agent-config.yaml # Root team config
@@ -230,15 +257,36 @@ Phase 4: Prompts & Signatures
 
 ### Execution Mode Decision (Phase 0, Step 4.5)
 
+> **⛔ CRITICAL GATE — This decision changes your entire role for the rest of the session.**
+
 ```
 Does execution-plan in manifest.yaml have parallel chunks across different streams?
 ├── Yes (2+ streams in any phase) → TEAM MODE
-│   Read: `references/common/team-mode.md`
-│   Load: agent-impl-teammate-spawn skill
+│   ⛔ STOP HERE. Do NOT proceed to Phase 1 until team is set up.
+│   1. Read: `references/common/team-mode.md`
+│   2. Load: agent-impl-teammate-spawn skill (Skill tool -> skill: "agent-impl-teammate-spawn")
+│   3. Create team (TeamCreate)
+│   4. Create tasks for ALL chunks (TaskCreate)
+│   5. Generate teammate prompt files (per agent-impl-teammate-spawn skill)
+│   6. Spawn teammates (one per stream)
+│   7. Verify skill loading from each teammate
+│   8. Your role is now TEAM LEAD — you do NOT write implementation code.
 │
 └── No (sequential, missing, or single stream) → SINGLE-AGENT MODE
-    Proceed through phases sequentially
+    Proceed through phases sequentially, implementing code yourself.
 ```
+
+**In team mode, the team lead's responsibilities are:**
+- Creating and managing tasks
+- Spawning and monitoring teammates
+- Relaying inter-stream communication
+- Validating completed work
+- Handling blockers and questions
+
+**The team lead does NOT:**
+- Write implementation code (models, signatures, programs, utilities)
+- Load child skills (teammates load their own)
+- Read spec files in detail (teammates read what they need)
 
 ---
 

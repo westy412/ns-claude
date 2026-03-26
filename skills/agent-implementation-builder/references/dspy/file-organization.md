@@ -10,6 +10,17 @@
 
 DSPy uses a two-file pattern: Signature classes in `signatures.py` have **empty docstrings**, and rich prompt content lives in co-located `prompts/{agent_name}.md` files that get loaded into `Signature.__doc__` at import time.
 
+**Directory naming:** Team directories use **snake_case** because they are Python packages that must be importable (e.g., `from src.content_review_loop.team import ...`). Kebab-case directories like `content-review-loop/` are invalid Python package names.
+
+| Thing | Convention | Example |
+|-------|-----------|---------|
+| Team directories | snake_case | `content_review_loop/` |
+| Python files | snake_case | `team.py`, `signatures.py` |
+| Python classes | PascalCase | `PlanningSignature`, `ContentReviewLoop` |
+| Python functions/variables | snake_case | `get_shared_lm()`, `call_with_retry()` |
+| URL path segments | kebab-case | `/agents/draft/short-form-text` |
+| Prompt files | snake_case | `prompts/planner.md`, `prompts/creator.md` |
+
 **Single team:**
 ```
 project-name/
@@ -18,7 +29,7 @@ project-name/
 ├── .env.example
 ├── main.py                  # FastAPI service wrapper
 └── src/
-    └── content-review-loop/
+    └── content_review_loop/
         ├── team.py          # Orchestration module
         ├── signatures.py    # DSPy Signatures (empty docstrings)
         ├── prompts/
@@ -29,7 +40,7 @@ project-name/
         └── utils.py         # Utilities + formatters (if needed)
 ```
 
-**Nested teams:**
+**Nested teams (2-5 related teams):**
 ```
 project-name/
 ├── pyproject.toml
@@ -37,11 +48,11 @@ project-name/
 ├── .env.example
 ├── main.py                  # FastAPI service wrapper
 └── src/
-    └── research-pipeline/
+    └── research_pipeline/
         ├── team.py          # Top-level orchestration
         ├── models.py        # Shared Pydantic models (optional)
         ├── utils.py         # Shared utilities + formatters
-        ├── content-refinement/
+        ├── content_refinement/
         │   ├── team.py
         │   ├── signatures.py
         │   ├── prompts/
@@ -49,7 +60,7 @@ project-name/
         │   │   └── critic.md
         │   ├── tools.py
         │   └── utils.py
-        └── parallel-research/
+        └── parallel_research/
             ├── team.py
             ├── signatures.py
             ├── prompts/
@@ -57,6 +68,142 @@ project-name/
             │   └── merger.md
             ├── tools.py
             └── utils.py
+```
+
+**Multi-team service (many teams, shared infrastructure, multiple HTTP endpoints):**
+
+This is the nested-teams pattern applied at service scale. The parent team's orchestration equivalent is `main.py` (FastAPI app + all endpoint handlers). Shared infrastructure sits at the parent level (`src/`). Each sub-team follows the standard team directory structure.
+
+| When | Pattern |
+|------|---------|
+| 1 team | Single team (above) |
+| 2-5 related teams | Nested teams (above) |
+| Many teams (10+), shared infrastructure, multiple HTTP endpoints | Multi-team service (below) |
+
+```
+project-name/
+├── pyproject.toml
+├── .env.example
+├── main.py                              # Parent orchestration — FastAPI app + all endpoint handlers
+└── src/
+    ├── config.py                        # Service configuration
+    ├── schemas.py                       # All request/response schemas (base classes + per-endpoint)
+    ├── models.py                        # Shared output models (or models/ directory if many)
+    ├── utils.py                         # Shared utilities: singleton LM, retry, validators (or utils/ if many)
+    ├── services.py                      # External clients (or services/ directory if many)
+    │
+    ├── document_draft/                  # Sub-team (standard team structure)
+    │   ├── __init__.py
+    │   ├── team.py                      # dspy.Module orchestration
+    │   ├── signatures.py                # DSPy signatures
+    │   ├── prompts/                     # Prompt .md files
+    │   │   ├── planner.md
+    │   │   ├── creator.md
+    │   │   └── critic.md
+    │   └── utils.py                     # Team-specific formatters (between-stage, if needed)
+    │
+    ├── document_revision/               # Sub-team
+    │   ├── __init__.py
+    │   ├── team.py
+    │   ├── signatures.py
+    │   ├── prompts/
+    │   └── utils.py
+    │
+    ├── quality_check/                   # Sub-team
+    │   ├── __init__.py
+    │   ├── team.py
+    │   ├── signatures.py
+    │   └── prompts/
+    │
+    └── ... (more sub-teams)
+```
+
+**Multi-team service design principles:**
+1. This IS the nested teams pattern, just at scale (parent = FastAPI service instead of dspy.Module)
+2. `team.py` for orchestration in every sub-team (consistent with single-team and nested-team patterns)
+3. Shared infrastructure at parent level when multiple sub-teams need it
+4. Request schemas in parent-level `schemas.py` (base classes + per-endpoint extensions)
+5. Endpoint handlers in `main.py` (thin wiring — ~15-20 lines each)
+6. No separate `routes/` or `programs/` wrapper directories
+7. Sub-teams sit directly under `src/`, not nested inside wrapper directories
+
+---
+
+## Shared Infrastructure (Nested & Multi-Team)
+
+When multiple sub-teams need the same components, those components go at the parent level.
+
+**Shared at parent level (`src/`):**
+- Output models used by multiple sub-teams → `models.py` (or `models/`)
+- Singleton LM factories → `utils.py` with `get_pro_lm()`, `get_flash_lm()` functions
+- Retry utilities → `utils.py` with `call_with_retry()`
+- External service clients → `services.py` (or `services/`)
+- Request/response schemas → `schemas.py` (or `schemas/`)
+
+**Not shared (stays in sub-team folders):**
+- Signatures → each sub-team has its own `signatures.py` (never shared between siblings)
+- Prompts → each sub-team has its own `prompts/*.md` (never shared)
+- Team-specific formatters → sub-team's `utils.py` (between-stage formatting)
+
+**When to promote a single file to a directory:**
+- `models.py` → `models/` when it gets unwieldy
+- `utils.py` → `utils/` when it gets unwieldy
+- `schemas.py` → `schemas/` when it gets unwieldy
+- Promote with `__init__.py` re-exporting for backwards compatibility
+
+---
+
+## Multi-Endpoint FastAPI Pattern
+
+When a multi-team service has many HTTP endpoints (e.g., 10+ programs each with their own endpoint), the FastAPI layer follows this pattern.
+
+**All endpoint handlers in `main.py`:**
+
+```python
+from fastapi import FastAPI
+from src.schemas import DraftInput, DraftOutput
+from src.document_draft.team import DocumentDraft
+
+app = FastAPI()
+
+@app.post("/agents/draft/document")
+async def draft_document(request: DraftInput) -> DraftOutput:
+    program = DocumentDraft()
+    result = await program.aforward(**request.model_dump())
+    return DraftOutput(**result)
+```
+
+After eliminating formatter layers (by using individual InputFields on signatures), handlers are thin wiring:
+- Import request schema
+- Import team module
+- Call `aforward()` with unpacked request
+- Return typed response
+
+With many endpoints at ~15-20 lines each, `main.py` stays manageable (~300-500 lines).
+
+**If main.py grows unwieldy (>500 lines), split by domain:**
+- `src/draft_routes.py` — all draft endpoints
+- `src/revision_routes.py` — all revision endpoints
+- `src/specialized_routes.py` — specialized endpoints
+- `main.py` imports and includes them: `app.include_router(draft_routes.router)`
+
+**Request schemas pattern (in `src/schemas.py`):**
+
+```python
+class CommonContext(BaseModel):
+    """Shared context fields used by all programs."""
+    title: str
+    description: str
+    language: str
+    # ... more shared fields
+
+class DraftInput(CommonContext):
+    """Base for all draft endpoints."""
+    pass
+
+class SpecializedDraftInput(DraftInput):
+    """Domain-specific additions."""
+    extra_field: Optional[str] = None
 ```
 
 ---

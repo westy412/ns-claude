@@ -33,6 +33,10 @@ Common workflows this supports:
 - **Improvement workflows** — analysis and implementation sub-agents
 - **Any custom team** — wherever you spawn teammates with the Task tool
 
+## Model policy
+
+**Use the default model.** Do NOT specify a `model` parameter when spawning teammates — let them inherit the default model. Only override the model if the user explicitly requests a specific model for a teammate.
+
 ## Quick start
 
 For each teammate you need to spawn:
@@ -80,7 +84,6 @@ Task tool:
   team_name: {team-name}
   name: {teammate-name}
   subagent_type: {appropriate type}
-  model: {appropriate model}
   prompt: |
     You are teammate {teammate-name} on team {team-name}.
 

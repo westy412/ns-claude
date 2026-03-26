@@ -37,28 +37,30 @@ Each middleware also operates through three mechanisms:
 
 ---
 
-## Default Middleware Stack
+## Default Middleware Stack (Verified: deepagents 0.4.1)
 
 `create_deep_agent()` automatically attaches this stack in order:
 
-| Order | Middleware | Purpose |
-|-------|-----------|---------|
-| 1 | TodoListMiddleware | Establish todo state, inject `write_todos` tool |
-| 2 | FilesystemMiddleware | Establish file state, inject fs tools |
-| 3 | SubAgentMiddleware | Inject `task` tool for delegation |
-| 4 | SummarizationMiddleware | Compress conversation when tokens approach limit |
-| 5 | AnthropicPromptCachingMiddleware | Optimize token usage for Anthropic models |
-| 6 | PatchToolCallsMiddleware | Fix interrupted tool call history |
+| Order | Middleware | Module | Purpose |
+|-------|-----------|--------|---------|
+| 1 | FilesystemMiddleware | `deepagents.middleware.filesystem` | Establish file state, inject fs tools |
+| 2 | SubAgentMiddleware | `deepagents.middleware.subagents` | Inject `task` tool for delegation |
+| 3 | SummarizationMiddleware | `deepagents.middleware.summarization` | Compress conversation when tokens approach limit |
+| 4 | MemoryMiddleware | `deepagents.middleware.memory` | Memory file management |
+| 5 | PatchToolCallsMiddleware | `deepagents.middleware.patch_tool_calls` | Fix interrupted tool call history |
 
 ## Conditional Middleware
 
-| Middleware | Activated By | Purpose |
-|-----------|-------------|---------|
-| MemoryMiddleware | `memory` argument | Persistent memory across sessions |
-| SkillsMiddleware | `skills` argument | Progressive skill loading |
-| HumanInTheLoopMiddleware | `interrupt_on` argument | Per-tool approval workflows |
+| Middleware | Module | Activated By | Purpose |
+|-----------|--------|-------------|---------|
+| SkillsMiddleware | `deepagents.middleware.skills` | `skills` argument | Progressive skill loading |
 
-**Stack order matters.** TodoListMiddleware must come first to establish todo state. FilesystemMiddleware depends on backend being configured. SubAgentMiddleware depends on the model.
+> **Note**: The following middleware do **NOT exist** in deepagents 0.4.x:
+> - ~~`TodoListMiddleware`~~ (`deepagents.middleware.todolist` does not exist)
+> - ~~`HumanInTheLoopMiddleware`~~ (`deepagents.middleware.hitl` does not exist)
+> - ~~`LLMToolSelectorMiddleware`~~ (`deepagents.middleware.tool_selector` does not exist)
+
+**Stack order matters.** FilesystemMiddleware depends on backend being configured. SubAgentMiddleware depends on the model.
 
 ---
 
@@ -142,25 +144,6 @@ agent = create_deep_agent(tools=[get_weather], middleware=[log_tool_calls])
 
 ## Key Middleware Deep Dives
 
-### TodoListMiddleware
-
-Provides the `write_todos` tool for structured task decomposition. Automatically injects system prompt guidance on when to use todos.
-
-**Critical constraint:** `write_todos` is enforced to be called at most once per model turn (replaces entire todo list, parallel calls create ambiguity).
-
-```python
-from deepagents.middleware.todolist import TodoListMiddleware
-
-# Included by default, but can be customized:
-agent = create_deep_agent(
-    middleware=[
-        TodoListMiddleware(
-            system_prompt="Always create a detailed plan before starting work."
-        ),
-    ],
-)
-```
-
 ### FilesystemMiddleware
 
 Provides tools: `ls`, `read_file`, `write_file`, `search_files`. Backend determines storage behavior.
@@ -206,23 +189,6 @@ agent = create_deep_agent(
 )
 ```
 
-### LLMToolSelectorMiddleware
-
-Uses an LLM to filter tools before the main model call. Essential when an agent has many tools -- reduces token usage and improves focus.
-
-```python
-from deepagents.middleware.tool_selector import LLMToolSelectorMiddleware
-
-agent = create_deep_agent(
-    tools=[tool1, tool2, ..., tool30],
-    middleware=[
-        LLMToolSelectorMiddleware(
-            model="anthropic:claude-haiku-4-5-20251001",  # Fast, cheap selector
-        ),
-    ],
-)
-```
-
 ---
 
 ## Middleware Execution Flow
@@ -252,22 +218,19 @@ before_agent(state)     <- Runs once: populate state
 Final Response
 ```
 
-## Detailed Execution Order
+## Detailed Execution Order (deepagents 0.4.1)
 
 ```
 1. PatchToolCallsMiddleware.before_agent()    <- Fix history
-2. TodoListMiddleware.before_agent()          <- Load todos
-3. FilesystemMiddleware.before_agent()        <- Load filesystem state
-4. SubAgentMiddleware.before_agent()          <- Configure subagents
+2. FilesystemMiddleware.before_agent()        <- Load filesystem state
+3. SubAgentMiddleware.before_agent()          <- Configure subagents
+4. MemoryMiddleware.before_agent()            <- Load memory files
 5. [SkillsMiddleware.before_agent()]          <- Load skill index (if enabled)
 6. SummarizationMiddleware.before_agent()     <- Check token limits
     |
     v
 Agent Loop:
-    7. LLMToolSelectorMiddleware.wrap()       <- Filter tools (if enabled)
-    8. AnthropicPromptCachingMiddleware.wrap() <- Optimize tokens
-    9. [Custom middleware].wrap()              <- Your extensions
-   10. [HumanInTheLoopMiddleware].wrap()      <- Intercept tool calls (if enabled)
+    7. [Custom middleware].wrap()              <- Your extensions
     |
     v
 Model Call -> Tool Execution -> Loop
@@ -278,9 +241,9 @@ Model Call -> Tool Execution -> Loop
 ## Middleware for Sub-Agents
 
 Sub-agents automatically receive a default middleware stack:
-- TodoListMiddleware
 - FilesystemMiddleware
 - SummarizationMiddleware
+- MemoryMiddleware
 
 Plus any custom middleware specified in the subagent definition.
 
@@ -292,30 +255,21 @@ Plus any custom middleware specified in the subagent definition.
 
 | Middleware | Tools Provided | Hook Used |
 |-----------|---------------|-----------|
-| TodoListMiddleware | `write_todos` | `before_agent` + `wrap_model_call` |
-| FilesystemMiddleware | `ls`, `read_file`, `write_file`, `search_files` | `before_agent` + `wrap_model_call` |
+| FilesystemMiddleware | `ls`, `read_file`, `write_file`, `edit_file`, `glob`, `grep` | `before_agent` + `wrap_model_call` |
 | SubAgentMiddleware | `task` | `wrap_model_call` |
 | SummarizationMiddleware | -- | `wrap_model_call` |
-| AnthropicPromptCachingMiddleware | -- | `wrap_model_call` |
+| MemoryMiddleware | -- | `before_agent` |
 | PatchToolCallsMiddleware | -- | `before_agent` |
 
-### Optional
+### Conditional (Auto-Added When Configured)
 
-| Middleware | Purpose | When to Use |
-|-----------|---------|-------------|
-| LLMToolSelectorMiddleware | Filters tools before main model call | Agent has 10+ tools |
+| Middleware | Purpose | When Added |
+|-----------|---------|------------|
+| SkillsMiddleware | Progressive skill loading | When `skills` argument provided |
 
 ### Quick Selection Guide
 
 ```
-Does the agent have many tools (10+)?
-+-- YES -> Add LLMToolSelectorMiddleware
-+-- NO -> Default stack is sufficient
-
-Does the agent need human approval for some actions?
-+-- YES -> Use interrupt_on parameter (auto-adds HumanInTheLoopMiddleware)
-+-- NO -> Default stack is sufficient
-
 Does the agent need domain expertise?
 +-- YES -> Use skills parameter (auto-adds SkillsMiddleware)
 +-- NO -> Default stack is sufficient
@@ -347,14 +301,13 @@ agent = create_deep_agent(
     middleware=[
         SubAgentMiddleware(...),     # Depends on model
         FilesystemMiddleware(...),    # Should come before SubAgent
-        TodoListMiddleware(...),      # Should come first
     ],
 )
 
 # WRONG: Duplicating default middleware
 agent = create_deep_agent(
     middleware=[
-        TodoListMiddleware(),  # Already included by default!
+        FilesystemMiddleware(),  # Already included by default!
     ],
 )
 ```

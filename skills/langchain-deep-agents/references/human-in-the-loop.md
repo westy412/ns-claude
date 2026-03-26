@@ -11,9 +11,9 @@ Some agent actions are irreversible (deleting files, sending emails, making API 
 HITL **requires a checkpointer** to persist agent state between the interrupt and resume. Without a checkpointer, the agent can't pause and wait for approval.
 
 ```python
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.memory import MemorySaver
 
-checkpointer = SqliteSaver.from_conn_string("agent.db")
+checkpointer = MemorySaver()  # Use PostgresSaver/AsyncPostgresSaver in production
 ```
 
 ---
@@ -27,7 +27,7 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 agent = create_deep_agent(
     model="anthropic:claude-sonnet-4-20250514",
     tools=[get_weather, send_email, delete_file],
-    checkpointer=SqliteSaver.from_conn_string("agent.db"),
+    checkpointer=MemorySaver()  # Use PostgresSaver/AsyncPostgresSaver in production,
     interrupt_on={
         "send_email": True,          # Full approve/edit/reject
         "delete_file": True,          # Full approve/edit/reject

@@ -38,6 +38,7 @@ Project initialization and session resumption. This phase establishes the projec
 project-name/
 └── spec/
     ├── manifest.yaml      # Entry point - read this first
+    ├── overview.md        # System context, architecture, decisions (populated in Phase 4)
     ├── progress.md        # Handover tracking
     └── [team-name]/       # Team folder (self-contained)
         ├── team.md

@@ -15,7 +15,7 @@ project-name/
 ├── uv.lock                  # Lockfile (managed by uv)
 ├── .env.example             # Required environment variables
 └── src/
-    └── content-review-loop/
+    └── content_review_loop/
         ├── team.py          # Orchestration + agents
         ├── prompts.py       # Agent prompts
         ├── tools.py         # Tool definitions (if needed)
@@ -29,14 +29,14 @@ project-name/
 ├── uv.lock
 ├── .env.example
 └── src/
-    └── research-pipeline/
+    └── research_pipeline/
         ├── team.py          # Top-level orchestration
-        ├── content-refinement/
+        ├── content_refinement/
         │   ├── team.py
         │   ├── prompts.py
         │   ├── tools.py
         │   └── utils.py
-        └── parallel-research/
+        └── parallel_research/
             ├── team.py
             ├── prompts.py
             ├── tools.py

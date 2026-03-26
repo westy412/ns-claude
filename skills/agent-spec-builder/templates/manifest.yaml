@@ -184,7 +184,16 @@ hierarchy:
 files:
   root:
     - manifest.yaml
+    - overview.md
     - progress.md
+
+  # Shared documents (include if cross-cutting specs exist)
+  # shared:
+  #   - folder: shared/
+  #     files:
+  #       - shared-infrastructure.md
+  #       - output-models.md
+  #       - endpoint-contracts.md
 
   # List all team folders and their contents
   teams:
@@ -239,6 +248,14 @@ execution-plan:
   # prompts/*.md files, because they have the most context. Include
   # prompt-engineering in each team stream's skills list.
   #
+  # DSPy PATH RULES (from file-organization reference):
+  #   - Sub-teams sit directly under src/, NOT inside wrapper directories
+  #   - NO src/programs/, src/routes/, or other wrapper directories
+  #   - Orchestration file is team.py (not program.py or pipeline.py)
+  #   - Endpoints go in main.py (not src/routes/)
+  #   - Team directories use snake_case (Python package names)
+  #
+  # LangGraph example:
   # streams:
   #   - name: scaffold
   #     responsibility: Orchestration, utilities, service wrapper
@@ -252,6 +269,36 @@ execution-plan:
   #     responsibility: Team modules, signatures, and prompts
   #     owns: [src/my_team/]
   #     skills: [agent-teams, individual-agents, prompt-engineering]
+  #
+  # DSPy single/nested team example:
+  # streams:
+  #   - name: scaffold
+  #     responsibility: Shared utilities, singleton LM, service wrapper
+  #     owns: [src/utils.py, src/config.py, main.py, .env.example]
+  #     skills: []
+  #   - name: my-team
+  #     responsibility: Team module (team.py), signatures, and prompts
+  #     owns: [src/my_team/]          # Direct under src/, no wrapper
+  #     skills: [individual-agents, prompt-engineering]
+  #
+  # DSPy multi-team service example (many sub-teams under src/):
+  # streams:
+  #   - name: foundation
+  #     responsibility: Shared infrastructure (models, utils, services, config)
+  #     owns: [src/models/, src/utils/, src/services/, src/config.py]
+  #     skills: []
+  #   - name: content-draft
+  #     responsibility: Content draft team (team.py, signatures.py, prompts/)
+  #     owns: [src/content_draft/]    # Direct under src/, NOT src/programs/content_draft/
+  #     skills: [individual-agents, prompt-engineering]
+  #   - name: content-iteration
+  #     responsibility: Content iteration team (team.py, signatures.py, prompts/)
+  #     owns: [src/content_iteration/] # Direct under src/
+  #     skills: [individual-agents, prompt-engineering]
+  #   - name: endpoints
+  #     responsibility: FastAPI endpoint handlers and request/response schemas
+  #     owns: [src/schemas.py, main.py] # Endpoints in main.py, NOT src/routes/
+  #     skills: []
 
   # Phases — sequential barriers. All chunks in a phase run in parallel.
   # Chunk-level dependencies can also be specified via depends_on.

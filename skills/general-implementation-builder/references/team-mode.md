@@ -172,7 +172,7 @@ If any teammate's prompt includes skills to load:
 2. Check for newly unblocked tasks
 3. If a teammate is idle and tasks are available, assign them
 4. Handle questions or blockers from teammates
-5. Update progress.md after each phase completes
+5. Update `progress-{spec-name}.md` after each phase completes
 
 ---
 
@@ -226,12 +226,13 @@ After all phases complete:
 
 As team lead, you MUST:
 
-**1. Create progress.md BEFORE spawning teammates**
+**1. Create `progress-{spec-name}.md` BEFORE spawning teammates**
 - Use template from `templates/progress.md`
+- Name the file based on the spec (e.g., `progress-content-engine.md`)
 - Populate Execution Plan Snapshot with all chunks from the spec
 - Set initial status: all "pending"
 
-**2. Update progress.md after each phase completes**
+**2. Update `progress-{spec-name}.md` after each phase completes**
 - Mark completed chunks as "done"
 - Update "Current Phase" and "Next Chunk"
 - Add session log entry

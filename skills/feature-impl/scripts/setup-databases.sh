@@ -62,9 +62,21 @@ create_database() {
             \"options\": [
               { \"name\": \"Feature\", \"color\": \"blue\" },
               { \"name\": \"Bug\", \"color\": \"red\" },
-              { \"name\": \"Improvement\", \"color\": \"purple\" }
+              { \"name\": \"Improvement\", \"color\": \"purple\" },
+              { \"name\": \"UX Issue\", \"color\": \"orange\" }
             ]
           }
+        },
+        \"Page\": {
+          \"select\": {
+            \"options\": []
+          }
+        },
+        \"Submitted By\": {
+          \"email\": {}
+        },
+        \"ID\": {
+          \"rich_text\": {}
         },
         \"Priority\": {
           \"select\": {

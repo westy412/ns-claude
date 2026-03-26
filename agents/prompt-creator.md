@@ -3,7 +3,8 @@ name: prompt-creator
 description: Create system prompts for AI agents from specifications. Use when you have a complete agent specification (framework, role, modifiers, requirements) and need to generate a production-ready prompt. Reads reference files and applies best practices.
 model: opus
 tools: Read, Glob, Grep, Edit, Skill
-skills: prompt-engineering
+skills: 
+  - prompt-engineering
 ---
 
 # Prompt Creator Agent

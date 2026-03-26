@@ -39,7 +39,7 @@ This cheat sheet contains critical rules, patterns, and anti-patterns for DSPy i
 
 **File Structure:**
 ```
-src/team-name/
+src/team_name/
 ├── signatures.py    # DSPy Signature classes (empty docstrings) - REQUIRED
 ├── prompts/         # Rich prompt content loaded at runtime
 │   ├── agent_a.md

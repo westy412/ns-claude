@@ -51,6 +51,8 @@ A single `/specs/[name].md` file following the spec template.
 
 The spec contains: Meta, Overview, Skills, Requirements, Architecture, Reference Files, Execution Plan (with work streams, phases, chunks, communication), Acceptance Criteria, Completion Promise, and Notes.
 
+**On completion:** The agent asks the user to confirm the spec is finished, invokes `/review-spec` for automated validation, addresses feedback, then outputs a short handoff message with the spec path, discovery doc path, skills to load, and instruction to invoke `/general-implementation-builder`. For multi-agent/teammate specs, the handoff also includes the `teammate-spawn` skill.
+
 ---
 
 ## Workflow
@@ -63,7 +65,7 @@ The spec contains: Meta, Overview, Skills, Requirements, Architecture, Reference
 | **2** | Research — codebase patterns, reference projects, web research | `references/phase-2-research.md` |
 | **3** | Construction — section-by-section spec writing with user | `references/phase-3-construction.md` |
 | **4** | Handoff — hybrid work handoff to agent-spec-builder (skip if not hybrid) | `references/phase-4-handoff.md` |
-| **5** | Review — validation gates, user confirmation, save | `references/phase-5-review.md` |
+| **5** | Review — completeness check, `/review-spec` validation, feedback loop, handoff message | `references/phase-5-review.md` |
 
 ### Phase Quick Decision
 
@@ -86,6 +88,13 @@ At Phase 3 complete:
 
 At Phase 4 complete:
 └── Phase 5 (Review) → references/phase-5-review.md
+
+At Phase 5:
+├── Ask user if spec is finished
+├── User confirms → invoke /review-spec skill
+├── Present review results → gather feedback → loop until satisfied
+└── Output handoff message (spec path, discovery path, skills, /general-implementation-builder)
+    └── If multi-agent/teammate → also include teammate-spawn skill
 ```
 
 ---
@@ -124,14 +133,15 @@ The execution plan is the most important section. It defines the contract betwee
 
 ---
 
-## Validation Gates (Phase 5)
+## Review & Finalize (Phase 5)
 
-Before finalizing, these 4 checks must pass:
+Phase 5 is a multi-step review process:
 
-1. **Stream ownership** — No two streams write to the same file
-2. **Chunk sizing** — Not too granular (overhead), not too large (can't complete)
-3. **Acceptance criteria verifiability** — Every criterion can be objectively verified
-4. **Skill assignment** — Every chunk has skills listed if applicable
+1. **Completeness check** — Ask the user if the spec is finished or if anything else needs to be added
+2. **Automated review** — Invoke the `/review-spec` skill to validate the spec (structural checks, missing sections, anti-patterns)
+3. **Feedback loop** — Present review results to user, address feedback, re-review if needed
+4. **Handoff message** — Once approved, produce a short handoff message with spec path, discovery doc path, skills to load, and instruction to invoke `/general-implementation-builder`
+5. **Teammate spawn** — If the spec involves multi-agent / teammate execution, the handoff also instructs loading the `teammate-spawn` skill
 
 Details: `references/phase-5-review.md`
 

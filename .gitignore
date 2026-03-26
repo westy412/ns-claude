@@ -2,6 +2,12 @@
 settings.json
 settings.local.json
 
+# Backups (contain secrets)
+backups/
+
+# Sessions
+sessions/
+
 # Session/ephemeral data
 history.jsonl
 *.log
@@ -35,3 +41,4 @@ chrome/
 ide/
 projects/
 teams/
+usage-data/

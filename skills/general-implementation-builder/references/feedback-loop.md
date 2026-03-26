@@ -6,7 +6,7 @@
 
 ## When to Record Feedback
 
-Record feedback in progress.md's Implementation Notes section when:
+Record feedback in `progress-{spec-name}.md`'s Implementation Notes section when:
 - User says generated code is wrong
 - A pattern was used incorrectly
 - Code doesn't follow project conventions
@@ -40,7 +40,7 @@ This prevents the same mistake from appearing in later chunks or phases.
 
 ### Step 4: Record in Progress Document
 
-Add the feedback to progress.md → Implementation Notes → Decisions Made:
+Add the feedback to `progress-{spec-name}.md` → Implementation Notes → Decisions Made:
 
 ```markdown
 ### Decisions Made
@@ -49,7 +49,7 @@ Add the feedback to progress.md → Implementation Notes → Decisions Made:
   Applied to: [list of files/locations]. Rule: [pattern to follow going forward].
 ```
 
-**Why progress.md instead of a cheat sheet:** This skill is technology-agnostic. There are no framework-specific cheat sheets to update. Instead, lessons learned are recorded in the progress document so they persist across sessions and are visible to all teammates.
+**Why the progress file instead of a cheat sheet:** This skill is technology-agnostic. There are no framework-specific cheat sheets to update. Instead, lessons learned are recorded in the spec-specific progress document so they persist across sessions and are visible to all teammates.
 
 ### Step 5: Inform Teammates (Team Mode)
 

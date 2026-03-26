@@ -11,7 +11,8 @@ Produce the specification files. After generating, run post-generation validatio
 project-name/
 └── spec/
     ├── manifest.yaml        # Entry point for impl-builder
-    ├── progress.md          # Handover document
+    ├── overview.md          # System-level overview and reading guide
+    ├── progress.md          # Handover document (spec-builder internal)
     ├── agent-config.yaml    # Machine-readable config
     └── my-agent.md          # Agent spec
 ```
@@ -21,7 +22,8 @@ project-name/
 project-name/
 └── spec/
     ├── manifest.yaml        # Entry point for impl-builder
-    ├── progress.md          # Handover document
+    ├── overview.md          # System-level overview and reading guide
+    ├── progress.md          # Handover document (spec-builder internal)
     └── content-review-loop/
         ├── team.md          # Team overview
         ├── agent-config.yaml # This team's config
@@ -35,7 +37,8 @@ project-name/
 project-name/
 └── spec/
     ├── manifest.yaml        # Entry point for impl-builder
-    ├── progress.md          # Handover document
+    ├── overview.md          # System-level overview and reading guide
+    ├── progress.md          # Handover document (spec-builder internal)
     └── research-pipeline/   # Root team folder
         ├── team.md
         ├── agent-config.yaml # Root team config (references sub-teams)
@@ -156,6 +159,7 @@ This prevents the impl-builder from guessing which files are relevant and ensure
 | File | Template | Purpose |
 |------|----------|---------|
 | `manifest.yaml` | `templates/manifest.yaml` | Entry point - hierarchy overview, file list |
+| `overview.md` | `templates/overview.md` | System-level context, architecture, decisions, reading guide |
 | `progress.md` | `templates/progress.md` | Handover between sessions |
 
 **Per team folder:**
@@ -166,12 +170,55 @@ This prevents the impl-builder from guessing which files are relevant and ensure
 | `agent-config.yaml` | `templates/agent-config.yaml` | This team's configuration |
 | `agents/{agent}.md` | `templates/agent.md` | Detailed spec for each agent |
 
+**Shared documents (optional, for multi-team systems):**
+
+| File | When to Create | Purpose |
+|------|---------------|---------|
+| `shared/shared-infrastructure.md` | Cross-cutting components used by 3+ teams | Shared utilities, LM factories, retry patterns |
+| `shared/endpoint-contracts.md` | System exposes HTTP endpoints | Input/output schemas, endpoint definitions |
+| `shared/output-models.md` | Output models shared across teams | Pydantic model definitions, discriminated unions |
+
 **Critical:**
 - `manifest.yaml` must be kept in sync with the spec structure
 - Each team folder is self-contained with its own `agent-config.yaml`
 - Agent specs go in `agents/` subdirectory within each team folder
 - Sub-teams have their own folder with their own config
 - After generating these files, run the **Post-Generation Validation Checks** below, then proceed to **Phase 5: Execution Plan**
+
+---
+
+## Generating overview.md
+
+All content for `overview.md` comes from `progress.md` sections accumulated during Phases 1-3. The overview promotes discovery substance from the session document into a permanent spec artifact.
+
+**Section-to-source mapping:**
+
+| overview.md Section | Source in progress.md |
+|---|---|
+| Purpose & Context | Discovery Findings → Problem & Purpose |
+| System Architecture | Design Overview → System Description, Flow Diagram |
+| Key Decisions | Decisions Made → Design Decisions table |
+| Integration Points | Discovery Findings → Interaction Mode, Integrations & Tools |
+| Shared Infrastructure | Tool Implementation Details + LLM Configuration |
+| Endpoint Contracts | Discovery Findings → Inputs & Outputs (if HTTP endpoints exist) |
+| Output Models | Agent Progress → Structured Output definitions |
+| Migration Context | Discovery Findings → Current State (migration projects only) |
+| Domain Context | Discovery Findings → any domain-specific notes |
+| System Constraints | Discovery Findings → Complexity & Reliability |
+| Reading Guide | Generated from manifest.yaml files section |
+
+**Conditional section rules:**
+- **Always include:** Purpose & Context, System Architecture, Key Decisions, System Constraints, Reading Guide
+- **Include if applicable:** Integration Points, Shared Infrastructure, Endpoint Contracts, Output Models, Migration Context, Domain Context
+- **Delete entirely** if not applicable (don't leave empty sections)
+
+**Shared document decision:**
+When generating overview.md, decide whether shared concerns (infrastructure, endpoints, output models) warrant their own separate files in a `shared/` folder:
+
+- **Separate file if:** Content exceeds ~50 lines, multiple teams reference it, or the system has 3+ teams
+- **Inline in overview.md if:** Content is brief, system is simple (single agent or single team with few agents)
+
+If separate files are created, overview.md should contain a summary table and link to the detailed document. If inlined, the full content lives in overview.md.
 
 ---
 

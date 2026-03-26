@@ -213,17 +213,27 @@ result = await agent.ainvoke(
 )
 ```
 
-## Async Variant
+## Async Usage
+
+> **Important**: `async_create_deep_agent` does **not exist** in deepagents 0.4.x.
+> `create_deep_agent` is **synchronous** and returns a `CompiledStateGraph`.
+> The returned graph supports async invocation via `ainvoke` and `astream`.
 
 ```python
-from deepagents import async_create_deep_agent
+from deepagents import create_deep_agent
 
-# Identical to create_deep_agent but passes is_async=True
-# Affects SubAgentMiddleware tool execution and subagent invocation
-agent = await async_create_deep_agent(
+# create_deep_agent is SYNCHRONOUS — no await needed
+agent = create_deep_agent(
     model="anthropic:claude-sonnet-4-20250514",
     tools=[search_web],
 )
+
+# But the returned graph supports async invocation
+result = await agent.ainvoke({"messages": [...]})
+
+# And async streaming
+async for event in agent.astream({"messages": [...]}, stream_mode="updates"):
+    process(event)
 ```
 
 ---
@@ -268,20 +278,20 @@ agent = create_deep_agent(
 
 ---
 
-## Default Middleware Stack
+## Default Middleware Stack (Verified: deepagents 0.4.1)
 
 When you call `create_deep_agent()`, the following middleware is automatically attached:
 
-1. **TodoListMiddleware** - Planning and task tracking
-2. **FilesystemMiddleware** - File read/write/ls/search operations
-3. **SubAgentMiddleware** - Sub-agent delegation via `task` tool
-4. **SummarizationMiddleware** - Context compression for long conversations
-5. **AnthropicPromptCachingMiddleware** - Token optimization (Anthropic models)
-6. **PatchToolCallsMiddleware** - Fixes interrupted tool call history
+1. **FilesystemMiddleware** (`deepagents.middleware.filesystem`) - File operations
+2. **SubAgentMiddleware** (`deepagents.middleware.subagents`) - Sub-agent delegation via `task` tool
+3. **SummarizationMiddleware** (`deepagents.middleware.summarization`) - Context compression for long conversations
+4. **MemoryMiddleware** (`deepagents.middleware.memory`) - Memory file management
+5. **PatchToolCallsMiddleware** (`deepagents.middleware.patch_tool_calls`) - Fixes interrupted tool call history
 
 Conditionally added:
-- **SkillsMiddleware** - When `skills` argument is provided
-- **HumanInTheLoopMiddleware** - When `interrupt_on` argument is provided
+- **SkillsMiddleware** (`deepagents.middleware.skills`) - When `skills` argument is provided
+
+> **Note**: `TodoListMiddleware`, `HumanInTheLoopMiddleware`, and `LLMToolSelectorMiddleware` do **not exist** in deepagents 0.4.x.
 
 ---
 
@@ -328,24 +338,102 @@ result = agent.invoke(...)  # Blocks until complete, no visibility
 for event in agent.stream(..., stream_mode="updates"):
     process(event)
 
-# WRONG: Mixing sync and async
-agent = create_deep_agent(...)  # Sync agent
-await agent.ainvoke(...)  # May cause issues with SubAgentMiddleware
-
-# CORRECT: Use async_create_deep_agent for async contexts
-agent = await async_create_deep_agent(...)
-await agent.ainvoke(...)
+# NOTE: create_deep_agent is SYNCHRONOUS but returns a graph that supports async
+agent = create_deep_agent(...)  # Sync creation
+result = await agent.ainvoke(...)  # Async invocation works fine
+async for event in agent.astream(...):  # Async streaming works fine
+    process(event)
 ```
 
 ## Checklist
 
 - [ ] Model explicitly specified (don't rely on default)
 - [ ] `system_prompt` focuses on domain behavior, not tool instructions
-- [ ] `checkpointer` configured for production (SqliteSaver/PostgresSaver)
+- [ ] `checkpointer` configured for production (PostgresSaver/AsyncPostgresSaver)
 - [ ] `thread_id` passed in config for every invocation
 - [ ] Streaming used for long-running agent tasks
-- [ ] `async_create_deep_agent` used in async contexts
+- [ ] `create_deep_agent` used (sync) — graph supports async via `ainvoke`/`astream`
 - [ ] Agent created once and reused across requests
+
+---
+
+## Built-in Tools vs Backend Methods
+
+**What the agent calls** (tool names):
+- `write_todos`, `ls`, `read_file`, `write_file`, `edit_file`, `glob`, `grep`, `execute`, `task`
+
+**What backends implement** (BackendProtocol methods):
+- `ls_info()`, `read()`, `write()`, `edit()`, `glob_info()`, `grep_raw()`
+- Async variants: `als_info()`, `aread()`, `awrite()`, `aedit()`, `aglob_info()`, `agrep_raw()`
+
+The middleware layer translates between tool calls and backend methods. When implementing custom backends, use the BackendProtocol method names.
+
+---
+
+## MCP Server Integration (langchain-mcp-adapters)
+
+Connect your Deep Agent to MCP servers using `langchain-mcp-adapters`:
+
+```python
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+# 1. Configure MCP servers
+config = {
+    "my-backend": {
+        "transport": "sse",
+        "url": "http://localhost:8000/mcp/sse",
+        "headers": {
+            "X-API-Key": "your-api-key",
+        },
+    },
+}
+
+# 2. Create and enter MCP client (context manager)
+client = MultiServerMCPClient(config)
+await client.__aenter__()
+
+# 3. Load tools from all servers
+mcp_tools = client.get_tools()  # Returns list[BaseTool]
+
+# Or from specific server
+backend_tools = client.get_tools(server_name="my-backend")
+
+# 4. Pass to agent
+from deepagents import create_deep_agent
+
+agent = create_deep_agent(
+    model="anthropic:claude-sonnet-4-20250514",
+    tools=mcp_tools,
+)
+
+# 5. Cleanup on shutdown
+await client.__aexit__(None, None, None)
+```
+
+### FastAPI Lifespan Pattern
+
+```python
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    client = MultiServerMCPClient(config)
+    await client.__aenter__()
+    mcp_tools = client.get_tools()
+
+    agent = create_deep_agent(tools=mcp_tools, ...)
+    app.state.agent = agent
+    app.state.mcp_client = client
+
+    yield
+
+    # Shutdown
+    await client.__aexit__(None, None, None)
+
+app = FastAPI(lifespan=lifespan)
+```
 
 ---
 

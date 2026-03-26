@@ -116,8 +116,8 @@ def get_checkpointer():
     if conn_string:
         return PostgresSaver.from_conn_string(conn_string)
     # Fallback for development
-    from langgraph.checkpoint.sqlite import SqliteSaver
-    return SqliteSaver.from_conn_string("agent.db")
+    from langgraph.checkpoint.memory import MemorySaver
+    return MemorySaver()
 
 def get_backend():
     """Get configured backend factory."""

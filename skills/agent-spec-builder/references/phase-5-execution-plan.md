@@ -7,12 +7,15 @@ Define HOW the spec should be implemented — what can be done in parallel, what
 ## Step 1: List Implementation Tasks
 
 For each team (including nested), identify the files that need to be created:
-- `team.py` (scaffold, then full implementation)
+- `team.py` (dspy.Module orchestration — DSPy) or `team.py` (StateGraph — LangGraph)
 - `tools.py` (if agents use tools)
-- `prompts.py` / `signatures.py` (depending on framework)
-- `utils.py` (if needed)
+- `signatures.py` + `prompts/*.md` (DSPy) or `prompts.py` (LangGraph)
+- `utils.py` (REQUIRED for DSPy — singleton LM, formatters; optional for LangGraph)
+- `models.py` (if complex Pydantic outputs needed)
 - `.env.example`
-- `main.py` (FastAPI wrapper)
+- `main.py` (FastAPI wrapper — root level only)
+
+**DSPy file placement:** Each team directory sits directly under `src/` (e.g., `src/content_draft/team.py`). Do NOT use wrapper directories like `src/programs/` or `src/routes/`. See `agent-implementation-builder/references/dspy/file-organization.md` for the full reference.
 
 ## Step 2: Group into Phases
 
@@ -38,10 +41,10 @@ Phase 4 — Finalization (parallel):
   Stream scaffold: utils.py, .env.example, main.py
 ```
 
-**DSPy typical execution plan:**
+**DSPy typical execution plan (single/nested team):**
 ```
 Phase 1 — Signatures + Tools (parallel):
-  Stream signatures: signatures.py (all signature classes with docstrings)
+  Stream signatures: signatures.py (all signature classes with empty docstrings)
   Stream tools: tools.py (tool functions)
   Skills: signatures → [prompt-engineering], tools → [tools-and-utilities]
 
@@ -56,6 +59,30 @@ Phase 3 — Team Module:
 Phase 4 — Finalization (parallel):
   Stream scaffold: .env.example, main.py
 ```
+
+**DSPy multi-team service execution plan:**
+```
+Phase 1 — Foundation (parallel):
+  Stream foundation: shared infrastructure (models/, utils/, services/, config.py)
+  Stream prompts: extract/create prompt .md files for all teams
+  Skills: foundation → [], prompts → [prompt-engineering]
+
+Phase 2 — Team Implementation (parallel, one chunk per team):
+  Stream team-X: src/team_x/ — team.py + signatures.py + prompts/*.md
+  Stream team-Y: src/team_y/ — team.py + signatures.py + prompts/*.md
+  Skills: each team stream → [individual-agents, prompt-engineering]
+
+Phase 3 — Endpoints & Integration:
+  Stream endpoints: main.py + src/schemas.py (endpoint handlers + request/response schemas)
+  Skills: []
+```
+
+**DSPy path rules (MUST follow file-organization reference):**
+- Team directories go directly under `src/` — e.g., `src/content_draft/`, NOT `src/programs/content_draft/`
+- NO wrapper directories: no `src/programs/`, no `src/routes/`
+- Orchestration file is `team.py` in every team directory, NOT `program.py`
+- Endpoint handlers go in `main.py`, NOT in `src/routes/`
+- Stream `owns` paths must match: `src/{snake_case_team_name}/`
 
 ## Step 3: Define Work Streams
 
@@ -84,3 +111,19 @@ Populate the `execution-plan` section using the template format:
 - `streams:` — work stream definitions with skills
 - `phases:` — phase definitions with chunks
 - `communication:` — inter-stream communication needs
+
+## Step 6: Validate Paths (DSPy Only)
+
+**BLOCKING — do not finalize the execution plan until all checks pass.**
+
+For DSPy projects, verify all generated `owns` paths and chunk descriptions against the file-organization reference (`agent-implementation-builder/references/dspy/file-organization.md`):
+
+| Check | Rule | Bad Example | Good Example |
+|-------|------|-------------|--------------|
+| No `programs/` wrapper | Teams go directly under `src/` | `src/programs/content_draft/` | `src/content_draft/` |
+| No `routes/` wrapper | Endpoints go in `main.py` | `src/routes/` | `main.py` |
+| Correct orchestration file | DSPy uses `team.py` | `program.py` | `team.py` |
+| Snake_case directories | Python packages must be importable | `src/content-draft/` | `src/content_draft/` |
+| Prompt file location | Prompts are in `prompts/*.md` inside team dir | `src/programs/*/prompts/` | `src/{team}/prompts/` |
+
+**If any path uses `programs/`, `routes/`, or `program.py`**, fix it before proceeding. These wrapper directories violate DSPy principle #6 ("No separate routes/ or programs/ wrapper directories") and principle #7 ("Sub-teams sit directly under src/").

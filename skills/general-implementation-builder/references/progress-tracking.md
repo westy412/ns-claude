@@ -6,17 +6,26 @@
 
 ## Creating Progress Document
 
-Create `progress.md` during Phase 0, BEFORE starting any implementation work.
+Create a spec-specific progress file during Phase 0, BEFORE starting any implementation work.
+
+**IMPORTANT:** Use a spec-specific filename, not a generic `progress.md`. Multiple specs may be in progress simultaneously, so each needs its own progress file.
+
+### Naming Convention
+
+Derive the progress filename from the spec name:
+- Spec: `/specs/content-engine.md` → Progress: `{repo-root}/progress-content-engine.md`
+- Spec: `/specs/auth-system.md` → Progress: `{repo-root}/progress-auth-system.md`
 
 ### Steps:
 
 1. **Read the template:** `templates/progress.md`
-2. **Populate from the parsed spec:**
+2. **Derive the progress filename** from the spec name (e.g., `progress-{spec-name}.md`)
+3. **Populate from the parsed spec:**
    - All streams from the Work Streams table
    - All phases and chunks from the Execution Plan
    - Spec file path
    - Execution mode (team or single-agent)
-3. **Write to:** `{repo-root}/progress.md`
+4. **Write to:** `{repo-root}/progress-{spec-name}.md`
 
 ### Populating the Execution Plan Snapshot:
 
@@ -60,7 +69,7 @@ For each stream, list its chunks across all phases:
 
 ## Updating Progress
 
-Update progress.md at these moments:
+Update `progress-{spec-name}.md` at these moments:
 
 | Event | What to Update |
 |-------|----------------|
@@ -73,7 +82,7 @@ Update progress.md at these moments:
 | Starting a session | Add Session Log entry |
 | Ending a session | Update Session Log with summary |
 
-**CRITICAL: Update progress.md BEFORE ending a session.** The next session depends on it.
+**CRITICAL: Update `progress-{spec-name}.md` BEFORE ending a session.** The next session depends on it.
 
 ---
 
@@ -81,7 +90,7 @@ Update progress.md at these moments:
 
 When starting a NEW session on an existing implementation:
 
-1. **Read progress.md** — it contains resumption instructions at the top
+1. **Read `progress-{spec-name}.md`** — it contains resumption instructions at the top
 2. **Check Current Phase and Next Chunk** to know where to pick up
 3. **Read the Execution Plan Snapshot** to understand the full build order without re-parsing the spec
 4. **Check Stream Status** for per-stream progress

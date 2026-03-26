@@ -10,12 +10,14 @@ Without persistence, if the process crashes during a long-running agent task, al
 
 ## Checkpointing
 
-### Development: SqliteSaver
+> **Note**: `SqliteSaver` does **not exist** in current LangGraph checkpoint packages. Use `MemorySaver` for dev/testing or `PostgresSaver`/`AsyncPostgresSaver` for production.
+
+### Development: MemorySaver
 
 ```python
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.memory import MemorySaver
 
-checkpointer = SqliteSaver.from_conn_string("agent.db")
+checkpointer = MemorySaver()  # In-memory only, lost on restart
 
 agent = create_deep_agent(
     model="anthropic:claude-sonnet-4-20250514",
@@ -23,7 +25,7 @@ agent = create_deep_agent(
 )
 ```
 
-### Production: PostgresSaver
+### Production (Sync): PostgresSaver
 
 ```python
 from langgraph.checkpoint.postgres import PostgresSaver
@@ -37,6 +39,49 @@ agent = create_deep_agent(
     checkpointer=checkpointer,
 )
 ```
+
+### Production (Async): AsyncPostgresSaver
+
+For async FastAPI apps, use `AsyncPostgresSaver` with a dedicated connection pool:
+
+```python
+from psycopg_pool import AsyncConnectionPool
+from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+
+# 1. Create connection pool
+pool = AsyncConnectionPool(
+    conninfo="postgresql://user:pass@host:5432/db",
+    kwargs={
+        "autocommit": True,         # Required for checkpointer
+        "prepare_threshold": None,   # Disable prepared statements
+    },
+    max_size=10,  # Adjust based on your connection budget
+)
+await pool.open()
+
+# 2. Create checkpointer
+checkpointer = AsyncPostgresSaver(pool)
+
+# 3. Setup tables (idempotent, safe to run on every startup)
+await checkpointer.setup()
+
+# Creates 4 predefined tables:
+# - checkpoints
+# - checkpoint_blobs
+# - checkpoint_writes
+# - checkpoint_migrations
+
+# 4. Use in agent
+agent = create_deep_agent(
+    model="anthropic:claude-sonnet-4-20250514",
+    checkpointer=checkpointer,
+)
+
+# 5. Cleanup on shutdown
+await pool.close()
+```
+
+**Important**: Table names and schema are predefined by LangGraph. You cannot customize them.
 
 ### Why Checkpointers Matter
 
@@ -157,11 +202,13 @@ agent = create_deep_agent(
 
 ## Checkpointer Selection Guide
 
-| Checkpointer | Persistence | Use Case |
-|--------------|-------------|----------|
-| `MemorySaver` | None (lost on restart) | Tests only, **never production** |
-| `SqliteSaver` | Local file | Development, single-machine |
-| `PostgresSaver` | Durable database | Production, multi-machine |
+| Checkpointer | Import | Persistence | Use Case |
+|--------------|--------|-------------|----------|
+| `MemorySaver` | `langgraph.checkpoint.memory` | None (lost on restart) | Tests, quick experiments, **never production** |
+| `PostgresSaver` | `langgraph.checkpoint.postgres` | Durable database | Production (sync apps) |
+| `AsyncPostgresSaver` | `langgraph.checkpoint.postgres.aio` | Durable database | Production (async apps like FastAPI) |
+
+> **Note**: `SqliteSaver` does **not exist** in current LangGraph checkpoint packages.
 
 ---
 
@@ -171,7 +218,7 @@ agent = create_deep_agent(
 # WRONG: MemorySaver in production
 from langgraph.checkpoint.memory import MemorySaver
 agent = create_deep_agent(checkpointer=MemorySaver())
-# Data lost on restart! Use SqliteSaver or PostgresSaver
+# Data lost on restart! Use PostgresSaver or AsyncPostgresSaver
 
 # WRONG: No thread_id
 result = agent.invoke({"messages": [...]})
@@ -189,7 +236,7 @@ agent = create_deep_agent(
 
 ## Checklist
 
-- [ ] Checkpointer configured (SqliteSaver for dev, PostgresSaver for prod)
+- [ ] Checkpointer configured (MemorySaver for dev, PostgresSaver/AsyncPostgresSaver for prod)
 - [ ] Thread IDs are meaningful and unique per conversation
 - [ ] Store configured for cross-thread memory needs
 - [ ] MemorySaver never used in production

@@ -111,7 +111,93 @@ agent = create_deep_agent(
 - All other files go to StateBackend (ephemeral, thread-local)
 - Longer prefixes win: `/memories/projects/` can override `/memories/`
 - CompositeBackend strips the route prefix before storing (`/memories/preferences.txt` stored as `/preferences.txt`)
-- Query operations (`ls`, `glob`, `grep`) aggregate results across backends and preserve original prefixed paths
+- Query operations (`ls_info`, `glob_info`, `grep_raw`) aggregate results across backends and preserve original prefixed paths
+
+---
+
+## BackendProtocol Methods (deepagents 0.4.x)
+
+When implementing custom backends, use these method names:
+
+| Sync Method | Async Variant | Purpose |
+|-------------|---------------|---------|
+| `ls_info(path)` | `als_info(path)` | List directory contents, returns `list[FileInfo]` |
+| `read(path)` | `aread(path)` | Read file, returns `str` |
+| `write(path, content)` | `awrite(path, content)` | Write content to file |
+| `edit(path, old, new)` | `aedit(path, old, new)` | Edit file (find & replace) |
+| `glob_info(pattern)` | `aglob_info(pattern)` | Pattern-based file search, returns `list[FileInfo]` |
+| `grep_raw(pattern)` | `agrep_raw(pattern)` | Content search, returns `list[GrepMatch]` or `str` |
+| `download_files(paths)` | `adownload_files(paths)` | Download files |
+| `upload_files(files)` | `aupload_files(files)` | Upload files |
+
+> **Note**: The agent's **tool names** (what the LLM calls) may differ: `ls`, `read_file`, `write_file`, `edit_file`, `glob`, `grep`. The middleware translates between tool names and backend method names.
+
+---
+
+## ReadOnlyBackend (Production Pattern)
+
+Wrap `FilesystemBackend` to allow read-only access (useful for skills in production):
+
+```python
+from deepagents.backends import FilesystemBackend
+
+class ReadOnlyBackend:
+    """Delegates reads, blocks writes."""
+
+    def __init__(self, root_dir: str):
+        self._inner = FilesystemBackend(root_dir=root_dir, virtual_mode=True)
+
+    # Delegate read operations
+    def ls_info(self, *args, **kwargs):
+        return self._inner.ls_info(*args, **kwargs)
+
+    def read(self, *args, **kwargs):
+        return self._inner.read(*args, **kwargs)
+
+    def glob_info(self, *args, **kwargs):
+        return self._inner.glob_info(*args, **kwargs)
+
+    def grep_raw(self, *args, **kwargs):
+        return self._inner.grep_raw(*args, **kwargs)
+
+    # Block write operations
+    def write(self, *args, **kwargs):
+        return "Error: Write operations not allowed."
+
+    def edit(self, *args, **kwargs):
+        return "Error: Edit operations not allowed."
+
+    # Async variants
+    async def als_info(self, *args, **kwargs):
+        return self._inner.ls_info(*args, **kwargs)
+
+    async def aread(self, *args, **kwargs):
+        return self._inner.read(*args, **kwargs)
+
+    async def awrite(self, *args, **kwargs):
+        return "Error: Write operations not allowed."
+
+    async def aedit(self, *args, **kwargs):
+        return "Error: Edit operations not allowed."
+
+    async def aglob_info(self, *args, **kwargs):
+        return self._inner.glob_info(*args, **kwargs)
+
+    async def agrep_raw(self, *args, **kwargs):
+        return self._inner.grep_raw(*args, **kwargs)
+
+
+# Usage with CompositeBackend for skills
+from deepagents.backends import CompositeBackend, StateBackend
+
+agent = create_deep_agent(
+    backend=lambda rt: CompositeBackend(
+        default=StateBackend(rt),
+        routes={"/skills/": ReadOnlyBackend(root_dir="./skills")}
+    ),
+    skills=["/skills/"],
+)
+```
 
 ---
 
