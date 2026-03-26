@@ -177,9 +177,9 @@ Initially empty or populated with key decisions from the discovery doc. Accumula
 
 After all sections are drafted and user-approved:
 
-1. Confirm the save location: "I'll save this to `/specs/[name].md`. Good?"
-2. Write the spec file using the completed template
-3. Update progress.md to reflect completed sections
+1. Confirm the save location: "I'll save this as `spec.md` in the spec folder at `[workforce-root]/specs/YYYY-MM-DD-feature-name/spec.md`. Good?"
+2. Write the spec file into the existing spec folder (created by discovery)
+3. Update the centralized `progress.md` at the spec folder root to reflect completed sections
 
 ---
 
@@ -188,5 +188,5 @@ After all sections are drafted and user-approved:
 Before moving to Phase 4 (or Phase 5 if no hybrid handoff needed):
 - [ ] All sections drafted and user-reviewed
 - [ ] Execution plan reviewed for completeness
-- [ ] Spec file written to `/specs/[name].md`
-- [ ] Progress.md updated with completed sections
+- [ ] Spec file written to `[spec-folder]/spec.md`
+- [ ] Centralized `progress.md` updated with completed sections

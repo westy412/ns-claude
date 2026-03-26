@@ -17,11 +17,11 @@ Before starting review, ask the user if the spec is finished:
 
 ---
 
-## Step 2: Invoke `/review-spec` Skill
+## Step 2: Invoke `/review-general-spec` Skill
 
-Once the user confirms the spec is ready for review, invoke the `/review-spec` skill to perform an automated review of the spec.
+Once the user confirms the spec is ready for review, invoke the `/review-general-spec` skill to perform a comprehensive review of the spec.
 
-Pass the spec file path to the review-spec skill. It will run structural checks, identify missing sections, inconsistencies, and anti-patterns.
+Pass the spec file path to the review-general-spec skill. It will run structural checks, trace source material coverage (cross-referencing against the discovery document and any brainstorm/research docs), and perform ambiguity analysis to catch requirements an autonomous agent could misinterpret. The review is automatically saved to the spec's `reviews/` folder.
 
 ---
 
@@ -34,7 +34,7 @@ After presenting the results:
 > "Here are the review results. Would you like me to fix any of the issues found, or are there any other changes you'd like to make?"
 
 **Feedback loop:**
-- If the user requests changes → make them → re-run `/review-spec` → present again
+- If the user requests changes → make them → re-run `/review-general-spec` → present again
 - If the user is satisfied and no FAIL items remain → proceed to Step 4
 
 **Do not proceed past this step until the user confirms the spec is good.**
@@ -43,9 +43,11 @@ After presenting the results:
 
 ## Step 4: Confirm Location and Save
 
-> "I'll save this to `/specs/[name].md`. Good?"
+Save `spec.md` into the existing spec folder created by the discovery skill:
 
-Save the spec file. Update progress.md to mark all sections as complete.
+> "I'll save this as `spec.md` in the spec folder at `[workforce-root]/specs/YYYY-MM-DD-feature-name/spec.md`. Good?"
+
+If no spec folder exists, create one following the convention. Update `progress.md` to mark all sections as complete.
 
 ---
 
@@ -62,7 +64,8 @@ After the spec is saved, output a **short, copy-pasteable handoff message** for 
 ### Handoff Message Format
 
 ```
-Read the spec at `/specs/[name].md` and the discovery document at `/discovery/[name].md`.
+Read the spec folder at `[workforce-root]/specs/YYYY-MM-DD-feature-name/`.
+The spec is at `spec.md` and the discovery document is at `discovery.md` in the same folder.
 
 Load these skills: [comma-separated list from spec's Skills section]
 
@@ -92,9 +95,9 @@ Note: The agent component requires a separate spec via `agent-spec-builder`.
 ## Phase Completion Checklist
 
 - [ ] User confirmed spec is complete (Step 1)
-- [ ] `/review-spec` skill invoked and review completed
+- [ ] `/review-general-spec` skill invoked and review completed
 - [ ] Review results presented to user
 - [ ] User feedback addressed (loop until satisfied)
 - [ ] No FAIL items remaining in review
-- [ ] Spec saved to `/specs/[name].md`
+- [ ] Spec saved to `[spec-folder]/spec.md`
 - [ ] Handoff message output with spec path, discovery doc path, skills, and implementation instruction

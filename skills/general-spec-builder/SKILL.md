@@ -47,7 +47,21 @@ If no discovery document exists, suggest running the `discovery` skill first.
 
 ## Output
 
-A single `/specs/[name].md` file following the spec template.
+A `spec.md` file saved into the existing spec folder created by the discovery skill:
+
+```
+[workforce-root]/specs/YYYY-MM-DD-feature-name/
+  discovery.md        ← already exists (from discovery skill)
+  brainstorm.md       ← may exist (from discovery skill)
+  spec.md             ← THIS IS WHAT YOU CREATE
+  progress.md         ← update with spec-builder progress
+  reviews/            ← created by review skill later
+  feedback/           ← already exists (placeholder)
+```
+
+**If the spec folder already exists** (created by discovery), save `spec.md` into it and update `progress.md`.
+
+**If no spec folder exists** (user skipped discovery or is using an older workflow), ask: "Where should I save the spec? I recommend creating a spec folder at `[workforce-root]/specs/YYYY-MM-DD-feature-name/`."
 
 The spec contains: Meta, Overview, Skills, Requirements, Architecture, Reference Files, Execution Plan (with work streams, phases, chunks, communication), Acceptance Criteria, Completion Promise, and Notes.
 
