@@ -68,7 +68,7 @@ Prompt:
 - Sends output to: [downstream agent or final output]
 
 ## Reference Files
-- Progress file: [path to spec/progress.md] — PRIMARY SOURCE for all decisions and context
+- Progress file: [path to spec-folder/progress.md at spec folder root] — PRIMARY SOURCE for all decisions and context
 - Discovery document: [path to discovery file] — ALWAYS include if it exists for full problem context
 - Agent template: ~/.claude/skills/agent-spec-builder/templates/agent.md
 
@@ -133,7 +133,7 @@ Prompt:
   - Needs memory: [yes/no]
 
 ## Reference Files
-- Progress file: [path to spec/progress.md] — PRIMARY SOURCE for validated agent types and all decisions
+- Progress file: [path to spec-folder/progress.md at spec folder root] — PRIMARY SOURCE for validated agent types and all decisions
 - Discovery document: [path to discovery file] — ALWAYS include if it exists for full problem context
 - Agent template: ~/.claude/skills/agent-spec-builder/templates/agent.md
 
@@ -213,7 +213,7 @@ Prompt:
 - Sends output to: [downstream]
 
 ## Reference Files
-- Progress file: [path to spec/progress.md]
+- Progress file: [path to spec-folder/progress.md at spec folder root]
 - Discovery document: [path if exists]
 - Team template: ~/.claude/skills/agent-spec-builder/templates/team.md
 - Agent-config template: ~/.claude/skills/agent-spec-builder/templates/agent-config.yaml
@@ -278,7 +278,7 @@ Prompt:
 - Sends output to: [downstream]
 
 ## Reference Files
-- Progress file: [path to spec/progress.md]
+- Progress file: [path to spec-folder/progress.md at spec folder root]
 - Discovery document: [path if exists]
 - Output path: [path to write spec/[team-name]/agents/agent-name.md]
 
