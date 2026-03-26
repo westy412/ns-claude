@@ -127,3 +127,30 @@ For DSPy projects, verify all generated `owns` paths and chunk descriptions agai
 | Prompt file location | Prompts are in `prompts/*.md` inside team dir | `src/programs/*/prompts/` | `src/{team}/prompts/` |
 
 **If any path uses `programs/`, `routes/`, or `program.py`**, fix it before proceeding. These wrapper directories violate DSPy principle #6 ("No separate routes/ or programs/ wrapper directories") and principle #7 ("Sub-teams sit directly under src/").
+
+---
+
+## Step 7: Review and Handoff
+
+After the execution plan is complete and all validation checks pass:
+
+1. **Ask the user** if the spec is ready for review: "The spec is complete. Ready for review?"
+2. **Invoke `/review-agent-spec`** with the spec folder path
+3. **Present review results** to the user
+4. **If any FAIL items:** Fix them, then re-run `/review-agent-spec`
+5. **Once all FAIL items are resolved**, update the feature folder's `progress.md`:
+   - Add row to Pipeline History: step, `/agent-spec-builder`, date, result
+   - Update Artifacts table with all spec files created
+   - Update Status to `spec-review`
+   - Update Next Action with the handoff message:
+
+```
+Read the spec folder at `[feature-folder]/spec/` (entry point: manifest.yaml).
+Also read the discovery document at `[feature-folder]/discovery.md`.
+
+Load these skills: [skills from execution plan streams]
+
+Then invoke `/agent-implementation-builder` to begin implementation.
+```
+
+6. **Present the handoff message** to the user

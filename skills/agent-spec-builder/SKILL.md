@@ -143,7 +143,7 @@ Setup → Discovery → High-Level Design → Agent Detail (per agent) → Final
 | **2** | High-Level Design — single vs team, pattern selection | `references/phase-2-high-level-design.md` | `agent-teams` |
 | **3** | Agent Detail — per-agent type, prompt config, I/O | `references/phase-3-agent-detail.md` | `individual-agents`, then `prompt-engineering` |
 | **4** | Generate Spec — folder structure, files, validation | `references/phase-4-generate-spec.md` | — |
-| **5** | Execution Plan — implementation phases, streams | `references/phase-5-execution-plan.md` | — |
+| **5** | Execution Plan + Review — implementation phases, streams, then invoke `/review-agent-spec` | `references/phase-5-execution-plan.md` | — |
 
 ### Phase Quick Decision
 
@@ -195,7 +195,7 @@ A complete specification folder containing:
 5. `{agent}.md` files — Detailed spec for each agent
 6. `manifest.yaml` — System hierarchy + **execution plan** for implementation
 
-This feeds into the `agent-impl-builder` skill.
+After Phase 5, invoke `/review-agent-spec` to validate the spec. Once the review passes, output a handoff message for `/agent-implementation-builder`.
 
 ---
 
