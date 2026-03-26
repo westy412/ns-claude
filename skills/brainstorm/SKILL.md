@@ -387,7 +387,21 @@ Brainstorm session: [link to brainstorm doc]
 
 ### Saving
 
-Save brainstorm output to `~/Programming/novosapien/brainstorms/` with a **date folder** per session:
+**If brainstorm is the entry point** (the user is starting fresh, no existing spec folder), create the spec folder structure:
+
+1. Ask: "Which workforce does this belong to, and what should we call it?"
+2. Create the spec folder:
+   ```
+   [workforce-root]/specs/YYYY-MM-DD-feature-name/
+     brainstorm.md         ← save the brainstorm document here
+     ideas/                ← idea cards go here
+       idea-name-1.md
+       idea-name-2.md
+     feedback/             ← create empty placeholder
+     progress.md           ← create with basic metadata (date, status: brainstorm-complete)
+   ```
+
+**If brainstorm is NOT the entry point** (a spec folder already exists, or this is a standalone brainstorm session not tied to a specific feature), save to the brainstorms archive:
 
 ```
 ~/Programming/novosapien/brainstorms/
@@ -403,14 +417,21 @@ Save brainstorm output to `~/Programming/novosapien/brainstorms/` with a **date 
 - The brainstorm doc is always named `brainstorm.md`
 - Idea cards go in the `ideas/` subfolder, named with kebab-case idea names
 
+**How to decide:** Ask the user early in the session: "Is this brainstorm for a specific feature we're going to build? If so, I'll set up the spec folder now. Or is this more of an open exploration session?"
+
 ---
 
 ## Handoff to Discovery
 
 When the user wants to take an idea card into discovery:
 
-1. Point them to the idea card file at `~/Programming/novosapien/brainstorms/YYYY-MM-DD/ideas/[idea-name].md`
-2. Suggest invoking the discovery skill: "You can start discovery on this by invoking `/discovery` and pointing it at the idea card at `[path]`"
+**If the spec folder already exists** (brainstorm was the entry point):
+1. Point to the idea card in the spec folder: `[workforce-root]/specs/YYYY-MM-DD-feature-name/ideas/[idea-name].md`
+2. Suggest: "You can start discovery by invoking `/discovery` and pointing it at this spec folder. The folder is already set up."
+
+**If brainstorm was saved to the archive** (standalone session):
+1. Point to the idea card at `~/Programming/novosapien/brainstorms/YYYY-MM-DD/ideas/[idea-name].md`
+2. Suggest: "You can start discovery by invoking `/discovery` and pointing it at this idea card. Discovery will create the spec folder and copy the brainstorm content there."
 3. Note any context from the brainstorm that discovery should be aware of
 
 The idea card is designed to give discovery a running start without constraining it. Discovery will take the idea deeper through its own conversational process.
