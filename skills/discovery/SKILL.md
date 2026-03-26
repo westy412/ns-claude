@@ -285,13 +285,37 @@ The document should be **readable and useful**, not formally structured. It's a 
 
 Diagrams make the document easier to scan and understand. A well-placed ASCII diagram can replace paragraphs of explanation. Mix prose and diagrams - use prose for context and rationale, diagrams for structure and flow.
 
-### Location
+### Location: Spec Folder Convention
 
-Ask the user where to save it:
-> "Where should I save the discovery document? Some options:
-> - `/specs/discovery/[name].md`
-> - `/docs/[name]-discovery.md`
-> - Or somewhere else?"
+When saving the discovery document, either **create the spec folder** or **add to an existing one**.
+
+1. **Check if a spec folder already exists** (brainstorm may have created it):
+   - If yes: save `discovery.md` into the existing folder. Update `progress.md` with discovery status.
+   - If no: proceed to step 2.
+
+2. **Ask the user:** "Which workforce does this belong to, and what should we call the spec folder?"
+   - Example: `~/Programming/novosapien/content-workforce/specs/2026-03-26-feature-name/`
+
+3. **Create the folder structure:**
+   ```
+   [workforce-root]/specs/YYYY-MM-DD-feature-name/
+     discovery.md          ← save the discovery document here
+     feedback/             ← create empty placeholder
+     progress.md           ← create with basic metadata (date, idea origin, status: discovery-complete)
+   ```
+
+4. **If there's a brainstorm or idea card** that informed this discovery (and it's NOT already in the spec folder), copy it in:
+   ```
+   [workforce-root]/specs/YYYY-MM-DD-feature-name/
+     discovery.md
+     brainstorm.md         ← copied from brainstorms/ folder if not already present
+     feedback/
+     progress.md
+   ```
+
+5. **If the user specifies a different location**, respect that — but suggest the convention.
+
+**Why this matters:** The spec folder is the single home for all artifacts related to this work — discovery, brainstorm, spec, reviews, and implementation feedback. Creating it at discovery time ensures the downstream skills (spec-builder, review, implementation) all have a consistent place to read from and write to.
 
 ---
 
@@ -330,9 +354,11 @@ Ask the user where to save it:
 
 When the discovery document is complete:
 
-1. **Save the document** to user-specified location
-2. **Summarize next steps:** "This discovery doc is ready for [spec-builder/agent-spec-builder]. You can invoke that skill and point it at this document."
-3. **Note any open questions** that the spec-builder should address
+1. **Save the document** to the spec folder (see Location section above)
+2. **Create the folder structure** with `feedback/` and `progress.md`
+3. **Copy brainstorm/idea card** into the folder if one exists
+4. **Summarize next steps:** "The discovery doc and spec folder are at `[path]`. You can invoke `/general-spec-builder` or `/agent-spec-builder` and point it at this folder."
+5. **Note any open questions** that the spec-builder should address
 
 ---
 
