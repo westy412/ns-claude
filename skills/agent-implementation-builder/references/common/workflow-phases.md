@@ -6,27 +6,43 @@
 
 ## Phase 0: Parse Spec and Initialize Project
 
-**Step 1:** Read `spec/manifest.yaml` — this is your entry point.
+### ⛔ Step 1: EXECUTION MODE CHECK (DO THIS FIRST — BEFORE ANYTHING ELSE)
 
-The manifest provides:
-1. **System type** — single-agent, agent-team, or nested-teams
-2. **Hierarchy** — visual structure of teams and agents
-3. **File list** — all spec files to read
-4. **Implementation order** — suggested sequence
+Read `spec/manifest.yaml` and **IMMEDIATELY** check the `execution-plan` section:
 
-**Step 1.5:** If `spec/overview.md` exists, read it next for system-level context.
+**Does it have 2+ parallel chunks across different streams in ANY phase?**
 
-The overview provides:
+- **YES → ⛔ TEAM MODE. You are the team lead. You do NOT write code.**
+  1. Load `agent-impl-teammate-spawn` skill: `Skill tool -> skill: "agent-impl-teammate-spawn"`
+  2. Read `references/common/team-mode.md` for the full team workflow
+  3. Continue with Steps 2-4 below to understand the spec, then follow team-mode.md for setup
+  4. **DO NOT proceed to Step 5 (project init) or any implementation. Teammates do that.**
+
+- **NO → MAYBE single-agent mode.** Ask the user to confirm before proceeding.
+
+**How to check:** Look at `execution-plan.phases` in manifest.yaml. If any phase has chunks assigned to 2+ different streams, that's team mode. Most agent specs with 2+ agents will have parallel streams (e.g., scaffold stream + tools stream + prompts stream).
+
+**If you are unsure, default to TEAM MODE.** It's better to spawn teammates unnecessarily than to do parallel work sequentially in one context window.
+
+**If you think single-agent mode is appropriate, ASK THE USER FIRST:**
+> "The execution plan appears to be sequential / single-stream. I'm planning to use single-agent mode. Can you confirm, or should I use team mode instead?"
+
+**Do NOT silently choose single-agent mode.** Get explicit user confirmation.
+
+---
+
+### Step 2: Read Spec Context
+
+Read `spec/overview.md` for system-level context:
 1. **System purpose** — why this system exists, what problem it solves
 2. **Architecture** — how teams connect, data flow between components
 3. **Key decisions** — design choices and rationale from discovery
 4. **Integration points** — upstream/downstream systems, API contracts
-5. **Shared infrastructure** — cross-cutting components (with links to detail docs)
-6. **Reading guide** — recommended order for reading remaining spec files
+5. **Reading guide** — recommended order for reading remaining spec files
 
-The overview is the narrative complement to manifest.yaml. The manifest tells you WHAT files exist; the overview tells you WHY and HOW they connect.
+### Step 3: Read Configuration
 
-**Step 2:** Read the ROOT `agent-config.yaml` for detailed configuration, including:
+Read the ROOT `agent-config.yaml` for detailed configuration, including:
 - Framework being used (langgraph, dspy)
 - Agent types
 - Tool requirements
@@ -48,7 +64,7 @@ team:
         name: signal-blender       # Direct member of this team
 ```
 
-**Step 3: READ THE FRAMEWORK CHEAT SHEET.**
+### Step 4: READ THE FRAMEWORK CHEAT SHEET
 
 Based on the framework in agent-config.yaml, read the corresponding cheat sheet:
 - LangGraph → `frameworks/langgraph/CHEATSHEET.md`
@@ -56,27 +72,15 @@ Based on the framework in agent-config.yaml, read the corresponding cheat sheet:
 
 **This step is CRITICAL.** The cheat sheet contains rules that prevent common implementation mistakes.
 
-**Step 4:** Read individual spec files as needed.
+### Step 5: Read Individual Spec Files
 
-**Step 4.5: Determine execution mode.**
+Read individual spec files as needed for understanding before implementation begins.
 
-> **⛔ CRITICAL GATE — This decision changes your entire role.**
+**If TEAM MODE (from Step 1):** After reading specs, go to `references/common/team-mode.md` and follow its workflow. DO NOT proceed to Step 6.
 
-Read the `execution-plan` section from manifest.yaml:
+**If SINGLE-AGENT MODE:** Proceed to Step 6.
 
-- **IF** the execution plan has phases with 2+ parallel chunks across different streams:
-  → **⛔ TEAM MODE. STOP HERE — do NOT proceed to Step 5 or any implementation.**
-  1. Load `agent-impl-teammate-spawn` skill: `Skill tool -> skill: "agent-impl-teammate-spawn"`
-  2. Read `references/common/team-mode.md` for the full team workflow
-  3. Follow the team-mode.md steps: TeamCreate → TaskCreate → generate teammate prompts → spawn teammates
-  4. **You are now team lead. You do NOT write implementation code. Teammates do.**
-
-- **IF** the execution plan is purely sequential, missing, or all chunks are in one stream:
-  → Use **SINGLE-AGENT MODE** (proceed to Step 5)
-
-Team mode uses Claude Code agent teams to execute chunks in parallel. Each work stream gets its own teammate agent with independent context. The team lead's job is orchestration: creating tasks, spawning teammates, monitoring progress, and relaying communication. Single-agent mode works through phases sequentially with the lead implementing directly.
-
-**Step 5: Initialize project with uv.**
+### Step 6: Initialize project with uv.
 
 ```bash
 # Navigate to project directory

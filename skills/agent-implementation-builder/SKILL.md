@@ -28,6 +28,34 @@ Use this skill when:
 
 ---
 
+## ⛔ FIRST THING YOU DO: Check Execution Mode
+
+**Before reading spec files, before loading skills, before ANYTHING — read manifest.yaml and check the execution-plan.**
+
+```
+Read manifest.yaml → check execution-plan.phases
+  ├── 2+ streams with parallel chunks in ANY phase?
+  │   └── YES → ⛔ TEAM MODE
+  │       1. Load skill: "agent-impl-teammate-spawn"
+  │       2. Read references/common/team-mode.md
+  │       3. You are TEAM LEAD. You do NOT write code.
+  │       4. Teammates write code. You orchestrate.
+  │
+  └── All sequential / single stream?
+      └── MAYBE → Ask the user to confirm before proceeding.
+```
+
+**Most agent specs require team mode.** If the spec has 2+ agents, it almost certainly has parallel streams (scaffold, tools, prompts). Default to team mode if unsure.
+
+**If you think single-agent mode is appropriate, ASK THE USER FIRST:**
+> "The execution plan appears to be sequential / single-stream. I'm planning to use single-agent mode. Can you confirm, or should I use team mode instead?"
+
+**Do NOT silently choose single-agent mode.** Get explicit user confirmation.
+
+**If you skip this and start writing code in single-agent mode when parallel streams exist, STOP immediately, set up the team, and start over.**
+
+---
+
 ## Key Principles
 
 1. **Spec-driven** — All implementation decisions come from the spec
