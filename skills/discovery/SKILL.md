@@ -313,9 +313,7 @@ When saving the discovery document, either **create the spec folder** or **add t
      progress.md
    ```
 
-5. **If the user specifies a different location**, respect that — but suggest the convention.
-
-**Why this matters:** The spec folder is the single home for all artifacts related to this work — discovery, brainstorm, spec, reviews, and implementation feedback. Creating it at discovery time ensures the downstream skills (spec-builder, review, implementation) all have a consistent place to read from and write to.
+**ALWAYS use the spec folder convention.** Every piece of work — regardless of size — gets its own `YYYY-MM-DD-feature-name/` folder. There are no exceptions. This folder is the single home for all artifacts: discovery, brainstorm, spec, reviews, and implementation feedback. Creating it at discovery time ensures all downstream skills have a consistent place to read from and write to.
 
 ---
 
