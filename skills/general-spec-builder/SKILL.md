@@ -59,13 +59,21 @@ A `spec.md` file saved into the existing spec folder created by the discovery sk
   feedback/           ← already exists (placeholder)
 ```
 
-**If the spec folder already exists** (created by discovery), save `spec.md` into it and update `progress.md`.
+**If the spec folder already exists** (created by brainstorm or discovery), save `spec.md` into it and update `progress.md`.
 
-**If no spec folder exists** (user skipped discovery or is using an older workflow), ask: "Where should I save the spec? I recommend creating a spec folder at `[workforce-root]/specs/YYYY-MM-DD-feature-name/`."
+**If no spec folder exists yet**, create it. Ask the user: "Which workforce does this belong to and what should we call it?" Then create the full structure:
+```
+[workforce-root]/specs/YYYY-MM-DD-feature-name/
+  spec.md             ← the spec you're building
+  progress.md         ← create with spec-builder metadata
+  feedback/           ← create empty placeholder
+```
+
+**ALWAYS use the spec folder convention.** Every spec — regardless of size, complexity, or whether discovery was run — gets its own `YYYY-MM-DD-feature-name/` folder. There are no "standalone specs" or "single file specs" outside this structure.
 
 The spec contains: Meta, Overview, Skills, Requirements, Architecture, Reference Files, Execution Plan (with work streams, phases, chunks, communication), Acceptance Criteria, Completion Promise, and Notes.
 
-**On completion:** The agent asks the user to confirm the spec is finished, invokes `/review-spec` for automated validation, addresses feedback, then outputs a short handoff message with the spec path, discovery doc path, skills to load, and instruction to invoke `/general-implementation-builder`. For multi-agent/teammate specs, the handoff also includes the `teammate-spawn` skill.
+**On completion:** The agent asks the user to confirm the spec is finished, invokes `/review-general-spec` for automated validation, addresses feedback, then outputs a short handoff message with the spec folder path, skills to load, and instruction to invoke `/general-implementation-builder`. For multi-agent/teammate specs, the handoff also includes the `teammate-spawn` skill.
 
 ---
 
