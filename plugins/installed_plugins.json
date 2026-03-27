@@ -58,10 +58,10 @@
     "agent-sdk-dev@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-plugins-official/agent-sdk-dev/b9edd2b6d0cc",
-        "version": "b9edd2b6d0cc",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-plugins-official/agent-sdk-dev/ccd629835777",
+        "version": "ccd629835777",
         "installedAt": "2026-02-16T20:56:01.120Z",
-        "lastUpdated": "2026-03-26T14:15:52.158Z",
+        "lastUpdated": "2026-03-27T11:42:56.411Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
@@ -78,10 +78,10 @@
     "frontend-design@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-plugins-official/frontend-design/b9edd2b6d0cc",
-        "version": "b9edd2b6d0cc",
+        "installPath": "/Users/georgewestbrook/.claude/plugins/cache/claude-plugins-official/frontend-design/ccd629835777",
+        "version": "ccd629835777",
         "installedAt": "2026-02-22T20:02:16.834Z",
-        "lastUpdated": "2026-03-26T14:15:52.157Z",
+        "lastUpdated": "2026-03-27T11:42:56.412Z",
         "gitCommitSha": "aa296ec81e8ccb49c9784f167c2c0aa625a86cec"
       }
     ]

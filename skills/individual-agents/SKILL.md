@@ -208,7 +208,7 @@ DSPy uses a different taxonomy based on module behavior rather than output forma
 | Basic Agent | `dspy/basic-agent.md` | Extraction, classification, ranking - any single-turn prediction |
 | Reasoning Agent | `dspy/reasoning-agent.md` | Creative synthesis, complex decisions needing visible reasoning |
 | Conversational Agent | `dspy/conversational-agent.md` | Multi-turn loops, critic-iterator patterns with dspy.History |
-| Tool Agent | `dspy/tool-agent.md` | Needs to call external tools (ReAct pattern) |
+| Tool Agent | `dspy/tool-agent.md` | Needs to call external tools. **Default to ChainOfThought/Predict + ToolCalls** (single LLM call, manual tool execution). **ReAct is rare** — only for agents that must dynamically discover which tools to call through multi-step reasoning chains. If you think ReAct is needed, **stop and ask the user** before proceeding. |
 | Text Agent *(alias)* | `dspy/text-agent.md` | Redirects to Basic Agent - DSPy has no text vs structured distinction |
 
 ---

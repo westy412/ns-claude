@@ -9,7 +9,7 @@ Links to detailed documentation for each DSPy agent type.
 | Basic Agent | `dspy.Predict` | Extraction, classification, evaluation | [basic-agent.md](../../individual-agents/dspy/basic-agent.md) |
 | Reasoning Agent | `dspy.ChainOfThought` | Creative synthesis, complex decisions | [reasoning-agent.md](../../individual-agents/dspy/reasoning-agent.md) |
 | Conversational Agent | `dspy.History` | Multi-turn loops, dialogue | [conversational-agent.md](../../individual-agents/dspy/conversational-agent.md) |
-| Tool Agent | `dspy.ReAct` | External data, actions | [tool-agent.md](../../individual-agents/dspy/tool-agent.md) |
+| Tool Agent | `dspy.ChainOfThought` + `ToolCalls` (default) or `dspy.ReAct` (rare) | External data, actions. Default to CoT + manual tool execution. ReAct only for multi-step dynamic chains — ask user first. | [tool-agent.md](../../individual-agents/dspy/tool-agent.md) |
 
 ## Quick Selection Guide
 
