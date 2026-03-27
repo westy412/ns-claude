@@ -125,14 +125,20 @@ If the source tracer found a gap (something in discovery not in spec) AND the am
 3. Write review to `reviews/review-NNN.md` using `templates/review-output.md`
 4. Clean up team: shutdown teammates, delete team
 
-**Present to user:**
-- Overall verdict (PASS/WARN/FAIL per dimension)
-- Blocking issue count
-- Warning count
-- The path where the review was saved
+**Present the FULL findings to the user in the chat.** Do NOT just show a summary — the user needs to see what's wrong. Output:
+
+1. **Overall verdict** (PASS/WARN/FAIL per dimension) as a summary table
+2. **All blocking issues** — list every FAIL with the specific issue, where it was found, and the suggested fix
+3. **All warnings** — list every WARN with the specific issue and suggestion
+4. **Source tracing gaps** — show the coverage gaps table (CRITICAL and MODERATE items)
+5. **Ambiguity findings** — show the ambiguity table with clarification questions for HIGH and MEDIUM items
+6. **Requirement-to-agent mapping gaps** — show any requirements with no responsible agent
+7. **Path where the full review was saved** — for reference
 
 **Then ask:**
 *"The review has been saved to `[path]`. Would you like me to fix any of the issues found?"*
+
+The user must be able to read the chat and understand exactly what's wrong without opening the review file.
 
 ---
 
