@@ -287,33 +287,47 @@ Diagrams make the document easier to scan and understand. A well-placed ASCII di
 
 ### Location: Spec Folder Convention
 
-When saving the discovery document, either **create the spec folder** or **add to an existing one**.
+The discovery document is **always** named `discovery.md`. No custom names.
 
-1. **Check if a spec folder already exists** (brainstorm may have created it):
-   - If yes: save `discovery.md` into the existing folder. Update `progress.md` with discovery status.
-   - If no: proceed to step 2.
+When saving, either **add to an existing spec folder** or **create a new one**.
 
-2. **Ask the user:** "Which workforce does this belong to, and what should we call the spec folder?"
-   - Example: `~/Programming/novosapien/content-workforce/specs/2026-03-26-feature-name/`
+**Step 1: Check if a spec folder already exists.**
 
-3. **Create the folder structure:**
-   ```
-   [workforce-root]/specs/YYYY-MM-DD-feature-name/
-     discovery.md          ← save the discovery document here
-     feedback/             ← create empty placeholder
-     progress.md           ← create with basic metadata (date, idea origin, status: discovery-complete)
-   ```
+The user may have provided a spec folder path (from brainstorm handoff), or you can check:
+- Did the user mention a brainstorm or idea card? Check if it's inside a spec folder (`[workforce-root]/specs/YYYY-MM-DD-*/brainstorm.md`)
+- Did the user provide a folder path directly?
+- If a spec folder exists with `brainstorm.md` and/or `progress.md` already in it, that's your target folder.
 
-4. **If there's a brainstorm or idea card** that informed this discovery (and it's NOT already in the spec folder), copy it in:
-   ```
-   [workforce-root]/specs/YYYY-MM-DD-feature-name/
-     discovery.md
-     brainstorm.md         ← copied from brainstorms/ folder if not already present
-     feedback/
-     progress.md
-   ```
+**If folder exists** (brainstorm was the entry point):
+- Save `discovery.md` into the existing folder
+- Update `progress.md` — add discovery status, update Status to `discovery`
+- The `brainstorm.md`, `ideas/`, `feedback/` should already be there
+- Done.
 
-**ALWAYS use the spec folder convention.** Every piece of work — regardless of size — gets its own `YYYY-MM-DD-feature-name/` folder. There are no exceptions. This folder is the single home for all artifacts: discovery, brainstorm, spec, reviews, and implementation feedback. Creating it at discovery time ensures all downstream skills have a consistent place to read from and write to.
+**Step 2: If no folder exists, create it.**
+
+Ask the user: "Which workforce does this belong to, and what should we call the spec folder?"
+
+Create:
+```
+[workforce-root]/specs/YYYY-MM-DD-feature-name/
+  discovery.md          ← ALWAYS this name
+  feedback/             ← create empty placeholder
+  progress.md           ← create with metadata (date, idea origin, status: discovery)
+```
+
+**Step 3: Check for brainstorm content to copy in.**
+
+If a brainstorm or idea card informed this discovery AND it's NOT already in the spec folder (e.g., it's in `~/Programming/novosapien/brainstorms/`), copy it:
+```
+[workforce-root]/specs/YYYY-MM-DD-feature-name/
+  discovery.md
+  brainstorm.md         ← copied from brainstorms/ folder
+  feedback/
+  progress.md
+```
+
+**ALWAYS use the spec folder convention.** Every piece of work — regardless of size — gets its own `YYYY-MM-DD-feature-name/` folder. No exceptions.
 
 ---
 

@@ -427,11 +427,13 @@ When the user wants to take an idea card into discovery:
 
 **If the spec folder already exists** (brainstorm was the entry point):
 1. Point to the idea card in the spec folder: `[workforce-root]/specs/YYYY-MM-DD-feature-name/ideas/[idea-name].md`
-2. Suggest: "You can start discovery by invoking `/discovery` and pointing it at this spec folder. The folder is already set up."
+2. Output this handoff message:
+   > "The spec folder is at `[full path]`. Start discovery by invoking `/discovery` and pointing it at this folder. The brainstorm.md and idea cards are already there."
 
 **If brainstorm was saved to the archive** (standalone session):
 1. Point to the idea card at `~/Programming/novosapien/brainstorms/YYYY-MM-DD/ideas/[idea-name].md`
-2. Suggest: "You can start discovery by invoking `/discovery` and pointing it at this idea card. Discovery will create the spec folder and copy the brainstorm content there."
+2. Output this handoff message:
+   > "Start discovery by invoking `/discovery` and pointing it at the idea card at `[full path]`. Discovery will create the spec folder and copy the brainstorm content there."
 3. Note any context from the brainstorm that discovery should be aware of
 
 The idea card is designed to give discovery a running start without constraining it. Discovery will take the idea deeper through its own conversational process.
