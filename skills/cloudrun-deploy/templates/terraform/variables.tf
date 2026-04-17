@@ -33,7 +33,7 @@ variable "project_id" {
 variable "region" {
   description = "GCP region for Cloud Run"
   type        = string
-  default     = "europe-west2"
+  default     = "europe-west1"
 }
 
 # ============================================================================
@@ -41,7 +41,15 @@ variable "region" {
 # ============================================================================
 
 variable "image_url" {
-  description = "Full URL of the container image (e.g., gcr.io/project/service:tag)"
+  description = <<-EOT
+    Full URL of the container image (e.g., REGION-docker.pkg.dev/project/repo/service:tag).
+
+    NOTE: After initial service creation, this value is IGNORED by terraform because
+    the Cloud Run resource has `lifecycle { ignore_changes = [template[0].containers[0].image] }`.
+    The actual deployed image is managed by the GitHub Actions workflow using commit SHA tags.
+    Updating this value has no effect on existing services — use `gcloud run deploy --image=...`
+    or push a new commit to redeploy. See SKILL.md "Image Tagging Strategy" for details.
+  EOT
   type        = string
 }
 

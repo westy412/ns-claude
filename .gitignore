@@ -1,6 +1,7 @@
 # Sensitive files - NEVER COMMIT
 settings.json
 settings.local.json
+mcp-needs-auth-cache.json
 
 # Backups (contain secrets)
 backups/
@@ -28,11 +29,15 @@ downloads/
 # OS files
 .DS_Store
 
-# Plugin cache and ephemeral data
-plugins/cache/
-plugins/install-counts-cache.json
-plugins/marketplaces/
-plugins/repos/
+# Personal / local-only config
+keybindings.json
+statusline.sh
+statusline-command.sh
+commands/
+prompts/
+
+# Plugins (managed by Claude Code per-machine)
+plugins/
 
 # Chrome extension data
 chrome/
@@ -42,3 +47,6 @@ ide/
 projects/
 teams/
 usage-data/
+
+# Specs (local working files)
+specs/

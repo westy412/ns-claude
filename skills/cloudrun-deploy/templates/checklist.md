@@ -4,10 +4,9 @@
 
 ### GCP Infrastructure
 - [ ] GCP project exists with billing enabled
-- [ ] Required APIs enabled (Cloud Run, Container Registry)
+- [ ] Required APIs enabled (Cloud Run, Artifact Registry)
 - [ ] Terraform service account created with correct permissions
-- [ ] Service account key file exists locally
-- [ ] Docker authenticated to GCR (`gcloud auth configure-docker`)
+- [ ] Docker authenticated to Artifact Registry (`gcloud auth configure-docker REGION-docker.pkg.dev`)
 
 ### Local Tools
 - [ ] Terraform installed (`terraform --version`)
@@ -92,11 +91,16 @@
 ## Commands Reference
 
 ```bash
-# Build and push
-docker build -t gcr.io/{{PROJECT_ID}}/{{SERVICE_NAME}}:latest .
-docker push gcr.io/{{PROJECT_ID}}/{{SERVICE_NAME}}:latest
+# Build and push (use commit SHA as tag — never :latest)
+IMAGE_TAG=$(git rev-parse HEAD)
+IMAGE_URL={{REGION}}-docker.pkg.dev/{{PROJECT_ID}}/{{AR_REPO}}/{{SERVICE_NAME}}:${IMAGE_TAG}
+docker build --platform linux/amd64 -t ${IMAGE_URL} .
+docker push ${IMAGE_URL}
 
-# Deploy
+# Deploy new image (workflow normally handles this on push to main)
+gcloud run deploy {{SERVICE_NAME}} --image=${IMAGE_URL} --region={{REGION}}
+
+# Apply infrastructure changes (env vars, scaling, etc. — NOT images)
 cd infrastructure && terraform apply
 
 # Verify
@@ -105,6 +109,10 @@ curl {{SERVICE_URL}}/health
 # Logs
 gcloud run services logs read {{SERVICE_NAME}} --region={{REGION}} --limit=50
 
-# Rollback
+# Rollback (shift traffic to previous revision, no redeploy)
 gcloud run services update-traffic {{SERVICE_NAME}} --region={{REGION}} --to-revisions=REVISION=100
+
+# Or rollback by redeploying a previous commit SHA
+gcloud run services update {{SERVICE_NAME}} --region={{REGION}} \
+  --image={{REGION}}-docker.pkg.dev/{{PROJECT_ID}}/{{AR_REPO}}/{{SERVICE_NAME}}:<previous-sha>
 ```

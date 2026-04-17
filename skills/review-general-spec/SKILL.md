@@ -54,7 +54,13 @@ Read all located source materials before proceeding.
 
 ## Step 2: Spawn Review Team
 
-Load the `teammate-spawn` skill to generate teammate prompt files.
+**FIRST ACTION — Load the teammate-spawn skill immediately:**
+
+```
+Skill tool → skill: "teammate-spawn"
+```
+
+Do NOT proceed with team creation or agent spawning until the teammate-spawn skill has been loaded. This skill provides the process for generating structured prompt files for each expert. Every expert agent MUST have their prompt file generated through the teammate-spawn process before being spawned.
 
 **Team composition (3 agents):**
 
@@ -66,16 +72,16 @@ Load the `teammate-spawn` skill to generate teammate prompt files.
 
 **Setup sequence:**
 
-1. Load the `teammate-spawn` skill: `Skill tool → skill: "teammate-spawn"`
+1. **Teammate-spawn skill must already be loaded** (see above). If not loaded, stop and load it now: `Skill tool → skill: "teammate-spawn"`
 2. Create a team via `TeamCreate`
 3. Create one task per dimension via `TaskCreate`
-4. Generate teammate prompt files — each prompt must include:
+4. **For each expert agent**, follow the teammate-spawn process to generate their prompt file — each prompt must include:
    - Path to the spec file
    - Paths to all source materials (discovery, brainstorm, research)
    - The specific reference file content for their dimension
    - The findings format they must report back in
    - Instruction: **read-only investigation, do NOT modify any files**
-5. Spawn all 3 agents in parallel
+5. Spawn all 3 agents in parallel — each agent's spawn prompt points to their teammate-spawn generated prompt file
 
 **Each agent's prompt must contain:**
 - The full spec content (or path to read it)

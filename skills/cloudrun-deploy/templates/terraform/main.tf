@@ -130,6 +130,19 @@ resource "google_cloud_run_v2_service" "main" {
   depends_on = [
     google_project_service.run,
   ]
+
+  # The container image is managed by .github/workflows/deploy.yml using the
+  # git commit SHA as the tag (immutable per commit). Terraform must NOT
+  # manage the image field — without this ignore_changes block, every
+  # `terraform apply` would silently revert the deployed image to whatever
+  # value is in tfvars (e.g. :latest), undoing the workflow's latest deploy.
+  # See SKILL.md "Image Tagging Strategy" and "Environment Variables Strategy
+  # → Option C: Hybrid" for the full pattern.
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image,
+    ]
+  }
 }
 
 # Enable Cloud Run API

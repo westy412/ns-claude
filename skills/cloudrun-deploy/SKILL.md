@@ -52,7 +52,7 @@ Before starting any deployment, verify these prerequisites exist:
 | Billing enabled | GCP Console → Billing | Link billing account to project |
 | Terraform service account | `gcloud iam service-accounts list` | See Service Account Setup below |
 | Service account key file | File exists locally | `gcloud iam service-accounts keys create` |
-| Container Registry enabled | `gcloud services list --enabled` | `gcloud services enable containerregistry.googleapis.com` |
+| Artifact Registry enabled | `gcloud services list --enabled` | `gcloud services enable artifactregistry.googleapis.com` |
 | Cloud Run API enabled | `gcloud services list --enabled` | `gcloud services enable run.googleapis.com` |
 
 ### Local Tools
@@ -71,8 +71,7 @@ The Terraform service account requires these roles at minimum:
 |------|---------|
 | `roles/run.admin` | Create, update, delete Cloud Run services |
 | `roles/iam.serviceAccountUser` | Deploy as the runtime service account |
-| `roles/storage.admin` | Push images to Container Registry (if using GCR) |
-| `roles/artifactregistry.writer` | Push images to Artifact Registry (if using AR) |
+| `roles/artifactregistry.writer` | Push images to Artifact Registry |
 | `roles/secretmanager.admin` | Create and manage secrets (if service uses secrets) |
 
 **Commands to grant roles:**
@@ -90,7 +89,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:${SA_EMAIL}" \
-    --role="roles/storage.admin"
+    --role="roles/artifactregistry.writer"
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:${SA_EMAIL}" \
@@ -100,7 +99,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 ### Docker Authentication
 
 ```bash
-gcloud auth configure-docker
+gcloud auth configure-docker ${REGION}-docker.pkg.dev
 ```
 
 ---
@@ -122,11 +121,11 @@ gcloud auth configure-docker
 | Field | Description | Default |
 |-------|-------------|---------|
 | `project_id` | GCP project to deploy into | — |
-| `region` | Cloud Run region | `europe-west2` |
+| `region` | Cloud Run region | `europe-west1` |
 
 **Supported Regions:**
 ```
-europe-west2 (London), europe-west1 (Belgium), us-central1 (Iowa),
+europe-west1 (Belgium), europe-west2 (London), us-central1 (Iowa),
 us-east1 (South Carolina), asia-east1 (Taiwan), australia-southeast1 (Sydney)
 ```
 
@@ -294,7 +293,6 @@ Generate these files in `infrastructure/`:
 | File | Purpose |
 |------|---------|
 | `.dockerignore` | Exclude unnecessary files from image |
-| `deploy.sh` | Orchestration script |
 
 ---
 
@@ -315,7 +313,12 @@ Generate these files in `infrastructure/`:
 # Set variables
 PROJECT_ID="your-project-id"
 SERVICE_NAME="your-service"
-IMAGE_URL="gcr.io/${PROJECT_ID}/${SERVICE_NAME}:latest"
+AR_REPO="cloud-run-services"  # Artifact Registry repository name
+
+# Use the git commit SHA as the image tag (immutable per commit).
+# DO NOT use :latest — see "Image Tagging Strategy" section for why.
+IMAGE_TAG=$(git rev-parse HEAD)
+IMAGE_URL="${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/${SERVICE_NAME}:${IMAGE_TAG}"
 
 # IMPORTANT: Always use --platform for Apple Silicon compatibility
 docker build --platform linux/amd64 -t ${IMAGE_URL} .
@@ -355,12 +358,18 @@ cd infrastructure/
 # Initialize Terraform (first time or after provider changes)
 terraform init
 
-# Preview changes
-terraform plan
-
-# Apply changes
-terraform apply -auto-approve
+# Preview changes — ALWAYS review this before applying
+terraform plan -var-file=terraform.<env>.tfvars -state=terraform.<env>.tfstate
 ```
+
+**Review the plan output before applying. Verify `0 to destroy`.** Never run `terraform apply -auto-approve` on a service that's already in production — blindly auto-approving a plan that wants to destroy or recreate the service is how outages happen.
+
+```bash
+# Only after reviewing the plan:
+terraform apply -var-file=terraform.<env>.tfvars -state=terraform.<env>.tfstate
+```
+
+**For adding/changing env vars on an existing Cloud Run service** (Option C Hybrid), see the dedicated workflow in ["Operational discipline when modifying env vars on an existing Hybrid-managed service"](#operational-discipline-when-modifying-env-vars-on-an-existing-hybrid-managed-service) below. It covers the plan-review-apply discipline, gitignore requirements, and the image-field comment convention — all critical for avoiding silent rollbacks and security incidents.
 
 ### Step 3: Create Secrets (if using Secret Manager)
 
@@ -392,7 +401,40 @@ curl ${SERVICE_URL}/health
 gcloud run services logs read ${SERVICE_NAME} --region=${REGION} --limit=50
 ```
 
-### Step 4: Verification Checklist
+### Step 4: Verify CLAUDE.md Documents the Deployment
+
+Once the service is live, the repo's `CLAUDE.md` (at repo root) MUST document the deployment convention so future sessions — human or agent — don't silently revert it. This is the step that prevents `:latest` rot, missing `lifecycle.ignore_changes` blocks, and accidental env var edits via the Cloud Run console.
+
+**Required content in `CLAUDE.md`** (under a "Deployment" heading or equivalent — two subsections):
+
+1. **"Image deployment"** subsection covering:
+   - Workflow owns the image (`gcloud run deploy --image=...:<sha>` on push, tagged with `${{ github.sha }}`)
+   - Terraform owns env vars and everything else
+   - `lifecycle.ignore_changes` on `template[0].containers[0].image` is required — removing it reintroduces the silent rollback bug
+   - tfvars pin a SHA, never `:latest`, and why
+   - How to force-deploy a specific commit (workflow re-run or `gcloud run services update --image=...:<sha>`)
+   - How to roll back (`gcloud run services update-traffic --to-revisions=<prev>=100`)
+   - How to check what's actually running (`gcloud run services describe`)
+
+2. **"Updating Environment Variables"** subsection covering:
+   - Env vars are managed via Terraform tfvars files — Terraform is the **single source of truth**
+   - Do NOT update via Cloud Run console or `gcloud --set-env-vars` (will be reverted on next `terraform apply`)
+   - Workflow on push does NOT update env vars — only the image
+   - Procedure: edit `terraform.{testing,production}.tfvars` → `cd infrastructure/` → `terraform plan -var-file=...` → `terraform apply -var-file=...`
+   - Backend detection note: for local backend, append `-state=terraform.{env}.tfstate`; for GCS backend, omit the `-state=` flag — check `infrastructure/backend.tf` to determine which
+   - **Always run `terraform plan` before `apply`** and verify `0 to destroy`
+
+**How to verify:**
+
+```bash
+# From repo root — both should return matches
+grep -E "^#+.*Image deployment" CLAUDE.md
+grep -E "^#+.*Updating Environment Variables" CLAUDE.md
+```
+
+**If missing:** Use the template at "Environment Variables Strategy → Option C (Hybrid) → CLAUDE.md deployment section (template)" below. Copy it into the repo's CLAUDE.md with the service name substituted. Commit the CLAUDE.md change in the same PR as the infrastructure work.
+
+### Step 5: Verification Checklist
 
 - [ ] Service URL accessible
 - [ ] Health check passing
@@ -400,6 +442,7 @@ gcloud run services logs read ${SERVICE_NAME} --region=${REGION} --limit=50
 - [ ] Environment variables loaded correctly
 - [ ] Secrets accessible (if applicable)
 - [ ] GCP service dependencies working
+- [ ] `CLAUDE.md` contains "Image deployment" and "Updating Environment Variables" subsections (see Step 4 above)
 
 ---
 
@@ -528,16 +571,16 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 | `app/main.py` with relative imports | `/app` | `uvicorn app.main:app` |
 | `main.py` at root | `/app` | `uvicorn main:app` |
 
-### Docker Push to GCR Fails with 403 Forbidden
+### Docker Push to Artifact Registry Fails with 403 Forbidden
 
 **Error:** `failed to fetch anonymous token: 403 Forbidden`
 
-**Cause:** Docker not authenticated with Google Container Registry.
+**Cause:** Docker not authenticated with Artifact Registry.
 
 **Fix:**
 ```bash
-gcloud auth configure-docker gcr.io --quiet
-gcloud services enable containerregistry.googleapis.com --project=${PROJECT_ID}
+gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+gcloud services enable artifactregistry.googleapis.com --project=${PROJECT_ID}
 ```
 
 ### Terraform "No credentials loaded" Error
@@ -792,20 +835,52 @@ gcloud iam service-accounts add-iam-policy-binding ${SA_EMAIL} \
     --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github-pool/attribute.repository/${REPO}"
 ```
 
+### Image Tagging Strategy
+
+**Decide BEFORE writing the workflow** how Docker images will be tagged. This choice affects rollback, reproducibility, and how IaC interacts with deployments.
+
+| Strategy | What | Pros | Cons |
+|----------|------|------|------|
+| **Immutable SHA tags (recommended)** | Each build is tagged with the git commit SHA only (e.g. `:abc123def`). No `:latest` tag. | Reproducible (deployed image always traces to a commit); easy rollback (deploy a previous SHA); no race conditions; works cleanly with GitOps tooling | Deployment system must know the specific SHA to deploy |
+| **`:latest` tag** | Each build is tagged with both `:<sha>` AND `:latest`. Deployment system references `:latest`. | Familiar mental model ("push = latest"); IaC can reference a stable name | **Race conditions** if two pushes finish out of order; harder rollback (must retag); no reproducibility (can't tell which commit produced the deployed image) |
+
+**Recommendation: immutable SHA tags.** Modern Cloud Run deployments and GitOps tools (Flux, ArgoCD) use this pattern. The skill's example workflows in this section all use `${{ github.sha }}` as the tag.
+
+#### Critical trap: don't mix the two strategies
+
+The most dangerous failure mode is **a workflow that uses SHA tags + IaC that references `:latest`**. This silently breaks deploys:
+
+1. Workflow builds and deploys `:<sha>` correctly. New revision is created and serves traffic.
+2. IaC (e.g. terraform) has `image = "...:latest"` in its config. Nothing in CI/CD ever updates `:latest`.
+3. `:latest` becomes frozen at whatever was last tagged manually (often during initial setup or a one-time bulk push).
+4. **Every subsequent `terraform apply` (for any reason — env var changes, scaling tweaks, IAM changes) silently reverts the deployed image to the stale `:latest`**, undoing the workflow's most recent deploy.
+5. The bug is invisible — no error, no warning, no failed health check. The new revision boots successfully (it's a working older image), traffic shifts to it, and the latest code is gone.
+
+**Symptoms** that suggest you've fallen into this trap:
+- Code changes you pushed don't appear to be running, even though the workflow succeeded
+- "Force redeploy" hacks like manually tweaking an env var to push out a new revision
+- Mysterious env vars in production with names like `WIRING_UPDATED=true` (someone's workaround)
+- Different team members reporting "I deployed this fix days ago and it's still broken"
+
+**If you find yourself in this hybrid state**, fix it ONE of these ways:
+- **Add `:latest` push to the workflow** (every build pushes BOTH `:<sha>` AND `:latest`). Eliminates the `terraform apply` rollback. Simple but has race conditions on concurrent pushes — only safe with single-pusher workflows.
+- **Tell IaC to ignore the image field**. For terraform, add `lifecycle { ignore_changes = [template[0].containers[0].image] }` to the `google_cloud_run_v2_service` resource. The workflow becomes the sole authority on the image. The `image` field in tfvars is only used on initial create. **This is the recommended fix.** See "Environment Variables Strategy → Option C: Hybrid" below for the full pattern.
+
 ### Environment Variables Strategy
 
 **ASK THE USER:** How should environment variables be managed in CI/CD?
 
 | Option | Description | Pros | Cons |
 |--------|-------------|------|------|
-| **Console-managed (Recommended)** | Set env vars once in Cloud Run console or via initial deploy. CI/CD only updates code. | No GitHub secrets needed, simple workflow, env vars rarely change | Must use console/gcloud to update env vars |
-| **GitHub Secrets** | Store all env vars as GitHub secrets, workflow sets them on each deploy | Env vars version-controlled with deploys | Duplicate secrets, more complex workflow |
+| **Console-managed (Recommended for simple setups)** | Set env vars once in Cloud Run console or via initial deploy. CI/CD only updates code. | No GitHub secrets needed, simple workflow, env vars rarely change | Must use console/gcloud to update env vars; no audit trail |
+| **GitHub Secrets** | Store all env vars as GitHub secrets, workflow sets them on each deploy via `--set-env-vars` | Env vars version-controlled with deploys (in workflow file) | Duplicate secrets, more complex workflow; secrets are write-only (can't diff or inspect) |
+| **Hybrid (Terraform + workflow)** | Terraform manages env vars in tfvars files. Workflow only manages images. Terraform Cloud Run resource has `lifecycle { ignore_changes = [image] }`. | Audit trail via tfvars; `terraform plan` shows env var diffs; workflow stays simple | Requires `ignore_changes` discipline (silent rollback bug if forgotten); `image` field in tfvars is misleading |
 
-**Recommendation: Console-managed** - Environment variables rarely change, and when they do, updating via Cloud Run console is straightforward. This keeps the workflow simple and avoids duplicating secrets.
+**Recommendation: Console-managed for simple setups, Hybrid for setups that already use Terraform.** The console-managed approach is simplest and works well when env vars are stable. The hybrid approach gives you a reviewable audit trail via tfvars at the cost of needing to remember the `ignore_changes` discipline. Avoid GitHub Secrets unless you specifically need every env var change to be linked to a workflow run.
 
 #### Option A: Console-Managed Env Vars (Default)
 
-1. Set env vars once during initial manual deploy (via `deploy.sh` or gcloud CLI)
+1. Set env vars once during initial manual deploy via `gcloud run deploy --set-env-vars=...` or the Cloud Run console
 2. Manage env vars in Cloud Run console: Service → Edit & Deploy New Revision → Variables & Secrets
 3. CI/CD workflow only deploys new images - existing env vars are preserved
 
@@ -815,7 +890,7 @@ gcloud iam service-accounts add-iam-policy-binding ${SA_EMAIL} \
   run: |
     # Deploy new image only - env vars managed in Cloud Run console
     gcloud run deploy ${{ env.SERVICE_NAME }} \
-      --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
+      --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
       --region ${{ env.REGION }} \
       --project ${{ env.PROJECT_ID }} \
       --platform managed
@@ -838,6 +913,200 @@ If you need env vars to be version-controlled with deployments, add secrets to G
 | `BACKEND_API_URL` | Backend API endpoint |
 
 **Note:** Non-sensitive config (ENVIRONMENT, models, providers) can be hardcoded in the workflow.
+
+#### Option C: Hybrid — Terraform for env vars, workflow for image
+
+If you want terraform to manage env vars (audit trail via tfvars, `terraform plan` visibility) but the workflow to manage code deploys, this is the cleanest pattern:
+
+1. **Workflow** tags each build with the commit SHA and deploys via `gcloud run deploy --image=...:<sha>` (same workflow as Option A — no `--set-env-vars`)
+2. **Terraform** manages everything else on the Cloud Run service: env vars (via dynamic `env` block), scaling, IAM, networking, etc.
+3. **Critical**: Terraform's Cloud Run resource MUST exclude the image field from management. Otherwise every `terraform apply` will pull the `image` value from tfvars (typically `:latest`, which the workflow never updates) and silently revert the deployed image.
+
+```hcl
+resource "google_cloud_run_v2_service" "service" {
+  name     = var.service_name
+  location = var.region
+
+  template {
+    containers {
+      image = var.image  # Only used on initial create — see lifecycle block below
+
+      dynamic "env" {
+        for_each = var.env_vars
+        content {
+          name  = env.key
+          value = env.value
+        }
+      }
+      # ... rest of container config ...
+    }
+    # ... rest of template ...
+  }
+
+  traffic {
+    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+    percent = 100
+  }
+
+  # The container image is managed by the GitHub Actions workflow using the
+  # git commit SHA as the tag. Terraform must NOT manage the image field —
+  # without this ignore_changes block, every `terraform apply` would silently
+  # revert the deployed image to whatever value is in tfvars (e.g. :latest),
+  # undoing the workflow's latest deploy.
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image,
+    ]
+  }
+}
+```
+
+**About the `image` field in tfvars**: It's only used when terraform creates a brand-new service from scratch. After the service exists, the `lifecycle { ignore_changes }` makes terraform leave the image alone. To avoid confusion for future maintainers, add a comment in tfvars or in the resource explaining that changing the `image` field has no effect on existing services — use the workflow or `gcloud run services update --image=...` to change the image.
+
+**Workflow**: Use the same workflow as Option A (image-only deploy via `gcloud run deploy --image=...:<sha>`). Do NOT add `--set-env-vars` — env vars are managed by terraform.
+
+**Updating env vars**: Edit tfvars locally, run `terraform apply`. Because `image` is in `ignore_changes`, the apply will only touch env vars and other infra fields. The deployed image is preserved.
+
+**Rolling back code**: Use `gcloud run services update <service> --image=...:<previous-sha>` (rollback is a workflow concern, not a terraform concern). Or shift traffic via `gcloud run services update-traffic`.
+
+**Pros**:
+- Env var changes are reviewable (tfvars + `terraform plan`)
+- Workflow stays simple (image only, no env var bookkeeping)
+- Clear separation of concerns: terraform owns infra, workflow owns code
+
+**Cons**:
+- Requires the `ignore_changes` discipline. Forgetting it triggers the silent rollback bug described in "Image Tagging Strategy → Critical trap"
+- The `image` field in tfvars is misleading (looks like it sets the image, actually doesn't after initial create). Mitigate with a comment in the tfvars or main.tf
+
+#### Operational discipline when modifying env vars on an existing Hybrid-managed service
+
+This is the workflow you follow **every time** you need to add, change, or remove an env var on a service that's already deployed with Option C Hybrid. Skipping steps here is how you end up with silent rollbacks, deleted service accounts, and production-down at 2am.
+
+1. **Check working tree is clean and you're on the right branch.** `git status` and `git branch --show-current`. Never start terraform work on a dirty branch or the wrong branch — surprises compound fast.
+
+2. **Edit ONLY the tfvars file(s).** For Option C Hybrid, env vars live in `env_vars = {}` map inside `terraform.testing.tfvars` / `terraform.production.tfvars`. Adding a new env var is a one-line addition to the map. **No `variables.tf` or `main.tf` changes needed** — the `dynamic "env" { for_each = var.env_vars }` block picks up new keys automatically.
+
+3. **Do NOT touch the `image` field.** It's pinned to a specific SHA on purpose. Leave it alone. If you accidentally edit it, `lifecycle.ignore_changes` will save you, but the diff will be confusing in code review.
+
+4. **Run `terraform plan` FIRST — always.** Never `terraform apply` without reviewing the plan. The canonical command:
+
+   ```bash
+   cd infrastructure
+   terraform plan -var-file=terraform.testing.tfvars -state=terraform.testing.tfstate
+   ```
+
+5. **Review the plan output before applying.** Look for:
+   - ✅ **`0 to destroy`** — this MUST hold. If terraform wants to destroy anything, STOP and investigate. The #1 source of Cloud Run incidents is a plan with unexpected destroys that nobody reviewed.
+   - ✅ Only the env var additions/changes you expected — nothing else on the Cloud Run resource should appear as modified.
+   - ✅ The `image` field is NOT in the diff (if it is, your `lifecycle.ignore_changes` is missing or broken — STOP).
+   - ⚠️ No unexpected IAM changes, no service account creation/deletion, no state migration errors.
+   - ⚠️ If the plan wants to recreate the service (`-/+ destroy and then create replacement`), STOP IMMEDIATELY. Recreating a Cloud Run service changes its URL and breaks every caller.
+
+6. **Only apply if the plan is clean.**
+   ```bash
+   terraform apply -var-file=terraform.testing.tfvars -state=terraform.testing.tfstate
+   ```
+
+7. **Verify on Cloud Run after apply:**
+   ```bash
+   gcloud run services describe <service-name> \
+     --region=<region> --project=<project> \
+     --format='value(spec.template.spec.containers[0].env)' \
+     | tr ';' '\n' | grep -i <YOUR_NEW_VAR>
+   ```
+
+8. **Repeat for production.** Phase 3 is always two applies: testing first, then production. **Never combine them.** Plan testing → review → apply testing → verify → plan production → review → apply production → verify.
+
+9. **Commit the tfvars edits.** Use a specific file add (`git add infrastructure/terraform.testing.tfvars infrastructure/terraform.production.tfvars`), not `git add -A`. Reference the related issue/spec in the commit message.
+
+#### tfvars gitignore: non-negotiable
+
+**`terraform.*.tfvars` MUST be in `.gitignore`** when using Option C Hybrid. These files contain real env var values, which in practice means real API keys, database URLs, secret tokens, etc. Committing them is a security incident.
+
+Canonical `.gitignore` entries for an infrastructure/ directory:
+
+```gitignore
+# Terraform
+infrastructure/terraform.*.tfvars
+infrastructure/terraform.*.tfstate
+infrastructure/terraform.*.tfstate.backup
+infrastructure/.terraform/
+infrastructure/.terraform.lock.hcl
+
+# Keep the example files
+!infrastructure/terraform.tfvars.example
+```
+
+**Double-check before any commit:**
+```bash
+git check-ignore -v infrastructure/terraform.testing.tfvars
+# Should output the gitignore rule that excludes it. If not, the file WILL get committed.
+```
+
+If you discover tfvars have been tracked in the past, `git rm --cached` them, commit the removal, rotate any secrets they contained, and make sure the `.gitignore` rule is in place.
+
+#### Image field comment convention
+
+Because the `image` field in tfvars is misleading (looks like it sets the image, actually ignored after initial create), put a loud comment right next to it so future maintainers don't "fix" it back to `:latest`:
+
+```hcl
+# tfvars snippet
+# -----------------------------------------------------------------------------
+# IMAGE PINNING
+# -----------------------------------------------------------------------------
+# The image field is IGNORED by terraform after the service is created (see
+# lifecycle.ignore_changes in main.tf). Changing this SHA in tfvars has NO
+# EFFECT on the deployed service — the image is managed by the GitHub Actions
+# workflow using the git commit SHA as the tag.
+#
+# DO NOT change this back to ":latest" — that re-introduces the silent
+# rollback bug (see cloudrun-deploy skill → "Image Tagging Strategy → Critical
+# trap").
+#
+# To roll back: `gcloud run services update <service> --image=...:<previous-sha>`
+# -----------------------------------------------------------------------------
+image_url = "europe-west1-docker.pkg.dev/PROJECT/REPO/SERVICE:<40-char-sha>"
+```
+
+#### CLAUDE.md deployment section (template)
+
+Every repo that deploys to Cloud Run via Option C Hybrid should have a Deployment section in its `CLAUDE.md` that future sessions (human or agent) will read before making terraform changes. Minimum content:
+
+```markdown
+## Deployment
+
+This service deploys to Cloud Run via the Option C Hybrid pattern (see the
+cloudrun-deploy skill): the GitHub Actions workflow owns the image (SHA-tagged),
+Terraform owns everything else (env vars, scaling, IAM).
+
+**Terraform does NOT manage the image field.** The Cloud Run resource has
+`lifecycle { ignore_changes = [template[0].containers[0].image] }`. Changing
+the `image` field in tfvars has no effect on subsequent applies.
+
+### Updating environment variables
+
+1. Edit `infrastructure/terraform.testing.tfvars` or `terraform.production.tfvars`
+2. **Always run `terraform plan` first** and verify `0 to destroy` before applying.
+3. Apply:
+   ```bash
+   terraform apply -var-file=terraform.testing.tfvars -state=terraform.testing.tfstate
+   ```
+4. Verify on Cloud Run:
+   ```bash
+   gcloud run services describe <service> --region=<region> \
+     --format='value(spec.template.spec.containers[0].env)'
+   ```
+5. Repeat for production.
+
+### Rollback
+
+- Traffic shift: `gcloud run services update-traffic <service> --to-revisions=<previous>=100`
+- Image rollback: `gcloud run services update <service> --image=...:<previous-sha>`
+
+### tfvars are gitignored
+
+`terraform.*.tfvars` contain real secrets and are in `.gitignore`. Do not commit them.
+```
 
 ### WIF Values for Workflow
 
@@ -863,7 +1132,8 @@ on:
 env:
   PROJECT_ID: your-project-id
   SERVICE_NAME: your-service
-  REGION: europe-west2
+  REGION: europe-west1
+  AR_REPO: cloud-run-services  # Artifact Registry repository name
   # WIF values - not sensitive, security is in the GCP WIF setup
   WIF_PROVIDER: projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/providers/github-provider
   WIF_SERVICE_ACCOUNT: github-actions-deploy@your-project-id.iam.gserviceaccount.com
@@ -888,12 +1158,12 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Docker for GCR
-        run: gcloud auth configure-docker gcr.io --quiet
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Build and Push Docker image
         run: |
-          IMAGE_URL="gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
+          IMAGE_URL="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
           docker build --platform linux/amd64 -t ${IMAGE_URL} .
           docker push ${IMAGE_URL}
 
@@ -901,7 +1171,7 @@ jobs:
         run: |
           # Deploy new image only - env vars are managed in Cloud Run console
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --platform managed
@@ -917,7 +1187,7 @@ jobs:
 ```
 
 **Key point:** This workflow does NOT set any `--set-env-vars`. Environment variables are:
-1. Set once during initial manual deploy (via `deploy.sh` sourcing `.env`)
+1. Set once during initial manual deploy via `gcloud run deploy --set-env-vars=...` sourcing `.env`
 2. Managed in Cloud Run console when changes are needed
 3. Preserved automatically when deploying new images
 
@@ -929,7 +1199,7 @@ Use this version if you need env vars version-controlled with deployments:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --platform managed \
@@ -1037,18 +1307,18 @@ jobs:
       - uses: google-github-actions/setup-gcloud@v2
 
       - name: Configure Docker
-        run: gcloud auth configure-docker gcr.io --quiet
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev --quiet
 
       - name: Build and Push
         run: |
-          IMAGE_URL="gcr.io/${{ secrets.PROJECT_ID }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}"
+          IMAGE_URL="${{ vars.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}"
           docker build --platform linux/amd64 -t ${IMAGE_URL} .
           docker push ${IMAGE_URL}
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ vars.SERVICE_NAME }} \
-            --image gcr.io/${{ secrets.PROJECT_ID }}/${{ vars.SERVICE_NAME }}:${{ github.sha }} \
+            --image ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }} \
             --region ${{ vars.REGION }} \
             --platform managed \
             --set-env-vars="ENV=${{ github.event.inputs.environment || 'development' }}"
@@ -1084,7 +1354,7 @@ gcloud iam service-accounts create github-actions-deploy \
 | Variable | Development | Staging | Production |
 |----------|-------------|---------|------------|
 | `SERVICE_NAME` | myservice | myservice | myservice |
-| `REGION` | europe-west2 | europe-west2 | europe-west2 |
+| `REGION` | europe-west1 | europe-west1 | europe-west1 |
 
 ### Promotion Workflow
 
@@ -1131,7 +1401,7 @@ jobs:
         run: |
           # Image already exists in registry from source env build
           gcloud run deploy ${{ vars.SERVICE_NAME }} \
-            --image gcr.io/${{ secrets.PROJECT_ID }}/${{ vars.SERVICE_NAME }}:${{ github.event.inputs.image_tag }} \
+            --image ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.event.inputs.image_tag }} \
             --region ${{ vars.REGION }} \
             --platform managed
 ```
@@ -1149,7 +1419,7 @@ Use these questions to gather information:
 
 ## GCP Target
 - Which GCP project? (use `gcloud projects list` to find)
-- Which region? (default: europe-west2)
+- Which region? (default: europe-west1)
 
 ## Source Code
 - Does the project have a Dockerfile?
@@ -1201,18 +1471,19 @@ After running this skill, the following files should exist:
 project/
 ├── Dockerfile                 # Container definition
 ├── .dockerignore             # Build exclusions
-├── infrastructure/           # (if using Terraform)
-│   ├── main.tf               # Cloud Run service
-│   ├── variables.tf          # Variable declarations
-│   ├── terraform.tfvars      # Variable values (gitignored)
-│   ├── terraform.tfvars.example  # Template for values
-│   ├── secrets.tf            # Secret Manager (only if chosen)
-│   ├── iam.tf                # Service account & IAM
-│   └── outputs.tf            # Service URL, etc.
-└── deploy.sh                 # Deployment script (supports both gcloud and Terraform)
+├── .github/workflows/
+│   └── deploy.yml            # CI/CD workflow (build, push, deploy on git push)
+└── infrastructure/           # (if using Terraform)
+    ├── main.tf               # Cloud Run service (includes lifecycle.ignore_changes for image)
+    ├── variables.tf          # Variable declarations
+    ├── terraform.tfvars      # Variable values (gitignored if contains secrets)
+    ├── terraform.tfvars.example  # Template for values
+    ├── secrets.tf            # Secret Manager (only if chosen)
+    ├── iam.tf                # Service account & IAM
+    └── outputs.tf            # Service URL, etc.
 ```
 
-**Note:** If user chose gcloud CLI deployment with plain env vars, `infrastructure/` may be minimal or skipped entirely.
+**Note:** There is intentionally no `deploy.sh` script. Manual deploys are done via `git push` to the appropriate branch (which triggers the GitHub Actions workflow) or via `gcloud run deploy --image=...` for emergency deploys. A local `deploy.sh` script would duplicate the workflow's logic and can silently drift out of sync with it.
 
 ---
 
