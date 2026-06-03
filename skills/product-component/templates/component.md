@@ -6,7 +6,7 @@ This template defines the structure for a **component document** — a detailed 
 
 **Where it sits in the hierarchy:**
 - The **vision document** describes the overall product — what it is, who it's for, why it exists. It sits above all components.
-- The **component map** (the `components/README.md`) lists all components and their relationships. It routes to individual component documents.
+- The **component map** (`components/components.md`) lists all components and their relationships. It routes to individual component documents.
 - **This document** describes one component in enough detail to identify sub-components and begin building.
 - **Sub-component documents** live below this, in a `sub-components/` folder within this component's directory. They follow a similar structure but scoped to a smaller unit.
 - **Entity journeys, look and feel, and data requirements** live at the leaf level — the smallest unit that doesn't decompose further.
@@ -23,7 +23,7 @@ This template defines the structure for a **component document** — a detailed 
 > **Date:** ___
 > **Status:** Collecting | Defined | Ready for build | In build | Complete
 > **Owner:** ___
-> **Sources:** _[[transcripts/YYYY-MM-DD-slug]]_
+> **Sources:** _[[meetings/YYYY-MM-DD-slug]]_
 
 ---
 
@@ -210,7 +210,7 @@ _What product-level controls should be built into this component to mitigate the
 
 ## Sub-Components
 
-_This section is **backfilled** as sub-components are identified and documented. When the component document is first created, this section may be empty or have only rough names from the initial brain dump. As sub-component documents are created in `sub-components/[name].md`, come back here and add the link and one-line overview. This is the routing mechanism — an agent or human reading the component can see all sub-components at a glance and navigate to any of them._
+_This section is **backfilled** as sub-components are identified and documented. When the component document is first created, this section may be empty or have only rough names from the initial brain dump. As sub-component documents are created in `sub-components/[name]/[name].md`, come back here and add the link and one-line overview. This is the routing mechanism — an agent or human reading the component can see all sub-components at a glance and navigate to any of them._
 
 | Sub-Component | Overview | Status | Link |
 |--------------|----------|--------|------|

@@ -50,3 +50,9 @@ usage-data/
 
 # Specs (local working files)
 specs/
+
+# Local runtime state (per-machine)
+daemon/
+jobs/
+.last-cleanup
+.last-update-result.json

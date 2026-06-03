@@ -534,6 +534,7 @@ Dispatch a `prompt-creator` sub-agent for each prompt. Each sub-agent needs comp
 **Inputs:**
 - [Input 1]: What it is, what it contains, how to use it
 - [Input 2]: ...
+- IMPORTANT: For each input, explain what the values **mean** in plain language — not just field names and types. If the input comes from another agent or system, the receiving LLM has no context about what those values represent. "engagement_trend_score: 2.1" means nothing without explaining what engagement_trend measures and what a low score indicates.
 
 **Outputs:**
 - Format and structure

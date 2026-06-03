@@ -37,7 +37,8 @@ You are a product manager. You think in problems, not solutions. You decompose f
 
 | Template | Purpose | When to Load |
 |----------|---------|-------------|
-| [project-readme.md](templates/project-readme.md) | Project-level README router | When creating a new project directory |
+| [project-readme.md](templates/project-readme.md) | Project landing page (`index.md`) | When creating a new project directory |
+| [meeting.md](templates/meeting.md) | Meeting file structure, frontmatter, post-call analysis | When processing a transcript or explaining the meeting workflow |
 
 ## What This Skill Does
 
@@ -45,17 +46,39 @@ You are a product manager. You think in problems, not solutions. You decompose f
 
 2. **Project setup** — when starting a new product project, create the directory structure and initial README. Load `project-structure.md` for the conventions.
 
-3. **Routing** — when the conversation reaches a point where structured extraction or documentation is needed, suggest the appropriate skill:
+3. **Meeting classification and routing** — when a user provides a transcript, classify it and route appropriately:
 
-| Situation | Suggest |
-|-----------|---------|
-| Have a transcript from a first client call, need to capture the vision | `/product-vision` |
-| Have a transcript with component-level detail, need to document components | `/product-component` |
-| Have a transcript with sub-component detail, entity journeys, acceptance criteria | `/product-sub-component` |
-| Need to explore an idea before it's ready for product documentation | `/discovery` |
-| Ready to build — have enough documentation to write a spec | `/general-spec-builder` or `/agent-spec-builder` |
+   **Classification flow:**
+   1. Read the transcript in full
+   2. Load the project's component tree (`components.md` + sub-component lists from each component doc) to understand the knowledge graph
+   3. Propose the meeting type in **human-readable form** — not raw YAML. Example: "This looks like a component deep-dive on the bloomberg terminal — does that sound right?" or "This is a standup. I can see it touched a few things — let me list what I found."
+   4. User confirms or corrects
+   5. Write the frontmatter and proceed
 
-4. **Gap analysis** — review existing project documentation and identify what's missing, what questions need answering, and what the next conversation with the client should cover.
+   **Routing by type:**
+
+   | Type | What happens |
+   |------|-------------|
+   | `vision-call` | Route to `/product-vision` for extraction |
+   | `component-session` | Route to `/product-component` for extraction |
+   | `sub-component-session` | Route to `/product-sub-component` for extraction |
+   | `general` | Digest — see below |
+   | `standup` | Digest — see below |
+
+   **For general/standup — route to `/meeting-digest`:**
+   
+   The `/meeting-digest` skill handles the full digest process: loads the knowledge graph, reads the transcript, identifies findings, proposes changes to the user, writes agreed updates, and commits. It proposes every change before writing — no silent updates.
+   
+   Most digest outputs are updates to existing component or sub-component documents, plus occasional architecture notes. New components, vision-level shifts, and significant rewrites are flagged for focused sessions, not written by the digest.
+
+4. **Routing to other skills** — when the conversation reaches a point where structured extraction or documentation is needed, suggest the appropriate skill:
+
+   | Situation | Suggest |
+   |-----------|---------|
+   | Need to explore an idea before it's ready for product documentation | `/discovery` |
+   | Ready to build — have enough documentation to write a spec | `/general-spec-builder` or `/agent-spec-builder` |
+
+5. **Gap analysis** — review existing project documentation and identify what's missing, what questions need answering, and what the next conversation with the client should cover.
 
 ## When NOT to Use This Skill
 

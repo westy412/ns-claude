@@ -22,11 +22,11 @@ This template defines the structure for a **sub-component document** — a detai
 
 # [Project Name] — [Sub-Component Name]
 
-> **Component:** [[../README]]
+> **Component:** [[component-name]]  <!-- Replace with the actual component name, e.g. [[bloomberg-terminal]] -->
 > **Date:** ___
 > **Status:** Collecting | Defined | Ready for build | In build | Complete
 > **Owner:** ___
-> **Sources:** _[[transcripts/YYYY-MM-DD-slug]]_
+> **Sources:** _[[meetings/YYYY-MM-DD-slug]]_
 
 ---
 
@@ -74,17 +74,26 @@ _What happens when things go wrong or when the entity does something unexpected?
 
 ## 3. Entity Journeys
 
-_The core of this document. Each journey describes a complete flow: an entity (user or agent) has an input or intent, takes steps, and reaches an outcome. Journeys are defined as text + Mermaid flowcharts — not screens or wireframes. The journey itself encodes UX and process decisions (e.g., "just the postcode, not the full address")._
+_The core of this document. Each journey describes a complete flow: an entity (user or agent) has an input or intent, takes steps, and reaches an outcome. Journeys are defined as text + Mermaid flowcharts -- not screens or wireframes. The journey itself encodes UX and process decisions (e.g., "just the postcode, not the full address")._
 
-_Each journey should be atomic — completable within this sub-component without crossing into other sub-components. Cross-cutting journeys that span multiple sub-components or components are documented separately at the component or vision level._
+_Journeys are split into two categories:_
 
-### Journey 1: ___
+- _**3a. Isolated journeys** -- journeys that stay within this component. They start in this sub-component and may touch sibling sub-components within the same parent component -- that's fine, it's all the same component. These define what this component does on its own._
+- _**3b. Cross-component journeys** -- journeys that cross into a different component entirely (e.g., Information Layer -> Trading, not Information Layer sub-component A -> Information Layer sub-component B). These define the integration points between components. Document the full flow but clearly mark the **handoff point** -- what state is passed, what the user expects when they return. Each side of the handoff becomes a contract between the two components._
+
+_Why the split matters: isolated journeys can be built and tested within the component. Cross-component journeys require coordination between different components and define the integration contracts that both sides must honour._
+
+### 3a. Isolated Journeys
+
+_Journeys that stay within this component. May span sibling sub-components (e.g., navigating from a game page to a team page within the same Information Layer) -- that's still an isolated journey because it doesn't leave the component._
+
+#### Journey 1: ___
 
 **Entity:** _User / Agent / Both_
 
 **Input:** _What triggers this journey? What does the entity start with? For a user: "User has selected a specific match from the match browser." For an agent: "Receives a new-lead event from the webhook."_
 
-**Outcome:** _What is true when this journey completes successfully? Be specific — this is the eval. "User can see the team's full performance data and has enough information to decide whether to trade on this match." Or: "Agent has enriched the lead record with company data and qualification score."_
+**Outcome:** _What is true when this journey completes successfully? Be specific -- this is the eval. "User can see the team's full performance data and has enough information to decide whether to trade on this match." Or: "Agent has enriched the lead record with company data and qualification score."_
 
 **Steps:**
 
@@ -109,11 +118,19 @@ _Specific, testable conditions that must be true for this journey to be consider
 
 ---
 
-### Journey 2: ___
+### 3b. Cross-Component Journeys
+
+_Journeys that start in this sub-component and cross into another component, or that originate elsewhere and pass through here. Mark the handoff point clearly -- this defines the integration contract._
+
+#### Journey 1: ___
 
 **Entity:** ___
 
 **Input:** ___
+
+**Handoff point:** _Where does the journey cross into another component? What state is passed? What does the user expect when they return?_
+
+**Components involved:** _List the components this journey touches (e.g., "Information Layer -> Trading -> Information Layer")_
 
 **Outcome:** ___
 
@@ -121,8 +138,12 @@ _Specific, testable conditions that must be true for this journey to be consider
 
 ```mermaid
 graph TD
-    A[Input] --> B[Step 1]
-    B --> C[Outcome]
+    A[Input] --> B[Step 1 - this sub-component]
+    B --> C[Step 2 - this sub-component]
+    C --> D[HANDOFF: state passed to Component X]
+    D --> E[Step 3 - Component X]
+    E --> F[RETURN: result passed back]
+    F --> G[Outcome - this sub-component]
 ```
 
 **Acceptance criteria:**
@@ -235,7 +256,7 @@ _OR:_
 ```markdown
 # [Project Name] — [Sub-Component Name]
 
-> **Component:** [[../README]]
+> **Component:** [[component-name]]  <!-- Replace with the actual component name, e.g. [[bloomberg-terminal]] -->
 > **Date:** [Date]
 > **Status:** [Status]
 > **Owner:** [Names]
@@ -271,7 +292,9 @@ _OR:_
 
 ## 3. Entity Journeys
 
-### Journey 1: [Name]
+### 3a. Isolated Journeys
+
+#### Journey 1: [Name]
 
 **Entity:** [User / Agent]
 **Input:** [What triggers this]
@@ -284,9 +307,38 @@ _OR:_
 - [ ] [Testable condition]
 - [ ] [Testable condition]
 
-### Journey 2: [Name]
+### 3b. Cross-Component Journeys
 
-[Same structure]
+_Journeys that cross into a different component entirely. Mark the handoff point clearly -- this defines the integration contract between components._
+
+#### Journey 1: ___
+
+**Entity:** ___
+
+**Input:** ___
+
+**Handoff point:** _Where does the journey cross into another component? What state is passed? What does the user expect when they return?_
+
+**Components involved:** _List the components this journey touches (e.g., "Information Layer -> Trading -> Information Layer")_
+
+**Outcome:** ___
+
+**Steps:**
+
+```mermaid
+graph TD
+    A[Input] --> B[Step 1 - this component]
+    B --> C[Step 2 - this component]
+    C --> D[HANDOFF: state passed to Component X]
+    D --> E[Step 3 - Component X]
+    E --> F[RETURN: result passed back]
+    F --> G[Outcome - this component]
+```
+
+**Acceptance criteria:**
+
+- [ ] ___
+- [ ] ___
 
 ---
 

@@ -52,43 +52,75 @@ Read all located source materials before proceeding.
 
 ---
 
-## Step 2: Spawn Review Team
+## Step 2: Spawn Review Team via Teammate-Spawn
 
-**FIRST ACTION — Load the teammate-spawn skill immediately:**
+> **MANDATORY PROCESS — You MUST use the teammate-spawn skill to generate prompt files.**
+> Do NOT spawn agents with inline prompts. Do NOT use the Agent tool directly.
+> Every review agent MUST read their instructions from a file generated through teammate-spawn.
+> If you skip this process, the review quality will degrade — agents ignore long inline prompts.
+
+### Step 2a: Load teammate-spawn skill
 
 ```
 Skill tool → skill: "teammate-spawn"
 ```
 
-Do NOT proceed with team creation or agent spawning until the teammate-spawn skill has been loaded. This skill provides the process for generating structured prompt files for each expert. Every expert agent MUST have their prompt file generated through the teammate-spawn process before being spawned.
+**STOP HERE until the skill is loaded.** Do not proceed to team creation or agent spawning until teammate-spawn is loaded and you have read its template.
 
-**Team composition (3 agents):**
+### Step 2b: Read the teammate-spawn template
 
-| Agent | Dimension | Reference | Summary |
-|-------|-----------|-----------|---------|
-| `structural-checker` | Structural Checks | `references/structural-checks.md` | 11 structural validation checks |
-| `source-tracer` | Source Tracing | `references/source-tracing.md` | Cross-reference spec against discovery/brainstorm |
-| `ambiguity-analyzer` | Ambiguity Analysis | `references/ambiguity-analysis.md` | 6-category ambiguity detection |
+Read the template file at `skills/teammate-spawn/templates/teammate-prompt.md`. You will fill this in once for each of the 3 agents below.
 
-**Setup sequence:**
+### Step 2c: Read the reference files for all 3 dimensions
 
-1. **Teammate-spawn skill must already be loaded** (see above). If not loaded, stop and load it now: `Skill tool → skill: "teammate-spawn"`
-2. Create a team via `TeamCreate`
-3. Create one task per dimension via `TaskCreate`
-4. **For each expert agent**, follow the teammate-spawn process to generate their prompt file — each prompt must include:
-   - Path to the spec file
-   - Paths to all source materials (discovery, brainstorm, research)
-   - The specific reference file content for their dimension
-   - The findings format they must report back in
-   - Instruction: **read-only investigation, do NOT modify any files**
-5. Spawn all 3 agents in parallel — each agent's spawn prompt points to their teammate-spawn generated prompt file
+Read ALL THREE reference files now — you need their content to embed in each teammate's prompt file:
 
-**Each agent's prompt must contain:**
-- The full spec content (or path to read it)
-- The full discovery document content (or path to read it)
-- The specific checks/methodology from their reference file
-- The exact output format expected (tables from their reference)
-- Instruction to send findings back via `SendMessage`
+1. `references/structural-checks.md` — 11 structural validation checks
+2. `references/source-tracing.md` — Cross-reference spec against discovery/brainstorm
+3. `references/ambiguity-analysis.md` — 6-category ambiguity detection
+
+### Step 2d: Create a team
+
+Create a team via `TeamCreate`.
+
+### Step 2e: Generate prompt files for all 3 agents
+
+**Team composition:**
+
+| Agent | Dimension | Reference |
+|-------|-----------|-----------|
+| `structural-checker` | Structural Checks | `references/structural-checks.md` |
+| `source-tracer` | Source Tracing | `references/source-tracing.md` |
+| `ambiguity-analyzer` | Ambiguity Analysis | `references/ambiguity-analysis.md` |
+
+**For EACH of the 3 agents above**, follow the teammate-spawn process:
+
+1. Fill in the teammate-spawn template with:
+   - **Role**: The agent's review dimension
+   - **Reference files**: Path to the spec file AND paths to all source materials (discovery, brainstorm, research)
+   - **Tasks**: The specific checks/methodology from their dimension's reference file (embed the full content)
+   - **Communication**: Send findings back to the team lead via `SendMessage`
+   - **Validation**: The exact output format expected (tables from their reference file)
+   - **Constraint**: Read-only investigation — do NOT modify any files
+2. Write the filled template to: `{spec-folder}/teammate-prompts/spec-review/{agent-name}.md`
+
+You MUST write all 3 prompt files before spawning any agents.
+
+### Step 2f: Create tasks and spawn all 3 agents
+
+1. Create one task per dimension via `TaskCreate`
+2. Spawn all 3 agents in parallel — each agent's spawn prompt is ONLY a pointer to their prompt file:
+
+```
+You are teammate {agent-name} on team {team-name}.
+
+Read your full instructions at:
+  {spec-folder}/teammate-prompts/spec-review/{agent-name}.md
+
+Follow all steps in order.
+```
+
+**Do NOT put review instructions in the spawn prompt itself.** The prompt file IS their instructions.
 
 **Why separate context windows:** Each dimension requires holding the full spec + source materials in context alongside the detailed methodology. Running all three in one context would exceed useful context limits and reduce quality.
 

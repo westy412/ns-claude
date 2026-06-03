@@ -6,9 +6,9 @@ This template defines the structure for a **vision document** — the first and 
 
 **Where it sits in the hierarchy:**
 - **This document** is the top of the tree. It describes the overall product at the highest level.
-- The **component map** (`components/README.md`) sits below, listing all the major functional parts needed to deliver this vision. Components are identified by reading this vision and asking: "in order to deliver this to these personas, what functional parts need to exist?"
+- The **component map** (`components/components.md`) sits below, listing all the major functional parts needed to deliver this vision. Components are identified by reading this vision and asking: "in order to deliver this to these personas, what functional parts need to exist?"
 - **Component documents** sit below the map, one per component, describing each part in detail.
-- **Architecture** (`architecture.md`) sits alongside the component map as a cross-cutting document that captures technology decisions affecting multiple components.
+- **Architecture** (`architecture/architecture.md`) sits alongside the component map as a cross-cutting directory that captures technology decisions affecting multiple components — tech stack, infrastructure, and integrations.
 
 **How it gets filled in:** The vision document is populated from client conversations. The client-facing person has natural conversations with the client, captures everything (via transcript), and then — behind closed doors — an agent extracts and structures the information into this document. The document goes through a loop: conversation → extraction → gap analysis → next conversation → until all sections have enough detail.
 
@@ -24,7 +24,7 @@ This template defines the structure for a **vision document** — the first and 
 > **Date:** ___
 > **Status:** Draft | Agreed | Evolving
 > **Owner:** ___
-> **Sources:** _[[transcripts/YYYY-MM-DD-slug]]_
+> **Sources:** _[[meetings/YYYY-MM-DD-slug]]_
 
 ---
 
@@ -192,11 +192,11 @@ _What could make users lose trust or abandon the product? Bad first impressions,
 
 ## Components
 
-_This section is **backfilled** as components are identified and documented. When the vision document is first created, this section may be empty or have only rough names. As component documents are created in `components/[name]/README.md`, come back here and add the link and one-line overview. This is the routing mechanism — an agent or human reading the vision can see all components at a glance and navigate to any of them._
+_This section is **backfilled** as components are identified and documented. When the vision document is first created, this section may be empty or have only rough names. As component documents are created in `components/[name]/[name].md`, come back here and add the link and one-line overview. This is the routing mechanism — an agent or human reading the vision can see all components at a glance and navigate to any of them._
 
 | Component | Overview | Status | Link |
 |-----------|----------|--------|------|
-| _Component name_ | _One-line description of what this component does and why it exists_ | _Collecting / Defined / Ready for build / In build / Complete_ | _[[components/component-name/README]]_ |
+| _Component name_ | _One-line description of what this component does and why it exists_ | _Collecting / Defined / Ready for build / In build / Complete_ | _[[component-name]]_ |
 | | | | |
 | | | | |
 
@@ -296,16 +296,19 @@ Vision: [Product Name]
 
 ```
 project/
-├── README.md
+├── index.md
 ├── architecture.md
 └── components/
-    ├── README.md
+    ├── components.md
     ├── component-a/
-    │   ├── README.md
-    │   ├── sub-components/
-    │   └── user-journeys/
+    │   ├── component-a.md
+    │   └── sub-components/
+    │       └── sub-comp-1/
+    │           ├── sub-comp-1.md
+    │           ├── changelog.md
+    │           └── changes/
     └── component-b/
-        ├── README.md
+        ├── component-b.md
         └── ...
 ```
 
@@ -489,5 +492,5 @@ user loop, or an ASCII tree of the product's major areas]
 
 | Component | Overview | Status | Link |
 |-----------|----------|--------|------|
-| [Name] | [One-line description] | [Status] | [[components/name/README]] |
+| [Name] | [One-line description] | [Status] | [[name]] |
 ```

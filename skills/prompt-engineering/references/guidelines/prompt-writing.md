@@ -207,7 +207,34 @@ For complex or nuanced behavior, examples are more effective than abstract instr
    - How to use it: [Specific application in this prompt]
    ```
 
-2. **Handle missing data explicitly**
+2. **Explain meaning, not just schema**
+   The most common input documentation mistake is listing field names and types without explaining what the values actually represent. The LLM needs to understand the **meaning** of the data, not just its structure.
+
+   **Bad — lists keys without meaning:**
+   ```
+   **Score Report**
+   Contains: engagement_trend_score (float 0-5), sentiment_trend_score (float 0-5),
+   headspace_score (float 0-5), behavioral_shifts_score (float 0-5)
+   ```
+
+   **Good — explains what each value means and how to interpret it:**
+   ```
+   **Score Report**
+   Six agents each score a different aspect of whether this lead is worth pursuing:
+
+   engagement_trend (0-5): Is the lead actively participating? A lead scoring high
+   is replying regularly, asking questions. A lead scoring low has gone quiet or
+   is giving one-word answers.
+
+   sentiment_trend (0-5): How does the lead feel about this conversation? High means
+   positive or improving tone. Low means frustration, dismissiveness, or withdrawal.
+   The agent prioritises behaviour over words — positive words with declining
+   engagement scores low.
+   ```
+
+   This applies especially when the input comes from another system or agent — the LLM receiving it has no prior context about what those values mean or how they were computed. Five different models could interpret `headspace_score: 2.1` five different ways without a plain-language explanation of what headspace measures and what a low score indicates.
+
+3. **Handle missing data explicitly**
    - "If company_size is not provided, do not infer it"
    - "If thread_history is empty, treat this as the first message"
 
@@ -223,6 +250,8 @@ For complex or nuanced behavior, examples are more effective than abstract instr
 - Undocumented inputs
 - Missing "how to use it" guidance
 - No handling for edge cases (null, empty, malformed)
+- Listing field names and types without explaining what they mean (schema-as-documentation)
+- Assuming the LLM knows what domain-specific values represent (e.g., what "headspace" or "engagement_trend" measure)
 
 ### Task Sections (`<task>`, `<operational_logic>`)
 

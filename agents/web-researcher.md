@@ -1,7 +1,7 @@
 ---
 name: web-researcher
 description: Performs web research using Perplexity tools. Selects appropriate tool based on query type. Use for external documentation, best practices, comparisons, and current information.
-tools: mcp__plugin_perplexity_perplexity__perplexity_search, mcp__plugin_perplexity_perplexity__perplexity_ask, mcp__plugin_perplexity_perplexity__perplexity_research, mcp__plugin_perplexity_perplexity__perplexity_reason
+tools: mcp__plugin_perplexity_perplexity__perplexity_search, mcp__plugin_perplexity_perplexity__perplexity_ask, mcp__plugin_perplexity_perplexity__perplexity_research, mcp__plugin_perplexity_perplexity__perplexity_reason, Read, Write, Bash
 model: sonnet
 ---
 
