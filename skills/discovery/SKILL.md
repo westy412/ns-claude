@@ -60,6 +60,8 @@ Don't inherit assumptions. For each aspect of the idea:
 
 **The biggest failure mode is jumping to solutions too fast.**
 
+**Soft sequencing:** bias toward getting the problem and a *measurable* definition of success concrete before converging on solution detail. Not a rigid order — if you notice solutioning early, pull back to the problem once. (See `references/prober-core.md` → Soft Sequencing.)
+
 When you notice convergence happening:
 - Pause and ask: "Have we explored this enough?"
 - Consider: What alternatives haven't we discussed?
@@ -79,6 +81,8 @@ Use subagents when the conversation needs external input:
 - Domain knowledge (how do others solve this?)
 
 Research should **serve the conversation**, not derail it.
+
+**Ground in reality, not docs.** Research should also *interrogate* reality — probe the real systems and data (actual API responses, real data shapes, existing schema), not imagined ones. See `references/prober-core.md` → Reality-Grounding.
 
 ---
 
@@ -161,11 +165,15 @@ When you sense convergence:
 
 **Never finalize without this checkpoint.**
 
+**After the checkpoint, run the blocking Pre-Write Validation Gate** (`references/prober-core.md`) before writing `discovery.md` — re-read the captured idea as an artifact, run the Coverage Checklist + a pre-mortem, fire any genuine gap as a single question, and log unresolved gaps as Known-Risks. The checkpoint confirms *intent*; the gate enforces *coverage*. They are two different steps.
+
 ---
 
 ## Conversation Flow
 
 This is **not** a rigid workflow. The conversation should flow naturally. But these are the territories to cover:
+
+> Hold the **model-held Coverage Checklist** (`references/prober-core.md`) silently across these territories — it's what guarantees dimensional coverage (problem concreteness, I/O contract, scale, failure modes, out-of-scope, edge cases) without turning the conversation into a form.
 
 ### The Problem Space
 - What's the actual problem?
@@ -236,14 +244,16 @@ When the conversation has converged and the user confirms, produce a discovery d
 The document should capture **everything a spec-builder needs to understand the idea**:
 
 1. **Problem Statement** — What we're solving, for whom, why it matters
-2. **Solution Overview** — The approach we landed on, at a high level
-3. **Key Decisions** — Decisions made during discovery, with rationale
-4. **Constraints** — Hard constraints that must be respected
-5. **Scope** — What's in, what's out, what's deferred
-6. **Context** — Relevant codebase context, integrations, dependencies
-7. **Reference Files** — Any files consulted during discovery (codebase, docs, examples)
-8. **Open Questions** — Things that need to be resolved during spec/implementation
-9. **Next Steps** — What happens after this (which spec-builder, etc.)
+2. **Input/Output Contract** *(required)* — trigger → output → format: what starts it, what it produces, in what shape
+3. **Solution Overview** — The approach we landed on, at a high level
+4. **Key Decisions** — Decisions made during discovery, with rationale
+5. **Constraints** — Hard constraints that must be respected
+6. **Scope** — What's in, what's deferred, and an **explicit out-of-scope list (required, non-empty)**
+7. **Context** — Relevant codebase context, integrations, dependencies
+8. **Reference Files** — Any files consulted during discovery (codebase, docs, examples)
+9. **Known-Risks** *(required)* — weak spots surfaced by the pre-mortem + any gaps fired-once and logged here
+10. **Open Questions** — Things that need to be resolved during spec/implementation
+11. **Next Steps** — What happens after this (which spec-builder, etc.)
 
 ### Reference Files (Required)
 
@@ -359,6 +369,13 @@ If a brainstorm or idea card informed this discovery AND it's NOT already in the
 - About to list 10 options (stop - curate to 2-3)
 - About to agree without questioning (stop - at least one probe)
 - About to disagree without reasoning (stop - explain why)
+
+---
+
+## References
+
+- `references/prober-core.md` — The probing instruments: model-held Coverage Checklist, Force-Concreteness reflex, named Ambiguity Classes, Reality-Grounding, Soft Sequencing, and the blocking Pre-Write Validation Gate (pre-mortem + fire-once escape valve).
+- `references/autonomy-and-escalation.md` — The fix-or-ask contract. When you bring a gap or a choice to the user, follow its escalation comms standard (clause C): one brief, specific question; ASCII-sketch the options when it's structural. Discovery already works this way — this is the shared contract the rest of the chain inherits.
 
 ---
 
