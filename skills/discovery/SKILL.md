@@ -12,6 +12,8 @@ A thinking partner for early-stage ideation. This is where vague ideas become co
 
 **Goal:** Through genuine conversation, help crystallize an idea into a discovery document that provides sufficient context for spec creation.
 
+**Discovery owns the front.** This skill is the *heavy originator* of front-loading — first concreteness, the I/O contract, scope-out, and the first pre-mortem all happen here. Downstream spec-builders only *gap-fill* what discovery genuinely left open; they must not re-interrogate what discovery already settled. Send them forward a settled idea, not a half-probed one.
+
 **This is NOT:**
 - A form to fill out
 - A requirements gathering checklist
