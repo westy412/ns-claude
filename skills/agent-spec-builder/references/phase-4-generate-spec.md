@@ -273,10 +273,30 @@ For each agent, verify the model tier is appropriate for the role:
 
 | Agent | Role | Model Tier | Appropriate? |
 |-------|------|-----------|-------------|
-| critic-agent | Critic-Reviewer | Flash/Haiku | ⚠️ Critic roles need nuanced judgment — confirm this is intentional |
-| router-agent | Router-Classifier | Flash/Haiku | ✅ Simple classification, fast model appropriate |
+| critic-agent | Critic-Reviewer | economy tier | Critic roles need nuanced judgment — confirm this is intentional |
+| router-agent | Router-Classifier | economy tier | Simple classification, fast model appropriate |
 
 **Flag when model tier contradicts role guidance:**
-- Critic-Reviewer or Planner-Strategist using economy-tier models (Flash, Haiku, Mini)
-- Router-Classifier or Transformer-Formatter using premium-tier models (Opus, o1) without justification
+- Critic-Reviewer or Planner-Strategist using economy-tier models
+- Router-Classifier or Transformer-Formatter using premium-tier models without justification
 - Any mismatch: prompt user "This agent uses [model] but its role ([role]) typically needs [tier]. Confirm this is intentional?"
+
+---
+
+### Check 5: Pre-Mortem (BLOCKING)
+
+Before handing off to Phase 5, run a pre-mortem on the whole spec — the one prober pattern the
+structural checks above can't substitute for, because it targets the *unknown-unknowns* a checklist
+can't enumerate:
+
+> *"Assume the implementation hits a surprise and the system doesn't work first time. Where did this
+> spec most likely under-think it?"*
+
+Name the one or two weakest areas — the agent interaction most likely to break, the data contract most
+likely to be wrong, the reasoning step most likely under-specified, the ambiguity the impl-builder is
+most likely to resolve wrongly.
+
+For each: **resolve it now** (tighten the spec — autonomous if discovery/conversation settles it, else
+one specific question per the escalation comms standard, `references/autonomy-and-escalation.md`), or
+**log it explicitly as a Known-Risk** in `overview.md` / `progress.md`. Do not pass a silently
+under-thought spec to Phase 5.

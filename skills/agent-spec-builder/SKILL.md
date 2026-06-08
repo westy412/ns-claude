@@ -12,6 +12,8 @@ A design consultant skill that helps users design agent systems through collabor
 
 **Goal:** Produce specifications detailed enough for agent-impl-builder to work autonomously.
 
+**Gap-fill the general layer; own the agent layer.** Discovery settles the general dimensions (problem, I/O contract, scope) — take those as settled, don't re-interrogate them. But the deep agent-specific design (team topology, per-agent type, prompt config, agent I/O contracts, model tier) is *yours to originate* — discovery can't reach it. That is where this skill's heavy questioning belongs.
+
 ---
 
 ## When to Use This Skill
@@ -201,6 +203,19 @@ After Phase 5, invoke `/review-agent-spec` to validate the spec. Once the review
 
 ---
 
+## Spec Re-Entry (downstream corrections loop back here)
+
+This spec is the source of truth *and* the source of the test cases — so it must not be allowed to rot.
+If a downstream stage (review, per-phase build loop, verifier) finds the **spec itself** wrong,
+incomplete, or contradictory, the correction loops **back into this spec**, never into the code only.
+Patching code while leaving the spec wrong leaves the spec-derived tests wrong too.
+
+- **Code diverges from spec** → impl-builder fixes the code (the spec is truth).
+- **Spec is wrong** → re-enter this skill at the affected phase, fix the spec/overview/agent files,
+  re-run the relevant Phase-4 validation checks, re-hand-off. See `references/autonomy-and-escalation.md`.
+
+---
+
 ## Handover Protocol
 
 When context is getting large or a session is ending, follow the handover protocol to persist state for cold-start resumption.
@@ -234,6 +249,7 @@ All templates are in `templates/` folder:
 - `references/phase-4-generate-spec.md` — Spec folder structure, nesting, validation
 - `references/phase-5-execution-plan.md` — Implementation task grouping, streams
 - `references/handover-protocol.md` — Handover steps and triggers
+- `references/autonomy-and-escalation.md` — Fix-or-ask contract: gap-fill-vs-escalate criterion + escalation comms standard (clause C — brief specific questions, ASCII diagrams). Load before escalating to the user.
 - `agent-teams/SKILL.md` — Team pattern selection criteria (child skill)
 - `individual-agents/SKILL.md` — Agent type selection criteria (child skill)
 - `prompt-engineering/SKILL.md` — Prompt configuration (child skill)
