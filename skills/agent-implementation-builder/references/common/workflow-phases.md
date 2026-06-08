@@ -292,7 +292,7 @@ For each input that comes from another component:
 1. Identify the upstream component (which module produces this?)
 2. Read that component's output spec
 3. Verify field names match EXACTLY
-4. If mismatch, flag for team lead
+4. If mismatch, run the **autonomy decision** (`references/common/autonomy-and-escalation.md`): resolvable from the specs → fix it yourself (if the *spec* is wrong, correct the spec, never code-only); genuinely ambiguous or a cross-stream fix → report to the team lead to escalate.
 
 Example:
 ```
@@ -300,7 +300,7 @@ Input: research_documents (from Research Phase)
 Upstream: ResearchPhase.aforward() output
 Trace: Does ResearchPhase return a field called "research_documents"?
   ✓ Yes → src/research/team.py:233 returns ResearchPhaseOutput with 4 doc fields
-  ✗ No → Message team-lead: "Research phase output schema mismatch"
+  ✗ No → autonomy decision: specs resolve it → fix (correct the spec if wrong); else report the mismatch to the team lead
 ```
 
 **Step 3: Implement Signature**
