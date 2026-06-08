@@ -1,3 +1,19 @@
+---
+# Machine-readable verdict — the implementation-builder reads this header and refuses to start on FAIL.
+review_verdict:
+  overall: PASS              # PASS | WARN | FAIL (= worst dimension)
+  blocking_count: 0
+  warning_count: 0
+  dimensions:
+    structural: PASS         # PASS | WARN | FAIL
+    source_tracing: PASS
+    ambiguity: PASS
+    reality_grounding: PASS
+    test_derivability: PASS
+  spec_path: [path]
+  reviewed: [YYYY-MM-DD HH:MM]
+---
+
 # Spec Review: [spec-name]
 
 | Field | Value |
@@ -87,6 +103,24 @@
 
 ---
 
+## Grounding & Testability
+
+> Lead-run at consolidation (see `references/grounding-and-testability.md`). Reality-grounding (FAIL
+> unanchored I/O) + scale/known-risk; test-derivability (FAIL un-testable Requirements). Liftable test
+> cases are emitted separately to `review-NNN-testseed.md`.
+
+| # | Check | Status | Notes |
+|---|-------|--------|-------|
+| 1 | Data contracts cite a real probed source (no unanchored I/O) | PASS/WARN/FAIL | |
+| 2 | Scale / volume assumptions present where load-bearing | PASS/WARN/FAIL | |
+| 3 | Known-Risks section present | PASS/WARN/FAIL | |
+| 4 | Every Requirement yields a concrete test case | PASS/WARN/FAIL | |
+
+**Reality-Grounding Verdict:** PASS/WARN/FAIL  ·  **Test-Derivability Verdict:** PASS/WARN/FAIL
+**Blocking:** [n] | **Warnings:** [n]
+
+---
+
 ## 4. Overall Summary
 
 | Dimension | Verdict | Blocking | Warnings |
@@ -94,6 +128,8 @@
 | Structural Checks | PASS/WARN/FAIL | [n] | [n] |
 | Source Tracing | PASS/WARN/FAIL | [n] | [n] |
 | Ambiguity Analysis | PASS/WARN/FAIL | [n] | [n] |
+| Reality Grounding | PASS/WARN/FAIL | [n] | [n] |
+| Test Derivability | PASS/WARN/FAIL | [n] | [n] |
 | **Overall** | **PASS/WARN/FAIL** | **[total]** | **[total]** |
 
 ### Blocking Issues (must fix before implementation)

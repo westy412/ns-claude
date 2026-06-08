@@ -145,6 +145,8 @@ If the source tracer found a gap (something in discovery not in spec) AND the am
 - Section 3: Ambiguity Analysis (from ambiguity-analyzer, deduplicated)
 - Section 4: Overall Summary with per-dimension verdicts
 
+**Lead-run checks (not delegated) — Grounding & Testability:** before applying the verdict, run `references/grounding-and-testability.md` against the spec yourself — reality-grounding (FAIL unanchored I/O) + scale/known-risk, and test-derivability (FAIL un-testable Requirements). Emit the liftable cases to `reviews/review-NNN-testseed.md`. These add two dimensions — `reality_grounding` and `test_derivability` — to the verdict below.
+
 **Apply overall verdict:**
 - Any FAIL in any dimension → Overall FAIL
 - No FAILs but WARNs → Overall WARN
@@ -158,7 +160,7 @@ If the source tracer found a gap (something in discovery not in spec) AND the am
 
 1. Create `reviews/` folder in the spec directory if it does not exist
 2. Determine next review number: glob `reviews/review-*.md`, parse the highest number, add 1. Start at `001` if none exist.
-3. Write review to `reviews/review-NNN.md` using `templates/review-output.md`
+3. Write review to `reviews/review-NNN.md` using `templates/review-output.md` — **fill the machine-readable `review_verdict` header** at the top; it is what the implementation-builder parses to block on FAIL. Also write the liftable cases to `reviews/review-NNN-testseed.md`.
 4. Clean up team: shutdown teammates, delete team
 
 **Present the FULL findings to the user in the chat.** Do NOT just show a summary — the user needs to see what's wrong. Output:
@@ -169,6 +171,8 @@ If the source tracer found a gap (something in discovery not in spec) AND the am
 4. **Source tracing gaps** — show the coverage gaps table (CRITICAL and MODERATE items)
 5. **Ambiguity findings** — show the ambiguity table with clarification questions for HIGH and MEDIUM items
 6. **Path where the full review was saved** — for reference
+
+**Spec-defect loopback.** When a finding is that the *spec itself* is wrong or under-specified (not mere reviewer uncertainty), the fix loops **back into the spec** via the spec-builder — never patched downstream, or the spec-derived tests stay wrong too. See `references/autonomy-and-escalation.md`.
 
 **Then ask:**
 *"The review has been saved to `[path]`. Would you like me to fix any of the issues found?"*
@@ -213,5 +217,7 @@ This skill expects (and reinforces) the following folder structure:
 |-----------|---------|
 | `references/structural-checks.md` | 11 structural validation checks |
 | `references/source-tracing.md` | Source material cross-referencing methodology |
+| `references/grounding-and-testability.md` | Reality-grounding + test-derivability (lead-run at consolidation); emits the test seed |
+| `references/autonomy-and-escalation.md` | Fix-or-ask contract: spec-defect loopback + escalation comms standard (clause C) |
 | `references/ambiguity-analysis.md` | Ambiguity detection categories and process |
 | `templates/review-output.md` | Review report template |
