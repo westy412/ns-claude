@@ -8,7 +8,7 @@ prompt:
   role: [researcher | critic-reviewer | router-classifier | creative-generator | planner-strategist | summarizer-synthesizer | conversational-assistant | transformer-formatter]
   modifiers: [tools, structured-output, memory, reasoning]
 model:
-  provider: [anthropic | openai | google | local]
+  provider: [openai | anthropic | google | local | other]
   name: [model-name]
   reasoning: [true | false]
 ---
@@ -49,8 +49,8 @@ What this agent does NOT do. Explicit limits.
 
 | Setting | Value | Reasoning |
 |---------|-------|-----------|
-| **Provider** | [anthropic / openai / google / local] | Why this provider |
-| **Model** | [model-name, e.g., claude-3-opus, gpt-4-turbo] | Why this model |
+| **Provider** | [openai / anthropic / google / local / other] | Why this provider |
+| **Model** | [model-name] | Why this model |
 | **Reasoning** | [Yes / No] | Does this agent need extended thinking? |
 | **Temperature** | [0.0 - 1.0] | Lower for consistency, higher for creativity |
 
@@ -96,7 +96,7 @@ For each tool, use the appropriate template below based on implementation type.
 
 | Field | Value |
 |-------|-------|
-| **Server** | [e.g., `@anthropic/mcp-server-github`] |
+| **Server** | [MCP server package/name] |
 | **Tool name** | [tool name within server] |
 | **Documentation** | [link to MCP server docs] |
 

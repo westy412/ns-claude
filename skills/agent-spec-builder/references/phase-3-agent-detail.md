@@ -58,10 +58,12 @@ Include reasoning for each choice.
 
 For each agent, determine the model configuration:
 
+> **Do not assume or hardcode a model.** Model lineups change constantly — any fixed name goes stale. Before setting a model: (1) research the models currently available for the candidate provider(s); (2) review their capability / cost / latency / context tradeoffs; (3) **ask the user which model to use for which agent** — strong reasoning models for critics, planners, and complex synthesis; faster/cheaper models for routers, classifiers, and simple transforms. Record the chosen model + the reasoning. The model names in the templates are illustrative placeholders, not recommendations.
+
 | Setting | Options | Considerations |
 |---------|---------|----------------|
-| **Provider** | anthropic / openai / google / local | API access, cost, compliance |
-| **Model** | claude-3-5-sonnet, gpt-4-turbo, etc. | Capability vs cost tradeoff |
+| **Provider** | openai / anthropic / google / local / other | API access, cost, compliance |
+| **Model** | project-approved model identifier | Capability vs cost tradeoff |
 | **Reasoning** | Yes / No | Does this agent need extended thinking? |
 | **Temperature** | 0.0 - 1.0 | Lower for consistency, higher for creativity |
 

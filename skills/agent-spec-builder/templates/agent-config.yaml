@@ -18,8 +18,8 @@
 # | prompt.framework   | enum   | Yes      | single-turn, conversational                      |
 # | prompt.role        | enum   | Yes      | 8 roles (see below)                              |
 # | prompt.modifiers   | list   | Yes      | [], or any combo of 4 modifiers                  |
-# | model.provider     | enum   | Yes      | anthropic, openai, google, local                 |
-# | model.name         | string | Yes      | Model identifier (e.g., claude-3-opus)           |
+# | model.provider     | enum   | Yes      | openai, anthropic, google, local, other          |
+# | model.name         | string | Yes      | Model identifier                                 |
 # | model.reasoning    | bool   | Yes      | true for extended thinking models                |
 # | model.temperature  | float  | No       | 0.0-1.0, defaults to model default               |
 #
@@ -34,7 +34,11 @@
 #
 # Modifiers: tools, structured-output, memory, reasoning
 #
-# Providers: anthropic (Claude), openai (GPT), google (Gemini), local (Ollama/etc)
+# Providers: openai, anthropic, google, local, or other project-approved provider
+#
+# Model selection: do NOT hardcode a model. Choose per the Phase-3 research + user decision
+# (see references/phase-3-agent-detail.md). The model names in the examples below are
+# illustrative placeholders, not defaults.
 
 # =============================================================================
 # LEAF TEAM EXAMPLE (has agents, no sub-teams)
@@ -61,8 +65,8 @@ team:
           role: creative-generator
           modifiers: [memory]
         model:
-          provider: anthropic
-          name: claude-3-sonnet
+          provider: [provider]
+          name: [balanced-model]
           reasoning: false
           temperature: 0.7
         notes: |
@@ -79,8 +83,8 @@ team:
           role: critic-reviewer
           modifiers: [structured-output]
         model:
-          provider: anthropic
-          name: claude-3-opus
+          provider: [provider]
+          name: [strong-reasoning-model]
           reasoning: true
           temperature: 0.0
         notes: |
@@ -159,7 +163,7 @@ team:
 #           modifiers: [structured-output, reasoning]
 #         model:
 #           provider: google
-#           name: gemini-3-flash
+#           name: [strong-reasoning-model]
 #           reasoning: true
 #           temperature: 0.7
 #         notes: |
@@ -181,7 +185,7 @@ team:
 #       modifiers: [tools, reasoning]
 #     model:
 #       provider: openai
-#       name: gpt-4-turbo
+#       name: [balanced-model]
 #       reasoning: false
 #       temperature: 0.0
 #     notes: |
@@ -216,8 +220,8 @@ team:
 #           role: researcher
 #           modifiers: [tools]
 #         model:
-#           provider: anthropic
-#           name: claude-3-sonnet
+#           provider: [provider]
+#           name: [balanced-model]
 #           reasoning: false
 #           temperature: 0.0
 #         notes: |
@@ -234,8 +238,8 @@ team:
 #           role: researcher
 #           modifiers: [reasoning]
 #         model:
-#           provider: anthropic
-#           name: claude-3-opus
+#           provider: [provider]
+#           name: [strong-reasoning-model]
 #           reasoning: true
 #           temperature: 0.0
 #         notes: |
