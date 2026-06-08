@@ -2,6 +2,27 @@
 
 Detailed guidance for spawning advisor and writer sub-agents during Phase 3 (Agent Detail). Sub-agents run in their own context windows via the Task tool, auto-load their skills, and return structured proposals for user validation. This is distinct from agent teams — these are lightweight delegates for focused analysis/writing tasks.
 
+> **Generate every delegate prompt as a file via the generic `teammate-spawn` skill** (reviewable, and it enforces skill loading) — not an inline prompt. Teammates skim long inline prompts and skip loading their skills, then write wrong patterns. The spawn *mechanics* below are platform-specific; the prompt *content* and the rules in this section are not.
+
+## Advisors vs Writers — rigor by fabrication risk
+
+- **Advisors** (`agent-type-advisor`, `prompt-config-advisor`) propose *bounded choices* (a type from a fixed set, a role from 8, modifiers from a list) and every proposal is **user-validated** before anything is written. Low fabrication surface, human-checked immediately. → file-based prompt + required skill loading + roster/purpose context. **No** per-field gate — they run *before* the detail exists; they help produce it.
+- **Writers** (`team-spec-writer`, `agent-spec-writer`) generate *substantive free-form detail* (behaviors, I/O, examples) into long files where a fabrication hides easily. → full complete-context handoff + the Pre-Writer Completeness Gate + the anti-fabrication rule below.
+
+## Pre-Writer Completeness Gate (BLOCKING)
+
+A writer fills missing detail by *fabricating* plausible-but-wrong content the end review may miss. So before spawning ANY writer for an agent, assert that agent's full detail is present in `progress.md` — this is exactly the per-agent checklist in `templates/progress.md` → "Agent Progress":
+
+Purpose (all 6) · Framework & Role (+reasoning) · LLM Config · Modifiers · Inputs/Outputs · Context Flow (up+down) · Domain Context · Behavioral Requirements · ≥1 Example (in→out)
+
+**Any blank → STOP. Do not spawn.** Capture the missing detail (ask the user, or pull from the discovery doc), record it in `progress.md`, then spawn. No empty field crosses the seam — an empty field is the fabrication trigger.
+
+## Anti-Fabrication Rule (every writer prompt includes this verbatim)
+
+> Write only from the provided files (`progress.md`, discovery, templates). Do NOT invent detail. If a required field is missing or ambiguous, do NOT guess — stop and report the gap to team lead (e.g. "BLOCKED: missing Inputs/Outputs for agent X"). A wrong-but-coherent spec is worse than a flagged gap.
+
+Parent-relay backstop: if the gate misses something, the writer returns a structured BLOCKED result instead of fabricating; the lead resolves and re-spawns. No live peer-to-peer messaging is assumed — the writer reports at the end, the lead relays. This keeps the flow portable across both platforms.
+
 ---
 
 ## Available Sub-Agents

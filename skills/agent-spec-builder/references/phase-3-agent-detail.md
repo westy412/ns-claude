@@ -21,7 +21,7 @@ Capture enough detail per agent for autonomous implementation. Teams are orchest
 
 **Context check:** If context is becoming large after individual-agents, consider triggering a session handover BEFORE loading prompt-engineering. Progress.md should have enough state for a new session to load prompt-engineering fresh.
 
-**Alternative: Use sub-agents** to offload analysis without consuming your context. See `references/sub-agent-delegation.md` for the full delegation workflow.
+**Inline by default** (small/medium teams) — you hold the full context, so you write the most complete spec. **Delegate writing** for large teams (offloads the per-agent reference reading + parallel file writing), and only past the **Pre-Writer Completeness Gate** — no agent's spec is written from incomplete detail. See `references/sub-agent-delegation.md`.
 
 ---
 

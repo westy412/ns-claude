@@ -113,6 +113,8 @@ Execution flow:
 └── agent-spec-writer (parallel batches of 5-6) → fills in specs
 ```
 
+**Generate each delegate's prompt as a file via `teammate-spawn`** (reviewable, enforces skill loading). **Advisors** are light and user-validated; **writers** must pass the **Pre-Writer Completeness Gate** (every required field present in `progress.md` — no blanks) and carry the **anti-fabrication rule** (report missing detail, never invent it).
+
 **Detailed spawn examples, batching strategies, and step-by-step flow:** Read `references/sub-agent-delegation.md`
 
 ---

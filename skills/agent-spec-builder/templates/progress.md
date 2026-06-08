@@ -140,6 +140,8 @@ Capture important questions and the user's answers. Prevents re-asking in a new 
 
 ## Agent Progress
 
+> **This per-agent checklist is the Pre-Writer Completeness Gate.** Every box must be ticked — and the underlying detail actually present below — before a spec-writer is spawned for this agent. A blank field is a fabrication trigger: capture it first.
+
 ### [Agent Name]
 **Type:** [Text Agent | Message Agent | Structured Output Agent | etc.]
 **Type rationale:** [Why this type was chosen]
