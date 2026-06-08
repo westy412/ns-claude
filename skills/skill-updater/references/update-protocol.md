@@ -48,7 +48,11 @@ Tie-breakers:
 
 ---
 
-## 4. Apply
+## 4. Propose, then apply
+
+**Propose first (blocking).** Before writing anything, present the full change plan to the user — every target file in both trees, with the concrete before → after for each edit (or a tight summary + the key hunks for large changes), marking base vs execution. Get explicit approval; revise and re-propose on feedback. **Never write a change the user has not seen** — skills are shared infrastructure that hit every future build.
+
+On approval, apply:
 
 - BASE edits: make the **same** edit in both trees. Prefer identical text so the regions stay diff-clean.
 - EXECUTION edits: make the platform-correct edit in each tree.
@@ -67,6 +71,7 @@ Re-read both trees and assert all of the following before declaring done:
 - [ ] **Common-denominator honored.** No base content requires Claude's experimental peer mesh.
 - [ ] **Budgets & format.** SKILL.md < 300 lines; references < 200 lines, no frontmatter; frontmatter correct per platform.
 - [ ] **Feedback resolved.** The intake change is actually reflected, not partially applied.
+- [ ] **Both tree repos committed.** On a clean gate, commit `~/.claude` and `~/.codex` (both are git-tracked) with a descriptive message.
 
 If any check fails, fix it before finishing. The gate is the point of the skill.
 

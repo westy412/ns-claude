@@ -46,15 +46,17 @@ Load [update-protocol.md](references/update-protocol.md) for the detailed steps,
 1. **Intake.** Identify the target skill and the change. If structured feedback exists (a dev-workflow friction log, a review, a critique), read it and extract the concrete change(s). If the request is vague, ask once — what specifically should change, and why.
 2. **Load references.** Read [platform-boundary.md](references/platform-boundary.md). Hold the authoring best practices: SKILL.md is a routing layer < 300 lines; reference files are one-topic, < 200 lines, no frontmatter; progressive disclosure (metadata → instructions → resources).
 3. **Locate both trees.** Read the skill at `~/.claude/skills/<name>/` **and** `~/.codex/skills/<name>/` in full, including reference files. If it is missing from one tree, STOP and flag (see protocol edge cases).
-4. **Classify, then apply.** For each change, decide BASE or EXECUTION:
-   - BASE → apply *identically* to both trees, in neutral prose.
-   - EXECUTION → apply *per platform* using the tool map (Claude tools in the Claude tree, Codex in the Codex tree).
+4. **Classify & plan.** For each change, decide BASE or EXECUTION and draft the exact edits — but do **not** write yet:
+   - BASE → the *same* edit in both trees, in neutral prose.
+   - EXECUTION → a per-platform edit using the tool map (Claude tools in the Claude tree, Codex in the Codex tree).
    - Most content changes are base. When in doubt, write it neutral (base) and only fence the part that names a tool.
-5. **Validate (blocking gate).** Re-read both trees. Assert: base content equivalent (diff-clean outside fenced execution sections); execution sections platform-correct; line budgets respected; frontmatter correct per platform. Do not finish on unresolved drift.
+5. **Propose & confirm (blocking).** Before writing anything, show the user the full change plan — every target file across both trees, with the concrete **before → after** for each edit (or a tight summary + key hunks for large changes), marking base vs execution. **Stop and get explicit approval. Never write a change the user has not seen.** On "adjust", revise and re-propose.
+6. **Apply & validate.** Write the approved edits, then re-read both trees and assert the gate: base content equivalent (diff-clean outside fenced execution sections); execution sections platform-correct; line budgets respected; frontmatter correct per platform. On pass, **commit both tree repos** (`~/.claude` and `~/.codex`). Do not finish on unresolved drift.
 
 ## Cardinal rules
 
 1. **Both trees, always.** Never edit one tree and leave the other. That single habit is the entire source of the fork drift.
-2. **Base in neutral prose.** About to write a platform tool name inside reasoning content? Stop — abstract it ("delegate to a research sub-agent", "enforce a phase barrier") and push the concrete name into the fenced execution section.
-3. **Design to the common denominator.** Base assumes the parent-orchestrated star (the model both platforms support). Claude's peer-messaging teams are experimental — treat peer-mesh as a Claude-only execution enhancement, never a base assumption.
-4. **Validate before done.** The two-tree consistency check is a gate, not a nicety.
+2. **Propose before applying.** Never write a skill change the user has not seen. Surface the full plan — files, trees, before → after — and wait for an explicit go. Skills are shared infrastructure; no silent edits.
+3. **Base in neutral prose.** About to write a platform tool name inside reasoning content? Stop — abstract it ("delegate to a research sub-agent", "enforce a phase barrier") and push the concrete name into the fenced execution section.
+4. **Design to the common denominator.** Base assumes the parent-orchestrated star (the model both platforms support). Claude's peer-messaging teams are experimental — treat peer-mesh as a Claude-only execution enhancement, never a base assumption.
+5. **Validate, then commit both trees.** The dual-tree consistency check is a gate, not a nicety; on pass, commit `~/.claude` and `~/.codex`.
