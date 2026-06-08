@@ -17,6 +17,28 @@ Before starting review, ask the user if the spec is finished:
 
 ---
 
+## Step 1.5: Blocking Self-Consistency Gate
+
+Before invoking the external `/review-general-spec`, **re-read the spec as an artifact and assert its
+internal consistency.** This is a blocking gate — do not pass a spec that fails it to external review.
+
+**Trace every invariant:**
+- [ ] **Every Requirement → ≥1 Acceptance Criterion** (nothing required is unverifiable)
+- [ ] **Every Requirement → ≥1 execution-plan chunk** (nothing required is unbuilt)
+- [ ] **Data shapes are consistent** — I/O contracts referenced across sections match
+- [ ] **Out-of-scope is present and non-empty**
+- [ ] **Requirement IDs are traceable** — each has a stable ID used by ACs and chunks
+
+**Spec → implementation pre-mortem:** *"Assume implementation hits a surprise — where did this spec
+most likely under-think it?"* Name the one or two weakest spots. Resolve them, or log them as
+Known-Risks in the spec's Notes.
+
+**On a gate failure:** fix it (autonomous if the discovery doc / conversation settles it — write the
+fix into the spec, never just note it) or escalate one specific question (clause C of
+`references/autonomy-and-escalation.md`). Only once the gate passes do you proceed to Step 2.
+
+---
+
 ## Step 2: Invoke `/review-general-spec` Skill
 
 Once the user confirms the spec is ready for review, invoke the `/review-general-spec` skill to perform a comprehensive review of the spec.

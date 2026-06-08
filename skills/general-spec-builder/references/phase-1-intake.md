@@ -16,6 +16,31 @@ Ask the user: "Where is the discovery document?"
 
 ---
 
+## Step 1.5: Gap-Scan vs the Discovery Doc
+
+You are **downstream of discovery** — discovery owns the heavy front-loading. Your job here is to
+**gap-fill, not re-interrogate.** Do not re-run discovery's probing on material it already settled.
+
+Hold the same load-bearing dimensions discovery tracks and scan the discovery doc for **genuine holes**:
+
+| Dimension | A hole means… |
+|-----------|---------------|
+| Problem concreteness | No specific problem / sufferer / consequence |
+| I/O contract | trigger → output → format not pinned |
+| Scale / volume | No sense of magnitude |
+| Failure modes | What-goes-wrong unaddressed |
+| Explicit out-of-scope | Missing or empty |
+| Edge cases | Boundary inputs/states unmentioned |
+
+**Fire a question only per genuine hole** — one specific, concise question per gap (escalation comms
+standard: `references/autonomy-and-escalation.md`, clause C). If discovery already settled a dimension,
+take it as settled and move on. If a dimension is genuinely out of scope or unknowable, log it as a
+Known-Risk in the spec and proceed (fire-once — never loop).
+
+**Record in progress.md:** which dimensions had holes, what you asked, what was resolved vs logged.
+
+---
+
 ## Step 2: Identify the Project / Repo
 
 Ask the user: "Which repo is this for?" (if not clear from the discovery doc)

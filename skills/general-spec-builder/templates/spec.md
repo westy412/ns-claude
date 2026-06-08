@@ -21,7 +21,17 @@ Load these skills before starting:
 
 ## Requirements
 
-[The actual requirements. What needs to be true when this is done.]
+<!-- Each requirement gets a stable ID (R1, R2, …) so Acceptance Criteria and execution-plan chunks
+     trace back to it. Every requirement must map to ≥1 Acceptance Criterion and ≥1 chunk. -->
+
+- **R1:** [requirement — what needs to be true when this is done]
+- **R2:** [requirement]
+
+## Out of Scope
+
+<!-- Required, non-empty. What this spec deliberately does NOT do. -->
+
+- [explicitly excluded item]
 
 ## Architecture
 

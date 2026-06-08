@@ -12,6 +12,8 @@ Transform a discovery document (from the `discovery` skill) into a formal spec t
 
 **Goal:** Produce a spec detailed enough for Claude to work through autonomously, with clear work breakdown, acceptance criteria, and completion promise.
 
+**Gap-fill, don't re-interrogate.** Discovery owns the front; this skill is downstream — it fills genuine gaps discovery left and must not re-probe what discovery already settled.
+
 **This skill handles:**
 - Backend APIs
 - Frontend features
@@ -32,6 +34,8 @@ Transform a discovery document (from the `discovery` skill) into a formal spec t
 4. **Technology-agnostic** — The template works for any work type
 5. **Skill-aware** — Discover and record which skills the implementing agent should load
 6. **Progress tracking** — Maintain progress document for cross-session resumption
+7. **Ask on ambiguity (gap-fill, don't re-interrogate)** — Downstream of discovery, which owns the heavy front-loading. Never draft a guess: where the discovery doc is genuinely silent or contradictory on a high-risk dimension, fire one specific question — but do not re-interrogate what discovery already settled. Ambiguity in the spec becomes bugs in the implementation
+8. **Research the real data contract** — Before defining input/output shapes, check the real source (existing API, database schema, upstream service). Use real data structures — field names, types, optional vs required — not imagined ones
 
 ---
 
@@ -231,6 +235,7 @@ Details: `references/handover-protocol.md`
 | `references/execution-plan-guide.md` | Deep guide on phases, chunks, streams, communication |
 | `references/handover-protocol.md` | Cross-session resumption |
 | `references/sub-agent-delegation.md` | Research sub-agent patterns |
+| `references/autonomy-and-escalation.md` | Fix-or-ask contract: gap-fill-vs-escalate criterion + escalation comms standard (clause C — brief specific questions, ASCII diagrams). Load before escalating a gap to the user. |
 
 ---
 

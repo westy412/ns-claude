@@ -65,13 +65,13 @@ The "what" — what needs to be true when this work is complete.
 - Be specific enough that acceptance can be verified
 - Include both functional and non-functional requirements
 
-**Ask the user:** "Here are the requirements I've extracted. Anything missing or wrong?"
+**Ask the user (forcing, not "anything missing?"):** "Here are the requirements I've extracted. Which non-functional thresholds have I left vague (latency, scale, error behavior), and which single requirement is most likely to be misread during the build?" — give each a stable ID (R1, R2, …) as you confirm it.
 
 ---
 
 ## Section: Architecture
 
-**Optional for simple work.** Include when:
+**The broad Architecture section is optional for simple work — but two decisions inside it are never optional (see *Forced Decisions* below).** Include the broader section when:
 - Key technical decisions must be followed
 - Specific patterns must be used
 - Constraints exist (performance, compatibility)
@@ -89,6 +89,18 @@ Pull from:
 | `backend-api` | API contracts, database schema, auth approach, error handling patterns |
 | `frontend` | Component hierarchy, state management, routing, styling conventions |
 | `hybrid` | How agent interacts with other components, data flow, sequencing |
+
+### Forced Decisions (never optional)
+
+Even for simple work, two decisions are always pinned in the spec — they are its highest-risk
+ambiguities if left open:
+
+- **Data contract** — the real input/output shapes (per Principle 8: from the real source, not imagined).
+  *Forcing question:* "What exactly goes in and comes out — field names, types, required vs optional?"
+- **Framework / library choice** — the stack the implementation must use.
+  *Forcing question:* "Which framework/libraries should this use, and is that a hard constraint or a default?"
+
+The rest of Architecture stays optional for simple work.
 
 ---
 
