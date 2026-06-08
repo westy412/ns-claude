@@ -17,6 +17,37 @@ Specs live at `/specs/[name].md` in the repo root. The user provides the path, o
 
 ---
 
+## Review Gate (BLOCKING — check before parsing)
+
+A spec reaches you only after `review-general-spec` has reviewed it. That review writes a
+machine-readable verdict you **must** honor: a FAILing spec is not ready to build.
+
+**Where:** the feature folder's `reviews/` subfolder holds `review-NNN.md` files (NNN = sequence).
+Read the **latest** (highest NNN). Each opens with a YAML `review_verdict` header whose `overall`
+field is the gate:
+
+```yaml
+review_verdict:
+  overall: PASS    # PASS | WARN | FAIL (worst dimension)
+  blocking_count: 0
+```
+
+**Gate rule:**
+
+| `overall` | Action |
+|-----------|--------|
+| `PASS` | Proceed. |
+| `WARN` | Proceed, but surface the warnings to the user first and log them as Known-Risks in `progress.md`. |
+| `FAIL` | **STOP — do not start.** Route the `blocking_count` issues back to `general-spec-builder` to fix the spec, then re-review. |
+| no review file | The spec was never reviewed. STOP; recommend reviewing it first (run `review-general-spec`). |
+
+**Override:** only if the user explicitly instructs you to build over a FAIL or unreviewed spec.
+Record it as a Known-Risk override in `progress.md` (which review, which blocking issues, that the
+user accepted them), then proceed. Never override silently or on your own judgment — escalate per
+`references/autonomy-and-escalation.md`.
+
+---
+
 ## Parsing Order
 
 Parse sections in this order. Each builds on the previous:
