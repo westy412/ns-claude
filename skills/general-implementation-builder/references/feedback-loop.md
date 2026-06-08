@@ -1,77 +1,90 @@
-# Feedback Loop
+# Feedback Loop & Autonomy Rule
 
-> **Context:** This reference covers how to handle feedback about generated code and prevent the same mistakes from recurring. Read this when you receive feedback about implementation quality.
-
----
-
-## When to Record Feedback
-
-Record feedback in `the feature folder's `progress.md``'s Implementation Notes section when:
-- User says generated code is wrong
-- A pattern was used incorrectly
-- Code doesn't follow project conventions
-- Debugging reveals a systematic issue
-- A fix needs to be applied across multiple files
+> **Context:** How the builder handles any finding about the work in progress — user feedback, a
+> per-phase review issue, a verifier mismatch, an I/O-trace divergence. Every finding runs the
+> fix-or-escalate decision in `references/autonomy-and-escalation.md`; this file is the builder-side
+> application of it. Read it whenever a finding lands.
 
 ---
 
-## How to Process Feedback
+## The decision (every finding runs this)
 
-### Step 1: Understand the Issue
+Run the one question from `references/autonomy-and-escalation.md`: **"Can I resolve this from what
+the user already gave me?"** (spec, discovery doc, conversation). It routes to one of two branches.
 
-When feedback arrives:
-1. Identify what was wrong (incorrect pattern, missing convention, bad approach)
-2. Understand WHY it was wrong (what should have been done instead)
-3. Determine if this is a one-off mistake or a systematic issue
+### Branch A — autonomous fix (resolvable from stated intent)
 
-### Step 2: Fix the Triggering Instance
+The finding is a *divergence* from what the source material already decides. Fix it; don't interrupt.
 
-Apply the fix to the specific code that was flagged.
+- **Code diverges from the spec** → fix the code. The spec is the truth. Then **sweep** (below).
+- **The spec itself is wrong, but the discovery doc / conversation settles what it should say** →
+  fix it **and write the correction back into the spec (and discovery if that's the source) — never
+  code-only.** Code-only rots the spec and the spec-derived tests: both stay wrong. Patch the source,
+  then bring the code into line.
 
-### Step 3: Sweep for Other Instances
+Record every Branch-A fix in `progress.md` (below).
 
-**If the issue is systematic** (same pattern used elsewhere):
+### Branch B — escalate (genuine uncertainty)
 
-1. Search the codebase for all instances of the same pattern
-2. Apply the same fix to ALL qualifying instances
-3. Document the sweep scope
+The source material genuinely doesn't decide it — a real gap or contradiction in stated intent.
+**STOP and bring the user in**, following the comms standard in `references/autonomy-and-escalation.md`
+(one brief specific question; ASCII-sketch a choice). **Fire each question once** — on "out of scope /
+don't know / proceed," log a Known-Risk in `progress.md` and move on. Never guess; never trap the
+conversation.
 
-This prevents the same mistake from appearing in later chunks or phases.
+> **Spec-defect loopback:** a finding that the *spec* is wrong is Branch A if resolvable from intent
+> (correct the spec), Branch B if not (escalate, then correct the spec). Either way the correction
+> lands in the spec — the build never silently routes around a bad spec.
 
-### Step 4: Record in Progress Document
+---
 
-Add the feedback to `the feature folder's `progress.md`` → Implementation Notes → Decisions Made:
+## Sweep for other instances (after any Branch-A code fix)
+
+**If the issue is systematic** (same pattern elsewhere):
+1. Search the codebase for all instances of the same pattern.
+2. Apply the same fix to ALL qualifying instances.
+3. Document the sweep scope in `progress.md`.
+
+This stops the same mistake reappearing in later chunks or phases.
+
+---
+
+## Record in the progress document
+
+Add to the feature folder's `progress.md` → Implementation Notes → Decisions Made:
 
 ```markdown
 ### Decisions Made
 
-- **[date]:** User feedback: [description of issue]. Fix: [what was changed].
-  Applied to: [list of files/locations]. Rule: [pattern to follow going forward].
+- **[date]:** Finding: [what was wrong]. Branch: A (autonomous) / B (escalated).
+  Fix: [what changed]. Spec amended? [yes/no — where]. Applied to: [files].
+  Rule: [pattern to follow going forward].
 ```
 
-**Why the progress file instead of a cheat sheet:** This skill is technology-agnostic. There are no framework-specific cheat sheets to update. Instead, lessons learned are recorded in the spec-specific progress document so they persist across sessions and are visible to all teammates.
-
-### Step 5: Inform Teammates (Team Mode)
-
-If in team mode and the feedback affects other streams:
-
-```
-SendMessage:
-  type: message
-  recipient: [affected-stream-name]
-  content: "Pattern correction: [describe the fix and the rule going forward]"
-  summary: "Pattern correction from feedback"
-```
+**Why the progress file:** this skill is technology-agnostic — no framework cheat sheets to update.
+Lessons live in the spec-specific progress document so they persist across sessions and are visible to
+every stream. This split (autonomous fixes vs escalations) is also the Layer-4 telemetry source.
 
 ---
 
-## Mandatory Feedback Triggers
+## Relay a correction to other streams (team mode)
 
-Always process feedback when:
-- [ ] User explicitly says the generated code is wrong
-- [ ] A pattern was used incorrectly
-- [ ] Code doesn't follow existing project conventions
-- [ ] Debugging reveals a systematic issue
-- [ ] The same mistake has appeared more than once
+If in team mode and a correction affects another stream, the orchestration layer relays it — the parent
+collects the correction and forwards it; the base never depends on peer-to-peer messaging. If the
+affected stream hasn't started, put the correction in its prompt / state sources; once work resumes,
+`progress.md` is the durable source.
 
-**Do not wait for multiple occurrences.** Record on first feedback to prevent repetition.
+**Execution (Claude Code):** the team lead forwards the correction; if the experimental peer mesh is
+enabled, `SendMessage` it directly to the active stream.
+
+---
+
+## Mandatory triggers
+
+Run this decision whenever:
+- [ ] The user says the generated code is wrong
+- [ ] A per-phase review or verifier flags a mismatch
+- [ ] An I/O trace finds a field-name / schema divergence
+- [ ] A pattern was used incorrectly, or the same mistake appears more than once
+
+**Don't wait for multiple occurrences.** Process on the first finding.

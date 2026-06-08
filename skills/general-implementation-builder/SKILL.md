@@ -168,11 +168,11 @@ Full details: `references/sub-agents.md`
 
 ---
 
-## Feedback Loop
+## Feedback Loop & Autonomy Rule
 
-When you receive feedback about generated code, record the pattern in the feature folder's `progress.md` (Implementation Notes section) to prevent the same mistake across chunks and sessions.
+Every finding about the work — user feedback, a review issue, a verifier mismatch — runs the fix-or-escalate decision: resolvable from the spec/discovery → fix autonomously (Branch A; if the spec is wrong, correct the spec, never code-only); genuinely undecided → escalate (Branch B). Record the outcome in the feature folder's `progress.md`.
 
-Full process: `references/feedback-loop.md`
+Full process: `references/feedback-loop.md` (cites `references/autonomy-and-escalation.md`).
 
 **Mandatory triggers:**
 - User says generated code is wrong
