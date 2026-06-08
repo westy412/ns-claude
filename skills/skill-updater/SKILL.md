@@ -43,7 +43,7 @@ The skill format is now a shared open standard (`agentskills.io`), so base conte
 
 Load [update-protocol.md](references/update-protocol.md) for the detailed steps, classification heuristics, validation checklist, and edge cases. In brief:
 
-1. **Intake.** Identify the target skill and the change. If structured feedback exists (a dev-workflow friction log, a review, a critique), read it and extract the concrete change(s). If the request is vague, ask once — what specifically should change, and why.
+1. **Intake.** Identify the target skill and the change. If structured feedback exists (a dev-workflow friction log, a review, a critique), read it and extract the concrete change(s). If the request is vague, ask once — what specifically should change, and why. Keep the question brief and specific — one concrete ask; ASCII-sketch the options if structure is involved. This brevity is for the question only; the propose-gate diff (step 5) still shows the full before → after.
 2. **Load references.** Read [platform-boundary.md](references/platform-boundary.md). Hold the authoring best practices: SKILL.md is a routing layer < 300 lines; reference files are one-topic, < 200 lines, no frontmatter; progressive disclosure (metadata → instructions → resources).
 3. **Locate both trees.** Read the skill at `~/.claude/skills/<name>/` **and** `~/.codex/skills/<name>/` in full, including reference files. If it is missing from one tree, STOP and flag (see protocol edge cases).
 4. **Classify & plan.** For each change, decide BASE or EXECUTION and draft the exact edits — but do **not** write yet:

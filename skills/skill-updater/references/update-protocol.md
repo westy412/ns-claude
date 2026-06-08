@@ -15,7 +15,7 @@ The change can arrive as:
 - **Structured feedback** — the dev-workflow layer-4 friction log, a `review-*-spec` output, an elicitation critique, or a captured failure. Read it in full and extract concrete, applyable change(s). Feedback describes a *problem*; restate it as a *skill change* before touching files.
 - A **drift-reconciliation** task — the two trees diverged and the base must be made consistent again. Here the "change" is "make base equivalent, keeping each tree's execution sections."
 
-If the change is vague or you are inferring intent, **ask once**: what specifically should change, and why. Do not draft a guess into shared infrastructure.
+If the change is vague or you are inferring intent, **ask once**: what specifically should change, and why. Keep the question brief and specific — one concrete ask; ASCII-sketch the options if structure is involved (this brevity is for the question only; the propose-gate diff in §4 still shows the full before → after). Do not draft a guess into shared infrastructure.
 
 ---
 
