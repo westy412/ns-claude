@@ -6,7 +6,24 @@
 
 ## Phase 0: Parse Spec and Initialize Project
 
-### ⛔ Step 1: EXECUTION MODE CHECK (DO THIS FIRST — BEFORE ANYTHING ELSE)
+### ⛔ Step 0: REVIEW GATE (BLOCKING — BEFORE ANYTHING ELSE)
+
+A spec reaches you only after `review-agent-spec` has reviewed it. Honor its verdict: a FAILing spec is not ready to build.
+
+**Where:** the `reviews/` folder in the **parent** spec directory (sibling of `spec/`, not inside it) holds `review-NNN.md` files. Read the **latest** (highest NNN). Its YAML `review_verdict` header's `overall` field is the gate:
+
+| `overall` | Action |
+|-----------|--------|
+| `PASS` | Proceed to Step 1. |
+| `WARN` | Proceed, but surface the warnings first and log them as Known-Risks in `progress.md`. |
+| `FAIL` | **STOP — do not start.** Route the `blocking_count` issues back to `agent-spec-builder` to fix the spec, then re-review. |
+| no review file | The spec was never reviewed. STOP; recommend reviewing it first (run `review-agent-spec`). |
+
+**Override:** only if the user explicitly instructs you to build over a FAIL or unreviewed spec. Record it as a Known-Risk override in `progress.md` (which review, which blocking issues, that the user accepted them), then proceed. Never override silently or on your own judgment — escalate per `references/common/autonomy-and-escalation.md`.
+
+---
+
+### ⛔ Step 1: EXECUTION MODE CHECK (DO THIS RIGHT AFTER THE REVIEW GATE)
 
 Read `spec/manifest.yaml` and **IMMEDIATELY** check the `execution-plan` section:
 

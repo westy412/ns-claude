@@ -247,6 +247,8 @@ What framework are you using?
 
 ## Workflow
 
+> **⛔ Review gate (BLOCKING, before Phase 0):** read the latest `review-NNN.md` `review_verdict` header from the `reviews/` folder in the parent spec dir. Refuse to start on `overall: FAIL` or an unreviewed spec unless the user explicitly overrides (recorded as a Known-Risk). See `references/common/workflow-phases.md` → Step 0.
+
 ### Phase Routing Table
 
 | Phase | What | Reference | Skill to Load |
@@ -429,6 +431,7 @@ Progress tracking template: `templates/progress.md`
 - `references/common/sub-agents.md` — Delegation strategy, sub-agent invocation patterns
 - `references/common/progress-tracking.md` — Progress tracking & cross-session resumption
 - `references/common/feedback-loop.md` — Cheat sheet update process
+- `references/common/autonomy-and-escalation.md` — Fix-or-ask contract: auto-fix a finding vs escalate, plus the escalation comms standard. Load when handling a review/feedback finding or before escalating.
 
 ### Existing (DO NOT MODIFY)
 - `frameworks/langgraph/CHEATSHEET.md` — LangGraph critical rules and patterns
