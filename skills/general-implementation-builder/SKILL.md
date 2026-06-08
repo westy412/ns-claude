@@ -193,3 +193,4 @@ Full process: `references/feedback-loop.md`
 - `references/sub-agents.md` — Delegation strategy for research sub-agents
 - `references/progress-tracking.md` — Progress tracking and cross-session resumption
 - `references/feedback-loop.md` — Learning from mistakes and recording patterns
+- `references/autonomy-and-escalation.md` — Fix-or-ask contract: when to auto-fix a finding vs escalate to the user, plus the escalation comms standard. Load when handling a review/feedback finding or before escalating to the user.
