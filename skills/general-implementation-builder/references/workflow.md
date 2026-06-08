@@ -112,6 +112,7 @@ After Phase 0, all phases come directly from the spec's execution plan. The buil
 3. Each chunk maps to a task in the task list
 4. Update the feature folder's `progress.md` (Implementation section) after each chunk completion
 5. Follow the Communication table for inter-stream data sharing
+6. At each phase boundary, run the **per-phase review** (`references/per-phase-review.md`) before starting the next phase (`execute → review → fix`); a final **big review** runs at Completion
 
 **What drives each chunk:**
 - The chunk's outcome statement defines success
@@ -124,6 +125,10 @@ After Phase 0, all phases come directly from the spec's execution plan. The buil
 ## Completion
 
 After all phases complete:
+
+### Big Review (before acceptance criteria)
+
+Before verifying acceptance criteria, run the final aggregate review across the whole change (`references/per-phase-review.md` → The big review) — it catches the cross-phase / integration issues a per-phase review can't see. Resolve findings via the autonomy rule.
 
 ### Step 1: Verify Acceptance Criteria
 

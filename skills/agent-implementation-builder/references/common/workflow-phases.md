@@ -174,6 +174,12 @@ For each team (including nested), add these tasks:
 
 ---
 
+## Per-Phase Review (applies to Phases 1–4)
+
+After each of Phases 1–4 (scaffold, tools, agents, prompts), run the **per-phase review** (`references/common/per-phase-review.md`) scoped to that phase's files + spec section before proceeding — `execute → review → fix`. Findings run the autonomy rule (`references/common/autonomy-and-escalation.md`). A final **big review** runs before completion (see end of this file).
+
+---
+
 ## Phase 1: Team Scaffold
 
 **When you reach this phase:** Invoke `skill: "agent-teams"` to load team pattern implementation guides.
@@ -563,3 +569,9 @@ async def get_status(job_id: str):
 ```
 
 **Only create if spec mentions async job patterns or status callbacks.**
+
+---
+
+## Final Big Review (before handoff)
+
+After Phase 7, before declaring the system complete or handing off to `agent-implementation-verifier`, run the aggregate **big review** across the whole system (`references/common/per-phase-review.md` → The big review) — integration seams between teams, end-to-end agent I/O contracts, and cross-phase consistency the per-phase reviews can't see. Resolve findings via the autonomy rule, then proceed to verification.

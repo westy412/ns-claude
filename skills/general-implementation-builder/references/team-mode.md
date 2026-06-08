@@ -207,6 +207,8 @@ SendMessage:
 
 After all phases complete:
 
+**First, run the big review** (`references/per-phase-review.md` → The big review) across the whole change; resolve findings via the autonomy rule. Then:
+
 1. **Validate completeness** — Check that all chunks are marked done in TaskList
 2. **Verify acceptance criteria** — Run test commands, check behavioral criteria
 3. **Fix issues** — If any criterion fails, assign fix work to the appropriate teammate
@@ -251,7 +253,7 @@ TaskList → check for newly unblocked tasks → assign to idle teammates
 **5. Validate before proceeding to next phase**
 - All Phase N tasks must be "completed" before Phase N+1 starts
 - Check that all communication happened
-- Spot-check 1-2 files for correctness
+- Run the **per-phase review** (`references/per-phase-review.md`) scoped to this phase's files + spec section; resolve findings via the autonomy rule before unblocking the next phase (subsumes the old spot-check)
 
 ---
 

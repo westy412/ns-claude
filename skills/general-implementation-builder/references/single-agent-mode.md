@@ -35,7 +35,7 @@ For each phase in the execution plan:
    c. Execute the sub-tasks
    d. Verify the chunk's outcome is met
    e. Update `the feature folder's `progress.md`` — mark chunk as `done`
-3. After all chunks in the phase complete, move to the next phase
+3. After all chunks in the phase complete, run the **per-phase review** (`references/per-phase-review.md`) scoped to this phase's files + spec section — resolve findings via the autonomy rule — then move to the next phase
 
 ### Step 3: Handle Dependencies
 
