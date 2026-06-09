@@ -50,6 +50,7 @@ Use this skill when:
 6. **Codebase-researcher for depth** -- Agents delegate deep code investigation to `codebase-researcher` sub-agents to manage context.
 7. **Gate before action** -- Present the report. Do NOT auto-fix.
 8. **Feedback flywheel** -- Classify each requirement outcome (CORRECT/INCORRECT/AMBIGUOUS/MISSING) so review skills detect recurring spec patterns.
+9. **Final static gate, then hand off** -- This verifier is the *final aggregate static review* the builder's per-phase review loop converges into: the last static check before the artifact is run. It reads, traces, and reports -- it never executes code or acceptance-criteria commands. Live validation is a separate typed concern, handed off on a static PASS (see Phase 4).
 
 ## Workflow
 
@@ -120,9 +121,13 @@ Read [team-orchestration.md](references/team-orchestration.md) for the full setu
 7. Write report to `{spec-folder}/feedback/verification-NNN.md` (incrementing number)
 8. Present summary to the invoking agent or user
 
-### Future: Test Verification (Not Yet Implemented)
+### Phase 4: Hand Off to Typed Testing (on static PASS)
 
-A 5th agent (`test-verifier`) will be added when the testing infrastructure is in place.
+This verifier is static-only by design -- it does not run the code or the acceptance-criteria commands. Executing the artifact against its spec-derived test sources (acceptance-criteria commands, worked examples, edge cases) is owned by the **typed-testing skill**, a separate live-validation stage that this verifier hands off to.
+
+On a static **PASS** (no FAILs), hand off to typed testing for the spec folder: `-> typed-testing {spec-folder-path}`.
+
+**Named seam -- not yet wired.** The typed-testing skill is built in a later stage. Until it exists: record in the report that the static review passed and that **live testing is owed**, then stop. Do **not** spawn a `test-verifier` agent (there is none) and do **not** block the PASS on the missing stage.
 
 ## Quick Reference
 

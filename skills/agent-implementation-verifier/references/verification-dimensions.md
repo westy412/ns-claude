@@ -227,6 +227,6 @@ Beyond the general checks, also verify:
 
 ---
 
-## Future Dimension: Test Verification (Not Yet Active)
+## Test Execution: Owned by Typed Testing (not a verifier dimension)
 
-**Agent:** `test-verifier` (placeholder -- do not spawn)
+Running tests is **not** a static verification dimension, and there is **no `test-verifier` agent** -- do not spawn one. After this verifier returns a static PASS, test execution is handed off to the **typed-testing skill** (a separate live-validation stage; see SKILL.md Phase 4). The typed-testing skill is built in a later stage; until it exists this is a named seam -- the verifier records that live testing is owed and does not block.

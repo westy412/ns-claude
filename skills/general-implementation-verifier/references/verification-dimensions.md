@@ -217,13 +217,13 @@ Group findings by sub-dimension (3a through 3f). Within each group, order by sev
 
 ---
 
-## Future Dimension: Test Verification (Not Yet Active)
+## Test Execution: Owned by Typed Testing (not a verifier dimension)
 
-**Agent:** `test-verifier` (placeholder -- do not spawn)
-
-When testing infrastructure is in place, this agent will check:
+Running tests is **not** a static verification dimension, and there is **no `test-verifier` agent** -- do not spawn one. After this verifier returns a static PASS, test execution is handed off to the **typed-testing skill** (a separate live-validation stage; see SKILL.md Phase 4), which runs the spec-derived test sources:
 - Test files exist for implemented modules
 - Tests cover critical paths (happy path + error paths)
 - Test commands from acceptance criteria pass
 - No tests that only verify mocks (over-mocking)
 - No flaky patterns (shared mutable state, real timers, real network calls)
+
+The typed-testing skill is built in a later stage; until it exists this is a named seam -- the verifier records that live testing is owed and does not block.
