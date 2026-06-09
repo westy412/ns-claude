@@ -42,9 +42,9 @@ inconsistency, end-to-end contract). Findings run the same autonomy rule. The te
 the static half of this; here it's the build-side gate before you emit the completion promise.
 
 On a clean big review, hand off to live validation — see `testing-handoff.md`: surface the spec's
-test seed (worked examples, edge cases, tool example-I/O, acceptance criteria) and route to the
-typed-testing skill. Named seam, not yet wired — record that live testing is owed; do not block
-completion.
+test seed (worked examples, edge cases, tool example-I/O, acceptance criteria) and invoke the
+typed-testing skill for the spec folder. Wired — its `testing_verdict` report is the live gate; if
+it cannot run now, record that live testing is owed (deferral is non-blocking; silent skipping is not).
 
 ---
 
@@ -55,4 +55,4 @@ completion.
   complete, before unblocking the next phase) — one scoped review over the phase's combined output,
   not a per-teammate step.
 
-**Execution (Claude Code):** spawn a `code-reviewer` sub-agent (`Task` / `subagent_type: code-reviewer`) with the scoped file list + spec slice; it returns findings.
+**Execution (Claude Code):** spawn a `code-reviewer` sub-agent (`Task` / `subagent_type: code-reviewer`) with the scoped file list + spec slice; it returns findings. Typed-testing handoff: invoke via the `Skill` tool → `skill: "typed-testing"` with the spec-folder path.

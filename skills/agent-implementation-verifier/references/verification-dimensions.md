@@ -229,4 +229,4 @@ Beyond the general checks, also verify:
 
 ## Test Execution: Owned by Typed Testing (not a verifier dimension)
 
-Running tests is **not** a static verification dimension, and there is **no `test-verifier` agent** -- do not spawn one. After this verifier returns a static PASS, test execution is handed off to the **typed-testing skill** (a separate live-validation stage; see SKILL.md Phase 4). The typed-testing skill is built in a later stage; until it exists this is a named seam -- the verifier records that live testing is owed and does not block.
+Running tests is **not** a static verification dimension, and there is **no `test-verifier` agent** -- do not spawn one. After this verifier returns a static PASS, test execution is handed off to the **typed-testing skill** (a separate live-validation stage; see SKILL.md Phase 4). The typed-testing skill is wired -- on a static PASS the verifier invokes it; its `testing_verdict` report is the live gate. If it cannot run now, the verifier records that live testing is owed (non-blocking deferral).

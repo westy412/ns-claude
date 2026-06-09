@@ -576,6 +576,6 @@ async def get_status(job_id: str):
 
 After Phase 7, before declaring the system complete or handing off to `agent-implementation-verifier`, run the aggregate **big review** across the whole system (`references/common/per-phase-review.md` → The big review) — integration seams between teams, end-to-end agent I/O contracts, and cross-phase consistency the per-phase reviews can't see. Resolve findings via the autonomy rule, then proceed to verification.
 
-On a clean big review, hand off to live validation: surface the spec's test seed and route to the
-typed-testing skill — see `references/common/testing-handoff.md` (named seam, not yet wired; records
-live-testing-owed, does not block).
+On a clean big review, hand off to live validation: surface the spec's test seed and invoke the
+typed-testing skill — see `references/common/testing-handoff.md` (wired; its `testing_verdict` is
+the live gate, with non-blocking deferral if it cannot run now).

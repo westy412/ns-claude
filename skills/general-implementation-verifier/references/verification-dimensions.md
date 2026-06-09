@@ -226,4 +226,4 @@ Running tests is **not** a static verification dimension, and there is **no `tes
 - No tests that only verify mocks (over-mocking)
 - No flaky patterns (shared mutable state, real timers, real network calls)
 
-The typed-testing skill is built in a later stage; until it exists this is a named seam -- the verifier records that live testing is owed and does not block.
+The typed-testing skill is wired -- on a static PASS the verifier invokes it (see SKILL.md Phase 4); its `testing_verdict` report is the live gate. If it cannot run now, the verifier records that live testing is owed (non-blocking deferral).

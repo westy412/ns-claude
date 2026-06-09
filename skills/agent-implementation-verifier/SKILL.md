@@ -127,7 +127,9 @@ This verifier is static-only by design -- it does not run the code or the accept
 
 On a static **PASS** (no FAILs), hand off to typed testing for the spec folder: `-> typed-testing {spec-folder-path}`.
 
-**Named seam -- not yet wired.** The typed-testing skill is built in a later stage. Until it exists: record in the report that the static review passed and that **live testing is owed**, then stop. Do **not** spawn a `test-verifier` agent (there is none) and do **not** block the PASS on the missing stage.
+**Wired -- invoke it now.** Invoke the typed-testing skill for the spec folder. It lifts the spec's test seed into a test manifest, routes each row by artifact type (code / agent-tools / agent-reasoning), runs the artifact live, and writes `{spec-folder}/feedback/testing-NNN.md` with a machine-readable `testing_verdict` -- the live gate this static PASS feeds. Record the handoff in the report. If typed testing cannot run right now (user defers, environment unavailable), record that **live testing is owed** instead -- deferral does not block the static PASS. Do **not** spawn a `test-verifier` agent (there is none).
+
+**Execution (Claude Code):** invoke via the `Skill` tool -> `skill: "typed-testing"` with the spec-folder path.
 
 ## Quick Reference
 

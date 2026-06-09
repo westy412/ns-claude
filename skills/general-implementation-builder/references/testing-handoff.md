@@ -33,7 +33,9 @@ Hand off the spec folder to the typed-testing skill: `-> typed-testing {spec-fol
 by artifact type (code → run/endpoints/browser; agent tools → input→assert-output; agent reasoning →
 evals / LLM-judge) and runs the seed as live tests.
 
-**Named seam — not yet wired.** The typed-testing skill is built in a later stage. Until it exists:
-record in `progress.md` that the build passed its static gate and that **live testing is owed** (with
-the surfaced seed), then emit the completion promise. Do **not** block completion on the missing
-stage. When typed-testing exists, this seam goes live (the handoff is invoked here).
+**Wired — invoke it now.** Invoke the typed-testing skill for the spec folder with the surfaced
+seed. It lifts the seed into a test manifest, routes each row by artifact type, runs the artifact
+live, and writes `feedback/testing-NNN.md` with a machine-readable `testing_verdict` — that verdict
+is the live gate. Record the outcome in `progress.md`. If typed testing cannot run right now (user
+defers, environment unavailable), record that **live testing is owed** (with the surfaced seed) and
+emit the completion promise — deferral is non-blocking; skipping silently is not.
