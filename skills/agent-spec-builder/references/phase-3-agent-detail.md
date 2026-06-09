@@ -113,14 +113,18 @@ Make explicit: Output of Agent A = Input of Agent B.
 ### Behavioral Requirements
 
 - **Key Behaviors:** Specific behaviors required
-- **Edge Cases:** What could go wrong, how to handle
+- **Edge Cases:** What could go wrong, how to handle. **Required, non-empty** — each edge case is a
+  test seed the downstream typed-testing skill lifts as an edge-case test.
 - **What NOT to do:** Explicit constraints
 
 ### Examples
 
-At least one example showing:
-- Sample input
-- Expected output
+**Required — at least one** worked example (concrete input → expected output). This is the agent's
+happy-path **test seed**: downstream typed testing lifts it as an input→assert-output check (tool
+agents) or an eval against the expected output (reasoning agents), and spec review FAILs a behavioral
+requirement no test can be derived from. Make inputs/outputs concrete and runnable, not illustrative.
+- Sample input (real values)
+- Expected output (exact)
 
 ---
 

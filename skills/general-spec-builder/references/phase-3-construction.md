@@ -69,6 +69,27 @@ The "what" — what needs to be true when this work is complete.
 
 ---
 
+## Section: Test Sources
+
+The seed of the test suite — this is what makes the spec the *source* of tests, not just the
+implementation contract. For each Requirement, capture at least one **worked example** (concrete
+input → expected output on the happy path) and the **edge cases** that must hold (boundaries, empty/
+malformed inputs, limits, failure modes). Trace every row to a Requirement ID.
+
+- Pull worked examples from the discovery doc's concrete scenarios and the I/O contract.
+- Pull edge cases from the discovery doc's failure-mode and out-of-scope discussion, and the
+  force-concreteness probes.
+- **Make them runnable-specific** — real values, not `[some input]`. A vague example cannot be lifted
+  as a test; downstream typed testing and the spec review both treat it as missing.
+
+**Forcing question:** "For each requirement, what's one concrete input and the exact output you'd
+expect — and what's the one edge case most likely to break it?"
+
+This section is **required and non-empty.** A Requirement with no derivable test is a review FAIL
+(see `/review-general-spec` test-derivability).
+
+---
+
 ## Section: Architecture
 
 **The broad Architecture section is optional for simple work — but two decisions inside it are never optional (see *Forced Decisions* below).** Include the broader section when:

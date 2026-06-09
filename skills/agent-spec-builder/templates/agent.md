@@ -390,9 +390,12 @@ If this agent selects, ranks, or curates from a larger set, specify the diversit
 
 ### Edge Cases
 
+<!-- REQUIRED, non-empty. Each row is a test case — downstream typed testing lifts these as the agent's
+     edge-case test suite, and spec review FAILs a behavioral requirement with no derivable test. -->
+
 | Case | How to Handle |
 |------|---------------|
-| [case 1] | [handling] |
+| [case 1 — boundary, empty/malformed input, limit, or failure mode] | [exact expected handling] |
 
 ### What This Agent Should NOT Do
 - [constraint 1]
@@ -400,16 +403,21 @@ If this agent selects, ranks, or curates from a larger set, specify the diversit
 
 ## Examples
 
+<!-- REQUIRED, at least one. Each example is a worked input → expected output test seed — downstream
+     typed testing lifts these as the agent's happy-path assertions (agent-tools → input→assert-output;
+     agent-reasoning → eval/LLM-judge against the expected output). Make inputs/outputs concrete and
+     runnable, not illustrative — a vague example cannot be lifted as a test. -->
+
 ### Example 1: [Scenario name]
 
 **Input:**
 ```
-[sample input]
+[concrete sample input — real values]
 ```
 
 **Output:**
 ```
-[sample output]
+[exact expected output]
 ```
 
 ## Notes

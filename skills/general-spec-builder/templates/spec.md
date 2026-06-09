@@ -33,6 +33,26 @@ Load these skills before starting:
 
 - [explicitly excluded item]
 
+## Test Sources
+
+<!-- Required, non-empty. The seed of the test suite — concrete worked examples and edge cases that
+     downstream typed testing lifts as live test cases, and that spec review asserts every Requirement
+     can derive at least one test from (a Requirement no test can be lifted from is a FAIL). Each row
+     traces to a Requirement ID so coverage is checkable. Make inputs/outputs runnable-specific (real
+     values, not "[some input]") — a vague example is not a test seed. -->
+
+### Worked Examples (happy-path contract)
+
+| # | Requirement | Input / Trigger | Expected Output / Behavior |
+|---|-------------|-----------------|----------------------------|
+| WE1 | R1 | [concrete input or trigger — real values] | [exact expected result] |
+
+### Edge Cases (boundaries & failure modes)
+
+| # | Requirement | Condition / Input | Expected Handling |
+|---|-------------|-------------------|-------------------|
+| EC1 | R1 | [boundary, empty, malformed, limit, or failure condition] | [how the system must respond] |
+
 ## Architecture
 
 [Key decisions, patterns to follow, constraints. Optional for simple work.]

@@ -24,6 +24,7 @@ internal consistency.** This is a blocking gate — do not pass a spec that fail
 
 **Trace every invariant:**
 - [ ] **Every Requirement → ≥1 Acceptance Criterion** (nothing required is unverifiable)
+- [ ] **Every Requirement → ≥1 Test Source** (a worked example or edge case a test can be lifted from — nothing required is untestable)
 - [ ] **Every Requirement → ≥1 execution-plan chunk** (nothing required is unbuilt)
 - [ ] **Data shapes are consistent** — I/O contracts referenced across sections match
 - [ ] **Out-of-scope is present and non-empty**

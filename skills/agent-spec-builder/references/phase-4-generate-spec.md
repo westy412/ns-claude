@@ -300,3 +300,20 @@ For each: **resolve it now** (tighten the spec — autonomous if discovery/conve
 one specific question per the escalation comms standard, `references/autonomy-and-escalation.md`), or
 **log it explicitly as a Known-Risk** in `overview.md` / `progress.md`. Do not pass a silently
 under-thought spec to Phase 5.
+
+---
+
+### Check 6: Test-Seed Presence (BLOCKING)
+
+Every agent spec must carry the seed of its test suite — the spec is the *source* of tests, not only
+the implementation contract. For each agent `.md`:
+
+- **≥1 worked Example** (concrete input → expected output) is present and uses real, runnable values
+  (not `[sample input]` placeholders).
+- **Edge Cases table is non-empty** — boundaries, empty/malformed inputs, limits, failure modes.
+
+These are what the downstream typed-testing skill lifts as live tests (tool agents → input→assert-
+output; reasoning agents → eval / LLM-judge) and what `review-agent-spec` asserts test-derivability
+against (a behavioral requirement no test can be lifted from is a FAIL). Any agent missing either is a
+spec defect — fill it from discovery/conversation (autonomous if settled, else one specific question)
+before proceeding to Phase 5.
