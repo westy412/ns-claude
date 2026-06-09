@@ -134,6 +134,9 @@ Task tool:
     Read your full instructions at:
       [repo-path]/teammate-prompts/[team-name]/[stream-name].md
 
+    You are not alone in the codebase. Do not revert edits made by others.
+    Own only the files assigned in that prompt. List every file path you changed in your final response.
+
     Follow ALL steps in order. Start by reading the file completely.
 ```
 
@@ -176,6 +179,12 @@ If any teammate's prompt includes skills to load:
 
 ---
 
+### Worker Resumption (context exhaustion)
+
+If a teammate exits before completing a chunk, or a continuation is needed, re-spawn it with the same prompt file **plus current state** — `progress.md` (phase/chunk status + handoffs), Git history (committed checkpoints), Linear issue state when available, and the code on disk. The new teammate resumes from the first incomplete task, not from conversation memory.
+
+---
+
 ### Step 7: Handle Inter-Stream Communication
 
 The spec's Communication table defines what needs to be shared between streams.
@@ -209,7 +218,7 @@ After all phases complete:
 
 **First, run the big review** (`references/per-phase-review.md` → The big review) across the whole change; resolve findings via the autonomy rule. Then:
 
-1. **Validate completeness** — Check that all chunks are marked done in TaskList
+1. **Validate completeness** — Check that all chunks are marked done in TaskList; verify changed files stayed within each stream's ownership boundary (no cross-stream clobbering) and review integration seams
 2. **Verify acceptance criteria** — Run test commands, check behavioral criteria
 3. **Fix issues** — If any criterion fails, assign fix work to the appropriate teammate
 4. **Shutdown teammates** — Send shutdown requests via `SendMessage(shutdown_request)`
