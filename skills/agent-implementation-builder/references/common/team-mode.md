@@ -116,6 +116,9 @@ Task tool:
     Read your full instructions at:
       [project-path]/teammate-prompts/[team-name]/[stream-name].md
 
+    You are not alone in the codebase. Do not revert edits made by others.
+    Own only the files/modules assigned in that prompt. List every file path you changed in your final response.
+
     Follow ALL steps in order. DO NOT skip Step 1 (Load Required Skills).
     After loading skills, confirm to team-lead via SendMessage.
 ```
@@ -150,6 +153,12 @@ assume it's wrong and request skill-guided review before accepting the work.
 
 ---
 
+### Worker Resumption (context exhaustion)
+
+If a teammate exits before completing a chunk, or a continuation is needed, re-spawn it with the same prompt file **plus current state** — `progress.md` (phase/chunk status + handoffs), Git history (committed checkpoints), Linear issue state when available, and the code on disk. The new teammate resumes from the first incomplete task, not from conversation memory.
+
+---
+
 ### Step 7: Handle Inter-Agent Communication
 
 The `communication` section of the execution plan defines what needs to be shared:
@@ -163,7 +172,7 @@ The `communication` section of the execution plan defines what needs to be share
 ### Step 8: Finalization
 
 After all phases complete:
-1. Lead validates all files exist and are internally consistent
+1. Lead validates all files exist and are internally consistent; verify changed files stayed within each stream's ownership boundary (no cross-stream clobbering) and review integration seams
 2. Run tests if defined in acceptance criteria
 3. Shutdown teammates via `SendMessage(shutdown_request)`
 4. Clean up team via `TeamDelete`
@@ -238,7 +247,7 @@ TaskList → check for newly unblocked tasks → assign to idle teammates
 **5. Validate before proceeding to next phase**
 - All Phase N tasks must be "completed" before Phase N+1 starts
 - Check that all communication happened
-- Spot-check 1-2 files for import validity
+- Run the **per-phase review** (`references/common/per-phase-review.md`) scoped to the phase's files + spec section: review changed files for ownership violations + framework anti-patterns + spec I/O conformance; resolve findings via the autonomy rule (`references/common/autonomy-and-escalation.md`) before unblocking the next phase
 
 ---
 
