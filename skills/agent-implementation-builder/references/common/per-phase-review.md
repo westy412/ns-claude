@@ -41,6 +41,11 @@ criteria — the cross-phase issues a per-phase review can't see (integration se
 inconsistency, end-to-end contract). Findings run the same autonomy rule. The terminal verifier is
 the static half of this; here it's the build-side gate before you emit the completion promise.
 
+On a clean big review, hand off to live validation — see `testing-handoff.md`: surface the spec's
+test seed (worked examples, edge cases, tool example-I/O, acceptance criteria) and route to the
+typed-testing skill. Named seam, not yet wired — record that live testing is owed; do not block
+completion.
+
 ---
 
 ## Who runs it

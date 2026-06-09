@@ -130,6 +130,10 @@ After all phases complete:
 
 Before verifying acceptance criteria, run the final aggregate review across the whole change (`references/per-phase-review.md` → The big review) — it catches the cross-phase / integration issues a per-phase review can't see. Resolve findings via the autonomy rule.
 
+On a clean big review, hand off to live validation: surface the spec's test seed and route to the
+typed-testing skill — see `references/testing-handoff.md` (named seam, not yet wired; records
+live-testing-owed, does not block).
+
 ### Step 1: Verify Acceptance Criteria
 
 Read the spec's Acceptance Criteria section. For each criterion:

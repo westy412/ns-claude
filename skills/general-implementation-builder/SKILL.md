@@ -199,3 +199,4 @@ Full process: `references/feedback-loop.md` (cites `references/autonomy-and-esca
 - `references/feedback-loop.md` — Learning from mistakes and recording patterns
 - `references/autonomy-and-escalation.md` — Fix-or-ask contract: when to auto-fix a finding vs escalate to the user, plus the escalation comms standard. Load when handling a review/feedback finding or before escalating to the user.
 - `references/per-phase-review.md` — Per-phase review loop: a scoped code review at each phase boundary + the big review before completion. Run at each phase boundary.
+- `references/testing-handoff.md` — Layer-3 handoff: on a clean big review, surface the spec's test seed and route to the typed-testing skill. Named seam (not yet wired). Read at the big review, before completion.
