@@ -1,159 +1,67 @@
 ---
 name: teammate-spawn
-description: Generates structured teammate prompt files for any agent team workflow. Use when spawning teammates via TeamCreate to provide reviewable, file-based prompts with optional skill loading enforcement.
+description: Generates structured teammate prompt files for any agent team workflow. Routes by profile (implementation / review / research / general) to the matching reference + template. Use when spawning sub-agents that need reviewable, file-based briefs.
 allowed-tools: Read, Glob, Grep, Write, Bash
 ---
 
 # Teammate Spawn
 
-Generates file-based teammate prompts for any agent team workflow. Each teammate gets a structured prompt file they read before starting work. Prompts are reviewable, consistent, and optionally enforce skill loading.
+Generates file-based prompts for the sub-agents you spawn. Each spawned agent reads its prompt file before starting work — reviewable, consistent, and explicit about ownership and reporting.
 
-**If you are using the agent-implementation-builder skill**, you MUST use `agent-impl-teammate-spawn` instead of this skill. It reads manifest.yaml and generates framework-specific prompts with mandatory skill loading enforcement.
+**If you are using the `agent-implementation-builder` skill**, use `agent-impl-teammate-spawn` instead — it reads `manifest.yaml` and generates framework-specific prompts with mandatory skill-context confirmation.
 
 ## Why file-based prompts
 
-Teammates do NOT inherit the team lead's context. When spawned, the prompt IS their entire world. Long inline prompts embedded in Task tool calls are:
-- Easy for teammates to skim over or ignore sections
-- Hard for team leads to review before spawning
-- Not visible to users or other agents
-- Inconsistent across teammates
+Sub-agents do not inherit the parent's working context. The prompt file IS their brief. Long inline prompts get skimmed, are hard to review before spawning, and dilute the instructions. A file is reviewable up front and read by the agent as its first action.
 
-File-based prompts solve all of these. The team lead generates a file, can review it, and the teammate reads it as their first action.
+## Pick a profile (router)
 
-## When to use
+Different sub-agents need different briefs — a read-only reviewer should not carry file-ownership or Git/Linear resumption machinery, and an implementation worker must. Choose the profile that matches the work, read its reference, then fill its template:
 
-Use this skill when you are:
-- Creating a team with `TeamCreate` and spawning teammates
-- Running any multi-agent workflow that isn't agent-implementation-builder
-- Coordinating parallel work across multiple sub-agents that need structured instructions
+| Profile | Use when | Reference | Template |
+|---------|----------|-----------|----------|
+| `implementation` | the agent edits files, owns a stream, and may need to resume mid-build | `references/implementation.md` | `templates/teammate-prompt-implementation.md` |
+| `review` | the agent reviews code or a spec against criteria (read-mostly, may write a findings file) | `references/review.md` | `templates/teammate-prompt-review.md` |
+| `research` | the agent explores read-only and returns findings | `references/research.md` | `templates/teammate-prompt-research.md` |
+| `general` | structured multi-agent work that fits none of the above | `references/general.md` | `templates/teammate-prompt-general.md` |
 
-Common workflows this supports:
-- **Spec-builder teams** — advisor and writer sub-agents
-- **Research orchestration** — parallel research sub-agents
-- **Improvement workflows** — analysis and implementation sub-agents
-- **Any custom team** — wherever you spawn teammates with the Task tool
+**When unsure between `implementation` and `general`:** if the agent owns files and edits them, it's `implementation`.
+
+## Process
+
+1. Pick the profile (table above) and read its reference.
+2. Fill its template — skip optional sections that don't apply; a short focused brief beats a long one with empty sections.
+3. Write to `{project}/teammate-prompts/{workflow-name}/{agent-name}.md` (create the directory if needed).
+4. Spawn the agent with a minimal prompt pointing to the file (see Execution).
+5. Collect results when you need them for the next phase; **review the agent's reported output before accepting it.**
 
 ## Model policy
 
-**Use the default model.** Do NOT specify a `model` parameter when spawning teammates — let them inherit the default model. Only override the model if the user explicitly requests a specific model for a teammate.
+Use the default model. Do NOT set a `model` parameter when spawning unless the user explicitly requests one or the task has a clear, justified need.
 
-## Quick start
+## Execution
 
-For each teammate you need to spawn:
-
-1. Decide what the teammate needs to know (role, tasks, skills, files)
-2. Read the template at [templates/teammate-prompt.md](templates/teammate-prompt.md)
-3. Fill in the template — skip optional sections that don't apply
-4. Write to `{project}/teammate-prompts/{team-name}/{teammate-name}.md`
-5. Spawn with a minimal prompt pointing to the file
-
-## Generating a teammate prompt
-
-### Step 1: Define the teammate's context
-
-Gather what this teammate needs. Not all fields apply to every workflow — use what's relevant:
-
-| Field | Required? | Description |
-|-------|-----------|-------------|
-| Teammate name | Yes | Identifier for this teammate (used in file name, SendMessage) |
-| Team name | Yes | From your TeamCreate call |
-| Role/responsibility | Yes | What this teammate does |
-| Skills to load | Optional | List of skills with exact Skill tool syntax |
-| Files they own | Optional | Files they may edit (enforces ownership boundaries) |
-| Tasks | Yes | What work they should do, with enough detail to act on |
-| Communication | Optional | Who to message, when, with what |
-| Validation | Optional | Checklist before marking work complete |
-| Reference files | Optional | Files to read for context |
-
-### Step 2: Read and fill the template
-
-Read [templates/teammate-prompt.md](templates/teammate-prompt.md). Fill in the `{{variable}}` placeholders. Delete any optional sections that don't apply — a shorter, focused prompt is better than a long one with empty sections.
-
-### Step 3: Write the prompt file
-
-```
-{project-path}/teammate-prompts/{team-name}/{teammate-name}.md
-```
-
-Create the directory if it doesn't exist.
-
-### Step 4: Spawn the teammate
+Spawn with the `Task` tool (`team_name`, `name`, `subagent_type`), with a minimal prompt telling the agent to read its prompt file first:
 
 ```
 Task tool:
   team_name: {team-name}
-  name: {teammate-name}
+  name: {agent-name}
   subagent_type: {appropriate type}
   prompt: |
-    You are teammate {teammate-name} on team {team-name}.
-
+    You are {agent-name} on team {team-name}.
     Read your full instructions at:
-      {project-path}/teammate-prompts/{team-name}/{teammate-name}.md
-
-    Follow all steps in order.{if skills: " DO NOT skip Step 1 (Load Required Skills). After loading skills, confirm to team-lead via SendMessage."}
+      {project-path}/teammate-prompts/{workflow-name}/{agent-name}.md
+    Follow all steps in order.
 ```
 
-### Step 5: Verify skill loading (if skills were specified)
-
-If the teammate's prompt includes skills to load:
-
-1. Wait for their first message — it should confirm skill loading
-2. If they skip it, send them back: "Load your required skills first. See Step 1 in your prompt file."
-3. Do not let them work until confirmed
-
-If the teammate has no skills to load, they can proceed directly to their tasks.
+If the profile's template includes a skill-loading step, wait for the teammate's `SendMessage` confirmation before letting it work. Collect results via teammate messages / the task list.
 
 ## Cleanup
 
-After team completion:
+After the team completes:
 
 ```bash
-rm -rf {project-path}/teammate-prompts/{team-name}/
+rm -rf {project-path}/teammate-prompts/{workflow-name}/
 rmdir {project-path}/teammate-prompts/ 2>/dev/null
 ```
-
-## Skill loading: when and how
-
-Skill loading is **optional per teammate**. Include it when:
-- The teammate needs domain-specific patterns (agent-teams, individual-agents, prompt-engineering, etc.)
-- The teammate will write code that must follow specific conventions
-- You've seen teammates produce incorrect output without skills in the past
-
-Skip it when:
-- The teammate is doing research or analysis (no skill-specific patterns needed)
-- The task is simple enough that general knowledge suffices
-- The teammate is a specialized sub-agent type that already has its own context (e.g., prompt-creator)
-
-When you DO include skills, the generated prompt must contain:
-1. The exact skill names
-2. The exact invocation syntax (`Skill tool -> skill: "name"`)
-3. A clear statement that skills must be loaded BEFORE any other work
-4. A confirmation message to send to team-lead
-
-This is critical — listing skill names without the invocation syntax means teammates won't know HOW to load them and will skip the step.
-
-## Examples
-
-### Research team (no skills needed)
-
-```
-teammate-prompts/content-research/web-researcher.md
-```
-
-Prompt includes: role, research questions, output format, where to send results. No skills section.
-
-### Spec-writing team (skills needed)
-
-```
-teammate-prompts/agent-spec/team-spec-writer.md
-```
-
-Prompt includes: role, skills to load (agent-teams), progress file path, validated decisions, output files. Skills section with exact invocation syntax.
-
-### Parallel batch workers (minimal)
-
-```
-teammate-prompts/prompt-batch/agent-creator-1.md
-```
-
-Prompt includes: role, agent spec to read, output file to write, skills to load (prompt-engineering). Minimal sections — just what they need.
