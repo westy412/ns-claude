@@ -24,17 +24,19 @@ From the progress file, extract:
 - **Completed files list** -- these are the files the code quality agent will review
 - **Execution plan snapshot** -- this is what the completeness agent will verify against
 - **Stream status** -- current state of all streams and chunks
+- **Deviations, blockers, and implementation notes** -- context for interpreting gaps
 
 From the spec, extract:
 - **Requirements** -- what the spec compliance agent will verify
 - **Acceptance criteria** -- what must be true
 - **Architecture section** -- patterns and constraints to verify
+- **Execution plan** -- the planned phases/chunks the completeness agent verifies against
 
 ### Step 2: Generate Teammate Prompts
 
 Use the [verifier-teammate.md](../templates/verifier-teammate.md) template to generate 3 prompt files.
 
-**Save location:** `{spec-folder}/teammate-prompts/`
+**Save location:** `{spec-folder}/teammate-prompts/verification/`
 
 Each prompt must include:
 - The specific dimension and its checks (from [verification-dimensions.md](verification-dimensions.md))
@@ -77,7 +79,7 @@ Each prompt must include:
 
 After collecting all results:
 1. Delete the team: `TeamDelete`
-2. Remove teammate prompt files: `rm -rf {spec-folder}/teammate-prompts/`
+2. Remove teammate prompt files: `rm -rf {spec-folder}/teammate-prompts/verification/`
 
 ---
 
