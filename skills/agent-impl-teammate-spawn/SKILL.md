@@ -24,6 +24,18 @@ Teammates DO NOT inherit the team lead's context. When spawned, the prompt IS th
 
 If the generated prompt does not explicitly tell the teammate what skills to load and how to load them, the implementation WILL fail. This is not a suggestion — it is the entire reason this skill exists.
 
+## Required context the prompt file must give
+
+Beyond skills, the generated prompt must give the worker everything it needs to act without guessing:
+
+1. Exact skill or reference file paths to read first
+2. Exact files/modules they own
+3. Phase chunks assigned to their stream
+4. Framework-specific validation checklist **+ the spec I/O to validate against (the spec anchor)**
+5. Required handoffs for downstream streams
+6. State sources for resumption: `progress.md`, Git, and Linear when available
+7. Final-response format listing context read, changed files, validation, checkpoints, and handoffs — **this is the per-phase review evidence**
+
 ## Model policy
 
 **Always use Opus.** Every teammate MUST be spawned with `model: "opus"` unless the user has explicitly requested a different model for that specific teammate.
@@ -56,6 +68,7 @@ For each stream that needs a teammate:
 | Project path | Absolute path to the project |
 | Spec path | Relative path to spec directory (usually `spec/`) |
 | Task IDs | Your `TaskCreate` results (map chunks to task IDs) |
+| State sources (resumption) | `progress.md`, Git, Linear when available |
 
 ## Step-by-step generation
 
@@ -187,6 +200,17 @@ After spawning all teammates:
 4. Do NOT assign tasks, do NOT allow work to begin, do NOT respond to implementation questions until skills are confirmed
 5. If a teammate claims a task without confirming skills — revoke it immediately and enforce loading
 
+### Step 8: Parent review after completion
+
+After a teammate completes a phase chunk:
+
+1. Confirm the final response lists the skills / context files read.
+2. Confirm changed files stayed inside the stream's ownership boundary.
+3. Run the **per-phase review** (the builder's `references/common/per-phase-review.md`) scoped to the phase's files + spec section: review the diff for framework anti-patterns + spec I/O conformance against the spec anchor.
+4. Resolve findings via the builder's **autonomy rule** (`references/common/autonomy-and-escalation.md`): fix what the spec resolves; escalate genuine uncertainty.
+5. Confirm progress / Git / Linear checkpoints were updated; update them if the teammate did not own that.
+6. Relay handoff details to downstream teammates.
+
 ## Cleanup
 
 After team completion (after `TeamDelete`):
@@ -218,3 +242,4 @@ Variables in [templates/teammate-prompt.md](templates/teammate-prompt.md):
 | `{{communication-inbound}}` | communication where `to == stream` | What to expect from others |
 | `{{validation-checklist}}` | Framework checklist from Step 4 above | Framework-specific items |
 | `{{first-chunk-spec-files}}` | First chunk's `spec-files` | Bulleted list of spec paths |
+| `{{state-sources}}` | progress.md / Git / Linear resumption pointers | `spec/progress.md`, Linear NS-123 |
