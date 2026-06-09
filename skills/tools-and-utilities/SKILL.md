@@ -1,6 +1,6 @@
 ---
 name: tools-and-utilities
-description: Design tools (agent-callable functions) and utility functions (helpers, wrappers). Use when adding functionality that agents will use or shared helper code. Covers input/output design, error handling, and implementation approach.
+description: Design agent-callable tools and their utility helpers during agent-system implementation (the agent-spec-builder / agent-implementation-builder workflow). Use when defining a tool's input/output contract, error handling, and implementation approach for an agent to call. NOT for general application code, helper refactors, or non-agent functions.
 allowed-tools: Read, Glob, Grep, Task, WebFetch
 ---
 
