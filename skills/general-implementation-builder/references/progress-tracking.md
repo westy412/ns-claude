@@ -81,7 +81,7 @@ Update the feature folder's `progress.md` at these moments:
 | Phase boundary | Current Phase, Next Chunk |
 | Encountering a blocker | Add to Open Questions / Blockers |
 | Making a design decision | Add to Implementation Notes → Decisions Made |
-| Deviating from spec | Add to Implementation Notes → Deviations from Spec |
+| Drift finding (code-bug / spec-bug) | Add a row to Implementation Notes → Drift Log / Spec-Feedback Ledger |
 | Completing a file | Add to Completed Files with commit hash |
 | Starting a session | Add Session Log entry |
 | Ending a session | Update Session Log with summary |

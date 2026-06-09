@@ -51,19 +51,22 @@ This stops the same mistake reappearing in later chunks or phases.
 
 ## Record in the progress document
 
-Add to the feature folder's `progress.md` → Implementation Notes → Decisions Made:
+Every finding that ran the decision gets a row in the feature folder's `progress.md` →
+Implementation Notes → **Drift Log / Spec-Feedback Ledger**:
 
 ```markdown
-### Decisions Made
-
-- **[date]:** Finding: [what was wrong]. Branch: A (autonomous) / B (escalated).
-  Fix: [what changed]. Spec amended? [yes/no — where]. Applied to: [files].
-  Rule: [pattern to follow going forward].
+| Phase | Finding | Class | Resolution | Spec amended? | Escalated? | Front-load failure? |
+|-------|---------|-------|------------|---------------|------------|---------------------|
+| [N] | [what was wrong] | code-bug / spec-bug | [what changed + files] | yes (where) / no | no (Branch A) / yes (Branch B) | yes / no |
 ```
+
+If the fix also sets a *rule* to follow going forward (a pattern, not a one-off), add it to
+Decisions Made — the ledger tracks drift; Decisions Made tracks choices.
 
 **Why the progress file:** this skill is technology-agnostic — no framework cheat sheets to update.
 Lessons live in the spec-specific progress document so they persist across sessions and are visible to
-every stream. This split (autonomous fixes vs escalations) is also the Layer-4 telemetry source.
+every stream. The ledger (drift + autonomous-vs-escalated split) is the Layer-4 telemetry source the
+run retro consolidates.
 
 ---
 

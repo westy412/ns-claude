@@ -113,8 +113,19 @@
 ### Issues Encountered
 -
 
-### Deviations from Spec
--
+### Drift Log / Spec-Feedback Ledger
+
+> One row per drift finding — anywhere built reality and the spec disagreed (per-phase review
+> finding, I/O mismatch, verifier flag, user correction). Layer-4 telemetry: the run retro reads
+> this table to root-cause process failures.
+
+| Phase | Finding | Class | Resolution | Spec amended? | Escalated? | Front-load failure? |
+|-------|---------|-------|------------|---------------|------------|---------------------|
+| | | code-bug / spec-bug | | yes (where) / no | no (Branch A) / yes (Branch B) | yes / no |
+
+**Class:** `code-bug` = code diverged from a correct spec. `spec-bug` = the spec was wrong
+(spec-defect loopback — amend the spec, never code-only). **Front-load failure?** = yes when
+discovery/spec should have caught it — every mid-build spec amendment is one.
 
 ---
 

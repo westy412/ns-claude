@@ -18,8 +18,9 @@ For each phase, after its chunks complete and before the next phase starts:
 3. **Fix** — each finding runs the autonomy rule (`autonomy-and-escalation.md`): Branch A autonomous
    fix incl. spec-write-back; Branch B escalate, fire-once → Known-Risk. Re-review if the fixes were
    substantial. Loop until the phase is clean or open items are logged Known-Risks.
-4. **Record** the outcome in `progress.md` (findings + resolutions) — the Layer-4 telemetry the
-   retro reads.
+4. **Record** each finding as a row in `progress.md` → **Drift Log / Spec-Feedback Ledger**
+   (phase · finding · code-bug vs spec-bug · resolution · spec-amended? · escalated? ·
+   front-load-failure?) — the Layer-4 telemetry the retro reads.
 
 Only then move to the next phase.
 
