@@ -90,12 +90,14 @@ Maps every agent spec requirement to an implementation outcome.
 
 **Outcome classifications:**
 
-| Outcome | Meaning | Blame |
-|---------|---------|-------|
-| **CORRECT** | Spec was clear, implementation matches | Neither |
-| **INCORRECT** | Spec was clear, implementation doesn't match | Implementation bug |
-| **AMBIGUOUS** | Spec was unclear, caused wrong implementation | Spec quality issue |
-| **MISSING** | Requirement not implemented at all | Implementation gap |
+| Outcome | Meaning | Blame | Routing |
+|---------|---------|-------|---------|
+| **CORRECT** | Spec was clear, implementation matches | Neither | None |
+| **INCORRECT** | Spec was clear, implementation doesn't match | Implementation bug | **Autonomous code fix** -- resolvable from the spec (autonomy rule Branch A) |
+| **AMBIGUOUS** | Spec was unclear, caused wrong implementation | Spec quality issue | **Escalate + loop into the spec** -- never code-only (Branch B / spec-defect loopback) |
+| **MISSING** | Requirement not implemented at all | Implementation gap | **Autonomous code fix** -- build the missing piece (Branch A) |
+
+**Testability precondition (WARN).** A requirement is only verifiable downstream if the spec carries a **forced example** for it -- a worked input->output example plus edge cases, the test seed the Phase-4 typed-testing handoff consumes. For any requirement with none, emit a **WARN** ("requirement has no forced example -- not testable downstream") and route it into the spec as a spec-quality gap (loops back to the spec-builder), not into the code. This is the verify-time echo of the spec review's test-derivability check: caught at review it blocks; caught here it warns, because the build already happened.
 
 **Agent-specific ambiguity sub-categories:**
 

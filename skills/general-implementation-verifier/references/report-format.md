@@ -104,12 +104,14 @@ Maps every requirement and acceptance criterion from the spec to an implementati
 
 **Outcome classifications:**
 
-| Outcome | Meaning | Blame |
-|---------|---------|-------|
-| **CORRECT** | Spec was clear, implementation matches | Neither -- working as intended |
-| **INCORRECT** | Spec was clear, implementation doesn't match | Implementation bug -- the agent built it wrong |
-| **AMBIGUOUS** | Spec was unclear or ambiguous, causing wrong implementation | Spec quality issue -- the spec builder needs to improve |
-| **MISSING** | Requirement not implemented at all | Implementation gap -- the agent skipped it |
+| Outcome | Meaning | Blame | Routing |
+|---------|---------|-------|---------|
+| **CORRECT** | Spec was clear, implementation matches | Neither -- working as intended | None |
+| **INCORRECT** | Spec was clear, implementation doesn't match | Implementation bug -- the agent built it wrong | **Autonomous code fix** -- resolvable from the spec; the builder fixes it (autonomy rule Branch A) |
+| **AMBIGUOUS** | Spec was unclear or ambiguous, causing wrong implementation | Spec quality issue -- the spec builder needs to improve | **Escalate + loop into the spec** -- correct via the spec-builder, never code-only (Branch B / spec-defect loopback) |
+| **MISSING** | Requirement not implemented at all | Implementation gap -- the agent skipped it | **Autonomous code fix** -- build the missing piece per the spec (Branch A) |
+
+**Testability precondition (WARN).** A requirement is only verifiable downstream if the spec carries a **forced example** for it -- a worked input->output example plus edge cases, the test seed the Phase-4 typed-testing handoff consumes. For any requirement with none, emit a **WARN** ("requirement has no forced example -- not testable downstream") and route it into the spec as a spec-quality gap (loops back to the spec-builder), not into the code. This is the verify-time echo of the spec review's test-derivability check: caught at review it blocks; caught here it warns, because the build already happened.
 
 **Why this matters:** Over time, review skills can read past `feedback/verification-*.md` files and detect recurring AMBIGUOUS patterns. If the same ambiguity type keeps causing failures (e.g., "spec says 'handle errors appropriately' without specifying error types"), the review skill can flag it pre-implementation in future specs.
 
