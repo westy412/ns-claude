@@ -21,6 +21,10 @@ A spec reaches you only after `review-agent-spec` has reviewed it. Honor its ver
 
 **Override:** only if the user explicitly instructs you to build over a FAIL or unreviewed spec. Record it as a Known-Risk override in `progress.md` (which review, which blocking issues, that the user accepted them), then proceed. Never override silently or on your own judgment — escalate per `references/common/autonomy-and-escalation.md`.
 
+**Telemetry (Layer 4):** every Phase-0 escalation point gets a Drift Log / Spec-Feedback Ledger row in `progress.md` — a WARN's Known-Risks, a FAIL routed back to the spec-builder, an unreviewed-spec stop, an explicit override (Phase 0 · spec-bug · resolution · escalated? yes · front-load-failure? yes). The run retro reads these to measure how often builds start on specs that weren't ready.
+
+**Test-seed confirm (after the gate, before parsing):** confirm the spec carries its test seed — the required Examples + Edge Cases per agent (+ tool Example-I/O tables if tools are specced). A PASS review implies it exists (test-derivability is a review dimension) — missing means a review gap. If missing: surface it as a spec-quality gap and route back to the spec-builder (typed-testing will have nothing to lift); on explicit user instruction to proceed anyway, record a Drift Log row (spec-bug · escalated? yes · front-load-failure? yes).
+
 ---
 
 ### ⛔ Step 1: EXECUTION MODE CHECK (DO THIS RIGHT AFTER THE REVIEW GATE)

@@ -248,7 +248,7 @@ What framework are you using?
 
 ## Workflow
 
-> **⛔ Review gate (BLOCKING, before Phase 0):** read the latest `review-NNN.md` `review_verdict` header from the `reviews/` folder in the parent spec dir. Refuse to start on `overall: FAIL` or an unreviewed spec unless the user explicitly overrides (recorded as a Known-Risk). See `references/common/workflow-phases.md` → Step 0.
+> **⛔ Review gate (BLOCKING, before Phase 0):** read the latest `review-NNN.md` `review_verdict` header from the `reviews/` folder in the parent spec dir. Refuse to start on `overall: FAIL` or an unreviewed spec unless the user explicitly overrides (recorded as a Known-Risk + Drift Log row). See `references/common/workflow-phases.md` → Step 0.
 
 ### Phase Routing Table
 

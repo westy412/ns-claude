@@ -92,7 +92,7 @@ Whatever the spec defines — this skill is technology-agnostic. The spec's type
 
 > **Review gate (BLOCKING, first):** before parsing, read the latest `reviews/review-NNN.md`
 > `review_verdict` header. Refuse to start on `overall: FAIL` or an unreviewed spec unless the user
-> explicitly overrides (recorded as a Known-Risk). See `references/spec-parsing.md` → Review Gate.
+> explicitly overrides (recorded as a Known-Risk + Drift Log row). See `references/spec-parsing.md` → Review Gate.
 
 1. Receive the spec folder path (e.g., `[workforce-root]/specs/YYYY-MM-DD-feature-name/`)
 2. Read the spec file (`spec.md` in the feature folder)
