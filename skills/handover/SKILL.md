@@ -81,7 +81,8 @@ Reference the Linear issue ID if one exists.
 Only do this if a `progress.md` file exists for an in-flight skill workflow, such as `general-spec-builder` or `general-implementation-builder`.
 
 1. Update it with current state, decisions made, and the exact resumption point.
-2. Commit it with the other changes.
+2. Confirm the Drift Log / Spec-Feedback Ledger and escalation records are current — the handover's Pipeline State section reads from them.
+3. Commit it with the other changes.
 
 ### Update Spec
 
@@ -104,6 +105,15 @@ Output the following in chat. Do not save it to a file.
 - **Linear**: [NS-XXX: Title] (omit if none used)
 - **Progress file**: [path] (omit if none exists)
 
+### Pipeline State (v4)
+[Only include when a spec-folder workflow is in flight. Snapshot the three feedback layers:]
+- **Layer 2 — review loop**: [latest reviews/review-NNN.md verdict (PASS/WARN/FAIL) +
+  per-phase review position — which phase, clean or open findings]
+- **Layer 3 — test/verification**: [latest feedback/verification-NNN.md result; latest
+  feedback/testing-NNN.md testing_verdict; note "live testing owed" if typed-testing deferred]
+- **Layer 4 — retro**: [retro owed? yes/no — yes when the run is ending without a process
+  retro; point at the accumulated telemetry: progress.md Drift Log, escalation records]
+
 ### What Was Done
 [Comprehensive account of every meaningful task completed this session.
 Each bullet: action taken, file/location affected, outcome.
@@ -120,9 +130,14 @@ Do not compress. If 8 things were done, list 8 things.]
 - **Linear issues touched**: NS-XXX, NS-YYY
 
 ### Decisions Made
-[Every non-obvious decision made this session. Each entry needs full rationale:]
-- **[Decision]**: [What options existed, what was chosen, what was rejected and why, any user preferences that drove it]
-- **[Decision]**: [Same depth. Do not summarize away the reasoning.]
+[Every non-obvious decision made this session, full rationale each. Split by how it was
+resolved — this split is Layer-4 telemetry:]
+
+**Autonomous fixes (Branch A — resolved from stated intent):**
+- **[Decision]**: [Options, chosen, rejected and why; spec amended? where]
+
+**Escalations (Branch B — the user was brought in):**
+- **[Decision]**: [What was asked, what the user chose, what that settles going forward]
 
 ### Next Task
 [The most important section. Be comprehensive.
@@ -159,5 +174,6 @@ Example: `general-implementation-builder - Phase 2 of 4 complete. Resume from Ph
 5. Decisions are the hardest thing to reconstruct. Git shows what changed, not why or what was rejected.
 6. The `Next Task` section carries forward context. Include decisions, preferences, and gotchas that affect it.
 7. List skills only if they are needed next. Do not list skills merely because they were used.
+8. Carry the v4 pipeline state. Review/test/verification position and retro-owed must survive the session boundary — the loop's unit is the run, not the session.
 
 **Execution (Claude Code):** the invocation detail arrives as the skill argument (`$ARGUMENTS`); Linear via the Linear MCP tools; the model may auto-invoke this skill when a session is wrapping up.
