@@ -86,16 +86,17 @@ Be specific. One tool = one capability.
 | **SDK/Library** | Python package available | Need package name, docs |
 | **Custom** | No existing solution | Will need to build logic |
 
-**Research if unsure:**
-
-Use web-researcher sub-agent:
-```
-"Research options for [capability]:
+**Research if unsure.** Research current options and cite sources:
 1. Are there MCP servers for this?
 2. What APIs are available?
 3. What Python libraries exist?
-Include: docs URL, auth method, rate limits"
-```
+
+Capture for each candidate: docs URL, auth method, pricing/rate limits, package health, and
+implementation constraints.
+
+**Reality-grounding:** ground the choice in a real, currently-available option, and design the tool's
+I/O and error shapes from that source's *actual* probed response — never an imagined or possibly-stale
+shape. A tool spec built on a guessed response shape yields tests that pass against fiction.
 
 ### Step 3: Design Input Schema
 
@@ -445,11 +446,21 @@ When using this skill, capture in the spec:
 
 **Output:** JSON with [fields]
 
-**Errors:**
-| Error | Handling |
-|-------|----------|
-| [type] | [how to handle] |
+**Example I/O (becomes the tool test suite):**
+| # | Input | Expected Output | Notes |
+|---|-------|-----------------|-------|
+| T1 | `{param1: "real value"}` | `{...exact JSON...}` | happy path |
+| T2 | `{param1: "edge/empty value"}` | `{...}` | edge case |
+
+**Errors (the tool's error test cases):**
+| Error | Trigger | Expected Return |
+|-------|---------|-----------------|
+| [type] | [failing condition] | [error JSON the tool returns — never a crash] |
 ```
+
+The **Example I/O** rows and the **Errors** table are the tool's test seed — the downstream
+typed-testing skill lifts them as live tests (call the tool with each input, assert the returned
+output / error). Use real, runnable values from the probed API or library, not invented ones.
 
 ### For Utilities
 
