@@ -59,8 +59,7 @@ Flag type mismatches as FAIL.
 
 | Check | Status if violated |
 |-------|--------------------|
-| Model tier matches spec (Opus preferred, Sonnet only if explicitly specified) | WARN |
-| Haiku is NOT used (unless explicitly specified in spec) | FAIL |
+| Each agent's model matches the tier the spec assigned it; no silent downgrade to a weaker/cheaper tier than the spec specifies | FAIL |
 | Model is initialized with correct provider | FAIL |
 | Temperature setting matches spec | WARN |
 
@@ -130,6 +129,6 @@ Flag type mismatches as FAIL.
 | `ToolNode` created inside agent function | Grep for `ToolNode(` inside node functions | FAIL |
 | Node function doesn't return State dict | Check return type of each node function | FAIL |
 | Graph not compiled | Grep for `.compile()` | FAIL |
-| Haiku model used without explicit spec approval | Grep for haiku model references | FAIL |
+| Agent uses a weaker model tier than the spec assigned (silent downgrade) | Compare each agent's model to the spec's per-agent assignment | FAIL |
 | State fields not matching spec I/O | Compare TypedDict fields to spec | FAIL |
 | Missing conditional edge handling for tools | Check graph edges after tool-using agents | FAIL |
