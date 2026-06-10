@@ -12,23 +12,23 @@ Guide for working with DSPy using Novosapien conventions and production-tested p
 
 ## Quick Start
 
-1. **File organization**: See [file-organization.md](file-organization.md)
-2. **Pydantic usage**: See [pydantic-patterns.md](pydantic-patterns.md)
-3. **Critical patterns**: [singleton-lm.md](singleton-lm.md), [signatures.md](signatures.md), [predictor-selection.md](predictor-selection.md)
+1. **File organization**: See [file-organization.md](references/file-organization.md)
+2. **Pydantic usage**: See [pydantic-patterns.md](references/pydantic-patterns.md)
+3. **Critical patterns**: [singleton-lm.md](references/singleton-lm.md), [signatures.md](references/signatures.md), [predictor-selection.md](references/predictor-selection.md)
 
 ## Core Patterns
 
 | Pattern | File | One-Line Summary |
 |---------|------|------------------|
-| File Organization | [file-organization.md](file-organization.md) | Signatures in signatures.py, NOT models.py |
-| Pydantic Models | [pydantic-patterns.md](pydantic-patterns.md) | BaseModel for single objects, RootModel for lists |
-| Singleton LM | [singleton-lm.md](singleton-lm.md) | One shared LM prevents 20x slowdown at scale |
-| Signatures | [signatures.md](signatures.md) | Docstrings ARE prompts - make them comprehensive |
-| Predictor Selection | [predictor-selection.md](predictor-selection.md) | Predict for extraction, ChainOfThought for synthesis |
-| Enum Handling | [enum-handling.md](enum-handling.md) | Small enums: prompting. Large enums: Union + fuzzy |
-| Formatters | [formatters.md](formatters.md) | Convert Predictions to markdown between stages |
-| Retry Patterns | [retry-patterns.md](retry-patterns.md) | Exponential backoff + rate limit handling |
-| History Patterns | [history-patterns.md](history-patterns.md) | dspy.History for multi-turn conversations |
+| File Organization | [file-organization.md](references/file-organization.md) | Signatures in signatures.py, NOT models.py |
+| Pydantic Models | [pydantic-patterns.md](references/pydantic-patterns.md) | BaseModel for single objects, RootModel for lists |
+| Singleton LM | [singleton-lm.md](references/singleton-lm.md) | One shared LM prevents 20x slowdown at scale |
+| Signatures | [signatures.md](references/signatures.md) | Docstrings ARE prompts - make them comprehensive |
+| Predictor Selection | [predictor-selection.md](references/predictor-selection.md) | Predict for extraction, ChainOfThought for synthesis |
+| Enum Handling | [enum-handling.md](references/enum-handling.md) | Small enums: prompting. Large enums: Union + fuzzy |
+| Formatters | [formatters.md](references/formatters.md) | Convert Predictions to markdown between stages |
+| Retry Patterns | [retry-patterns.md](references/retry-patterns.md) | Exponential backoff + rate limit handling |
+| History Patterns | [history-patterns.md](references/history-patterns.md) | dspy.History for multi-turn conversations |
 
 ## Anti-Patterns (Quick Reference)
 

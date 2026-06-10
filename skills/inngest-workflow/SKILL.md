@@ -21,9 +21,9 @@ Choose the appropriate reference based on your task:
 
 | Task | Reference File | Description |
 |------|----------------|-------------|
-| **Create** | [inngest-create.md](./inngest-create.md) | Building workflows from scratch - project setup, function creation, step chaining, event design |
-| **Improve** | [inngest-improve.md](./inngest-improve.md) | Enhancing existing workflows - wait_for_event, cancellation, concurrency, fan-out, human-in-the-loop |
-| **Debug** | [inngest-debug.md](./inngest-debug.md) | Troubleshooting - dev server, common errors, logging, testing strategies |
+| **Create** | [inngest-create.md](references/inngest-create.md) | Building workflows from scratch - project setup, function creation, step chaining, event design |
+| **Improve** | [inngest-improve.md](references/inngest-improve.md) | Enhancing existing workflows - wait_for_event, cancellation, concurrency, fan-out, human-in-the-loop |
+| **Debug** | [inngest-debug.md](references/inngest-debug.md) | Troubleshooting - dev server, common errors, logging, testing strategies |
 
 > **Maintenance Note**: If any patterns in the reference files are found to be incorrect during implementation, update the corresponding reference file with the correct pattern. This keeps the documentation accurate and prevents future issues.
 
