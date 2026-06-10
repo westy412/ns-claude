@@ -1,6 +1,6 @@
 ---
 name: individual-agents
-description: Select implementation types for agents in a team. Given a team pattern with defined slots, determines which of the 6 agent types (LLM, Tool, Human-in-Loop, Subgraph, Router, Retriever) to use for each slot. Use after agent-teams skill to implement individual agents.
+description: Select implementation types for agents in a team. Given a team pattern with defined slots, routes each slot through the 6-type conceptual taxonomy (LLM, Tool, Router, Retriever, Subgraph, Human-in-Loop) to a concrete framework implementation -- LangGraph's 2x3 matrix (text/message/structured-output x with/without tools) or DSPy modules (Predict, ChainOfThought, History, ToolCalls). Use after agent-teams skill to implement individual agents.
 allowed-tools: Read, Glob, Grep, Task
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Grep, Task
 
 ## Purpose
 
-Selects implementation types for all agents in an agent team. Given a team pattern with defined slots, this skill determines which of the 6 agent types to use for each slot.
+Selects implementation types for all agents in an agent team. Given a team pattern with defined slots, this skill routes each slot through the 6-type conceptual taxonomy (LLM, Tool, Router, Retriever, Subgraph, Human-in-Loop) to a concrete framework implementation: LangGraph's 2x3 matrix (text / message / structured-output, each with or without tools) or a DSPy module (Predict, ChainOfThought, History, ToolCalls).
 
 ---
 

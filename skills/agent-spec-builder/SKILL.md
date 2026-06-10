@@ -78,7 +78,7 @@ Use this skill when:
 |-------|-----------|------------------|
 | `tools-and-utilities` | Phase 1, Section 6 (Tools) | Tool vs utility decision tree, design patterns |
 | `agent-teams` | Phase 2 (Pattern Selection) | Team patterns (pipeline, router, loop, fan-out), selection criteria |
-| `individual-agents` | Phase 3 (Agent Types) | Agent type definitions (LLM, Tool, Router, etc.), selection criteria |
+| `individual-agents` | Phase 3 (Agent Types) | 6-type conceptual taxonomy (LLM, Tool, Router, Retriever, Subgraph, Human-in-Loop) routed to LangGraph 2x3 matrix / DSPy module implementations, selection criteria |
 | `prompt-engineering` | Phase 3 (Prompt Config) | Prompt frameworks, roles, modifiers reference |
 
 **How to invoke (one at a time):**

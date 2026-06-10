@@ -6,6 +6,11 @@ allowed-tools: Read, Glob, Grep, Task
 
 # Agent Teams Skill
 
+> **Scope.** This skill selects the *internal topology of the agent system being built* --
+> LangGraph/DSPy patterns wiring the product's agents together. It is NOT about orchestrating
+> Claude Code / Codex sessions or sub-agents (spawning workers, reviewers, researchers) -- that
+> is `teammate-spawn` territory.
+
 ## Purpose
 
 Provides structural patterns for composing individual agents into coordinated multi-agent workflows. Each pattern represents a different **topology** — the shape of how agents connect and pass work between each other.
@@ -29,7 +34,7 @@ Use this skill when:
 
 Before selecting an agent team pattern:
 
-1. **Framework selection** — Ask user preference: LangGraph or DSPy
+1. **Framework selection** — Read the framework from the spec / discovery doc; ask the user only if it is genuinely open
 2. **Problem understanding** — Understand the business problem and requirements
 
 ---
@@ -180,7 +185,7 @@ When generating team.md for a parent with sub-teams, include:
 
 ## Workflow
 
-1. **Ask framework preference** — LangGraph or DSPy
+1. **Establish the framework** — from the spec / discovery doc (ask only if genuinely open)
 2. **Identify the dominant flow** — Use decision tree above
 3. **Select pattern** — Reference the appropriate pattern file
 4. **Identify agent slots** — Each pattern has natural roles (see pattern docs)
