@@ -199,7 +199,21 @@ A complete specification folder containing:
 5. `{agent}.md` files — Detailed spec for each agent
 6. `manifest.yaml` — System hierarchy + **execution plan** for implementation
 
-After Phase 5, invoke `/review-agent-spec` to validate the spec. Once the review passes, output a handoff message for `/agent-implementation-builder`.
+After Phase 5, invoke `/review-agent-spec` to validate the spec. Once the review passes, output a
+handoff message whose **first line is the `agent-implementation-builder` invocation** — never drop
+or paraphrase it. Verbatim format (fill the paths):
+
+```
+Invoke the `agent-implementation-builder` skill to implement the spec folder at
+`[workforce-root]/specs/YYYY-MM-DD-feature-name/`.
+
+- Spec entry point: `spec/manifest.yaml`
+- Discovery: `discovery.md`
+- Latest review: `reviews/review-NNN.md` (verdict: [PASS/WARN])
+- Progress: `progress.md` (centralized — at the spec folder root)
+
+Load the `agent-impl-teammate-spawn` skill too if the execution plan uses team mode.
+```
 
 ---
 

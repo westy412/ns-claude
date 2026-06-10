@@ -77,7 +77,7 @@ A `spec.md` file saved into the existing spec folder created by the discovery sk
 
 The spec contains: Meta, Overview, Skills, Requirements, Architecture, Reference Files, Execution Plan (with work streams, phases, chunks, communication), Acceptance Criteria, Completion Promise, and Notes.
 
-**On completion:** The agent asks the user to confirm the spec is finished, invokes `/review-general-spec` for automated validation, addresses feedback, then outputs a short handoff message with the spec folder path, skills to load, and instruction to invoke `/general-implementation-builder`. For multi-agent/teammate specs, the handoff also includes the `teammate-spawn` skill.
+**On completion:** The agent asks the user to confirm the spec is finished, invokes `/review-general-spec` for automated validation, addresses feedback, then outputs a short handoff message that **leads with the `general-implementation-builder` invocation**, followed by the spec folder path, spec/discovery/review/progress paths, and the skills to load. For multi-agent/teammate specs, the handoff also includes the `teammate-spawn` skill.
 
 ---
 
@@ -119,7 +119,7 @@ At Phase 5:
 ├── Ask user if spec is finished
 ├── User confirms → invoke /review-spec skill
 ├── Present review results → gather feedback → loop until satisfied
-└── Output handoff message (spec path, discovery path, skills, /general-implementation-builder)
+└── Output handoff message (LINE 1 = invoke general-implementation-builder; then spec, discovery, review, progress paths + skills)
     └── If multi-agent/teammate → also include teammate-spawn skill
 ```
 

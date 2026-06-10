@@ -78,23 +78,29 @@ If no spec folder exists, create one following the convention. Update `progress.
 
 ## Step 5: Handoff to Implementation
 
-After the spec is saved, output a **short, copy-pasteable handoff message** for the next agent. This message must include:
+After the spec is saved, output a **short, copy-pasteable handoff message** for the next agent.
+**The first line is the skill invocation — never drop, reorder, or paraphrase it.** Output the
+format below verbatim with the paths filled in. It must include:
 
-1. **Spec location** — path to the saved spec
-2. **Discovery document location** — path to the discovery doc that informed the spec
-3. **Skills to load** — list from the spec's Skills section
-4. **Implementation skill** — which skill to invoke
-5. **Teammate spawn** — if applicable (multi-agent / teammate specs)
+1. **Implementation skill to invoke** — `general-implementation-builder` (the FIRST line)
+2. **Spec folder + spec location**
+3. **Discovery document location** — the doc that informed the spec
+4. **Latest review + progress file** — so the builder's Phase-0 gate finds the verdict
+5. **Skills to load** — list from the spec's Skills section
+6. **Teammate spawn** — if applicable (multi-agent / teammate specs)
 
 ### Handoff Message Format
 
 ```
-Read the spec folder at `[workforce-root]/specs/YYYY-MM-DD-feature-name/`.
-The spec is at `spec.md` and the discovery document is at `discovery.md` in the same folder.
+Invoke the `general-implementation-builder` skill to implement the spec folder at
+`[workforce-root]/specs/YYYY-MM-DD-feature-name/`.
 
-Load these skills: [comma-separated list from spec's Skills section]
+- Spec: `spec.md` (in that folder)
+- Discovery: `discovery.md`
+- Latest review: `reviews/review-NNN.md` (verdict: [PASS/WARN])
+- Progress: `progress.md`
 
-Then invoke `/general-implementation-builder` to begin implementation.
+Load these skills first: [comma-separated list from spec's Skills section]
 ```
 
 ### For Multi-Agent / Teammate Specs
