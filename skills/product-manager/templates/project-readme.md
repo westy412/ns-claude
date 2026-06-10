@@ -21,6 +21,8 @@ ___
 | [[architecture]] | Cross-cutting technical decisions — tech stack, infrastructure, integrations | Not started |
 | [[components]] | Component map — all major parts of the product | ___ |
 
+_Add rows for [[whats-new]] (client-facing update log) and [[open-questions]] (open questions register) once those files exist — never link before the file is created._
+
 ## External Resources
 
 _Client-provided materials, design artifacts, research, and data that live outside the vault. Link to Google Drive folders or other external locations._

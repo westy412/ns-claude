@@ -1,7 +1,0 @@
-node_modules/
-public/
-.obsidian/
-.quartz-cache/
-*.log
-.DS_Store
-prof/

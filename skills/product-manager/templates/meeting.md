@@ -4,7 +4,7 @@
 
 This template defines the structure for a **meeting file** — a transcript with metadata and (after processing) a post-call analysis. Meeting files live in the project's `meetings/` directory and are the raw source material that feeds extraction and changelog updates.
 
-**Naming convention:** `YYYY-MM-DD-<slug>.md` — date of the meeting + a short descriptive title.
+**Naming convention:** `YYYY-MM-DD-<slug>.md` — ISO date of the meeting + a short descriptive title. The date must be **verified against the date stated inside the transcript** — never trusted from the upload filename. Full blocking checklist: `references/meeting-intake.md`.
 
 **Workflow:**
 1. User creates the file and pastes in the raw transcript

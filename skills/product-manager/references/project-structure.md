@@ -1,6 +1,8 @@
 # Project Structure
 
-> **When to read:** At the start of every `/product-manager` session. This defines the directory layout, wikilink conventions, and named entry-point pattern that all project documents must follow.
+> **When to read:** At the start of every product-manager session. This defines the directory layout and named entry-point pattern that all project documents must follow.
+>
+> **Sibling references:** [knowledge-graph.md](knowledge-graph.md) — wikilinks, backfilling, navigation, open questions. [meeting-intake.md](meeting-intake.md) — meeting files, classification, digest. [vault-setup.md](vault-setup.md) — scaffolding a brand-new vault.
 
 ---
 
@@ -12,6 +14,8 @@ Every project follows this structure. Create directories and files as needed —
 [project-name]/
 ├── index.md                     ← Project landing page (always exists)
 ├── vision.md                    ← Vision document
+├── whats-new.md                 ← Rolling client-facing update log (created at first update)
+├── open-questions.md            ← Central open-questions register
 ├── architecture/                ← Cross-cutting tech decisions (created when components are known)
 │   ├── architecture.md          ← Entry point: overview, routes to sections
 │   ├── tech-stack/
@@ -21,106 +25,27 @@ Every project follows this structure. Create directories and files as needed —
 │   └── integrations/
 │       └── integrations.md      ← Third-party services, APIs, data feeds
 ├── meetings/                    ← Raw meeting transcripts, named YYYY-MM-DD-<slug>.md
-│   ├── 2026-05-05-initial-vision-call.md
-│   └── 2026-05-08-component-deep-dive.md
+├── product/                     ← OPTIONAL: product surface layer (app products)
+│   └── pages/
+│       ├── PAGES.md             ← Screen inventory entry point
+│       └── [area]/[screen].md   ← One doc per screen, grouped by app area
+├── drafts/                      ← Work-in-progress documents
 └── components/
     ├── components.md            ← Component map
-    ├── [component-1]/
-    │   ├── [component-1].md     ← Component document
-    │   └── sub-components/
-    │       ├── [sub-comp-1]/
-    │       │   ├── [sub-comp-1].md    ← Sub-component document
-    │       │   ├── changelog.md       ← Iteration log (append-only)
-    │       │   └── changes/           ← Active change documents
-    │       └── [sub-comp-2]/
-    │           ├── [sub-comp-2].md
-    │           ├── changelog.md
-    │           └── changes/
-    ├── [component-2]/
-    │   ├── [component-2].md
-    │   └── sub-components/
-    │       └── ...
-    └── ...
+    └── [component]/
+        ├── [component].md       ← Component document
+        └── sub-components/
+            └── [sub-comp]/
+                ├── [sub-comp].md      ← Sub-component document
+                ├── changelog.md       ← Iteration log (append-only)
+                └── changes/           ← Active change documents
 ```
 
----
+**Legacy note:** older vaults nest content under a `vault/` or `content/` subdirectory (a leftover from the retired Quartz setup) and may contain Quartz framework files (`quartz/`, `quartz.config.ts`, `package.json`). Ignore the Quartz files — they are unused. The structure above applies relative to the content root, wherever it sits.
 
-## Meetings
+### Architecture grows by section
 
-Meeting transcripts are stored in the project's `meetings/` directory. They are the raw source material that feeds extraction and changelog updates.
-
-**Naming convention:** `YYYY-MM-DD-<slug>.md` — date of the meeting + a short descriptive title.
-
-**Input modes:**
-- User pastes transcript directly into the chat → offer to save it to `meetings/` before extraction
-- User provides a file path → read from that location, copy to `meetings/` if not already there
-
-### Meeting Frontmatter
-
-Every meeting file has frontmatter written by the agent after reading the transcript. The agent proposes the classification in human-readable form ("This looks like a component deep-dive on the bloomberg terminal") — the user confirms or corrects before the agent writes it.
-
-```yaml
----
-date: YYYY-MM-DD
-type: vision-call | component-session | sub-component-session | general | standup
-scope:                              # What this meeting focused on (if focused)
-  - "[[component-or-sub-component]]"
-status: raw | extracted | partially-extracted
-extracted-to:                       # Filled after processing
-  - "[[destination-doc-or-changelog]]"
----
-```
-
-### Meeting Types
-
-| Type | What it is | Duration | Next step |
-|------|-----------|----------|-----------|
-| `vision-call` | Focused vision conversation | ~2 hours | Route to `/product-vision` |
-| `component-session` | Focused component deep-dive | ~1 hour | Route to `/product-component` |
-| `sub-component-session` | Focused sub-component / entity journey session | ~1 hour | Route to `/product-sub-component` |
-| `general` | Review session, longer discussion | ~1 hour | Digest process |
-| `standup` | Status update with discussion | ~30 min | Digest process |
-
-### Post-Call Analysis
-
-After processing, the agent writes a post-call analysis between the frontmatter and the raw transcript. This is the traceability artifact — it shows what the meeting produced and where each finding went.
-
-For **focused meetings**, the analysis is light — confirming what was extracted and linking to the output document.
-
-For **general/standup meetings**, the analysis is the main output — mapping every piece of product-relevant intelligence to its destination in the knowledge graph. Format is a findings table, not prose:
-
-```markdown
-## Post-Call Analysis
-
-| Finding | Destination | Action |
-|---------|-------------|--------|
-| Filter UX confusion | [[match-browser]] changelog | Entry added |
-| Auth provider — leaning Clerk | [[architecture]] | Note added |
-| Watchlist feature mentioned | [[bloomberg-terminal]] | Flagged — potential new sub-component |
-| Timeline discussion | — | No action (status update only) |
-```
-
-### Digest Process (General and Standup Meetings)
-
-General and standup meetings can touch any part of the knowledge graph. Before processing, the agent must load the project's component tree (`components.md` + sub-component lists from each component doc) so it can map findings to known entities.
-
-1. Load the full component tree
-2. Read the transcript and identify product-relevant intelligence
-3. Present findings as a list — each item mapped to a known entity. Flag anything unmatched.
-4. User confirms, corrects, or removes items
-5. Write changelog entries, architecture notes, and flags
-6. Write the post-call analysis at the top of the meeting file
-7. Update meeting frontmatter (`status`, `extracted-to`)
-
-Digest outputs are **light** — mostly changelog entries and notes. Deep extraction happens in focused sessions.
-
-### Source Linking
-
-Extracted documents (vision, components, sub-components) link back to their source transcripts via a `Sources` field in the document header:
-
-```markdown
-> **Sources:** [[meetings/2026-05-05-initial-vision-call]], [[meetings/2026-05-08-component-deep-dive]]
-```
+The three baseline sections are tech-stack, infrastructure, integrations. Real projects grow more — known examples from live vaults: `decisions/`, `services/`, `data-flows/`, `performance/`, `frontend/`. Create a section when there's content for it, never as an empty placeholder. Every new section gets a row in `architecture.md`'s routing table.
 
 ---
 
@@ -131,11 +56,30 @@ Every directory has a named entry-point file that serves two purposes:
 1. **Router** — links to all children with one-line overviews
 2. **Summary** — enough context to understand what's here without going deeper
 
-The entry-point file is named after the thing it describes: the project root uses `index.md`, the components directory uses `components.md`, each component directory uses `component-name.md`, and each sub-component directory uses `sub-component-name.md`.
+The entry-point file is named after the thing it describes: the project root uses `index.md`, the components directory uses `components.md`, each component directory uses `component-name.md`, each sub-component directory uses `sub-component-name.md`, and the pages directory uses `PAGES.md`.
 
 An agent or human navigates the project by entering at the top-level `index.md`, scanning the summary and links, and diving into the relevant child. At each level, the entry-point file tells you what's here and where to go next.
 
+---
 
+## Rolling Updates — `whats-new.md` + Recent Activity
+
+Two mechanisms, two audiences, no duplication:
+
+- **`index.md` → Recent Activity table** — the internal log. One line per event, newest first: date + what happened. For the team and for agents orienting on project state.
+- **`whats-new.md`** — the client-facing log. Narrative digests of shipped or changed work, written for the client to read. Created when there's a first real update to report; linked from the `index.md` Documents table. Header links back to `[[index]]`.
+
+When both exist, Recent Activity rows stay one-liners — the narrative lives in `whats-new.md` only. Never write the same update twice.
+
+---
+
+## The Product Surface Layer (optional — app products)
+
+For products with a user-facing app, the knowledge graph can carry a `product/pages/` layer: one document per screen, grouped by app area, with `PAGES.md` as the entry point (total screen count, tab/navigation structure, routing table by area).
+
+- Page docs describe **what users see and do**: content, actions, navigation in/out, states.
+- Each page doc links to the component or sub-component that owns its behaviour; the sub-component doc holds the spec, the page doc holds the surface.
+- Create this layer when screen-level documentation starts mattering (design reviews, build phase) — not during early discovery.
 
 ---
 
@@ -161,7 +105,17 @@ An agent or human navigates the project by entering at the top-level `index.md`,
 | [[vision]] | Product vision — what we're building and why | [Draft / Agreed / Evolving] |
 | [[architecture]] | Cross-cutting technical decisions | [Not started / In progress / Agreed] |
 | [[components]] | Component map — all major parts of the product | [Identifying / Defined / Building] |
+| [[whats-new]] | Client-facing update log | [Rolling] |
+| [[open-questions]] | Open questions register | [Rolling] |
+
+## Recent Activity
+
+| Date | What happened |
+|------|--------------|
+| | |
 ```
+
+(Only list `whats-new` / `open-questions` rows once the files exist — see the dangling-wikilink rule in [knowledge-graph.md](knowledge-graph.md).)
 
 ### Component Map (`components.md`)
 
@@ -179,157 +133,35 @@ An agent or human navigates the project by entering at the top-level `index.md`,
 | Component | What it does | Status | Link |
 |-----------|-------------|--------|------|
 | [Name] | [One-line description] | [Status] | [[component-name]] |
-| [Name] | [One-line description] | [Status] | [[component-name]] |
 ```
-
----
-
-## Wikilink Conventions
-
-All documents link to their parent and children using Obsidian **shortest-path wikilinks**. This means using just the filename (or filename with minimal path to disambiguate), not full relative paths. Obsidian resolves the link by finding the nearest match in the vault.
-
-**Convention:** Shortest-path. Use `[[vision]]` not `[[../vision]]` or `[[../../vision]]`. Only add path segments if needed to disambiguate (e.g., two files with the same name in different directories).
-
-**Link to parent:**
-```markdown
-> **Vision:** [[vision]]
-> **Component:** [[component-name]]
-```
-
-**Link to children (in backfilled routing tables):**
-```markdown
-| Component | Overview | Link |
-|-----------|----------|------|
-| Landing Page | User acquisition and first impression | [[landing-page]] |
-```
-
-**Cross-links between siblings:**
-```markdown
-See also: [[trading]] for the trading component this feeds into.
-```
-
-**Rules:**
-- Every document links UP to its parent
-- Every document links DOWN to its children (backfilled as children are created)
-- Cross-links between siblings are optional but encouraged when components have dependencies
-- Use shortest-path — just the filename or minimal path needed for Obsidian to resolve unambiguously
-- Wikilinks use the `[[path]]` format, not markdown `[text](url)` format
-- If two files share a name across projects, add enough path to disambiguate: `[[inplay/vision]]` vs `[[txn/vision]]`
-
----
-
-## Backfilling Protocol
-
-When a new document is created, the parent must be updated:
-
-1. **New component created** → update `components/components.md` (add row to component table) AND update `vision.md` (add row to Components table)
-2. **New sub-component created** → update the parent component document (add row to Sub-Components table)
-3. **New sub-sub-component created** → update the parent sub-component document (add row to Sub-Sub-Components table)
-
-**Always backfill immediately after creating a new document.** Don't batch — if you create a document and don't backfill, the knowledge graph has a broken link.
-
----
-
-## Agent Navigation and Interlinking
-
-The knowledge graph is only useful if agents can efficiently navigate it and if every document is reachable. These rules govern how agents traverse the graph and how documents must be interlinked when written.
-
-### How Agents Navigate
-
-Agents enter the knowledge graph at `index.md` and navigate downward by following wikilinks. They should never need to guess file paths or scan directories — every document is reachable by following links from the entry point.
-
-**Loading strategy (breadth-first, depth on demand):**
-
-1. **Start at `index.md`** — read the landing page to understand the project, its status, and what exists.
-2. **Load the relevant entry point** — `vision.md` for product context, `components.md` for the component map, `architecture.md` for technical decisions.
-3. **Go deep only when the task requires it** — if working on a specific sub-component, follow the chain: `components.md` → `component-name.md` → `sub-component-name.md`. Don't load all sub-components when you only need one.
-4. **Cross-reference via links in the document** — if a sub-component mentions an integration, follow the link to `integrations.md` for the detail. The links are the navigation; the filesystem is the storage.
-
-**Rule: if an agent has to use `find` or `ls` to locate a document, the knowledge graph has a broken link.** Every document must be reachable by following wikilinks from the root.
-
-### Interlinking Rules
-
-Every document in the knowledge graph must have three types of links:
-
-**1. Vertical links (parent ↔ child)**
-
-Every document links UP to its parent and DOWN to its children. These are mandatory — they form the spine of the graph.
-
-- Header metadata links up: `> **Component:** [[bloomberg-terminal]]`
-- Routing tables link down: the Sub-Components table at the bottom of a component doc
-- Both directions must exist. If a child links to its parent but the parent doesn't list the child, the graph is broken.
-
-**2. Cross-links (sibling ↔ sibling)**
-
-When two documents at the same level have a dependency, they link to each other inline where the dependency is mentioned.
-
-- Component A depends on Component B for auth → Component A's Dependencies section links to `[[component-b]]`
-- Sub-component mentions a related sub-component in another component → inline link where it's referenced
-- Cross-links are contextual, not in a dedicated section — they appear where the relationship is discussed.
-
-**3. Cross-cutting links (architecture ↔ components)**
-
-Architecture decisions affect components. Components surface architecture needs. These must be linked bidirectionally:
-
-- Architecture docs reference which components they affect: "Used by: [[bloomberg-terminal]], [[trading]]"
-- Component docs reference which architecture decisions apply: in the "How Are We Going to Solve It?" section, link to `[[tech-stack]]` or `[[integrations]]` where a decision is made at the architecture level rather than locally.
-- Integration docs reference which components consume them: "Consumed by: [[bloomberg-terminal]], [[trading]]"
-
-### Routing Within Pages
-
-Every document must have a routing mechanism that lets a reader (human or agent) navigate to related content without going back up the tree. This means:
-
-**Entry-point files** have a routing table — a table or list near the top that links to all children with one-line descriptions and status. This is the primary navigation mechanism.
-
-**Content files** (vision, component, sub-component docs) have routing at the bottom — backfilled tables that link to their children. The content is the body; the routing is the footer.
-
-**Changelog and change documents** link back to their parent sub-component doc and forward to any dev workflow artifacts (specs, PRs) they produce:
-- `changelog.md` header: `> **Sub-component:** [[sub-component-name]]`
-- Change documents header: `> **Sub-component:** [[sub-component-name]]`
-- Change document body references which changelog entries it addresses
-
-### Orphan Prevention
-
-A document is orphaned if no other document links to it. Orphans are invisible to agents navigating the graph.
-
-**Rules:**
-- Every document must be linked from at least one other document (its parent at minimum)
-- The backfilling protocol (below) prevents orphans at creation time
-- Meeting transcripts are linked from the documents they sourced via the `Sources` field
-- Change documents are linked from the changelog entries that spawned them
-- If you create a document and aren't sure where it should be linked from, it probably doesn't belong in the knowledge graph yet — put it in Drafts
 
 ---
 
 ## Naming Conventions
 
 **Directories:** lowercase, hyphen-separated. Match the component/sub-component name.
-```
-components/bloomberg-terminal/
-components/onboarding-kyc/
-components/landing-page/
-```
 
 **Files:** lowercase, hyphen-separated. Named after the thing they describe.
 
-**Entry-point files:** named after the thing they describe. Component directories use `component-name.md`. The project root uses `index.md`. The component map uses `components.md`.
+**Entry-point files:** named after the thing they describe. Component directories use `component-name.md`. The project root uses `index.md`. The component map uses `components.md`. The pages inventory uses `PAGES.md`.
 
 **Sub-components** are directories (not flat files), containing a named document, a changelog, and a changes directory:
 ```
 sub-components/match-browser/match-browser.md
-sub-components/ai-research-partner/ai-research-partner.md
 ```
+
+**Meetings:** `YYYY-MM-DD-<slug>.md`, ISO date order — see the intake checklist in [meeting-intake.md](meeting-intake.md).
 
 ---
 
 ## Creating the Initial Project Structure
 
-When starting a new project, create:
+When starting a new project **inside an existing vault**, create:
 
-1. The project directory: `[project-name]/`
-2. The project landing page: `[project-name]/index.md`
-3. The vision document: `[project-name]/vision.md` (from vision template)
-4. The components directory: `[project-name]/components/`
-5. The component map: `[project-name]/components/components.md`
+1. The project landing page: `index.md`
+2. The vision document: `vision.md` (from vision template)
+3. The components directory and map: `components/components.md`
 
 Everything else gets created as documents are produced. Don't create empty placeholder directories — create them when there's content to put in them.
+
+When the vault itself doesn't exist yet (no repo, empty directory), load [vault-setup.md](vault-setup.md) and scaffold it first.
