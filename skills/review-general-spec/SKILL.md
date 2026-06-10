@@ -102,7 +102,7 @@ Create a team via `TeamCreate`.
    - **Communication**: Send findings back to the team lead via `SendMessage`
    - **Validation**: The exact output format expected (tables from their reference file)
    - **Constraint**: Read-only investigation — do NOT modify any files
-2. Write the filled template to: `{spec-folder}/teammate-prompts/spec-review/{agent-name}.md`
+2. Write the filled template to: `{spec-folder}/teammate-prompts/review-general-spec/{agent-name}.md`
 
 You MUST write all 3 prompt files before spawning any agents.
 
@@ -115,7 +115,7 @@ You MUST write all 3 prompt files before spawning any agents.
 You are teammate {agent-name} on team {team-name}.
 
 Read your full instructions at:
-  {spec-folder}/teammate-prompts/spec-review/{agent-name}.md
+  {spec-folder}/teammate-prompts/review-general-spec/{agent-name}.md
 
 Follow all steps in order.
 ```
