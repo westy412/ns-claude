@@ -17,7 +17,7 @@ class of question twice".
 | 1 | **Front-load failures** | Drift Log `front-load-failure? yes` + `class: spec-bug` rows; mid-build spec amendments; Phase-0 gate escalation rows; review ambiguity findings | `discovery`, `general-spec-builder` / `agent-spec-builder` (probing, force-concreteness, pre-mortem, self-consistency) |
 | 2 | **Build friction / rework** | Drift Log `class: code-bug` rows; per-phase review findings; verifier INCORRECT/MISSING matrix rows | `*-implementation-builder` (per-phase loop, phase decomposition, worker briefs via teammate-spawn) |
 | 3 | **Gate effectiveness** | `review_verdict` FAIL/WARN counts + what each round caught; verifier matrix vs what reviews passed; `testing_verdict` FAILs that every static gate missed; UNTESTED rows | `review-*-spec`, `*-implementation-verifier`, `typed-testing`, spec test-seed emitters |
-| 4 | **Human interruption** | Drift Log `escalated? yes` rows; Decisions Made Branch-B entries; gate overrides (Known-Risk); spec-stage escalations when present | the autonomy doctrine (`autonomy-and-escalation.md` base), Phase-0 gates, escalating skills' Branch-A/B judgement |
+| 4 | **Human interruption** | Drift Log `escalated? yes (Branch B)` rows; spec-stage Escalation & Decision Record `branch-B` / `gate-override` rows; gate overrides (Known-Risk); spec-stage escalations when present | the autonomy doctrine ([autonomy-and-escalation.md](autonomy-and-escalation.md) base), Phase-0 gates, escalating skills' Branch-A/B judgement |
 
 Overlap between dimensions is intentional (one Drift Log row can feed 1 and 4) — the lead
 dedupes at consolidation; analyzers must not self-censor to avoid overlap.
@@ -29,7 +29,8 @@ dedupes at consolidation; analyzers must not self-censor to avoid overlap.
 1. Load the `teammate-spawn` skill and use its **research** profile (read-only analyzers
    returning findings — no file ownership, no resumption machinery).
 2. Write one brief per dimension to
-   `{registry-folder}/teammate-prompts/dev-evolution-retro/dimension-{n}-{name}.md`. Each brief
+   `{registry-folder}/teammate-prompts/dev-evolution-retro/dimension-{n}-{name}.md`
+   (`{registry-folder}` = the folder containing the registry file from Phase 0). Each brief
    carries:
    - The dimension's row from the table above (scope + reads + attribution targets)
    - The full sweep set: every run's spec-folder path + its Phase-1 manifest
@@ -38,6 +39,8 @@ dedupes at consolidation; analyzers must not self-censor to avoid overlap.
    - The finding format from `root-causing.md` — verbatim; the consolidation parses it
    - Cross-run instruction: "You see every run. Where the same skill shows the same
      failure-class in more than one run, say so explicitly — name the runs."
+   - No-signal instruction: "If your dimension has nothing to read for a run, report 'no signal'
+     for that run explicitly — never return silence." (Feeds `dimensions_no_signal` in the report.)
    - Scope fence: findings only; no skill edits, no spec edits, no proposals (proposals are the
      lead's pattern-gate job)
 3. Spawn all four in parallel, each with the minimal pointer prompt from `teammate-spawn`'s

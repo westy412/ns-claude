@@ -74,4 +74,4 @@ class ContentPipeline(dspy.Module):
 ## See Also
 
 - [Team Patterns](team-patterns.md) - How to combine agents
-- [Predictor Selection](../predictor-selection.md) - Choosing the right predictor
+- [Predictor Selection](predictor-selection.md) - Choosing the right predictor

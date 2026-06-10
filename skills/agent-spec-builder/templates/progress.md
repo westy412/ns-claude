@@ -100,7 +100,7 @@ gap asked once, unresolved, logged as a Known-Risk.
 
 ### LLM Configuration
 **Model strategy:** [Same for all agents / Different per agent]
-**Provider:** [Anthropic / OpenAI / Google / Local]
+**Provider:** [Google / Anthropic / OpenAI / Local / Other]
 **Cost constraints:**
 **Latency requirements:**
 

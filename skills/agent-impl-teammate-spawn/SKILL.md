@@ -154,7 +154,7 @@ For the `{{validation-checklist}}` variable, use the appropriate framework check
 - [ ] ToolNode added as a separate graph node — NOT created inside agent functions
 - [ ] Graph compiled before use
 - [ ] All node functions return State dict
-- [ ] Model tier matches spec (Opus preferred, Sonnet only if explicitly specified — never Haiku)
+- [ ] Model tier matches spec (Pro vs Flash; provider per spec — default Gemini via `langchain-google-genai`)
 - [ ] Prompt template matches agent role from spec
 - [ ] All imports work: `uv run python -c "from ... import ..."`
 - [ ] Sent required data to downstream streams per Communication Requirements

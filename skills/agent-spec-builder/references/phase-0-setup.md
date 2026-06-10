@@ -24,7 +24,7 @@ Project initialization and session resumption. This phase establishes the projec
    - Create `feedback/` placeholder
 
 4. **If resuming work:**
-   - Read `spec/progress.md` FIRST — this is the authoritative state document
+   - Read the centralized `progress.md` at the spec folder root FIRST — this is the authoritative state document
    - Review: Current Phase, Decisions Made, Discovery Substance, Open Questions, Next Steps
    - Read `spec/manifest.yaml` only if progress.md references spec files that exist
    - DO NOT re-read discovery documents, handover messages, or other source material already summarized in progress.md

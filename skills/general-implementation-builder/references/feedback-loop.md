@@ -20,7 +20,9 @@ The finding is a *divergence* from what the source material already decides. Fix
 - **The spec itself is wrong, but the discovery doc / conversation settles what it should say** →
   fix it **and write the correction back into the spec (and discovery if that's the source) — never
   code-only.** Code-only rots the spec and the spec-derived tests: both stay wrong. Patch the source,
-  then bring the code into line.
+  then bring the code into line. **Boundary:** a surgical amendment may be applied in place, but
+  re-check the spec's self-consistency invariants for the touched section; a structural change
+  (requirements, architecture, scope) re-enters the spec-builder per its Spec Re-Entry contract.
 
 Record every Branch-A fix in `progress.md` (below).
 

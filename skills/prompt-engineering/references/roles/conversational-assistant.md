@@ -106,7 +106,7 @@ Maintains dialogue with users across multiple turns, handling follow-ups, clarif
 - Use structured output for: internal routing, intent classification, conversation state tracking
 - Useful for logging/analytics: `{"response": "...", "intent": "...", "sentiment": "...", "escalation_risk": 0.2}`
 - For agent-to-agent handoff: structure the context you pass to downstream agents
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 
 **If adding Memory:**
 - Conversation history is essential; treat it as a core input

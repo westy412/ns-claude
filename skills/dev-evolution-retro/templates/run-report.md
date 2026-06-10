@@ -1,3 +1,4 @@
+---
 # Machine-readable header — downstream consumers (next sweep's pattern gate, handover) parse this.
 retro_verdict:
   run: [registry row name]

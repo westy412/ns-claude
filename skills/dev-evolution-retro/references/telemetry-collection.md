@@ -20,7 +20,7 @@ records what's *missing* (a telemetry gap is itself a finding).
 | Verifier reports | `feedback/verification-NNN.md` → Spec Traceability Matrix | Per-requirement CORRECT / INCORRECT (impl-bug) / MISSING / AMBIGUOUS (spec-quality) + Routing column |
 | Live testing | `feedback/testing-NNN.md` → `testing_verdict` header + manifest rows | PASS/FAIL/UNTESTED per seed row; FAILs that static gates missed; UNTESTED = seed/environment gaps |
 | Mid-build spec amendments | Drift Log `Spec amended? yes` rows + spec git history if available | Every one is a front-load failure by definition |
-| Decisions split | `progress.md` Decisions Made (Branch A vs Branch B), handover captures if present | Autonomous fixes vs escalations — the autonomy-dial signal |
+| Decisions split | Drift Log `Escalated?` column (`no (Branch A)` / `yes (Branch B)`) + the spec-stage Escalation & Decision Record `Type` column | Autonomous fixes vs escalations — the autonomy-dial signal. (Handover's Branch-A/B split is chat-only — never read it from a file.) |
 | Spec-stage escalation records | `progress.md` → "Escalation & Decision Record (spec-stage)" table | One row per front-half escalation point: Stage · Point · Type (`branch-B` / `prober-force` / `gate-override` / `fired-once`) · Asked/Forced · Resolution · Doc section — written by discovery + both spec-builders (#48). For runs predating #48 the section may be absent: record "spec-stage telemetry absent" in the manifest — absence is a finding, not a blocker. |
 
 ---

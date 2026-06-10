@@ -185,7 +185,7 @@ project-name/
 └── spec/
     ├── manifest.yaml        # ENTRY POINT - read this first
     ├── overview.md          # System context, architecture, decisions
-    ├── progress.md          # Spec-builder internal (session tracking)
+    ├── progress.md          # Centralized pipeline progress (legacy location; preferred: spec-folder root)
     ├── agent-config.yaml    # Machine-readable configuration
     └── my-agent.md          # Agent spec
 ```
@@ -399,7 +399,9 @@ Full details: `references/common/sub-agents.md`
 
 ## Feedback Loop
 
-When you receive feedback about generated code, update the framework cheat sheet to prevent the same mistake.
+Every finding about the work (user feedback, review/verifier mismatch, I/O divergence) runs the
+two-branch autonomy rule and lands as a **Drift Log row** in the spec folder's centralized
+`progress.md`; framework-generic lessons *also* update the framework cheat sheet.
 
 Full process: `references/common/feedback-loop.md`
 

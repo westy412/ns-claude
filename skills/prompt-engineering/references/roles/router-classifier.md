@@ -78,7 +78,7 @@ Makes decisions and routes inputs to appropriate destinations or categories. Rou
 - If you need complex tool workflows, this is probably a different agent type
 
 **If using Structured Output:**
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 - Almost always recommended; routing decisions must be machine-parseable
 - Schema pattern: `{"route": "enum", "confidence": "number", "reasoning": "string"}`
 - Ensure the enum matches exactly the routes defined in `<inputs>`

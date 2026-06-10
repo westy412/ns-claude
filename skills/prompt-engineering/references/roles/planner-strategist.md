@@ -120,7 +120,7 @@ Creates plans, breaks down complex goals into actionable steps, and develops str
 - Add a `<tool_usage_guidelines>` section if tools inform planning decisions
 
 **If using Structured Output:**
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 - Common for planning — plans feed into project management tools (Jira, Linear, Asana)
 - Schema should include: tasks, dependencies, estimates, risks, assumptions
 - Consider separate schemas for strategic (high-level milestones) vs. operational (detailed tasks)

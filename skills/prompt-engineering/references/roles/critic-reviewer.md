@@ -111,7 +111,7 @@ Evaluates content, code, or work products against defined standards or criteria.
 - Add a `<tool_usage_guidelines>` section if tools are central to the review process
 
 **If using Structured Output:**
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 - Ideal for CI/CD integration where feedback is parsed programmatically
 - Define severity enums explicitly (CRITICAL, MAJOR, MINOR, INFO)
 - Include machine-readable verdicts (APPROVE, REQUEST_CHANGES, COMMENT)

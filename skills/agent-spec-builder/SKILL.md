@@ -206,13 +206,14 @@ After Phase 5, invoke `/review-agent-spec` to validate the spec. Once the review
 ## Spec Re-Entry (downstream corrections loop back here)
 
 This spec is the source of truth *and* the source of the test cases — so it must not be allowed to rot.
-If a downstream stage (review, per-phase build loop, verifier) finds the **spec itself** wrong,
+If a downstream stage (review, per-phase build loop, verifier, typed testing) finds the **spec itself** wrong,
 incomplete, or contradictory, the correction loops **back into this spec**, never into the code only.
 Patching code while leaving the spec wrong leaves the spec-derived tests wrong too.
 
 - **Code diverges from spec** → impl-builder fixes the code (the spec is truth).
 - **Spec is wrong** → re-enter this skill at the affected phase, fix the spec/overview/agent files,
-  re-run the relevant Phase-4 validation checks, re-hand-off. See `references/autonomy-and-escalation.md`.
+  re-run the relevant Phase-4 validation checks, re-hand-off. Record the amendment as a Drift Log
+  row in the centralized `progress.md`. See `references/autonomy-and-escalation.md`.
 
 ---
 

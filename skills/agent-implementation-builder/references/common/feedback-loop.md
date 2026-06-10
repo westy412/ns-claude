@@ -1,122 +1,98 @@
-# Feedback Loop: Updating Cheat Sheets
+# Feedback Loop & Autonomy Rule
 
-> **Context:** This reference covers updating framework cheat sheets when feedback reveals implementation mistakes. Read this when you receive feedback about generated code.
-
----
-
-## When to Update
-
-Update the cheat sheet when you receive feedback that:
-- Points out an incorrect pattern you used
-- Identifies a framework anti-pattern
-- Highlights a rule you didn't follow
-- Reveals a common mistake
+> **Context:** How the builder handles any finding about the work in progress — user feedback, a
+> per-phase review issue, a verifier mismatch, an I/O-trace divergence, a framework-pattern misuse.
+> Every finding runs the fix-or-escalate decision in `references/common/autonomy-and-escalation.md`;
+> this file is the builder-side application of it. Read it whenever a finding lands.
 
 ---
 
-## How to Update
+## The decision (every finding runs this)
 
-1. **Identify the framework** — Which cheat sheet needs updating?
-   - `references/langgraph/CHEATSHEET.md`
-   - `references/dspy/CHEATSHEET.md`
+Run the one question from `references/common/autonomy-and-escalation.md`: **"Can I resolve this from
+what the user already gave me?"** (spec, discovery doc, conversation). It routes to one of two branches.
 
-2. **Categorize the feedback:**
-   - **Critical Rule** — Add to "Critical Rules" section
-   - **Anti-pattern** — Add to "Anti-Patterns" section with wrong code example
-   - **Pattern clarification** — Add to relevant pattern section
+### Branch A — autonomous fix (resolvable from stated intent)
 
-3. **Check for contradictions (MANDATORY):**
-   Before writing ANY update, read the target file AND related skill files to check if the proposed change contradicts existing content.
+The finding is a *divergence* from what the source material already decides. Fix it; don't interrupt.
 
-   **What to check:**
-   - Does the proposed pattern conflict with an existing rule in the same file?
-   - Does it conflict with guidance in other skills that reference the same framework?
-   - Does it contradict conventions in SKILL.md routing logic?
+- **Code diverges from the spec** → fix the code. The spec is the truth. Then **sweep** (below).
+- **The spec itself is wrong, but the discovery doc / conversation settles what it should say** →
+  fix it **and write the correction back into the spec (and discovery if that's the source) — never
+  code-only.** Code-only rots the spec and the spec-derived tests: both stay wrong. Patch the source,
+  then bring the code into line. **Boundary:** a surgical amendment may be applied in place, but
+  re-check the spec's validation gates for the touched section; a structural change (agents, teams,
+  I/O contracts, scope) re-enters the spec-builder per its Spec Re-Entry contract.
 
-   **Key cross-references to check:**
+Record every Branch-A fix in `progress.md` (below).
 
-   | If updating... | Also check... |
-   |----------------|---------------|
-   | `references/dspy/CHEATSHEET.md` | `prompt-engineering/references/targets/dspy.md`, SKILL.md DSPy routing |
-   | `references/langgraph/CHEATSHEET.md` | `prompt-engineering/references/targets/langgraph.md`, SKILL.md LangGraph routing |
-   | Any pattern or rule | The corresponding section in other framework cheat sheets for consistency |
+### Branch B — escalate (genuine uncertainty)
 
-   **If a contradiction is found:** STOP. Present both the existing content and the proposed change to the user. Explain the conflict and ask which should take precedence. Do NOT silently overwrite existing guidance.
+The source material genuinely doesn't decide it — a real gap or contradiction in stated intent.
+**STOP and bring the user in**, following the comms standard in
+`references/common/autonomy-and-escalation.md` (one brief specific question; ASCII-sketch a choice).
+**Fire each question once** — on "out of scope / don't know / proceed," log a Known-Risk in
+`progress.md` and move on. Never guess; never trap the conversation.
 
-   **If no contradiction:** Proceed with the update.
-
-4. **Format the update:**
-
-**For anti-patterns:**
-```
-### DO NOT: [Description of mistake]
-
-```python
-# WRONG
-[Code that was incorrectly generated]
-```
-
-**Why:** [Explanation of why this is wrong]
-
-**Correct approach:**
-```python
-# CORRECT
-[How it should be done]
-```
-```
-
-**For critical rules:**
-```
-### [Number]. [Rule Name]
-
-**CORRECT:**
-```python
-[Correct code]
-```
-
-**WRONG - DO NOT DO THIS:**
-```python
-[Wrong code]
-```
-
-**Why:** [Explanation]
-```
-
-5. **Edit the cheat sheet** using the Edit tool.
+> **Spec-defect loopback:** a finding that the *spec* is wrong is Branch A if resolvable from intent
+> (correct the spec), Branch B if not (escalate, then correct the spec). Either way the correction
+> lands in the spec — the build never silently routes around a bad spec.
 
 ---
 
-## Example
+## Sweep for other instances (after any Branch-A code fix)
 
-**Feedback received:**
-> "The ToolNode is being created inside the agent function instead of being added to the graph."
+**If the issue is systematic** (same pattern elsewhere):
+1. Search the codebase for all instances of the same pattern.
+2. Apply the same fix to ALL qualifying instances.
+3. Document the sweep scope in `progress.md`.
 
-**Action taken:**
-1. Open `references/langgraph/CHEATSHEET.md`
-2. Add to Anti-Patterns section:
-
-```
-### DO NOT: Create ToolNode inside agent functions
-
-```python
-# WRONG
-async def agent(state):
-    if response.tool_calls:
-        tool_node = ToolNode(tools)  # WRONG - created inside function
-        result = await tool_node.ainvoke(...)  # WRONG - manual invocation
-```
-
-**Why:** ToolNode is designed to be a graph node. Creating it inside functions bypasses LangGraph's execution model.
-```
+This stops the same mistake reappearing in later phases or other agents/teams.
 
 ---
 
-## Mandatory Update Triggers
+## Record in the progress document
 
-**Always update the cheat sheet when:**
-- [ ] User explicitly says the generated code is wrong
-- [ ] A pattern was used incorrectly
-- [ ] The code doesn't follow framework best practices
-- [ ] A debugging session reveals a systematic issue
+Every finding that ran the decision gets a row in the spec folder's centralized `progress.md` →
+**Drift Log / Spec-Feedback Ledger**:
 
-**Do not wait for multiple occurrences.** Add to the cheat sheet on first feedback to prevent repetition.
+```markdown
+| Phase | Finding | Class | Resolution | Spec amended? | Escalated? | Front-load failure? |
+|-------|---------|-------|------------|---------------|------------|---------------------|
+| [N] | [what was wrong] | code-bug / spec-bug | [what changed + files] | yes (where) / no | no (Branch A) / yes (Branch B) | yes / no |
+```
+
+If the fix also sets a *rule* to follow going forward (a pattern, not a one-off), add it to
+Decisions Made — the ledger tracks drift; Decisions Made tracks choices. The ledger (drift +
+autonomous-vs-escalated split) is the Layer-4 telemetry source the run retro consolidates.
+
+---
+
+## Also update the framework cheat sheet (framework-generic lessons)
+
+If the lesson is **framework-generic** — a LangGraph/DSPy pattern misuse that would recur in any
+build, not a drift specific to this spec — *also* update the relevant cheat sheet
+(`references/langgraph/CHEATSHEET.md` / `references/dspy/CHEATSHEET.md`): add or correct the
+pattern, with a short why. Cheat-sheet updates **complement the ledger row, never replace it** —
+the row is the run's telemetry; the cheat sheet is the cross-run carrier for framework lessons.
+
+---
+
+## Relay a correction to other streams (team mode)
+
+If in team mode and a correction affects another stream, the orchestration layer relays it — the
+parent collects the correction and forwards it; the base never depends on peer-to-peer messaging.
+If the affected stream hasn't started, put the correction in its prompt / state sources; once work
+resumes, `progress.md` is the durable source.
+
+---
+
+## Mandatory triggers
+
+Run this decision whenever:
+- [ ] The user says the generated code is wrong
+- [ ] A per-phase review or verifier flags a mismatch
+- [ ] An I/O trace finds a field-name / schema divergence
+- [ ] A pattern was used incorrectly, or the same mistake appears more than once
+
+**Don't wait for multiple occurrences.** Process on the first finding.

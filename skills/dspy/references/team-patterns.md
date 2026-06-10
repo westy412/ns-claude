@@ -104,5 +104,5 @@ Pipeline Stage 1 → Fan-out → Pipeline Stage 2
 ## See Also
 
 - [Agent Types](agent-types.md) - Individual agent patterns
-- [History Patterns](../history-patterns.md) - For loops needing conversation context
-- [Formatters](../formatters.md) - For pipeline stage transitions
+- [History Patterns](history-patterns.md) - For loops needing conversation context
+- [Formatters](formatters.md) - For pipeline stage transitions

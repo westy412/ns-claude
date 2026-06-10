@@ -84,7 +84,7 @@ Converts data between formats, restructures data, and maps schemas. Transformers
 - If you need complex tool workflows, this is probably an Orchestrator
 
 **If using Structured Output:**
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 - Almost always required—transformers produce predictable schemas by definition
 - Define the output schema to match your target format exactly
 - Use strict mode to catch schema violations early

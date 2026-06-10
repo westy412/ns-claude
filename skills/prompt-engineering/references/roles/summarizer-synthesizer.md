@@ -87,7 +87,7 @@ Condenses information and creates summaries from single or multiple sources. Thi
 - Never add tools for "enhancing" summaries with external information
 
 **If using Structured Output:**
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 - Excellent fit for summaries that feed into databases, dashboards, or downstream agents
 - Schema pattern: `{"summary": "...", "action_items": [...], "decisions": [...], "key_points": [...]}`
 - Use arrays for repeating structures (action items, themes, sources)

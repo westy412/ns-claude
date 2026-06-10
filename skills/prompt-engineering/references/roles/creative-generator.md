@@ -105,7 +105,7 @@ Creates content, generates ideas, and drafts materials based on defined inputs a
 - Add a `<tool_usage_guidelines>` section to the prompt if tools are central to the task
 
 **If using Structured Output:**
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 - More common than it appears — even creative content often needs metadata
 - Use when: confidence scoring, reasoning traces, quality metrics, or inter-agent communication
 - Pattern: wrap free-form content in structured envelope: `{"content": "...", "confidence": 0.85, "reasoning": "..."}`

@@ -120,7 +120,7 @@ Read dependencies from `team.md` → Dependencies section and add them:
 
 ```bash
 # Core framework dependencies
-uv add langgraph langchain-anthropic
+uv add langgraph langchain-google-genai
 
 # Tool dependencies (from spec)
 uv add httpx beautifulsoup4 youtube-transcript-api
@@ -130,10 +130,12 @@ uv add httpx beautifulsoup4 youtube-transcript-api
 
 **Step 7: CREATE the progress document.**
 
-This is CRITICAL. Create `progress.md` in the project root BEFORE starting implementation.
+This is CRITICAL. Use the **centralized `progress.md` at the spec folder root** (created by the
+upstream skills — brainstorm/discovery/spec-builder; ALL pipeline skills read and write this one
+file). Do NOT create a second progress.md in the project root.
 
-1. **Read the template:** `agent-patterns/agent-implementation-builder/templates/progress.md`
-2. **Create progress.md** in project root
+1. **Read the template:** this skill's `templates/progress.md`
+2. **Extend the centralized progress.md** with the implementation sections from the template (create it from the template only if it is genuinely missing — legacy structure)
 3. **Populate with ALL tasks** derived from the spec:
 
 For each team (including nested), add these tasks:
@@ -358,7 +360,7 @@ Generate environment configuration file.
 
 ```bash
 # Required API keys
-ANTHROPIC_API_KEY=your_key_here  # LLM provider
+GOOGLE_API_KEY=your_key_here  # LLM provider (default: Gemini via langchain-google-genai)
 YOUTUBE_API_KEY=your_key_here    # For YouTube metadata (optional)
 
 # Optional configuration

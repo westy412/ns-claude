@@ -53,6 +53,7 @@ A proposal is a structured `skill-updater` input row:
    structured feedback (invocation mechanics: SKILL.md → Sub-Agent Delegation). **Never edit a
    skill from this skill** — even for a one-line fix.
 4. Update the registry proposal rows when skill-updater lands the change (commit SHAs in the
-   status), so the next sweep knows the pattern was addressed and can watch for recurrence
+   status). If approval happens in a later session, the next sweep's Phase 0 reconciles proposal
+   statuses against landed skill-updater commits. Either way the next sweep knows the pattern was addressed and can watch for recurrence
    *after* the fix — a pattern that survives its fix is a failed prevention hypothesis, which is
    itself a finding.

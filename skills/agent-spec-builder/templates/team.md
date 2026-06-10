@@ -83,7 +83,7 @@ Team-level integrations:
 # Core framework (pick one based on framework choice)
 # LangGraph:
 langgraph>=0.x.x
-langchain-anthropic>=0.x.x
+langchain-google-genai>=0.x.x  # or the package for your chosen provider
 # DSPy:
 dspy>=2.x.x
 

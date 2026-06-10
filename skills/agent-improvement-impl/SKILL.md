@@ -45,8 +45,8 @@ Use this skill when:
 
 | Framework | Cheat Sheet Location |
 |-----------|---------------------|
-| LangGraph | `references/langgraph/CHEATSHEET.md` |
-| DSPy | `references/dspy/CHEATSHEET.md` |
+| LangGraph | `agent-implementation-builder/references/langgraph/CHEATSHEET.md` |
+| DSPy | `agent-implementation-builder/references/dspy/CHEATSHEET.md` |
 
 ---
 

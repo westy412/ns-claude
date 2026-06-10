@@ -154,7 +154,7 @@ After specifying all tools, compile the project-level dependencies:
 
 **Python Packages:**
 - Collect all packages from tool specs
-- Include framework packages (langgraph, langchain-anthropic, etc.)
+- Include framework packages and the package for the chosen model provider (default: `langchain-google-genai`)
 - Note version constraints if specified in docs
 
 **Environment Variables:**
@@ -182,7 +182,7 @@ After specifying all tools, compile the project-level dependencies:
 
 ## 8. LLM Configuration
 - Same model for all agents, or different per agent?
-- Provider preferences (Anthropic, OpenAI, Google, local)?
+- Provider preferences (Google, Anthropic, OpenAI, local, other)? Default when unspecified: Google (Gemini).
 - Reasoning models needed? (for complex decision-making)
 - Cost constraints? (affects model choice)
 - Latency requirements? (smaller models for speed)
@@ -191,7 +191,7 @@ After specifying all tools, compile the project-level dependencies:
 | Consideration | Questions to Ask |
 |---------------|------------------|
 | **Uniformity** | All agents same model, or specialized per task? |
-| **Provider** | Anthropic, OpenAI, Google, local/self-hosted? |
+| **Provider** | Google, Anthropic, OpenAI, local/self-hosted, other? (default: Google) |
 | **Reasoning** | Need chain-of-thought? Extended thinking? |
 | **Cost** | Budget constraints? Token limits? |
 | **Latency** | Real-time needs? Async acceptable? |

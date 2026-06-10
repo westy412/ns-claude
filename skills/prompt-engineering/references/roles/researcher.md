@@ -104,7 +104,7 @@ Gathers information from multiple sources, explores topics systematically, and s
 - Add a `<tool_usage_guidelines>` section if tools are central to the research
 
 **If using Structured Output:**
-- See `modifiers/structured-output.md` for schema design patterns
+- See `modifiers/output-type.md` for schema design patterns
 - Common for research — enables downstream automation and agent-to-agent handoff
 - Schema should separate: findings (facts), analysis (inferences), metadata (confidence, sources)
 - Include confidence fields to surface uncertainty programmatically
