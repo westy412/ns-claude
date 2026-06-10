@@ -1,6 +1,6 @@
 # Phase 1: Discovery
 
-Understand the problem thoroughly before designing. Cover these 8 areas through conversation with the user. Update progress.md with all findings before proceeding to Phase 2.
+Understand the problem thoroughly before designing. Cover these 8 areas through conversation with the user. Update progress.md with all findings before proceeding to Phase 2. Every question fired at the user, forced concretisation, and fired-once gap also lands as a row in progress.md's **Escalation & Decision Record (spec-stage)** table.
 
 ---
 

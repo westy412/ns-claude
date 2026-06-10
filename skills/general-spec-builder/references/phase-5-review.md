@@ -36,7 +36,9 @@ Known-Risks in the spec's Notes.
 
 **On a gate failure:** fix it (autonomous if the discovery doc / conversation settles it — write the
 fix into the spec, never just note it) or escalate one specific question (clause C of
-`references/autonomy-and-escalation.md`). Only once the gate passes do you proceed to Step 2.
+`references/autonomy-and-escalation.md`). Every escalation here — and any user override of the
+gate — appends a row to `progress.md`'s Escalation & Decision Record (`branch-B` / `gate-override`).
+Only once the gate passes do you proceed to Step 2.
 
 ---
 

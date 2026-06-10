@@ -32,6 +32,22 @@
 
 ---
 
+## Escalation & Decision Record (spec-stage)
+
+> One row per escalation/decision point on the front half of the run -- the spec-stage twin of the
+> implementation Drift Log. Layer-4 telemetry: the dev-evolution-retro reads this table to
+> root-cause front-load failures and human interruptions.
+
+| Stage | Point | Type | Asked / Forced | Resolution | Doc section |
+|-------|-------|------|----------------|------------|-------------|
+| discovery / spec / review | [phase or gate] | branch-B / prober-force / gate-override / fired-once | [the question, or what was forced concrete] | [user's answer / outcome] | [section it shaped] |
+
+**Type:** `branch-B` = the user was asked (genuine escalation). `prober-force` = vague input
+forced concrete by a prober. `gate-override` = the user overrode a blocking gate. `fired-once` =
+gap asked once, unresolved, logged as a Known-Risk.
+
+---
+
 ## Discovery Findings
 
 ### Problem & Purpose

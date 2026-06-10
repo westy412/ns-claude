@@ -312,7 +312,7 @@ The user may have provided a spec folder path (from brainstorm handoff), or you 
 
 **If folder exists** (brainstorm was the entry point):
 - Save `discovery.md` into the existing folder
-- Update `progress.md` — add discovery status, update Status to `discovery`
+- Update `progress.md` — add discovery status, update Status to `discovery`, and append this conversation's rows to the **Escalation & Decision Record (spec-stage)** section (create the section if absent — the spec-builder progress template defines it)
 - The `brainstorm.md`, `ideas/`, `feedback/` should already be there
 - Done.
 
@@ -326,6 +326,8 @@ Create:
   discovery.md          ← ALWAYS this name
   feedback/             ← create empty placeholder
   progress.md           ← create with metadata (date, idea origin, status: discovery)
+                          + the Escalation & Decision Record (spec-stage) section,
+                            backfilled with this conversation's escalation rows
 ```
 
 **Step 3: Check for brainstorm content to copy in.**

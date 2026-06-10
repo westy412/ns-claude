@@ -299,7 +299,9 @@ most likely to resolve wrongly.
 For each: **resolve it now** (tighten the spec — autonomous if discovery/conversation settles it, else
 one specific question per the escalation comms standard, `references/autonomy-and-escalation.md`), or
 **log it explicitly as a Known-Risk** in `overview.md` / `progress.md`. Do not pass a silently
-under-thought spec to Phase 5.
+under-thought spec to Phase 5. Each escalation or Known-Risk log here appends a row to
+`progress.md`'s Escalation & Decision Record (`branch-B` / `fired-once`); a user override of any
+blocking check is a `gate-override` row.
 
 ---
 

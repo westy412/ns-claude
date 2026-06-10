@@ -21,7 +21,7 @@ records what's *missing* (a telemetry gap is itself a finding).
 | Live testing | `feedback/testing-NNN.md` → `testing_verdict` header + manifest rows | PASS/FAIL/UNTESTED per seed row; FAILs that static gates missed; UNTESTED = seed/environment gaps |
 | Mid-build spec amendments | Drift Log `Spec amended? yes` rows + spec git history if available | Every one is a front-load failure by definition |
 | Decisions split | `progress.md` Decisions Made (Branch A vs Branch B), handover captures if present | Autonomous fixes vs escalations — the autonomy-dial signal |
-| Spec-stage escalation records | *(when present)* | Discovery/spec-builder/review-stage escalations. **Known gap:** the spec-stage skills carry the escalation doctrine but do not yet write structured records (backlog #48). Read conversation-adjacent artefacts (spec folder notes, session captures) when they exist; otherwise record "spec-stage telemetry absent" in the manifest — absence is a finding, not a blocker. |
+| Spec-stage escalation records | `progress.md` → "Escalation & Decision Record (spec-stage)" table | One row per front-half escalation point: Stage · Point · Type (`branch-B` / `prober-force` / `gate-override` / `fired-once`) · Asked/Forced · Resolution · Doc section — written by discovery + both spec-builders (#48). For runs predating #48 the section may be absent: record "spec-stage telemetry absent" in the manifest — absence is a finding, not a blocker. |
 
 ---
 

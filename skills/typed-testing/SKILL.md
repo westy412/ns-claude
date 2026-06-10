@@ -112,6 +112,8 @@ reasoning lane, and any service/UI shell around it takes the code lane.
    fill the `testing_verdict` header.
 2. **All PASS (no FAILs):** update `progress.md` — live testing **done** (report path), clearing
    the "live testing owed" record. UNTESTED rows stay listed as known gaps.
+   If the user confirms this completes the run end-to-end, offer to register it with
+   `dev-evolution-retro` (register mode) — prompt-only; the user declares run-complete, never you.
 3. **Any FAIL:** route per [report-format.md](references/report-format.md) — fix-side or
    spec-defect loopback — then re-run the failed rows as a new `testing-NNN` run after fixes land.
 4. Report the verdict and the report path to the user / calling skill.

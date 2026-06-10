@@ -37,7 +37,9 @@ standard: `references/autonomy-and-escalation.md`, clause C). If discovery alrea
 take it as settled and move on. If a dimension is genuinely out of scope or unknowable, log it as a
 Known-Risk in the spec and proceed (fire-once — never loop).
 
-**Record in progress.md:** which dimensions had holes, what you asked, what was resolved vs logged.
+**Record in progress.md:** one row per hole in the **Escalation & Decision Record (spec-stage)**
+table — what you asked (`branch-B`), what you forced concrete (`prober-force`), what was fired-once
+and logged as a Known-Risk (`fired-once`).
 
 ---
 

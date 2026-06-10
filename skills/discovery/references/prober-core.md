@@ -88,4 +88,8 @@ the comms standard — and **fired once.** On "out of scope / don't know / proce
 Known-Risk and move on. The gate enforces coverage; it must never loop the user in circles. (This is
 clause B of `autonomy-and-escalation.md`: escalate genuine uncertainty, fire each question once.)
 
+Each of these points leaves telemetry: at save time, every fired question, forced concretisation,
+and fired-once gap becomes one row in `progress.md`'s **Escalation & Decision Record (spec-stage)**
+(type `branch-B`, `prober-force`, or `fired-once`) — the front-load signal the run retro reads.
+
 Only once the gate passes (or every open gap is logged as a Known-Risk) do you write `discovery.md`.

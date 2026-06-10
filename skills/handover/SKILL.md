@@ -113,6 +113,8 @@ Output the following in chat. Do not save it to a file.
   feedback/testing-NNN.md testing_verdict; note "live testing owed" if typed-testing deferred]
 - **Layer 4 — retro**: [retro owed? yes/no — yes when the run is ending without a process
   retro; point at the accumulated telemetry: progress.md Drift Log, escalation records]
+  [If the run is complete end-to-end and not yet registered: prompt the user — "Register this
+  run with dev-evolution-retro?" Prompt-only; never declare a run complete yourself.]
 
 ### What Was Done
 [Comprehensive account of every meaningful task completed this session.
