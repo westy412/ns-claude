@@ -23,13 +23,18 @@ gh repo create Novosapien/[name]-vault --private --clone
 
 ## Step 3 — Content skeleton
 
-Content lives at the **repo root** (no `vault/` nesting — that was a Quartz requirement):
+Content lives at the **repo root** (no `vault/` nesting — that was a Quartz requirement). Scaffold the full working skeleton — every entry-point file `index.md` links to must exist on day one (no dangling links):
 
 1. `index.md` — from the project-readme template, filled in with project name, client name, status "Discovery"
-2. `vision.md` — empty vision template (from the product-vision skill)
+2. `vision.md` — stub from the vision template (status "Not started", pointer to run the vision-extraction skill)
 3. `components/components.md` — empty component map
+4. `architecture/architecture.md` — entry-point stub (overview + empty routing table; sections like tech-stack/ grow later)
+5. `open-questions.md` — empty register with the standard table header
+6. `meetings/` — empty directory with `.gitkeep`
+7. `drafts/` — empty directory with `.gitkeep`
+8. `.gitignore` — at minimum `.DS_Store` and `.obsidian/workspace.json`
 
-Nothing else. `meetings/`, `architecture/`, `drafts/`, `whats-new.md`, `open-questions.md` get created when there's content for them (see [project-structure.md](project-structure.md)).
+`whats-new.md` is the only deferred file — created at the first real client-facing update. Beyond this scaffold set, the don't-create-empty-placeholders rule applies: everything else (components, sub-components, architecture sections, `product/pages/`) is created when there's content for it (see [project-structure.md](project-structure.md)).
 
 ## Step 4 — Copy the product skill suite
 

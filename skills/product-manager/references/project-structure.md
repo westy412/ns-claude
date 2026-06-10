@@ -156,12 +156,15 @@ sub-components/match-browser/match-browser.md
 
 ## Creating the Initial Project Structure
 
-When starting a new project **inside an existing vault**, create:
+Every new project starts with the full working skeleton — every entry point `index.md` links to must exist from day one:
 
 1. The project landing page: `index.md`
-2. The vision document: `vision.md` (from vision template)
+2. The vision document: `vision.md` (stub from vision template)
 3. The components directory and map: `components/components.md`
+4. The architecture entry point: `architecture/architecture.md` (stub; sections grow later)
+5. The open-questions register: `open-questions.md`
+6. `meetings/` and `drafts/` directories
 
-Everything else gets created as documents are produced. Don't create empty placeholder directories — create them when there's content to put in them.
+**Beyond the skeleton, structure grows with content.** Don't create empty placeholder directories or files past this set — new components, sub-components, architecture sections, and the `product/pages/` layer are created when there's content to put in them. `whats-new.md` is created at the first client-facing update.
 
 When the vault itself doesn't exist yet (no repo, empty directory), load [vault-setup.md](vault-setup.md) and scaffold it first.
