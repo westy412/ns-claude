@@ -193,10 +193,10 @@ When generating team.md for a parent with sub-teams, include:
 
 | Pattern | LangGraph | DSPy |
 |---------|-----------|------|
-| Pipeline | `langgraph/pipeline.md` | `dspy/pipeline.md` |
-| Router | `langgraph/router.md` | `dspy/router.md` |
-| Fan-in/Fan-out | `langgraph/fan-in-fan-out.md` | `dspy/fan-in-fan-out.md` |
-| Loop | `langgraph/loop.md` | `dspy/loop.md` |
+| Pipeline | `references/langgraph/pipeline.md` | `references/dspy/pipeline.md` |
+| Router | `references/langgraph/router.md` | `references/dspy/router.md` |
+| Fan-in/Fan-out | `references/langgraph/fan-in-fan-out.md` | `references/dspy/fan-in-fan-out.md` |
+| Loop | `references/langgraph/loop.md` | `references/dspy/loop.md` |
 
 ---
 
@@ -252,19 +252,19 @@ These feed into the next skills in the chain.
 ## References
 
 ### Overview
-- `overview.md` — Pattern overview and comparison
+- `references/overview.md` — Pattern overview and comparison
 
 ### LangGraph Patterns
-- `langgraph/pipeline.md` — Linear chain pattern
-- `langgraph/router.md` — Dynamic dispatch pattern
-- `langgraph/fan-in-fan-out.md` — Parallel execution pattern
-- `langgraph/loop.md` — Iterative refinement pattern
+- `references/langgraph/pipeline.md` — Linear chain pattern
+- `references/langgraph/router.md` — Dynamic dispatch pattern
+- `references/langgraph/fan-in-fan-out.md` — Parallel execution pattern
+- `references/langgraph/loop.md` — Iterative refinement pattern
 
 ### DSPy Patterns
-- `dspy/pipeline.md` — Sequential module composition
-- `dspy/router.md` — Conditional dispatch pattern
-- `dspy/fan-in-fan-out.md` — Parallel execution with asyncio.gather
-- `dspy/loop.md` — Iterative refinement with dspy.History
+- `references/dspy/pipeline.md` — Sequential module composition
+- `references/dspy/router.md` — Conditional dispatch pattern
+- `references/dspy/fan-in-fan-out.md` — Parallel execution with asyncio.gather
+- `references/dspy/loop.md` — Iterative refinement with dspy.History
 
 ### DSPy Optimization (Advanced)
 - `../agent-implementation-builder/frameworks/dspy/optimization/overview.md` — Optimization concepts

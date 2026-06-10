@@ -172,14 +172,14 @@ A markdown document mapping all slots to their types:
 - **Type:** Text Agent
 - **Framework:** LangGraph
 - **Tools:** None
-- **Reference:** `langgraph/text-agent.md`
+- **Reference:** `references/langgraph/text-agent.md`
 
 ### critic
 - **Type:** Structured Output Agent
 - **Framework:** LangGraph
 - **Tools:** None
 - **Schema:** `CriticFeedback` (score, passed, feedback, suggestions)
-- **Reference:** `langgraph/structured-output-agent.md`
+- **Reference:** `references/langgraph/structured-output-agent.md`
 ```
 
 This feeds into the prompt-engineering skill.
@@ -192,12 +192,12 @@ This feeds into the prompt-engineering skill.
 
 | Agent Type | Reference |
 |------------|-----------|
-| Text Agent | `langgraph/text-agent.md` |
-| Message Agent | `langgraph/message-agent.md` |
-| Structured Output Agent | `langgraph/structured-output-agent.md` |
-| Text + Tool Agent | `langgraph/text-tool-agent.md` |
-| Message + Tool Agent | `langgraph/message-tool-agent.md` |
-| Structured Output + Tool Agent | `langgraph/structured-output-tool-agent.md` |
+| Text Agent | `references/langgraph/text-agent.md` |
+| Message Agent | `references/langgraph/message-agent.md` |
+| Structured Output Agent | `references/langgraph/structured-output-agent.md` |
+| Text + Tool Agent | `references/langgraph/text-tool-agent.md` |
+| Message + Tool Agent | `references/langgraph/message-tool-agent.md` |
+| Structured Output + Tool Agent | `references/langgraph/structured-output-tool-agent.md` |
 
 ### DSPy Agent Types
 
@@ -205,11 +205,11 @@ DSPy uses a different taxonomy based on module behavior rather than output forma
 
 | Agent Type | Reference | Use When |
 |------------|-----------|----------|
-| Basic Agent | `dspy/basic-agent.md` | Extraction, classification, ranking - any single-turn prediction |
-| Reasoning Agent | `dspy/reasoning-agent.md` | Creative synthesis, complex decisions needing visible reasoning |
-| Conversational Agent | `dspy/conversational-agent.md` | Multi-turn loops, critic-iterator patterns with dspy.History |
-| Tool Agent | `dspy/tool-agent.md` | Needs to call external tools. **Default to ChainOfThought/Predict + ToolCalls** (single LLM call, manual tool execution). **ReAct is rare** — only for agents that must dynamically discover which tools to call through multi-step reasoning chains. If you think ReAct is needed, **stop and ask the user** before proceeding. |
-| Text Agent *(alias)* | `dspy/text-agent.md` | Redirects to Basic Agent - DSPy has no text vs structured distinction |
+| Basic Agent | `references/dspy/basic-agent.md` | Extraction, classification, ranking - any single-turn prediction |
+| Reasoning Agent | `references/dspy/reasoning-agent.md` | Creative synthesis, complex decisions needing visible reasoning |
+| Conversational Agent | `references/dspy/conversational-agent.md` | Multi-turn loops, critic-iterator patterns with dspy.History |
+| Tool Agent | `references/dspy/tool-agent.md` | Needs to call external tools. **Default to ChainOfThought/Predict + ToolCalls** (single LLM call, manual tool execution). **ReAct is rare** — only for agents that must dynamically discover which tools to call through multi-step reasoning chains. If you think ReAct is needed, **stop and ask the user** before proceeding. |
+| Text Agent *(alias)* | `references/dspy/text-agent.md` | Redirects to Basic Agent - DSPy has no text vs structured distinction |
 
 ---
 
@@ -224,8 +224,8 @@ DSPy uses a different taxonomy based on module behavior rather than output forma
 
 | Slot | Agent Type | Framework | Reference |
 |------|-----------|-----------|-----------|
-| retriever | Tool Agent | DSPy | `dspy/tool-agent.md` |
-| reasoner | Reasoning Agent | DSPy | `dspy/reasoning-agent.md` |
+| retriever | Tool Agent | DSPy | `references/dspy/tool-agent.md` |
+| reasoner | Reasoning Agent | DSPy | `references/dspy/reasoning-agent.md` |
 
 ---
 
@@ -245,6 +245,6 @@ DSPy uses a different taxonomy based on module behavior rather than output forma
 
 ## References
 
-- `overview.md` — Full taxonomy, detailed comparisons, code examples
-- `langgraph/*.md` — LangGraph agent implementations
-- `dspy/*.md` — DSPy agent implementations
+- `references/overview.md` — Full taxonomy, detailed comparisons, code examples
+- `references/langgraph/*.md` — LangGraph agent implementations
+- `references/dspy/*.md` — DSPy agent implementations

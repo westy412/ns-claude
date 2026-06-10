@@ -368,6 +368,6 @@ def search(q: str) -> str:
 
 ## Related Documentation
 
-- [Tool Agent Pattern](../../../individual-agents/dspy/tool-agent.md) — Full implementation guide for tool-using agents
+- [Tool Agent Pattern](../../../individual-agents/references/dspy/tool-agent.md) — Full implementation guide for tool-using agents
 - [DSPy Cheatsheet](CHEATSHEET.md) — Critical rules and patterns
 - [Async Patterns](async-patterns.md) — Running multiple ReAct agents in parallel

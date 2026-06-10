@@ -365,4 +365,4 @@ for expert in experts:
 
 - [DSPy Cheatsheet](CHEATSHEET.md) — Critical rules and singleton LM pattern
 - [ReAct Module](react.md) — Tool-using agents with ReAct
-- [Loop Pattern](../../../agent-teams/dspy/loop.md) — Iterative refinement with quality gates
+- [Loop Pattern](../../../agent-teams/references/dspy/loop.md) — Iterative refinement with quality gates

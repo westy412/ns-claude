@@ -6,10 +6,10 @@ Links to detailed documentation for DSPy team topologies.
 
 | Pattern | Flow | Use Case | Documentation |
 |---------|------|----------|---------------|
-| Pipeline | A → B → C | Sequential processing | [pipeline.md](../../agent-teams/dspy/pipeline.md) |
-| Loop | A ↔ B (iterate) | Refinement with feedback | [loop.md](../../agent-teams/dspy/loop.md) |
-| Fan-in-Fan-out | A → [B, C, D] → E | Parallel processing | [fan-in-fan-out.md](../../agent-teams/dspy/fan-in-fan-out.md) |
-| Router | R → A or B or C | Conditional routing | [router.md](../../agent-teams/dspy/router.md) |
+| Pipeline | A → B → C | Sequential processing | [pipeline.md](../../agent-teams/references/dspy/pipeline.md) |
+| Loop | A ↔ B (iterate) | Refinement with feedback | [loop.md](../../agent-teams/references/dspy/loop.md) |
+| Fan-in-Fan-out | A → [B, C, D] → E | Parallel processing | [fan-in-fan-out.md](../../agent-teams/references/dspy/fan-in-fan-out.md) |
+| Router | R → A or B or C | Conditional routing | [router.md](../../agent-teams/references/dspy/router.md) |
 
 ## Quick Selection Guide
 

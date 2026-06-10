@@ -1380,7 +1380,7 @@ async def aforward(self, input_text: str, feedback: str = None):
 
 ### Loop Orchestration
 
-> **Full reference:** [`agent-teams/dspy/loop.md`](../../../agent-teams/dspy/loop.md)
+> **Full reference:** [`agent-teams/references/dspy/loop.md`](../../../agent-teams/references/dspy/loop.md)
 
 The loop pattern implements while-loop with quality-check → retry-with-feedback:
 

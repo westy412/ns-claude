@@ -418,7 +418,7 @@ For detailed documentation of each agent type with code templates, see:
 
 **Corpus Location:** `/Users/georgewestbrook/Programming/novosapien/agent-patterns/`
 
-- `individual-agents/overview.md` — 6-type taxonomy overview
+- `individual-agents/references/overview.md` — 6-type taxonomy overview
 - `individual-agents/text-agent.md` — Text Agent documentation
 - `individual-agents/message-agent.md` — Message Agent documentation
 - `individual-agents/structured-output-agent.md` — Structured Output Agent documentation
