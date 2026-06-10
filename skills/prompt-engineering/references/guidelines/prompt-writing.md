@@ -2,6 +2,12 @@
 
 Detailed techniques for writing effective agent system prompts. Use this alongside framework templates, role guidance, and modifiers to produce complete, high-quality prompts.
 
+> **Spec-derived sections.** When the prompt is being written inside the agent-implementation
+> workflow (an `agent-spec-builder` spec exists), the spec's per-agent file is the *source* for
+> the prompt's role, inputs, outputs, and examples — derive these sections from the spec
+> (Purpose, I/O contract, Examples + Edge Cases), don't invent them. A gap in the spec is a
+> spec-quality issue (run the autonomy rule), not a license to improvise.
+
 ---
 
 ## Core Principles
