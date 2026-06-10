@@ -1,8 +1,8 @@
 # Verification Dimensions
 
-> **When to read:** When generating teammate prompts in Phase 1. Each section defines what one verification agent checks.
+> **When to read:** When generating verifier prompts in Phase 1. Each section defines what one verification agent checks.
 
-Each dimension is assigned to one agent. The agent spawns `codebase-researcher` sub-agents to investigate specific areas, then synthesizes findings into structured results.
+Each dimension is assigned to one verification agent. It investigates its bounded dimension — delegating to research sub-agents where the platform supports them — and returns structured findings for parent consolidation.
 
 ---
 
@@ -40,7 +40,7 @@ Each dimension is assigned to one agent. The agent spawns `codebase-researcher` 
 
 ### How to Investigate
 
-Spawn `codebase-researcher` sub-agents for:
+Focus investigation on:
 - Tracing a specific requirement to code: "Find the implementation of [requirement]. Check [files from execution plan]."
 - Verifying an architectural pattern: "Check if [pattern] is followed in [directory]. Look for violations."
 - Checking a specific acceptance criterion: "Verify that [criterion] is met by examining [relevant files]."
@@ -98,7 +98,7 @@ For each check, report:
 
 ### How to Investigate
 
-Spawn `codebase-researcher` sub-agents for:
+Focus investigation on:
 - Checking a set of files: "Verify these files exist and are non-empty: [file list]. Report any that are missing or contain only stubs."
 - Verifying a chunk's output: "The execution plan says [chunk] should produce [outcome]. Check if this exists in [files/directories]."
 - Finding stubs: "Search [directories] for TODO comments, NotImplementedError, placeholder functions, or empty implementations."
@@ -191,14 +191,14 @@ Only review files that were created or modified as part of this implementation. 
 
 ### How to Investigate
 
-Spawn `codebase-researcher` sub-agents per quality sub-dimension:
+Focus investigation per quality sub-dimension:
 - "Review [files] for security issues: injection, hardcoded secrets, auth flaws, XSS. Report findings with file paths and line numbers."
 - "Check [files] for correctness: null handling, boundary conditions, boolean logic, unreachable code."
 - "Analyze [files] for performance: N+1 queries, inefficient algorithms, memory leaks."
 - "Review [files] for maintainability: duplication, function length, nesting, magic numbers."
 - "Check [files] for error handling: empty catches, unhandled promises, missing propagation."
 
-Group files by area (e.g., all API handlers together, all data layer together) to give each sub-agent focused context.
+Group files by area (e.g., all API handlers together, all data layer together) to keep the verifier's context focused.
 
 ### Findings Format
 

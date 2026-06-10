@@ -1,8 +1,8 @@
 # Verification Dimensions
 
-> **When to read:** When generating teammate prompts in Phase 1. Each section defines what one verification agent checks.
+> **When to read:** When generating verifier prompts in Phase 1. Each section defines what one verification agent checks.
 
-Each dimension is assigned to one agent. The agent spawns `codebase-researcher` sub-agents to investigate specific areas, then synthesizes findings into structured results.
+Each dimension is assigned to one verification agent. It investigates its bounded dimension — delegating to research sub-agents where the platform supports them — and returns structured findings for parent consolidation.
 
 ---
 
@@ -152,7 +152,7 @@ project/
 **Agent:** `framework-compliance-verifier`
 **Purpose:** Verify the implementation follows the correct framework patterns and avoids known anti-patterns. This dimension is framework-specific -- load the appropriate reference file.
 
-The team lead includes the correct framework checks in this agent's prompt:
+The parent includes the correct framework checks in this agent's prompt:
 - DSPy → content from [framework-checks-dspy.md](framework-checks-dspy.md)
 - LangGraph → content from [framework-checks-langgraph.md](framework-checks-langgraph.md)
 

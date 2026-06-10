@@ -6,6 +6,13 @@ allowed-tools: Read Glob Grep AskUserQuestion Write Skill TeamCreate TaskCreate 
 
 # Review Agent Spec
 
+> **Mirrored machinery.** `review-general-spec` and `review-agent-spec` share their review
+> engine: `autonomy-and-escalation.md` + `grounding-and-testability.md` are byte-identical
+> copies; `ambiguity-analysis` / `source-tracing` / `structural-checks` are deliberate per-track
+> specializations of the same structure. Change shared machinery via `skill-updater` across all
+> copies — never assume the sibling covers a fix made here.
+
+
 ## Purpose
 
 Validate a completed agent spec before handoff to implementation. Three dimensions, each run by a dedicated agent in its own context window:
