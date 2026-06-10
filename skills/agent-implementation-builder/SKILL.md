@@ -127,8 +127,8 @@ Read manifest.yaml → check execution-plan.phases
 
 | Framework | Cheat Sheet Location |
 |-----------|---------------------|
-| LangGraph | `frameworks/langgraph/CHEATSHEET.md` |
-| DSPy | `frameworks/dspy/CHEATSHEET.md` |
+| LangGraph | `references/langgraph/CHEATSHEET.md` |
+| DSPy | `references/dspy/CHEATSHEET.md` |
 
 **What cheat sheets contain:**
 - **Critical Rules** — Things you MUST do / MUST NOT do
@@ -437,9 +437,9 @@ Progress tracking template: `templates/progress.md`
 - `references/common/testing-handoff.md` — Layer-3 handoff: on a clean big review, surface the spec's test seed and invoke the typed-testing skill (wired — its `testing_verdict` is the live gate). Read at the big review, before completion.
 
 ### Existing (DO NOT MODIFY)
-- `frameworks/langgraph/CHEATSHEET.md` — LangGraph critical rules and patterns
-- `frameworks/dspy/CHEATSHEET.md` — DSPy critical rules and patterns
-- `frameworks/dspy/async-patterns.md` — DSPy async patterns
-- `frameworks/dspy/react.md` — DSPy ReAct patterns
-- `frameworks/dspy/optimization/` — DSPy optimization guides
+- `references/langgraph/CHEATSHEET.md` — LangGraph critical rules and patterns
+- `references/dspy/CHEATSHEET.md` — DSPy critical rules and patterns
+- `references/dspy/async-patterns.md` — DSPy async patterns
+- `references/dspy/react.md` — DSPy ReAct patterns
+- `references/dspy/optimization/` — DSPy optimization guides
 - `templates/progress.md` — Progress tracking template

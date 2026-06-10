@@ -502,4 +502,4 @@ def function_name(param: type) -> return_type:
 
 - `agent-spec-builder/` — Uses this for new systems
 - `agent-improvement-spec/` — Uses this for improvements
-- `frameworks/langgraph/CHEATSHEET.md` — LangGraph tool patterns
+- `references/langgraph/CHEATSHEET.md` — LangGraph tool patterns

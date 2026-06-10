@@ -42,6 +42,12 @@ A component document must exist for the parent component. Sub-components are ide
 
 6. **Recursive decomposition.** If a sub-component is too large (multiple distinct journeys that don't share state, own sub-parts that could be built independently), propose further decomposition.
 
+7. **Knowledge-graph integrity — never write a dangling wikilink.** Every `[[link]]` must resolve to a file that exists. Reference not-yet-documented items as **plain text** (or create a stub first); add the `[[link]]` only once the file exists. Use shortest-path links (`[[name]]`, not `[[../name]]` or `[[sub-components/name]]`). After writing, run `python3 scripts/check-wikilinks.py` and fix anything it reports.
+
+8. **Open questions go in the register.** Don't bury open questions at the bottom of a doc — add them to the central [[open-questions]] register and leave a short inline marker `_[⚠ open — see [[open-questions]] #N]_` where relevant.
+
+9. **Status reflects real coverage.** Only mark a sub-component **Defined** after a dedicated deep-dive produced its entity journeys and acceptance criteria. Don't present inferred acceptance criteria as decided.
+
 ## Flow
 
 ```
@@ -84,10 +90,11 @@ Check for further decomposition:
 After extraction:
     │
     1. Write sub-component documents
-    2. Backfill parent component's Sub-Components table
-    3. Add wikilinks (up to parent, cross-links to siblings)
+    2. Backfill the parent component's Sub-Components table (replace plain text with a [[link]] now this doc exists)
+    3. Add wikilinks — up to the parent ([[component-name]], shortest-path) and cross-links to siblings that already exist
     4. Produce gap analysis
     5. Questions for next call
+    6. Validate the graph — run `python3 scripts/check-wikilinks.py` and fix any broken links
 ```
 
 ## Entity Journey Extraction

@@ -47,6 +47,8 @@ The digest runs in 7 phases. Load `references/digest-process.md` for full detail
 - **Flag, don't create.** New components, vision shifts, and significant rewrites get flagged for focused sessions.
 - **Source-tag every addition.** `(Source: standup 2026-05-16)` — makes it traceable.
 - **Light outputs.** Changelog entries and targeted edits, not document rewrites.
+- **Knowledge-graph integrity.** Never write a dangling wikilink — link only to docs that exist (shortest-path); list anything not yet documented as plain text. Run `python3 scripts/check-wikilinks.py` after writing and fix anything it reports.
+- **Open questions go in the register.** Append open questions to the central [[open-questions]] register at the project root, with an inline `_[⚠ open — see [[open-questions]] #N]_` marker in the relevant doc — not buried at the bottom of a file.
 
 ## Boundaries
 

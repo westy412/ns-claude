@@ -37,7 +37,7 @@ An agent that maintains conversation context across multiple turns using `dspy.H
 - Output fields defined in the Signature
 - History object should be updated after each call
 
-> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `references/dspy/CHEATSHEET.md` Critical Rules.
 
 ## Prompting Guidelines
 

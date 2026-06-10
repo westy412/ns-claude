@@ -272,5 +272,5 @@ These feed into the next skills in the chain.
 - `references/dspy/loop.md` — Iterative refinement with dspy.History
 
 ### DSPy Optimization (Advanced)
-- `../agent-implementation-builder/frameworks/dspy/optimization/overview.md` — Optimization concepts
-- `../agent-implementation-builder/frameworks/dspy/optimization/gepa-workflow.md` — GEPA optimization workflow
+- `../agent-implementation-builder/references/dspy/optimization/overview.md` — Optimization concepts
+- `../agent-implementation-builder/references/dspy/optimization/gepa-workflow.md` — GEPA optimization workflow

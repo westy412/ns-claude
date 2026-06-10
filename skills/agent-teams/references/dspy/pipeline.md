@@ -76,7 +76,7 @@ def get_shared_lm():
 # STRUCTURED OUTPUT RULE: Use typed output fields (bool, int, list[str],
 # dict[str, Any]) or Pydantic BaseModel/RootModel as OutputField types.
 # NEVER use str fields with JSON parsing instructions.
-# See frameworks/dspy/CHEATSHEET.md Critical Rules.
+# See references/dspy/CHEATSHEET.md Critical Rules.
 
 class Stage1Signature(dspy.Signature):
     """
@@ -395,7 +395,7 @@ if __name__ == "__main__":
 
 ## DSPy-Specific Notes
 
-> **Structured Output Rule:** When defining signatures for pipeline stages, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+> **Structured Output Rule:** When defining signatures for pipeline stages, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `references/dspy/CHEATSHEET.md` Critical Rules.
 
 - **Singleton LM Pattern:** All predictors share one LM instance via `set_lm()`. This is critical for connection pooling when running concurrent workflows.
 

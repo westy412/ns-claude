@@ -17,8 +17,8 @@ Update the cheat sheet when you receive feedback that:
 ## How to Update
 
 1. **Identify the framework** — Which cheat sheet needs updating?
-   - `frameworks/langgraph/CHEATSHEET.md`
-   - `frameworks/dspy/CHEATSHEET.md`
+   - `references/langgraph/CHEATSHEET.md`
+   - `references/dspy/CHEATSHEET.md`
 
 2. **Categorize the feedback:**
    - **Critical Rule** — Add to "Critical Rules" section
@@ -37,8 +37,8 @@ Update the cheat sheet when you receive feedback that:
 
    | If updating... | Also check... |
    |----------------|---------------|
-   | `frameworks/dspy/CHEATSHEET.md` | `prompt-engineering/references/targets/dspy.md`, SKILL.md DSPy routing |
-   | `frameworks/langgraph/CHEATSHEET.md` | `prompt-engineering/references/targets/langgraph.md`, SKILL.md LangGraph routing |
+   | `references/dspy/CHEATSHEET.md` | `prompt-engineering/references/targets/dspy.md`, SKILL.md DSPy routing |
+   | `references/langgraph/CHEATSHEET.md` | `prompt-engineering/references/targets/langgraph.md`, SKILL.md LangGraph routing |
    | Any pattern or rule | The corresponding section in other framework cheat sheets for consistency |
 
    **If a contradiction is found:** STOP. Present both the existing content and the proposed change to the user. Explain the conflict and ask which should take precedence. Do NOT silently overwrite existing guidance.
@@ -92,7 +92,7 @@ Update the cheat sheet when you receive feedback that:
 > "The ToolNode is being created inside the agent function instead of being added to the graph."
 
 **Action taken:**
-1. Open `frameworks/langgraph/CHEATSHEET.md`
+1. Open `references/langgraph/CHEATSHEET.md`
 2. Add to Anti-Patterns section:
 
 ```

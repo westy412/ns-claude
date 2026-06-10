@@ -74,7 +74,7 @@ If the transcript contains enough vision-level content, attempt to identify the 
 - Propose an initial component list
 - Let the user confirm, modify, or expand
 
-**Do NOT create component documents yet.** Just list them in the vision document's Components backfill table with one-line descriptions and "Collecting" status.
+**Do NOT create component documents yet.** Just list them in the vision document's Components backfill table with one-line descriptions and "Collecting" status — as **plain text** (no wikilinks until the component docs exist, or a link will dangle).
 
 ---
 

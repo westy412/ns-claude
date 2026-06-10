@@ -92,7 +92,7 @@ class SingleToolAgent(dspy.Module):
 - Output fields defined in the Signature
 - `trajectory` containing the full reasoning and tool call history
 
-> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+> **Structured Output Rule:** Use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `references/dspy/CHEATSHEET.md` Critical Rules.
 
 ## Prompting Guidelines
 

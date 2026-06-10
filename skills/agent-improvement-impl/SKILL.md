@@ -45,8 +45,8 @@ Use this skill when:
 
 | Framework | Cheat Sheet Location |
 |-----------|---------------------|
-| LangGraph | `frameworks/langgraph/CHEATSHEET.md` |
-| DSPy | `frameworks/dspy/CHEATSHEET.md` |
+| LangGraph | `references/langgraph/CHEATSHEET.md` |
+| DSPy | `references/dspy/CHEATSHEET.md` |
 
 ---
 
@@ -340,7 +340,7 @@ Next steps:
 
 ## References
 
-- `frameworks/` — Framework cheat sheets
+- `agent-implementation-builder/references/{dspy,langgraph}/` — Framework cheat sheets
 - `agent-improvement-spec/` — Creates change specs
 - `individual-agents/` — Agent implementation patterns
 - `agent-teams/` — Team patterns

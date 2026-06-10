@@ -142,10 +142,10 @@ Let the user decide. If they decompose further, the sub-component gets its own `
 
 After creating sub-component documents:
 
-1. **Update the parent component's README.md** — add each new sub-component to the Sub-Components backfill table
-2. **Add wikilinks** — the sub-component links UP to its parent component `[[../README]]`
-3. **Cross-link siblings** — if sub-components depend on each other, add links in their Dependencies sections
-4. **Update the components README** — if the component's status changed (e.g., from "Collecting" to "Defined")
+1. **Update the parent component document** (`component-name.md`) — add each new sub-component to its Sub-Components backfill table (replace any plain-text entry with a `[[link]]` now the doc exists)
+2. **Add wikilinks** — the sub-component links UP to its parent component with a shortest-path link, `[[component-name]]` (never `[[../README]]` — that path doesn't exist and breaks the graph)
+3. **Cross-link siblings** — if sub-components depend on each other, add links in their Dependencies sections (only to docs that exist)
+4. **Update the component map** (`components.md`) — if the component's status changed (only mark **Defined** after a dedicated deep-dive)
 
 ---
 

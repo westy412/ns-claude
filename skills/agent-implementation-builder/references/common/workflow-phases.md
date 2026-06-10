@@ -88,8 +88,8 @@ team:
 ### Step 4: READ THE FRAMEWORK CHEAT SHEET
 
 Based on the framework in agent-config.yaml, read the corresponding cheat sheet:
-- LangGraph → `frameworks/langgraph/CHEATSHEET.md`
-- DSPy → `frameworks/dspy/CHEATSHEET.md`
+- LangGraph → `references/langgraph/CHEATSHEET.md`
+- DSPy → `references/dspy/CHEATSHEET.md`
 
 **This step is CRITICAL.** The cheat sheet contains rules that prevent common implementation mistakes.
 

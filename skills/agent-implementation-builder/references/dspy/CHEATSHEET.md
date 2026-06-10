@@ -1250,7 +1250,7 @@ class MyPipeline(dspy.Module):
 
 ### Tool-Using Agents (ReAct vs Manual)
 
-> **Full reference:** [`frameworks/dspy/react.md`](react.md) and [Tool-Calling Patterns](#tool-calling-patterns) above
+> **Full reference:** [`references/dspy/react.md`](react.md) and [Tool-Calling Patterns](#tool-calling-patterns) above
 
 **Default to ChainOfThought + manual tool handling.** Only use ReAct when multi-step tool chains are genuinely required (LLM must reason between tool calls and decide what to call next).
 
@@ -1287,7 +1287,7 @@ result = await react.acall(question="...")
 
 ### asyncio.gather Fan-Out
 
-> **Full reference:** [`frameworks/dspy/async-patterns.md`](async-patterns.md)
+> **Full reference:** [`references/dspy/async-patterns.md`](async-patterns.md)
 
 ```python
 # Fan out N instances in parallel (with retry + timeout)
@@ -1313,7 +1313,7 @@ successful = [r for r in results if not isinstance(r, Exception)]
 
 ### Multi-Model Singleton
 
-> **Full reference:** [`frameworks/dspy/async-patterns.md`](async-patterns.md)
+> **Full reference:** [`references/dspy/async-patterns.md`](async-patterns.md)
 
 ```python
 # utils.py — separate factories for each model tier

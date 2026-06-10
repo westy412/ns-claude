@@ -67,7 +67,7 @@ def get_shared_lm():
 # STRUCTURED OUTPUT RULE: Use typed output fields (bool, int, list[str],
 # dict[str, Any]) or Pydantic BaseModel/RootModel as OutputField types.
 # NEVER use str fields with JSON parsing instructions.
-# See frameworks/dspy/CHEATSHEET.md Critical Rules.
+# See references/dspy/CHEATSHEET.md Critical Rules.
 
 class CreatorSignature(dspy.Signature):
     """
@@ -467,7 +467,7 @@ if __name__ == "__main__":
 
 ## DSPy-Specific Notes
 
-> **Structured Output Rule:** When defining signatures for Creator, Critic, and Iterator agents, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+> **Structured Output Rule:** When defining signatures for Creator, Critic, and Iterator agents, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `references/dspy/CHEATSHEET.md` Critical Rules.
 
 - **forward() + aforward() — Both REQUIRED:** `forward()` enables DSPy prompt optimization (GEPA/MIPROv2) — runs a simplified single-pass loop. `aforward()` is for production with full iteration, retry logic, and timing. Always implement both.
 

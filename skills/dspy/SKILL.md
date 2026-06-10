@@ -95,7 +95,7 @@ See [references/team-patterns.md](references/team-patterns.md) for links to:
 - Router
 
 ### Full Cheatsheet
-For comprehensive reference: `~/.claude/skills/agent-implementation-builder/frameworks/dspy/CHEATSHEET.md`
+For comprehensive reference: `~/.claude/skills/agent-implementation-builder/references/dspy/CHEATSHEET.md`
 
 ## Related Skills
 

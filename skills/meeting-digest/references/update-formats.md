@@ -59,7 +59,7 @@ When updating architecture documents:
 
 1. **Integration notes** — add to `vault/architecture/integrations/integrations.md` or create a new integration file if substantial
 2. **Tech stack decisions** — add to the relevant section in `vault/architecture/`
-3. **Open questions** — append to `vault/architecture/open-questions.md` if it exists
+3. **Open questions** — append to the central `open-questions.md` register at the project root (create it if missing); leave an inline `_[⚠ open — see [[open-questions]] #N]_` marker in the relevant doc
 
 **Format for integration notes:**
 

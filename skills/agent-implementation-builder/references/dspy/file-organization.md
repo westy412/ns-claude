@@ -263,7 +263,7 @@ When generating DSPy signatures, NEVER use `str` output fields with JSON parsing
 - Use Pydantic `BaseModel` for complex nested outputs, `RootModel[List[...]]` for lists of objects
 - Define Pydantic models in `models.py`, import them in `signatures.py`
 - Access results: `result.field_name` for typed fields, `result.field_name.model_dump()` for Pydantic models
-- See `frameworks/dspy/CHEATSHEET.md` Critical Rules §7 for full guidance and examples
+- See `references/dspy/CHEATSHEET.md` Critical Rules §7 for full guidance and examples
 
 ---
 

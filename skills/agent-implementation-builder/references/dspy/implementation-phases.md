@@ -112,7 +112,7 @@ When writing DSPy `prompts/*.md` files, teammates should read these reference fi
 
 | Order | File | Purpose |
 |-------|------|---------|
-| 1 | `agent-implementation-builder/frameworks/dspy/CHEATSHEET.md` | Signature patterns and DSPy-specific rules |
+| 1 | `agent-implementation-builder/references/dspy/CHEATSHEET.md` | Signature patterns and DSPy-specific rules |
 | 2 | `prompt-engineering/references/targets/dspy.md` | DSPy-specific sections to keep/skip/add |
 | 3 | `prompt-engineering/references/frameworks/single-turn.md` | XML section structure template |
 | 4 | `prompt-engineering/references/roles/{role}.md` | Role-specific section guidance |

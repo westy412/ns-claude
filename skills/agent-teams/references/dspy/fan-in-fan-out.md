@@ -69,7 +69,7 @@ def get_shared_lm():
 # STRUCTURED OUTPUT RULE: Use typed output fields (bool, int, list[str],
 # dict[str, Any]) or Pydantic BaseModel/RootModel as OutputField types.
 # NEVER use str fields with JSON parsing instructions.
-# See frameworks/dspy/CHEATSHEET.md Critical Rules.
+# See references/dspy/CHEATSHEET.md Critical Rules.
 
 class TechnicalCriticSignature(dspy.Signature):
     """
@@ -411,7 +411,7 @@ if __name__ == "__main__":
 
 ## DSPy-Specific Notes
 
-> **Structured Output Rule:** When defining signatures for parallel agents, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `frameworks/dspy/CHEATSHEET.md` Critical Rules.
+> **Structured Output Rule:** When defining signatures for parallel agents, use typed DSPy output fields (`bool`, `int`, `list[str]`, `dict[str, Any]`) or Pydantic `BaseModel`/`RootModel` as OutputField types. NEVER use `str` fields with JSON parsing instructions. See `references/dspy/CHEATSHEET.md` Critical Rules.
 
 - **forward() + aforward() — Both REQUIRED:** `forward()` enables DSPy prompt optimization (GEPA/MIPROv2) — runs critics sequentially without retry. `aforward()` is for production with parallel execution and retry logic. Always implement both.
 
@@ -423,7 +423,7 @@ if __name__ == "__main__":
 
 - **All critics use Predict:** Evaluation tasks don't benefit from ChainOfThought reasoning. Use `dspy.Predict` for all critics.
 
-- **Tool-calling in fan-out agents:** If fan-out agents need tools, default to ChainOfThought + manual tool handling (1 LLM call) instead of ReAct (N+ LLM calls). ReAct should only be used for multi-step tool chains. See `frameworks/dspy/CHEATSHEET.md` Tool-Calling Patterns section.
+- **Tool-calling in fan-out agents:** If fan-out agents need tools, default to ChainOfThought + manual tool handling (1 LLM call) instead of ReAct (N+ LLM calls). ReAct should only be used for multi-step tool chains. See `references/dspy/CHEATSHEET.md` Tool-Calling Patterns section.
 
 ---
 

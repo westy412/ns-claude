@@ -23,7 +23,7 @@ Component-level content in a transcript sounds like:
 
 Before extracting, read:
 1. The project's vision document — understand the overall context
-2. The components README — see what components have been identified already
+2. The component map (`components.md`) — see what components have been identified already
 3. Any existing component documents — avoid duplicating work
 
 ### Step 2: Identify which components are discussed
@@ -84,7 +84,7 @@ From the discussion about the Bloomberg Terminal, I can see these natural sub-co
 Does that match what you heard in the room? Any I've missed or mis-bucketed?
 ```
 
-**Do NOT create sub-component documents at this stage.** Just list them in the component document's Sub-Components backfill table with one-line descriptions and "Collecting" status.
+**Do NOT create sub-component documents at this stage.** Just list them in the component document's Sub-Components backfill table as **plain text** — one-line descriptions, "Collecting" status, **no wikilinks** (the sub-component docs don't exist yet, so a link would dangle).
 
 ---
 
@@ -95,7 +95,7 @@ When a transcript covers multiple components:
 1. Process them in order of coverage depth (most detail first)
 2. For each component, note cross-references to other components (these become dependencies)
 3. After processing all components, review the dependencies — are they consistent?
-4. Update the components README with any new components
+4. Update the component map (`components.md`) with any new components
 5. Backfill the vision document — add any new components to the vision document's Components table with one-line descriptions and current status.
 
 Update the vision document's Components table whenever new components are identified or component statuses change.
