@@ -172,22 +172,30 @@ If the source tracer found a gap (something in discovery not in spec) AND the am
 3. Write review to `reviews/review-NNN.md` using `templates/review-output.md` — **fill the machine-readable `review_verdict` header** at the top; it is what the implementation-builder parses to block on FAIL. Also write the liftable cases to `reviews/review-NNN-testseed.md`.
 4. Clean up team: shutdown teammates, delete team
 
-**Present the FULL findings to the user in the chat.** Do NOT just show a summary — the user needs to see what's wrong. Output:
+**Present a digest in chat — complete on errors, ruthless on everything else.** The full detail
+lives in `reviews/review-NNN.md`; the chat digest exists for the user's fix-or-proceed decision,
+not as a second archive. Output:
 
-1. **Overall verdict** (PASS/WARN/FAIL per dimension) as a summary table
-2. **All blocking issues** — list every FAIL with the specific issue, where it was found, and the suggested fix
-3. **All warnings** — list every WARN with the specific issue and suggestion
-4. **Source tracing gaps** — show the coverage gaps table (CRITICAL and MODERATE items)
-5. **Ambiguity findings** — show the ambiguity table with clarification questions for HIGH and MEDIUM items
-6. **Requirement-to-agent mapping gaps** — show any requirements with no responsible agent
-7. **Path where the full review was saved** — for reference
+1. **Verdict line** — overall + per-dimension with counts, ONE line
+   (e.g. `FAIL — structural PASS · source-tracing FAIL (2 critical) · ambiguity WARN (3)`).
+2. **Blocking issues** — EVERY FAIL, one line each: `[location] — what's wrong → fix`.
+   For an ambiguity item, the clarification question IS the line.
+3. **Warnings** — EVERY WARN, same one-line shape. Requirements with no responsible
+   agent are blocking lines in section 2, not a separate table.
+4. **Everything else as counts only** — clean checks, LOW/info items: a single summary line
+   (e.g. `Clean: 14 checks · 5 LOW notes — see the saved review`). No tables for these.
+5. **Saved path.**
+
+**Digest rules:** every FAIL and WARN appears — never collapse errors into a count; one line per
+finding — no nested tables, no severity-legend boilerplate, no restating what a finding means; if
+a line needs two sentences, it's two findings.
 
 **Spec-defect loopback.** When a finding is that the *spec itself* is wrong or under-specified (not mere reviewer uncertainty), the fix loops **back into the spec** via the spec-builder — never patched downstream, or the spec-derived tests stay wrong too. See `references/autonomy-and-escalation.md`.
 
 **Then ask:**
 *"The review has been saved to `[path]`. Would you like me to fix any of the issues found?"*
 
-The user must be able to read the chat and understand exactly what's wrong without opening the review file.
+The user must grasp every error from the chat digest alone — and read it in under a minute. Depth lives in the saved file.
 
 ---
 
