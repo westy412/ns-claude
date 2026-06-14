@@ -174,28 +174,72 @@ If the source tracer found a gap (something in discovery not in spec) AND the am
 
 **Present a digest in chat — complete on errors, ruthless on everything else.** The full detail
 lives in `reviews/review-NNN.md`; the chat digest exists for the user's fix-or-proceed decision,
-not as a second archive. Output:
+not as a second archive. The user must grasp every error from the digest alone and read it in
+under a minute.
 
-1. **Verdict line** — overall + per-dimension with counts, ONE line
-   (e.g. `FAIL — structural PASS · source-tracing FAIL (2 critical) · ambiguity WARN (3)`).
-2. **Blocking issues** — EVERY FAIL, one line each: `[location] — what's wrong → fix`.
-   For an ambiguity item, the clarification question IS the line.
-3. **Warnings** — EVERY WARN, same one-line shape. Requirements with no responsible
-   agent are blocking lines in section 2, not a separate table.
-4. **Everything else as counts only** — clean checks, LOW/info items: a single summary line
-   (e.g. `Clean: 14 checks · 5 LOW notes — see the saved review`). No tables for these.
-5. **Saved path.**
+**Structure (reproduce the worked example below exactly):**
 
-**Digest rules:** every FAIL and WARN appears — never collapse errors into a count; one line per
-finding — no nested tables, no severity-legend boilerplate, no restating what a finding means; if
-a line needs two sentences, it's two findings.
+1. **Verdict line** — `<overall> — N blocking · N warnings · N need your input` (one line).
+2. **Findings grouped by severity** (`FAIL`, then `WARN`). Each finding is **two lines**:
+   - line 1 — the **issue**, stated plainly and front-and-centre (for an ambiguity item, name
+     what is undefined — not the question yet);
+   - line 2, indented — `<dimension> · <location> · <disposition>`. Disposition is
+     **`will fix (how)`** when the source material (discovery / spec / conversation) settles it
+     with no assumptions (Branch A of `references/autonomy-and-escalation.md`), or
+     **`needs you → Qn`** when the sources do not decide it (Branch B).
+   - **Agent-specific:** a requirement with no responsible agent is a **blocking** finding
+     (dimension `agent-mapping`), in the FAIL group, same two-line shape.
+3. **`Clean:` line** — clean checks + LOW/info items as counts only. No tables.
+4. **Saved path.**
+5. **Questions block (last)** — one line stating what you can fix now without assumptions, then
+   every `needs you` finding as a numbered question `Qn` (same order they were referenced). Each
+   question is specific and answerable; sketch the options when it is a choice.
 
-**Spec-defect loopback.** When a finding is that the *spec itself* is wrong or under-specified (not mere reviewer uncertainty), the fix loops **back into the spec** via the spec-builder — never patched downstream, or the spec-derived tests stay wrong too. See `references/autonomy-and-escalation.md`.
+**Disposition is the Branch A/B autonomy split made visible** — never guess a `needs you` answer
+to avoid asking, and never ask about something the sources already settle.
 
-**Then ask:**
-*"The review has been saved to `[path]`. Would you like me to fix any of the issues found?"*
+**Spec-defect loopback.** When a finding is that the *spec itself* is wrong or under-specified
+(not mere reviewer uncertainty), the fix loops **back into the spec** via the spec-builder — never
+patched downstream, or the spec-derived tests stay wrong too. See
+`references/autonomy-and-escalation.md`.
 
-The user must grasp every error from the chat digest alone — and read it in under a minute. Depth lives in the saved file.
+**Digest rules:** every FAIL and WARN appears — never collapse errors into a count; exactly two
+lines per finding (issue, then categorisation); no nested tables, no severity-legend boilerplate;
+if the issue needs more than one sentence, it is two findings.
+
+**Worked example:**
+
+```
+FAIL — 3 blocking · 4 warnings · 5 need your input
+
+FAIL
+• "Dedupe against existing CRM contacts" is in discovery but missing from the spec
+    source-tracing · discovery §4 · will fix (pull from discovery, add requirement + AC)
+• Vendor rate-limit handling is never specified
+    source-tracing · discovery §6 · needs you → Q1
+• "Enrich within SLA" has no latency number, so no test can be derived
+    test-derivability · R7 · needs you → Q2
+
+WARN
+• Chunk 3 owns both the API and worker streams
+    structural · Execution Plan · will fix (split by stream)
+• "High-quality leads" — no scored threshold given
+    ambiguity · R3 · needs you → Q3
+• "Notify the user" — channel unspecified
+    ambiguity · R5 · needs you → Q4
+• "Retry on failure" — no count or backoff given
+    ambiguity · R9 · needs you → Q5
+
+Clean: structural 10/11 · reality-grounding 6/6 · 4 LOW notes
+Saved: …/reviews/review-002.md
+
+I can fix the 2 "will fix" items now without assumptions. The rest need you:
+  Q1. Enrichment vendor's rate limit, and how to handle hitting it — queue / backoff / skip?
+  Q2. Enrichment SLA — concrete latency target (e.g. p95 < 2s)?
+  Q3. What score makes a lead "high-quality" — what's the cutoff?
+  Q4. Notify via email, in-app, or webhook?
+  Q5. On failure, how many retries and what backoff?
+```
 
 ---
 
