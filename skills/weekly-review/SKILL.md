@@ -432,11 +432,11 @@ Notion:notion-create-pages with:
 - 2026 folder: `2e57fe586c3b80da9bdcc1bf1af72bc9`
 - Month folders: Created as needed, find ID by fetching 2026 folder
 
-### Phase 4.5: Update Cofounder Vault (this-week.md)
+### Phase 4.5: Update Cofounder Vault (private/this-week.md + weekly-reviews archive)
 
-After uploading the full review to Notion, write a **comprehensive extract** to the cofounder vault so the `/cofounder` skill has rich current-state context.
+After uploading the full review to Notion, write a **comprehensive extract** to the cofounder vault so the `/cofounder` skill has rich current-state context, **and** archive the full review locally.
 
-**Target file:** `~/Programming/novosapien/cofounder/documents/this-week.md`
+**Target file:** `~/Programming/novosapien/cofounder/private/this-week.md` — the `this-week` note now lives in the **private** layer (its own git repo, gitignored by the shared repo, never shared with Brett).
 
 **This file is tagged `#context`** in its frontmatter, meaning it's normally protected by the `/cofounder` immutability rule. The `/weekly-review` skill is **explicitly allowed** to overwrite it as part of this final step — this is the documented exception. Do not run the approval flow for this write.
 
@@ -488,16 +488,25 @@ summary: Bridge from weekly review to /cofounder — comprehensive extract of la
 **Process:**
 
 1. After Notion upload completes successfully, generate the comprehensive extract from the full review content.
-2. Write the file to `~/Programming/novosapien/cofounder/documents/this-week.md`. Overwrite the existing content — this file is fully replaced each week.
-3. Commit the change to git from the cofounder vault directory:
+2. Write the extract to `~/Programming/novosapien/cofounder/private/this-week.md`. Overwrite the existing content — this file is fully replaced each week.
+3. **Archive the full review locally** (see "Local weekly-review archive" below): write the complete review to `~/Programming/novosapien/cofounder/private/weekly-reviews/<YYYY-MM-DD>.md`.
+4. Commit both to the **private** repo (the private layer is its own git repo — NOT the shared repo):
    ```bash
-   cd ~/Programming/novosapien/cofounder
-   git add documents/this-week.md
-   git commit -m "weekly-review: update this-week.md for week of <DD/MM/YYYY>"
+   cd ~/Programming/novosapien/cofounder/private
+   git add this-week.md weekly-reviews/<YYYY-MM-DD>.md
+   git commit -m "weekly-review: update this-week.md + archive for week of <DD/MM/YYYY>"
    ```
-4. Confirm to George: "Updated `cofounder/documents/this-week.md` — `/cofounder` will pick this up on its next session."
+5. Confirm to George: "Updated `private/this-week.md` and archived the full review to `private/weekly-reviews/<date>.md` — `/cofounder` will pick this up on its next session."
 
 **Why this matters:** The `/cofounder` skill loads `this-week.md` conditionally when conversations touch current state. Without this step, that file goes stale, `/cofounder` warns George at session start, and the agent has to fall back to fetching the latest weekly review from Notion. The richer this file is, the more useful the cofounder agent can be without needing to round-trip to Notion.
+
+### Local weekly-review archive
+
+In addition to Notion, every full weekly review is archived locally in the **private** layer at `private/weekly-reviews/<YYYY-MM-DD>.md`. This keeps a version-controlled, offline copy of each week's complete review (Thoughts / brain dump, Previous Week Summary, Previous Cycle Analysis, Objectives) that `/cofounder` and `/lint` can read without round-tripping to Notion. The archive is **private** — these are George's candid brain dumps and never sync to the shared repo.
+
+- **Filename:** `private/weekly-reviews/<YYYY-MM-DD>.md` (the review date). One file per review.
+- **Content:** the full review as uploaded to Notion — all four sections, verbatim.
+- **Commit:** to the private repo, batched with the `this-week.md` write (step 4 above).
 
 ### Phase 5: Linear Issue Creation Handoff
 

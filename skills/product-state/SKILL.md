@@ -12,7 +12,7 @@ argument-hint: [all | content | inbound | outbound]
 > Produces operational state snapshots for Novosapien's three product workforces. Each snapshot answers: "What's happening with this product right now?"
 
 **Input:** Which product(s) to update. Defaults to all three.
-**Output:** Updated `state.md` files in `~/Programming/novosapien/cofounder/documents/products/<product>/state.md`, committed to git.
+**Output:** Updated `state.md` files in `~/Programming/novosapien/cofounder/business/products/<product>/state.md`, committed to git.
 
 ---
 
@@ -20,7 +20,7 @@ argument-hint: [all | content | inbound | outbound]
 
 ### Content Creation Workforce
 
-**Vault path:** `documents/products/content-creation-workforce/state.md`
+**Vault path:** `business/products/content-creation-workforce/state.md`
 **Repos root:** `~/Programming/novosapien/ns-content-workforce/`
 
 | Repo | Type | Service name (Cloud Run) |
@@ -38,7 +38,7 @@ argument-hint: [all | content | inbound | outbound]
 
 ### Inbound Sales Workforce
 
-**Vault path:** `documents/products/inbound-sales-workforce/state.md`
+**Vault path:** `business/products/inbound-sales-workforce/state.md`
 **Repos root:** `~/Programming/novosapien/ns-inbound-workforce/`
 
 | Repo | Type | Service name (Cloud Run) |
@@ -61,7 +61,7 @@ argument-hint: [all | content | inbound | outbound]
 
 ### Cold Outreach Workforce
 
-**Vault path:** `documents/products/cold-outreach-workforce/state.md`
+**Vault path:** `business/products/cold-outreach-workforce/state.md`
 **Repos root:** `~/Programming/novosapien/ns-outbound-workforce/`
 
 | Repo | Type | Service name (Cloud Run) |
@@ -225,7 +225,7 @@ If nothing is concerning, say "No current blockers." — but still note dormant 
 5. **Commit to git** from the cofounder vault directory:
    ```bash
    cd ~/Programming/novosapien/cofounder
-   git add documents/products/*/state.md
+   git add business/products/*/state.md
    git commit -m "product-state: refresh state.md for <product(s)>"
    ```
    Use `product-state:` prefix for all commits from this skill.
