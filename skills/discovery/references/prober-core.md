@@ -26,6 +26,20 @@ a known-risk / out-of-scope*. Coverage is guaranteed without turning the convers
 
 Track which dimensions are still vague. Those are where you probe — depth, not volume.
 
+### Dimension ownership — who resolves a vague dimension
+
+- **User-owned** — the problem, the success measure, scope boundaries (in/out),
+  failure *policy* (what SHOULD happen when it goes wrong), and the keystone
+  decision. Resolved by **asking** — never by research, inference, or a
+  plausible guess. Self-answering a user-owned dimension is this skill's
+  defining failure mode.
+- **Reality-owned** — data shapes, schemas, existing seams/code, API responses,
+  library capabilities. Resolve by probing the real thing (reality-grounding);
+  asking the user is usually the wrong move — they'll guess.
+
+Failure modes span both: the *policy* ("silently skip or hard-fail?") is
+user-owned; the *mechanics* ("what does the API return on 429?") are reality-owned.
+
 ## Force-Concreteness (a reflex)
 
 The moment an answer is abstract, make it concrete **before moving on**:
@@ -39,8 +53,11 @@ Abstract nouns ("seamless", "robust", "scalable") are a prompt to ask for the co
 
 ## Ask-on-Ambiguity — the named high-risk classes
 
-Fire a real question **only where the user/doc is genuinely silent or contradictory** on a high-risk
-class (never interrogate where they've already been clear). The classes most likely to sink a build:
+Discovery is an interrogation of the *idea* — friendly in tone, relentless in coverage. The bias is
+to **ask**: when a high-risk class is silent, contradictory, or user-owned-and-vague, fire the
+question. Don't re-ask what's already clearly answered, and fire each question once (the gate's
+escape valve) — but "the user was probably clear enough" is never a reason to skip. **Zero questions
+on a fresh idea means under-probing, not a clear brief.** The classes most likely to sink a build:
 
 - **The I/O contract** — exact trigger, exact output, exact shape.
 - **Data source & shape** — where real data comes from and what it actually looks like (see reality-grounding).
@@ -58,6 +75,14 @@ Probe the *real* systems and data, not imagined ones — the actual API response
 the existing schema/code — not just the docs and not a guess. Most "reality differed from the spec"
 failures are preventable right here. When a data contract or integration is in play, ground it
 against the real thing (codebase/web research) before it's written down as fact.
+
+**Reuse claims carry a probe obligation.** Any framing that leans on a named existing
+capability/seam/asset — "reuse X", "wrap the existing Y", "few-shot on Z", "same gate as W" —
+must be probed to a cite (file:symbol) proving the seam exists at the **shape** assumed: a
+callable service vs logic inline in a route; a data pool that actually carries the needed
+fields; a gate whose fail-mode is stated. Never infer a reusable seam from a code comment or a
+sibling's design. If the seam is aspirational, the doc says so explicitly (extract-first note)
+instead of asserting it.
 
 ## Soft Sequencing
 
@@ -82,6 +107,10 @@ instrument for the unknown-unknowns the checklist can't enumerate.
 
 **Required outputs present.** The I/O contract, a non-empty out-of-scope list, and a Known-Risks
 section all exist. If not, they're gate failures.
+
+**Zero-questions tripwire.** Reaching this gate on a fresh idea with zero user-directed questions
+fired (an empty Escalation & Decision Record for this conversation) is a gate FAILURE by
+definition — go back, map the checklist, and fire the top ambiguities before writing anything.
 
 **Escape valve (never trap the conversation).** Each gap becomes one follow-up question, asked per
 the comms standard — and **fired once.** On "out of scope / don't know / proceed," log it as a

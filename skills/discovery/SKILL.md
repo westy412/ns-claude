@@ -21,6 +21,16 @@ A thinking partner for early-stage ideation. This is where vague ideas become co
 
 ---
 
+## Step 1 — Load the Prober (BLOCKING)
+
+Before engaging with the idea — before any research, drafting, or substantive
+reply — read `references/prober-core.md` in full. It holds the instruments this
+skill is built on (Coverage Checklist, dimension ownership, Force-Concreteness,
+Ambiguity Classes, the Pre-Write Validation Gate). Discovery run from a
+remembered summary of that file is how transcription happens.
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -89,6 +99,23 @@ Research should **serve the conversation**, not derail it.
 ---
 
 ## Behavioral Guidelines
+
+### The Dump Opening (mandatory first move)
+
+Ideas often arrive as a monologue — a voice dump, a pasted note, 8 lines of
+stream-of-thought. A dump is the START of discovery, not a completed input.
+The mandatory first move:
+
+1. **Map the dump against the Coverage Checklist**: mark each dimension
+   concrete or vague, and each vague one user-owned or reality-owned.
+2. **Fire the highest-risk questions on the vague user-owned dimensions** —
+   before any research, before any drafting. 2–4 questions, per the
+   escalation comms standard.
+3. **Never write `discovery.md` in the same turn as the opening dump.** A
+   discovery with no back-and-forth is transcription wearing a discovery template.
+
+Research cannot answer a user-owned dimension. Going away to "figure it out
+yourself" on the user's intent is this skill's defining failure mode.
 
 ### How to Push Back
 
@@ -352,6 +379,8 @@ If a brainstorm or idea card informed this discovery AND it's NOT already in the
 | Anti-Pattern | Why It's Bad |
 |--------------|--------------|
 | **Agree too quickly** | Robs user of genuine exploration |
+| **Self-answer a user-owned gap** | Research/inference can't produce the user's intent — ask |
+| **Zero-question discovery** | A fresh idea with no questions fired is transcription, not discovery |
 | **Jump to solutions** | Skips problem understanding |
 | **Pure devil's advocate** | Adversarial without being productive |
 | **Info dump from research** | Derails conversation with noise |
@@ -378,8 +407,14 @@ If a brainstorm or idea card informed this discovery AND it's NOT already in the
 
 ## References
 
-- `references/prober-core.md` — The probing instruments: model-held Coverage Checklist, Force-Concreteness reflex, named Ambiguity Classes, Reality-Grounding, Soft Sequencing, and the blocking Pre-Write Validation Gate (pre-mortem + fire-once escape valve).
+- `references/prober-core.md` — **Blocking Step 1 read.** The probing instruments: model-held Coverage Checklist + dimension ownership (user-owned vs reality-owned), Force-Concreteness reflex, named Ambiguity Classes, Reality-Grounding (incl. the reuse-claim probe obligation), Soft Sequencing, and the blocking Pre-Write Validation Gate (pre-mortem + zero-questions tripwire + fire-once escape valve).
 - `references/autonomy-and-escalation.md` — The fix-or-ask contract. When you bring a gap or a choice to the user, follow its escalation comms standard (clause C): one brief, specific question; ASCII-sketch the options when it's structural. Discovery already works this way — this is the shared contract the rest of the chain inherits.
+
+---
+
+## Related Skills
+
+- `novasapien-build` — If the idea builds on the `@novosapien` package ecosystem (`@novosapien/nova-ui` generative chat UI, `@novosapien/ui` design system, `nova-kernel` render contract), load it during the Solution/Context exploration. It grounds the discussion in what those packages actually provide and their hard constraints (CSS distribution, injection surfaces, registry auth) so the discovery doc is realistic rather than re-deriving the integration.
 
 ---
 
