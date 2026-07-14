@@ -10,12 +10,30 @@ Work through each section WITH the user. Don't fill it out alone.
 
 For each section:
 1. **Draft** based on discovery doc + research findings
-2. **Present** to user
+2. **Present** to user — in chat, per "How to present a section" below
 3. **Get feedback** and refine
 4. **Write** to the spec file
 5. **Move** to next section
 
 Use the spec template at `templates/spec.md` as the starting structure.
+
+### How to present a section (chat is the review surface)
+
+Assume the user will NOT open `spec.md` — or re-read `discovery.md`. For every section:
+
+- **Show the content itself in chat** — the actual drafted text, not "section written —
+  see the file." Judgment-heavy sections (Requirements, Architecture, Execution Plan,
+  Acceptance Criteria) are always shown in full; long mechanical sections (file lists,
+  meta tables) may be tightly summarized.
+- **Surface what the draft decides.** Call out inline: the decisions the draft embeds,
+  the assumptions you made, anything inferred rather than stated in the discovery doc.
+  The user should never have to diff the draft against discovery to find where you
+  filled a gap.
+- **Ask that section's questions with their context** (per the escalation comms
+  standard): the relevant excerpt, the options, the consequence of each — answerable
+  from the chat alone, no document homework.
+- **Approval must be informed.** "Approved" means the user saw the content in chat,
+  not that they were told a file changed.
 
 ---
 

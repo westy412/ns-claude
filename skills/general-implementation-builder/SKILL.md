@@ -200,3 +200,9 @@ Full process: `references/feedback-loop.md` (cites `references/autonomy-and-esca
 - `references/autonomy-and-escalation.md` — Fix-or-ask contract: when to auto-fix a finding vs escalate to the user, plus the escalation comms standard. Load when handling a review/feedback finding or before escalating to the user.
 - `references/per-phase-review.md` — Per-phase review loop: a scoped code review at each phase boundary + the big review before completion. Run at each phase boundary.
 - `references/testing-handoff.md` — Layer-3 handoff: on a clean big review, surface the spec's test seed and invoke the typed-testing skill (wired — its `testing_verdict` is the live gate). Read at the big review, before completion.
+
+---
+
+## Related Skills
+
+- `novasapien-build` — Load when implementing against the `@novosapien` package ecosystem (`@novosapien/nova-ui`, `@novosapien/ui`, `nova-kernel`). Carries the real package APIs, consume patterns, and the gates that broke the consuming app during extraction (consumer-`@source` CSS / no global utilities, an injection point per domain-free component, verify-in-real-app-under-Turbopack, GitHub Packages `read:packages` auth). Reference it instead of re-deriving the integration.

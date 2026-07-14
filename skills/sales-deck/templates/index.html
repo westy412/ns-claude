@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--
+  NovoSapien pitch deck - skeleton. One slide per archetype, in narrative order.
+  Replace [PLACEHOLDER]s. Fill deck.css :root brand block. Drop client logos in
+  assets/img/. Add diagram files in visuals/ and include them before deck.js.
+  Keep the non-negotiables: presented-not-read copy, no em dashes, layout variety.
+-->
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[Client]: [the one-line framing]</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="deck.css" />
+</head>
+<body>
+  <div class="deck" id="deck">
+
+    <!-- 1 · COVER (gradient) -->
+    <section class="slide section cover active">
+      <div class="slide-inner">
+        <span class="eyebrow">A proposal to [Audience]</span>
+        <h1>[The one-line framing].</h1>
+        <p class="sub">[Sub-tagline].</p>
+        <div class="credit"><span>[Client]</span><span class="dot"></span><span>[Context]</span><span class="dot"></span><span>[Date]</span></div>
+      </div>
+      <div class="snote" hidden><ul class="cue"><li>Open with: <span class="say">"[one framing sentence]"</span></li></ul></div>
+    </section>
+
+    <!-- 2 · THE MOMENT (ink statement) -->
+    <section class="slide ink statement center">
+      <div class="slide-inner"><span class="eyebrow">The moment</span>
+        <h1>[The shift that resets the board.]</h1><p class="sub">[One supporting line.]</p></div>
+      <div class="snote" hidden><ul class="cue"><li>[The stakes. Don't introduce the proposal yet.]</li></ul></div>
+    </section>
+
+    <!-- 3 · THE PROBLEM (stat-contrast) -->
+    <section class="slide stat">
+      <div class="slide-inner"><span class="eyebrow accent-coral">Where we stand</span>
+        <h1>[The uncomfortable truth, in one sentence.]</h1>
+        <div class="statrow stagger">
+          <div class="statcol them"><div class="num">[44M]</div><div class="lab">[them]</div></div>
+          <div class="statvs">vs</div>
+          <div class="statcol us"><div class="num">[6M]</div><div class="lab">[us]</div></div>
+        </div>
+        <p class="verdict">[One-line verdict.]</p></div>
+      <div class="snote" hidden><ul class="cue"><li>[The honest starting point.]</li></ul></div>
+    </section>
+
+    <!-- 4 · THE BET (ink from→to) - state the recommendation EARLY -->
+    <section class="slide ink transform">
+      <div class="slide-inner"><span class="eyebrow">The bet</span>
+        <h1>[The recommendation, in one line.]</h1>
+        <div class="tpair stagger">
+          <div class="tpanel from"><div class="lbl">Was</div><div class="big">[old constraint]</div></div>
+          <div class="tarrow">&rarr;</div>
+          <div class="tpanel to"><div class="lbl">Now</div><div class="big">[new constraint, in our favour]</div></div>
+        </div></div>
+      <div class="snote" hidden><ul class="cue"><li>[Why the bet is winnable for this client.]</li></ul></div>
+    </section>
+
+    <!-- 5 · THE OUTCOME (diagram-hero) - first diagram appears here -->
+    <section class="slide dhero">
+      <div class="slide-inner"><span class="eyebrow accent">The outcome</span>
+        <h1>[What winning looks like.]</h1>
+        <div class="viz"><div class="module-slot" data-visual="example"></div></div>
+        <p class="cap">[One caption naming the outcomes.]</p></div>
+      <div class="snote" hidden><ul class="cue"><li>Let the diagram run a full turn. <b>Hover to pause.</b></li></ul></div>
+    </section>
+
+    <!-- 6 · THE SOLUTION (grid) -->
+    <section class="slide section grid">
+      <div class="slide-inner"><span class="eyebrow accent">The solution</span>
+        <h1>[One platform. N worlds.]</h1>
+        <div class="regions stagger">
+          <div class="region-card supply"><span class="kicker">[Tier]</span><h3>[World 1]</h3><p class="one">[one line]</p></div>
+          <div class="region-card demand"><span class="kicker">[Tier]</span><h3>[World 2]</h3><p class="one">[one line]</p></div>
+          <div class="region-card engine"><span class="kicker">[Tier]</span><h3>[World 3]</h3><p class="one">[one line]</p></div>
+          <div class="region-card workforce"><span class="kicker">[Tier]</span><h3>[World 4]</h3><p class="one">[one line]</p></div>
+        </div></div>
+      <div class="snote" hidden><ul class="cue"><li>Land the shape, don't read the cards.</li></ul></div>
+    </section>
+
+    <!-- 7 · A WORLD (flanked + full-surface chips). Repeat per world; alternate accents. -->
+    <section class="slide flank featured">
+      <div class="slide-inner" style="--accent: var(--coral-deep)">
+        <div class="head"><span class="eyebrow accent-coral">[Tier] &middot; [world]</span><h1>[The world's claim.]</h1></div>
+        <ul class="fpoints col-l"><li>[point]</li><li>[point]</li><li>[point]</li></ul>
+        <div class="viz"><div class="module-slot" data-visual="example"></div></div>
+        <ul class="fpoints col-r"><li>[point]</li><li>[point]</li><li>[point]</li></ul>
+        <div class="fset"><span class="lbl">The full surface</span>
+          <span class="chip soc">[standout]</span><span class="chip">[feature]</span><span class="chip">[feature]</span><span class="chip">[feature]</span></div>
+      </div>
+      <div class="snote" hidden><ul class="cue"><li>[The point to land + the killer line.]</li></ul></div>
+    </section>
+
+    <!-- 8 · A BROAD WORLD (capability menu - "go broad") -->
+    <section class="slide wfmenu">
+      <div class="slide-inner">
+        <div class="head"><span class="eyebrow" style="color:var(--blue)">[area]</span><h1>[The breadth claim.]</h1></div>
+        <div class="signal"><span class="slbl">[Hero idea] &rarr; three plays:</span>
+          <span class="play"><b>[trigger]?</b> [play].</span><span class="play"><b>[trigger]?</b> [play].</span><span class="play"><b>[trigger]?</b> [play].</span></div>
+        <div class="wftop"><span class="wfhub">[Hub label]</span>
+          <svg class="wfwires" preserveAspectRatio="none" aria-hidden="true">
+            <line class="w1" x1="50%" y1="0" x2="17%" y2="100%"/><line class="w2" x1="50%" y1="0" x2="50%" y2="100%"/><line class="w3" x1="50%" y1="0" x2="83%" y2="100%"/></svg></div>
+        <div class="cols">
+          <div class="oscard nb"><span class="kicker">[col 1]</span><h3>[title]</h3>
+            <div class="agents"><div class="agent"><b>[Name]:</b> [role]</div><div class="agent"><b>[Name]:</b> [role]</div><div class="agent"><b>[Name]:</b> [role]</div></div></div>
+          <div class="oscard am"><span class="kicker">[col 2]</span><h3>[title]</h3>
+            <div class="agents"><div class="agent"><b>[Name]:</b> [role]</div><div class="agent"><b>[Name]:</b> [role]</div><div class="agent"><b>[Name]:</b> [role]</div></div></div>
+          <div class="oscard mk"><span class="kicker">[col 3]</span><h3>[title]</h3>
+            <div class="agents"><div class="agent"><b>[Name]:</b> [role]</div><div class="agent"><b>[Name]:</b> [role]</div><div class="agent"><b>[Name]:</b> [role]</div></div></div>
+        </div></div>
+      <div class="snote" hidden><ul class="cue"><li>Go broad: gesture at the spread, don't read every item.</li></ul></div>
+    </section>
+
+    <!-- 9 · THE PROOF (ink quote + chips) -->
+    <section class="slide ink proof">
+      <div class="slide-inner"><span class="eyebrow">The proof</span>
+        <p class="bigquote">"[short proof quote] <span class="accent">[emphasis].</span>"</p>
+        <p class="qattr">[attribution].</p>
+        <div class="validrow stagger">
+          <div class="vchip"><div class="who">[Name]</div><div class="what">[what it proves]</div></div>
+          <div class="vchip"><div class="who">[Name]</div><div class="what">[what it proves]</div></div>
+          <div class="vchip"><div class="who">[Name]</div><div class="what">[what it proves]</div></div>
+        </div>
+        <p class="punch">[The takeaway] <span class="accent">[our edge].</span></p></div>
+      <div class="snote" hidden><ul class="cue"><li>Reframe "risky" into "proven thesis + our unfair advantage."</li></ul></div>
+    </section>
+
+    <!-- 10 · THE PATH (steps) -->
+    <section class="slide section steps">
+      <div class="slide-inner"><span class="eyebrow accent">The path</span>
+        <h1>[How we get there, safely.]</h1>
+        <div class="steprow stagger">
+          <div class="step s1"><div class="n">Step 1</div><div class="t">[title]</div><div class="d">[one line]</div></div>
+          <div class="step s2"><div class="n">Step 2</div><div class="t">[title]</div><div class="d">[one line]</div></div>
+          <div class="step s3"><div class="n">Step 3</div><div class="t">[title]</div><div class="d">[one line]</div></div>
+        </div></div>
+      <div class="snote" hidden><ul class="cue"><li>Answers "can you do this without breaking the business?"</li></ul></div>
+    </section>
+
+    <!-- 11 · THE CLOSE (ink statement) - end on the decision, never "thank you" -->
+    <section class="slide ink statement center">
+      <div class="slide-inner"><span class="eyebrow accent">The decision</span>
+        <h1>[The one line that frames the decision.]</h1>
+        <p class="sub">[The only question is whether we move.]</p></div>
+      <div class="snote" hidden><ul class="cue"><li><span class="flag">The explicit ask: confirm with [founder] before presenting.</span></li></ul></div>
+    </section>
+
+  </div>
+
+  <!-- chrome -->
+  <div class="scrub" id="scrub"></div>
+  <div class="deck-top">
+    <span class="brand">
+      <img class="brand-logo on-light" src="assets/img/logo.svg" alt="[Client]" />
+      <img class="brand-logo on-dark"  src="assets/img/logo-light.svg" alt="[Client]" />
+    </span>
+    <span class="deck-counter" id="counter">01 / 11</span>
+  </div>
+  <div class="deck-bottom">
+    <div class="progress" id="progress" aria-label="Slide progress"></div>
+    <span class="deck-hint">&larr; &rarr; navigate &middot; N notes &middot; F full screen</span>
+    <div class="nav"><button id="prev" aria-label="Previous slide">&lsaquo;</button><button id="next" aria-label="Next slide">&rsaquo;</button></div>
+  </div>
+  <div class="notes" id="notes" aria-live="polite">
+    <div class="nh">Speaker notes <span class="slidelabel" id="notesLabel"></span></div>
+    <div class="nb" id="notesBody"></div>
+  </div>
+
+  <!-- scripts: core registry, then each diagram file, then the controller -->
+  <script src="visuals-core.js"></script>
+  <script src="visuals/example-diagram.js"></script>
+  <!-- <script src="visuals/<client>.js"></script> -->
+  <script src="deck.js"></script>
+</body>
+</html>

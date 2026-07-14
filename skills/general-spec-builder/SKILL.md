@@ -260,3 +260,4 @@ Details: `references/handover-protocol.md`
 - `agent-spec-builder` — Handles pure agent work and hybrid handoffs
 - `general-implementation-builder` — Consumes the spec this skill produces
 - `project-management` — Can help create Linear issues from Execution Plan
+- `novasapien-build` — Load when the spec builds on the `@novosapien` package ecosystem (`@novosapien/nova-ui`, `@novosapien/ui`, `nova-kernel`): real package APIs, consume patterns, and gotchas (CSS distribution, injection surfaces, registry auth) so the spec references them instead of re-deriving

@@ -43,6 +43,11 @@ This governs the **question you ask the user**, not the document you write. When
   questionnaire.
 - **Draw it.** When the gap is about structure or a choice between options, sketch an inline
   ASCII diagram so the user can see it and answer in seconds.
+- **Self-contained in chat.** Assume the user will NOT open the discovery doc or the spec.
+  Every question carries everything needed to answer it right there in the chat — the
+  relevant excerpt or decision, the options, the consequence of each. "See §X of the doc"
+  is not a question; it's homework. The artifact records the answer; the chat is where the
+  question lives.
 - **Applies everywhere a skill asks the user to decide** — discovery probes, spec-builder
   gap-fills, review/build escalations.
 - **Not the same as showing work for approval.** A propose-gate diff stays *full* — the user

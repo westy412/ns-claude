@@ -307,6 +307,8 @@ When you sense convergence:
 
 **After the checkpoint, run the blocking Pre-Write Validation Gate** (see The Probing Instruments) before writing `discovery.md` — re-read the captured idea as an artifact, run the Coverage Checklist + a pre-mortem, fire any genuine gap as a single question, and log unresolved gaps as Known-Risks. The checkpoint confirms *intent*; the gate enforces *coverage*. They are two different steps.
 
+Present the gate's outcome in chat — the Known-Risks and any fired-once gaps — assume the user will not open `discovery.md` to find them.
+
 ---
 
 ## Conversation Flow

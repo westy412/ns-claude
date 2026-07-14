@@ -3,16 +3,25 @@
     {
       "name": "Content Creation Workforce",
       "page_id": "2dc7fe586c3b80f9a584dfc39cb4a6b4",
-      "database_id": "3057fe58-6c3b-8121-9317-e093935fae3b"
+      "feedback_source": "supabase",
+      "supabase": {
+        "tables": ["bug_reports", "sentry_issues"],
+        "dashboard_route": "/admin/feedback",
+        "default_dashboard_base": "https://content.novosapien.ai",
+        "api_env_default": "~/Programming/novosapien/ns-content-workforce/ns-content-workforce-api/.env"
+      },
+      "notion_database_id_legacy": "3057fe58-6c3b-8121-9317-e093935fae3b"
     },
     {
       "name": "Inbound Sales Workforce",
       "page_id": "2dc7fe586c3b808b810ec7f7e3eae6a8",
+      "feedback_source": "notion",
       "database_id": "3057fe58-6c3b-811d-b7e9-d8cfe7381d15"
     },
     {
       "name": "Outbound Sales Workforce",
       "page_id": "2dc7fe586c3b80af8524f3d7eacdc1fc",
+      "feedback_source": "notion",
       "database_id": "3057fe58-6c3b-81e6-aa4a-f0f355e60f0d"
     }
   ]
