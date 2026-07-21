@@ -25,6 +25,23 @@ Capture enough detail per agent for autonomous implementation. Teams are orchest
 
 ---
 
+## How to present agent detail (chat is the review surface)
+
+Assume the user will NOT open the agent spec files — or re-read discovery. For every agent:
+
+- **Show the drafted detail in chat** — judgment-heavy sections (Purpose, LLM Configuration,
+  Behavioral Requirements, Examples) always in full; mechanical field tables may be tightly
+  summarized.
+- **Surface what the draft decides.** Call out inline: decisions embedded, assumptions made,
+  anything inferred rather than stated. The user should never have to diff the draft against
+  discovery to find where you filled a gap.
+- **Ask that agent's questions with their context** — answerable from chat alone, no
+  document homework.
+- **Approval must be informed.** "Approved" means the user saw the content in chat, not
+  that they were told a file changed.
+
+---
+
 ## Per-Agent Detail Checklist
 
 For each agent, capture the following:

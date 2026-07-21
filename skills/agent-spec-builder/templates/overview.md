@@ -41,6 +41,15 @@ date: YYYY-MM-DD
 
 ---
 
+## Out of Scope
+<!-- [REQUIRED] Non-empty. What this system deliberately does NOT do.
+  Source: Phase 1 Discovery — scope boundaries, Current State & Constraints;
+  roll up per-agent Scope Boundaries that exclude system-level capabilities. -->
+
+- [explicitly excluded item]
+
+---
+
 ## System Architecture
 <!-- [REQUIRED] Source: Phase 2 High-Level Design — Pattern Selection, Flow Diagram -->
 

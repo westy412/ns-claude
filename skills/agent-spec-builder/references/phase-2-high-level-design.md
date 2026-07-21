@@ -4,6 +4,22 @@ Evaluate the discovered problem and map the rough system outline. This phase det
 
 ---
 
+## How to present design decisions (chat is the review surface)
+
+Assume the user will NOT open the spec files — or re-read the discovery notes. For every
+design decision in this phase (single-vs-team, pattern choice, team breakdown):
+
+- **Show the proposal itself in chat** — the actual decision-tree outcome, the ASCII flow
+  diagram, the team/agent list. Never "design captured — see progress.md."
+- **Surface what the proposal decides.** Call out inline: the assumptions made, anything
+  inferred from discovery rather than stated by the user.
+- **Ask questions with their context** (per the escalation comms standard): the relevant
+  excerpt, the options, the consequence of each — answerable from the chat alone.
+- **Approval must be informed.** "Approved" means the user saw the design in chat, not
+  that they were told a file changed.
+
+---
+
 ## First Decision: Single Agent or Agent Team?
 
 ```

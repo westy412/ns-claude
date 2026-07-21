@@ -196,6 +196,7 @@ All content for `overview.md` comes from `progress.md` sections accumulated duri
 | overview.md Section | Source in progress.md |
 |---|---|
 | Purpose & Context | Discovery Findings → Problem & Purpose |
+| Out of Scope | Discovery Findings → Scope boundaries, Current State & Constraints |
 | System Architecture | Design Overview → System Description, Flow Diagram |
 | Key Decisions | Decisions Made → Design Decisions table |
 | Integration Points | Discovery Findings → Interaction Mode, Integrations & Tools |
@@ -208,7 +209,7 @@ All content for `overview.md` comes from `progress.md` sections accumulated duri
 | Reading Guide | Generated from manifest.yaml files section |
 
 **Conditional section rules:**
-- **Always include:** Purpose & Context, System Architecture, Key Decisions, System Constraints, Reading Guide
+- **Always include:** Purpose & Context, Out of Scope (non-empty), System Architecture, Key Decisions, System Constraints, Reading Guide
 - **Include if applicable:** Integration Points, Shared Infrastructure, Endpoint Contracts, Output Models, Migration Context, Domain Context
 - **Delete entirely** if not applicable (don't leave empty sections)
 
