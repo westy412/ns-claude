@@ -129,47 +129,61 @@
 
 # Objectives for Next Week
 
-## 1. [Objective Name]
+## Business Objectives
+
+### 1. [Objective Name] ([Owner])
 
 - [ ] Specific action item
 - [ ] Specific action item
 - [ ] Specific action item
 - [ ] Specific action item
 
-## 2. [Objective Name]
+### 2. [Objective Name] ([Owner])
 
 - [ ] Specific action item
 - [ ] Specific action item
 - [ ] Specific action item
 
-## 3. [Objective Name]
-
-- [ ] Specific action item
-- [ ] Specific action item
-- [ ] Specific action item
-- [ ] Specific action item
-- [ ] Specific action item
-
-## 4. [Objective Name]
+### 3. [Objective Name] ([Owner])
 
 - [ ] Specific action item
 - [ ] Specific action item
 - [ ] Specific action item
 
-## 5. [Objective Name]
+### 4. [Objective Name] ([Owner])
 
 - [ ] Specific action item
 - [ ] Specific action item
 
-## 6. [Objective Name]
+### 5. [Objective Name] ([Owner])
 
 - [ ] Specific action item
 - [ ] Specific action item
 - [ ] Specific action item
 
-## 7. [Objective Name]
+## George's Objectives
+
+### 1. [Objective Name]
 
 - [ ] Specific action item
+- [ ] Specific action item
+
+### 2. [Objective Name]
+
+- [ ] Specific action item
+- [ ] Specific action item
+
+### 3. [Objective Name]
+
+- [ ] Specific action item
+
+### 4. [Objective Name]
+
+- [ ] Specific action item
+- [ ] Specific action item
+
+### 5. Personal
+
 - [ ] Specific action item
 - [ ] Specific action item
 - [ ] Specific action item

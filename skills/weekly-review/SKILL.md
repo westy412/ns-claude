@@ -222,6 +222,26 @@ Then transform into structured summary:
 
 Format: **Bold heading with status**, then detailed bullets including specifics, decisions made, blockers, and next steps mentioned.
 
+### Phase 1.5: Gap Questions
+
+Do not go straight from the brain dump to the structured summary. The first pass of a dump is always partial — carried items get silently dropped, ownership is left implicit, and open calls deferred for weeks simply don't get mentioned.
+
+**Before structuring the summary, ask a short round of targeted follow-ups.** Cap it at 3-4 questions in a single message — this is a gap-fill, not an interrogation.
+
+Draw the questions from:
+
+- **Carried items not mentioned.** Cross-check the previous review's objectives and open calls against the dump. Anything that carried and wasn't mentioned is a question — silence is not the same as done.
+- **Unanswered open calls.** Items that have carried 3+ weeks (park-or-kill decisions, unbooked meetings, untouched products). Name the carry count: *"Google/Angelos — 7th carry. Book it or kill it?"*
+- **Ownership ambiguity.** For anything that's "starting next week" or newly landed, establish who does it — George, Brett, a hire, a contractor. Ownership drives the business/personal objective split in Phase 3.
+- **Deltas between the dump and the data.** Work the git/Linear analysis shows but the dump doesn't mention, and vice versa.
+- **Personal.** If the dump is work-only, ask once — flat/move/health/social. It belongs in the review.
+
+**Rules:**
+
+- Ask in one message, not serially. George is usually tired by this point.
+- If a question goes unanswered after asking **twice**, record it in the summary as unanswered rather than asking a third time. *"Asked twice, not answered"* is itself a finding — it usually means the item is being deprioritised by default.
+- Do not ask about things the dump clearly answered.
+
 ### Phase 2: Cycle Analysis
 
 Ask George:
@@ -344,7 +364,13 @@ Include NS-XXXX issue IDs where available, and commit messages for non-tracked w
 
 ### Phase 3: Strategic Objectives
 
-Based on brain dump insights and cycle analysis, define **4-8 high-level objectives** for the upcoming week.
+Based on brain dump insights and cycle analysis, define objectives for the upcoming week in **two groups**.
+
+**Group 1 — Business Objectives.** What the company needs to achieve this week, regardless of who does it. **Every business objective names an owner** (George, Brett, a named team member). 4-8 objectives.
+
+**Group 2 — George's Objectives.** What George personally works on. Derived from the business objectives he owns, plus anything personal (personal listed last). This is the list he actually executes against, so it must be honest about capacity. 4-8 objectives.
+
+The two groups **overlap by design** — a business objective George owns appears in both, stated at company level in Group 1 and as his own work in Group 2. Objectives owned by Brett or anyone else appear in Group 1 **only**.
 
 **Objectives should flow from:**
 - What was mentioned as "need to do" in the brain dump
@@ -354,9 +380,9 @@ Based on brain dump insights and cycle analysis, define **4-8 high-level objecti
 
 **Objectives must be:**
 - Concrete, tangible deliverables (not process or mindset goals)
-- Work-focused first, personal objectives tertiary (listed last)
 - Specific to a project, system, or outcome
 - Achievable within the week
+- Owned by a named person (business objectives)
 
 **Action items should be:**
 - Substantial chunks of work (not micro-tasks)
@@ -364,10 +390,13 @@ Based on brain dump insights and cycle analysis, define **4-8 high-level objecti
 - Concrete enough to know when they're done
 - 3-7 items per objective
 
+**Capacity check (required before finalizing).** Count what George personally owns in Group 2 against the days available. If the load is obviously more than fits — especially where one item is forecast to consume most of the week — say so explicitly and name which objective will slip if something gives. Recurring carries are the evidence: an objective that has slipped 3+ weeks running will slip again unless it is front-loaded to early in the week or formally parked.
+
 **Avoid:**
 - Meta-objectives about productivity, focus, or "getting into flow"
 - Vague action items like "plan out the week" or "set boundaries"
-- Putting personal objectives before work objectives
+- Business objectives with no named owner
+- Putting personal objectives before work objectives within Group 2
 - Fluffy goals that aren't tied to concrete deliverables
 
 **Discuss objectives with George before finalizing.** Allow for additions, removals, and modifications.
@@ -459,19 +488,25 @@ summary: Bridge from weekly review to /cofounder — comprehensive extract of la
 
 ## This week — objectives
 
-### 1. <Objective 1 Name>
+### Business objectives
+
+**1. <Objective 1 Name> (<owner>)**
 
 - <Action item 1>
 - <Action item 2>
 - <Action item 3>
-- <Action item 4>
 
-### 2. <Objective 2 Name>
+**2. <Objective 2 Name> (<owner>)**
 
 - <Action item 1>
 - ...
 
-<Continue for all objectives. Include the FULL action items as bullets (without checkboxes — they live in Notion). The cofounder agent needs to know what George has actually committed to doing, not just headlines.>
+### George's objectives
+
+1. **<Objective>** — <what it means in a clause, or sub-bullets for the action items>
+2. **<Objective>** — ...
+
+<Continue for all objectives in both groups. Include the FULL action items as bullets (without checkboxes — they live in Notion). The cofounder agent needs to know what George has actually committed to doing, not just headlines, AND which items sit with someone else.>
 
 ## Strategic context
 
@@ -480,7 +515,8 @@ summary: Bridge from weekly review to /cofounder — comprehensive extract of la
 
 **Format notes:**
 
-- Use `### N. Objective Name` headings for each objective so they're easy to scan
+- Split objectives under `### Business objectives` and `### George's objectives`
+- Name the owner in the business objective heading, e.g. `**3. Hiring push (Brett)**`
 - Action items are plain bullets (`-`), not checkboxes — checkboxes are Notion-only
 - Bold the work area headings in the summary section (`**Heading — Status**`)
 - Include parenthetical date range in the "Last week — summary" heading (e.g., `(Mar 30 – Apr 5)`)
@@ -669,20 +705,34 @@ If yes:
 ```markdown
 # Objectives for Next Week
 
-## 1. [Objective Name]
+## Business Objectives
 
-- [ ] Specific action item
-- [ ] Specific action item
-- [ ] Specific action item
-- [ ] Specific action item
-
-## 2. [Objective Name]
+### 1. [Objective Name] ([Owner])
 
 - [ ] Specific action item
 - [ ] Specific action item
 - [ ] Specific action item
 
-[Continue for 4-8 objectives total]
+### 2. [Objective Name] ([Owner])
+
+- [ ] Specific action item
+- [ ] Specific action item
+
+[Continue for 4-8 business objectives. Every one names an owner.]
+
+## George's Objectives
+
+### 1. [Objective Name]
+
+- [ ] Specific action item
+- [ ] Specific action item
+
+### 2. [Objective Name]
+
+- [ ] Specific action item
+
+[Continue for 4-8. Objectives George owns from the business list appear here too;
+items owned by others do not. Personal objectives last.]
 ```
 
 ## Important Notes
@@ -691,18 +741,20 @@ If yes:
 1. **Confirm date & fetch previous review** - Start by confirming the date and fetching last week's review for context
 2. **Present previous objectives** - Show George what was planned last week before the brain dump
 3. **Capture brain dump** - Process George's weekly reflection, include raw under Thoughts
-4. **Structure the summary** - Transform into categorized Previous Week Summary
-5. **Analyze the cycle** - Review completed Linear issues (optional but recommended)
-6. **Set objectives** - Define 4-8 objectives informed by previous week's progress and new priorities
-7. **Upload to Notion** - Save to correct year/month folder structure
-8. **Offer issue creation** - Hand off to project-management skill if desired
+4. **Ask gap questions** - Targeted follow-ups on carried items, unanswered open calls, ownership, and personal — before structuring anything
+5. **Structure the summary** - Transform into categorized Previous Week Summary
+6. **Analyze the cycle** - Review completed Linear issues and git history (optional but recommended)
+7. **Set objectives** - Define business objectives (with owners) and George's objectives, informed by previous week's progress and new priorities
+8. **Upload to Notion** - Save to correct year/month folder structure
+9. **Offer issue creation** - Hand off to project-management skill if desired
 
 ### Strategic Planning Standards
-- **4-8 weekly objectives** - Balance strategic initiatives with operational needs
+- **Two objective groups** - Business objectives (4-8, every one names an owner) and George's objectives (4-8, personal last)
 - **Clear action items** - Each objective includes specific, actionable checkbox items
+- **Capacity honesty** - Flag explicitly when George's personal load exceeds the week, and name which objective slips
 - **Strategic context** - Include insights and priorities from weekly review for tactical guidance
 - **Handoff preparation** - Structure objectives for efficient conversion to Linear issues
-- **Week-over-week tracking** - Reference previous week's objectives to track progress and carryover
+- **Week-over-week tracking** - Reference previous week's objectives to track progress and carryover; name the carry count on repeat items
 
 ### Documentation Requirements
 - **Notion folder structure** - Year → Month → Review page (DD/MM/YYYY)
