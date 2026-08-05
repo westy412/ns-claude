@@ -34,6 +34,8 @@ Content lives at the **repo root** (no `vault/` nesting — that was a Quartz re
 7. `drafts/` — empty directory with `.gitkeep`
 8. `.gitignore` — at minimum `.DS_Store` and `.obsidian/workspace.json`
 
+Every scaffolded markdown file gets its one-line `description:` frontmatter at creation — see the "Description frontmatter" section in the Step 5 template.
+
 `whats-new.md` is the only deferred file — created at the first real client-facing update. Beyond this scaffold set, the don't-create-empty-placeholders rule applies: everything else (components, sub-components, architecture sections, `product/pages/`) is created when there's content for it (see [project-structure.md](project-structure.md)).
 
 ## Step 4 — Copy the product skill suite
@@ -90,6 +92,22 @@ Agents enter at `index.md` and follow wikilinks. If an agent needs `find` or
 - Backfilling: creating a child document immediately updates the parent's routing table
 - Meetings: `YYYY-MM-DD-<slug>.md`, date verified against the transcript, frontmatter at intake
 - Naming: lowercase, hyphen-separated, files named after the thing they describe
+
+## Description frontmatter
+
+Every markdown document in this vault carries a one-line `description:` in its
+YAML frontmatter.
+
+- When you create a markdown file, write its description in the same edit.
+- When you edit a markdown file, re-read its description. If the description no
+  longer matches what the page now says, rewrite it in the same edit.
+- Format: one line, at most 160 characters, double-quoted, a sentence that says
+  what the document IS. Never a quote from the page, a table fragment, or
+  dialogue. Over 160 characters is INVALID, not merely truncated downstream.
+- If you cannot summarise the page faithfully from its content, leave
+  `description:` absent and say so — a confident wrong line is worse than none.
+- Exempt (no description): files named `changelog.md` or `*changelog*.md`, files
+  named `TEMPLATE.md` or `*template*.md`, and empty files.
 ```
 
 ## Step 6 — Commit and push

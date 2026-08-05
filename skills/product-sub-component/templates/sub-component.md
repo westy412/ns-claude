@@ -20,6 +20,10 @@ This template defines the structure for a **sub-component document** — a detai
 
 ---
 
+---
+description: "[One line, at most 160 characters: what this document IS]"
+---
+
 # [Project Name] — [Sub-Component Name]
 
 > **Component:** [[component-name]]  <!-- Replace with the actual component name, e.g. [[bloomberg-terminal]] -->
@@ -254,6 +258,10 @@ _OR:_
 ## Skeleton: What the Filled-In Document Looks Like
 
 ```markdown
+---
+description: "The [Sub-Component Name] sub-component of [Component Name]: entity journeys, acceptance criteria, and data requirements"
+---
+
 # [Project Name] — [Sub-Component Name]
 
 > **Component:** [[component-name]]  <!-- Replace with the actual component name, e.g. [[bloomberg-terminal]] -->

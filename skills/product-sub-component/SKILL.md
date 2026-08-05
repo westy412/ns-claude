@@ -1,7 +1,7 @@
 ---
 name: product-sub-component
 description: Extract and structure sub-component documents with entity journeys from client call transcripts. Conversational — extracts journeys, acceptance criteria, and data requirements at the granular buildable level.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, Skill, AskUserQuestion, TeamCreate, TaskCreate, TaskUpdate, TaskList, TaskGet, SendMessage
 argument-hint: "[transcript file path]"
 ---
 
@@ -47,6 +47,10 @@ A component document must exist for the parent component. Sub-components are ide
 8. **Open questions go in the register.** Don't bury open questions at the bottom of a doc — add them to the central [[open-questions]] register and leave a short inline marker `_[⚠ open — see [[open-questions]] #N]_` where relevant.
 
 9. **Status reflects real coverage.** Only mark a sub-component **Defined** after a dedicated deep-dive produced its entity journeys and acceptance criteria. Don't present inferred acceptance criteria as decided.
+
+10. **Extraction isn't done until reviewed.** The final step of every run invokes the `review-product-extraction` skill (MANDATORY, not optional): three parallel agents check the written docs against the transcript for fabrications, unmarked assumptions, and errors. Present its digest and apply agreed fixes before closing.
+
+11. **Description frontmatter.** Every markdown document this skill creates or updates carries a one-line `description:` in its YAML frontmatter — the canonical rule ("## Description frontmatter") lives in the vault's `CLAUDE.md` and `AGENTS.md`. Write the description in the same edit that creates the file; on a material edit, re-read it and rewrite it if it no longer matches the page. Format: one line, at most 160 characters, double-quoted, a sentence that says what the document IS — never a quote, a table fragment, or dialogue. If you cannot summarise the page faithfully, leave `description:` absent and say so. Exempt: changelog files, template files, empty files.
 
 ## Flow
 
@@ -95,6 +99,11 @@ After extraction:
     4. Produce gap analysis
     5. Questions for next call
     6. Validate the graph — run `python3 scripts/check-wikilinks.py` and fix any broken links
+    7. MANDATORY — invoke the review-product-extraction skill (Skill tool) on
+       everything written this session (sub-component docs + parent backfill +
+       register rows + meeting file). Present the review digest, apply agreed
+       fixes, and include the verdict in the closing summary. Do not close
+       without it.
 ```
 
 ## Entity Journey Extraction
@@ -125,9 +134,11 @@ For each journey:
 2. Gaps — missing journeys, incomplete criteria, unknown data requirements
 3. Further decomposition recommendations if any
 4. Questions for next call
+5. Review verdict from review-product-extraction + fixes applied
 
 ## Related Skills
 
 - `/product-manager` — General PM thinking partner
 - `/product-component` — Component extraction (prerequisite for this skill)
 - `/product-vision` — Vision extraction (establishes overall context)
+- `/review-product-extraction` — Mandatory closing review (fabrications, assumptions, errors) — invoked automatically as the final step

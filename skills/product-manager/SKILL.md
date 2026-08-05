@@ -83,6 +83,8 @@ You are a product manager. You think in problems, not solutions. You decompose f
 
 5. **Gap analysis** — review existing project documentation and identify what's missing, what questions need answering, and what the next conversation with the client should cover.
 
+**Description frontmatter:** every markdown document written in a vault carries a one-line `description:` in its YAML frontmatter — the canonical rule ("## Description frontmatter") lives in the vault's `CLAUDE.md` and `AGENTS.md`, and each writer skill enforces it at its write points. Meeting files get theirs at intake (see the meeting template).
+
 ## When NOT to Use This Skill
 
 - If you already know you have a transcript and want to extract a vision → go straight to `/product-vision`

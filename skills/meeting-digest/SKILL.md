@@ -49,6 +49,7 @@ The digest runs in 7 phases. Load `references/digest-process.md` for full detail
 - **Light outputs.** Changelog entries and targeted edits, not document rewrites.
 - **Knowledge-graph integrity.** Never write a dangling wikilink — link only to docs that exist (shortest-path); list anything not yet documented as plain text. Run `python3 scripts/check-wikilinks.py` after writing and fix anything it reports.
 - **Open questions go in the register.** Append open questions to the central [[open-questions]] register at the project root, with an inline `_[⚠ open — see [[open-questions]] #N]_` marker in the relevant doc — not buried at the bottom of a file.
+- **Description frontmatter.** Every document this skill writes or updates carries a one-line `description:` in its YAML frontmatter — the canonical rule ("## Description frontmatter") lives in the vault's `CLAUDE.md` and `AGENTS.md`. A material edit re-checks the description in the same edit; meeting files get theirs at intake. One line, at most 160 characters, double-quoted, says what the document IS. Changelog files are exempt.
 
 ## Boundaries
 

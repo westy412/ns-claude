@@ -129,6 +129,7 @@ Write the post-call analysis between the frontmatter and the raw transcript in t
 Update the meeting frontmatter:
 - Set `status` to `extracted` (or `partially-extracted` if items were deferred)
 - Fill in `extracted-to` with links to every file that was updated
+- Re-read the `description:` line. If the digest changed what the page says, rewrite it in the same edit (one line, at most 160 characters, double-quoted). Apply the same check to every document the digest updated.
 
 ---
 

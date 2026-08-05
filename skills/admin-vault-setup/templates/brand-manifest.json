@@ -1,0 +1,11 @@
+{
+  "_readme": "Optional overrides for the panel's Corporate Identity browser (/admin/ci). Keys are file paths RELATIVE to brand/. Each value may override 'title' and/or 'category'. Assets without an entry get a humanized filename title and their subfolder as category (loose files -> 'General'). Delete this _readme key or the whole file if unused.",
+  "logos/primary-logo.svg": {
+    "title": "Primary Logo",
+    "category": "Logos"
+  },
+  "guidelines/tone-of-voice.html": {
+    "title": "Tone of Voice",
+    "category": "Guidelines"
+  }
+}

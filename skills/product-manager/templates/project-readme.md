@@ -1,3 +1,6 @@
+---
+description: "[One line, at most 160 characters: what this project is]"
+---
 <!-- Template: produces index.md — the project landing page -->
 
 # [Project Name]

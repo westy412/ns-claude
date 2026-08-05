@@ -18,6 +18,10 @@ This template defines the structure for a **vision document** — the first and 
 
 ---
 
+---
+description: "[One line, at most 160 characters: what this document IS]"
+---
+
 # [Project Name] — Vision
 
 > **Client:** ___
@@ -370,6 +374,10 @@ Personas
 _Below is the expected output structure. Guidance text is removed. Placeholders show where content goes and how much is expected._
 
 ```markdown
+---
+description: "Vision for [Project Name]: what it is, who it is for, and why it matters"
+---
+
 # [Project Name] — Vision
 
 > **Client:** [Name]

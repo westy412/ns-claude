@@ -17,6 +17,10 @@ This template defines the structure for a **component document** — a detailed 
 
 ---
 
+---
+description: "[One line, at most 160 characters: what this document IS]"
+---
+
 # [Project Name] — [Component Name]
 
 > **Vision:** [[vision]]
@@ -239,6 +243,10 @@ _Use diagrams inline within the relevant section. Full diagram guide (with all M
 _Below is the expected output structure. Guidance text is removed. Placeholders show where content goes and how much is expected._
 
 ```markdown
+---
+description: "The [Component Name] component of [Project Name]: what it does and how it behaves"
+---
+
 # [Project Name] — [Component Name]
 
 > **Vision:** [[vision]]
