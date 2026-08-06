@@ -1,0 +1,49 @@
+name: Notify the vault MCP server
+
+# The cross-repository hop: a push to main here triggers a rebuild and redeploy of
+# novosapien/<client_slug>-vault-mcp, so the client-facing MCP server tracks this vault.
+#
+# Needs a fine-grained PAT with `contents: write` on novosapien/<client_slug>-vault-mcp.
+# The default GITHUB_TOKEN cannot dispatch across repositories. MCP_DISPATCH_TOKEN
+# is preferred; PANEL_DISPATCH_TOKEN (a panel-sync PAT, if this repo has one) is
+# the fallback. If neither is set, or neither reaches the MCP repo, this workflow
+# skips or fails loudly and the MCP server stays a frozen snapshot.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger the MCP server build
+        env:
+          MCP_TOKEN: ${{ secrets.MCP_DISPATCH_TOKEN }}
+          PANEL_TOKEN: ${{ secrets.PANEL_DISPATCH_TOKEN }}
+        run: |
+          # MCP_DISPATCH_TOKEN is the deliberate wiring: when it is set, a failed
+          # dispatch fails this workflow. PANEL_DISPATCH_TOKEN is best-effort — a
+          # panel PAT typically has no access to the MCP repo, so a failure with
+          # it warns and stays green.
+          if [ -n "$MCP_TOKEN" ]; then
+            export GH_TOKEN="$MCP_TOKEN"; strict=1
+          elif [ -n "$PANEL_TOKEN" ]; then
+            export GH_TOKEN="$PANEL_TOKEN"; strict=0
+          else
+            echo "::warning::No dispatch token is set. The MCP server was NOT rebuilt; it serves a stale vault snapshot."
+            exit 0
+          fi
+          if gh api repos/novosapien/<client_slug>-vault-mcp/dispatches \
+            --method POST \
+            -f event_type=vault-updated \
+            -F "client_payload[sha]=${GITHUB_SHA}" \
+            -F "client_payload[pushed_at]=$(date -u +%Y-%m-%dT%H:%M:%SZ)"; then
+            echo "Dispatched."
+          elif [ "$strict" = 1 ]; then
+            exit 1
+          else
+            echo "::warning::The fallback PAT cannot reach <client_slug>-vault-mcp. The MCP server was NOT rebuilt. Set MCP_DISPATCH_TOKEN to wire this properly."
+            exit 0
+          fi
