@@ -1,0 +1,37 @@
+{
+  "default_actor_email": "george.westbrook412@gmail.com",
+  "default_actor_name": "George Westbrook",
+  "clients": {
+    "inPlay": {
+      "root": "~/Programming/inPlay",
+      "schema": "public",
+      "admin_credentials": { "path": null, "format": "hcl-env-vars" },
+      "agent_database": null
+    },
+    "caterer": {
+      "root": "~/Programming/caterer",
+      "schema": "caterer",
+      "admin_credentials": { "path": null, "format": "hcl-env-vars" },
+      "agent_database": null
+    },
+    "total-jobs": {
+      "root": "~/Programming/total-jobs",
+      "schema": "totaljobs",
+      "admin_credentials": { "path": null, "format": "hcl-env-vars" },
+      "agent_database": null
+    },
+    "txn": {
+      "root": "~/Programming/txn",
+      "schema": "txn",
+      "admin_credentials": {
+        "path": "~/Programming/txn/txn-admin-api/infrastructure/terraform.production.tfvars",
+        "format": "hcl-env-vars"
+      },
+      "agent_database": {
+        "path": "~/Programming/txn/txn-agentic-agent/.env",
+        "format": "dotenv",
+        "tenant_id": null
+      }
+    }
+  }
+}

@@ -172,20 +172,29 @@ Create the directory and write the file:
 Use a minimal spawn prompt:
 
 ```
-Task tool:
-  team_name: {team-name}
+Agent:
   name: {stream-name}
   subagent_type: general-purpose
   model: "opus"
+  description: {3-5 word label}
   prompt: |
-    You are teammate {stream-name} on team {team-name}.
+    You are teammate {stream-name}.
 
     Read your full instructions at:
       {project-path}/teammate-prompts/{team-name}/{stream-name}.md
 
     Follow ALL steps in order. DO NOT skip Step 1 (Load Required Skills).
-    After loading skills, confirm to team-lead via SendMessage.
+    After loading skills, confirm to team-lead via SendMessage, then end your turn.
 ```
+
+Do not pass `team_name`. Claude Code removed the `TeamCreate` and `TeamDelete`
+tools in v2.1.178. Each session now has one implicit team. The `Agent` tool still
+accepts `team_name`, but it ignores the value. `{team-name}` stays in this skill
+only as a folder name for the prompt files.
+
+A teammate message arrives only after the sender ends its turn. Read the
+"How teammate messaging works" section in the `teammate-spawn` skill before you
+design any teammate-to-teammate step.
 
 ### Step 7: Verify skill loading (MANDATORY — DO NOT SKIP)
 
@@ -226,7 +235,7 @@ Variables in [templates/teammate-prompt.md](templates/teammate-prompt.md):
 
 | Variable | Source | Example |
 |----------|--------|---------|
-| `{{team-name}}` | TeamCreate team_name | `idea-agents-impl` |
+| `{{team-name}}` | Build/workflow name you choose (folder name only) | `idea-agents-impl` |
 | `{{project-path}}` | Project absolute path | `/Users/.../project` |
 | `{{spec-path}}` | Spec directory | `spec/` |
 | `{{framework}}` | agent-config.yaml `team.framework` | `dspy` |

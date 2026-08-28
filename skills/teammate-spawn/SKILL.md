@@ -41,21 +41,69 @@ Use the default model. Do NOT set a `model` parameter when spawning unless the u
 
 ## Execution
 
-Spawn with the `Task` tool (`team_name`, `name`, `subagent_type`), with a minimal prompt telling the agent to read its prompt file first:
+Spawn with the `Agent` tool. Always give the agent a `name`. The `name` makes the
+agent a teammate. A named agent joins the session team file, and other agents can
+address it by that name.
 
 ```
-Task tool:
-  team_name: {team-name}
+Agent:
   name: {agent-name}
   subagent_type: {appropriate type}
+  description: {3-5 word label}
   prompt: |
-    You are {agent-name} on team {team-name}.
+    You are {agent-name}.
     Read your full instructions at:
       {project-path}/teammate-prompts/{workflow-name}/{agent-name}.md
     Follow all steps in order.
 ```
 
-If the profile's template includes a skill-loading step, wait for the teammate's `SendMessage` confirmation before letting it work. Collect results via teammate messages / the task list.
+Do not pass `team_name`. Claude Code removed the `TeamCreate` and `TeamDelete`
+tools in v2.1.178. Each session now has one implicit team. The `Agent` tool still
+accepts `team_name`, but it ignores the value.
+
+Results arrive as task notifications and as teammate messages. There is no task
+list to poll.
+
+If the profile's template includes a skill-loading step, wait for the teammate's
+`SendMessage` confirmation before you let it work.
+
+## How teammate messaging works
+
+Teammates send messages to each other with `SendMessage`. The transport is
+reliable. The delivery time is not immediate. Follow these rules.
+
+**Messages arrive at turn boundaries.** A teammate receives its messages when its
+turn ends. A teammate does not receive a message between the tool calls inside one
+turn. The `SendMessage` tool description says that messages "drain at the
+receiver's next tool round". That statement is wrong for in-process teammates.
+
+**Never put a wait loop in a brief.** A loop of `sleep` calls stays inside one
+turn. The receiver gets nothing and then reports a false negative. In two tests,
+receivers polled for 45 seconds and for 200 seconds and received nothing. Each
+message arrived immediately after the turn ended.
+
+**Use send-then-finish.** Tell the sender to send the message and then end its
+turn. Tell the receiver to end its turn and wait. A new message resumes a finished
+teammate. The teammate then reads its full inbox.
+
+**Do not plan a live conversation.** Teammates exchange turns. Two teammates
+cannot hold a back-and-forth inside one turn.
+
+**Name every peer in the brief.** A teammate has no `ListAgents` tool and cannot
+look up its peers. A system reminder gives it a roster at spawn time, but the
+brief must still name the peer to write to.
+
+The receiver sees this wrapper:
+
+```
+<teammate-message teammate_id="{sender}" color="{color}" summary="{summary}">
+  {message text}
+</teammate-message>
+```
+
+Each teammate has an inbox file at
+`~/.claude/teams/session-{id}/inboxes/{agent-name}.json`. Read that file to debug
+a message that a teammate did not report.
 
 ## Cleanup
 

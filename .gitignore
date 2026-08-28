@@ -56,3 +56,13 @@ daemon/
 jobs/
 .last-cleanup
 .last-update-result.json
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Per-machine daemon/runtime droppings
+daemon.lock
+daemon.status.json
+daemon-auth-status.json
+daemon-auth-cooldown
+*.bak-*
