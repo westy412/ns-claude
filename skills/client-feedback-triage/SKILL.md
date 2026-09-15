@@ -2,7 +2,6 @@
 name: client-feedback-triage
 description: "Triage a client's open admin panel feedback into buckets of work. Reads every feedback record at review_status New from the client's own Postgres schema, splits it into two lanes (Lane A: agent-reply and conversation feedback grouped by conversation with transcripts from the agent database; Lane B: UI annotations — pins, shapes, freehand, component selects — grouped by route or component), proposes a complete bucket set up front, debates it with the user, writes a dated triage document to <client-root>/feedback/, marks only the selected records with a client-safe templated comment plus an audit row, and ends with one /discovery handoff block per will-do bucket. Never writes review_status. Use for client feedback triage, admin panel feedback review, TXN feedback, agent feedback buckets, UI feedback buckets, or turning open feedback into discovery runs."
 argument-hint: '[client]'
-disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion, Write, Edit, Skill
 ---
 
