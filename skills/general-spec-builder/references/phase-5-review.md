@@ -30,6 +30,14 @@ internal consistency.** This is a blocking gate — do not pass a spec that fail
 - [ ] **Out-of-scope is present and non-empty**
 - [ ] **Requirement IDs are traceable** — each has a stable ID used by ACs and chunks
 
+**Consistency sweep (the spec reads one way):**
+- [ ] **Counts match** — every count literal ("four endpoints", "three states") matches the list or table it names
+- [ ] **One reading per Requirement** — each Requirement reads the same way across its worked examples, edge cases, ACs, and architecture lines
+- [ ] **One name per value** — each status, enum, or state value keeps one name everywhere (never `decline` in one section and `reject` in another)
+
+A sentence with two readings that the discovery doc does not settle is a question for the user
+(one specific question, Branch B) — never a silent pick. Where discovery left a hole, ask.
+
 **Spec → implementation pre-mortem:** *"Assume implementation hits a surprise — where did this spec
 most likely under-think it?"* Name the one or two weakest spots. Resolve them, or log them as
 Known-Risks in the spec's Notes.

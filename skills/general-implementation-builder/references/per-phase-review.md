@@ -21,6 +21,19 @@ For each phase, after its chunks complete and before the next phase starts:
 4. **Record** each finding as a row in `progress.md` → **Drift Log / Spec-Feedback Ledger**
    (phase · finding · code-bug vs spec-bug · resolution · spec-amended? · escalated? ·
    front-load-failure?) — the Layer-4 telemetry the retro reads.
+5. **File the verdict** in `reviews/phase-NNN.md` (NNN = the phase number): the header below, then
+   the findings. A re-review adds a round to the same file and updates the header.
+   ```yaml
+   phase_review_verdict:
+     phase: 2
+     overall: PASS | FAIL | SKIPPED
+     blocking: 0
+     findings: 3
+   ```
+
+The review is **blocking**: the next phase does not start until `reviews/phase-NNN.md` exists. A
+deliberate skip still writes the file, with `overall: SKIPPED` and the reason. A review that left no
+file did not happen.
 
 Only then move to the next phase.
 
@@ -30,8 +43,8 @@ Only then move to the next phase.
 
 The review is scoped to the phase, so it stays cheap — it reads the phase's diff and the matching
 spec slice, not the whole tree. For a trivial single-phase spec the loop collapses into just the
-**big review**; don't spawn a reviewer per chunk or for a one-file change. Match the review to the
-surface the phase touched.
+**big review** (file `reviews/phase-001.md` as `SKIPPED`, reason: single phase); don't spawn a
+reviewer per chunk or for a one-file change. Match the review to the surface the phase touched.
 
 ---
 

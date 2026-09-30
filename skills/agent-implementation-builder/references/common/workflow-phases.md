@@ -97,6 +97,11 @@ Based on the framework in agent-config.yaml, read the corresponding cheat sheet:
 
 Read individual spec files as needed for understanding before implementation begins.
 
+**Git pre-flight** — run `git status` in each target repo at build start, and again before each
+stream's agent starts. On a dirty tree, isolate the work (worktree or branch), or ask the user once,
+at kickoff, and record the answer as a standing policy in Decisions Made; never re-ask it per
+iteration. Never pack or publish from a dirty tree. Runs in both modes.
+
 **If TEAM MODE (from Step 1):** After reading specs, go to `references/common/team-mode.md` and follow its workflow. DO NOT proceed to Step 6.
 
 **If SINGLE-AGENT MODE:** Proceed to Step 6.

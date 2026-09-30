@@ -196,7 +196,7 @@ only. Patching code while leaving the spec wrong leaves the spec-derived tests w
 - **Code diverges from spec** → impl-builder fixes the code (the spec is truth).
 - **Spec is wrong** → re-enter this skill at the affected phase, fix `spec.md` (and the discovery doc
   if that's the source), re-run the Phase-5 self-consistency gate (every Requirement → ≥1 AC + ≥1
-  chunk + ≥1 Test Source), re-hand-off. Record the amendment as a Drift Log row in `progress.md`.
+  chunk + ≥1 Test Source; counts, readings, and value names consistent), re-hand-off. Record the amendment as a Drift Log row in `progress.md`.
   See `references/autonomy-and-escalation.md`.
 
 ---

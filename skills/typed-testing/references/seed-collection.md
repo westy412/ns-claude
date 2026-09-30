@@ -56,4 +56,5 @@ derivability; this confirms it survived the build). For any Requirement with no 
 ## Output of this phase
 
 The completed manifest (kept in working context; it is reproduced in the report). Proceed to
-Phase 2 routing with every row carrying a lane.
+Phase 2 routing with every row carrying a lane. Do not mark a row UNTESTED for an environment
+reason in this phase — that call belongs to Phase 3, from the probes Phase 0 re-ran.

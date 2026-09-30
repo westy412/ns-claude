@@ -25,8 +25,15 @@ testing_verdict:
 | **Spec Folder** | [path] |
 | **Static gate** | [feedback/verification-NNN.md verdict | clean big review per progress.md | user override (Known-Risk)] |
 | **Seed sources** | [spec Test Sources | agent Examples/Edge Cases | tool Example I/O | Acceptance Criteria | reviews/review-NNN-testseed.md] |
+| **Lane files** | [feedback/testing-NNN-lanes/ | none — the lead ran every lane] |
 
 ---
+
+## Environment Probes (re-run at Phase 0 — never reused)
+
+| Probe | Result | measured_at |
+|-------|--------|-------------|
+| [service up / credential present / fixture exists] | [observed] | [YYYY-MM-DD HH:MM] |
 
 ## Test Manifest & Results
 
@@ -50,7 +57,7 @@ testing_verdict:
 
 | Manifest ID | Requirement | Reason | Re-runnable when |
 |-------------|-------------|--------|------------------|
-| [M#] | [R#] | [no credentials / external cost / environment down / missing seed] | [what unblocks it] |
+| [M#] | [R#] | [no credentials / external cost / environment down / missing seed / owed / lane report missing] | [what unblocks it] |
 
 ## Failures & Routing
 

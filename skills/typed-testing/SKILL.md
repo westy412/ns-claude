@@ -54,9 +54,9 @@ Load these just-in-time per phase — one at a time:
 1. **The spec is the source of tests.** Lift every test from the emitted seed — never invent a
    test the spec doesn't ground. A requirement with no liftable seed is a spec-quality gap, not a
    license to improvise (run the autonomy rule).
-2. **Run the real artifact.** Real environment, real commands, real calls. Never simulate a pass:
-   a row that cannot be run live is recorded **UNTESTED** with the reason — an honest gap beats a
-   fake green.
+2. **Run the real artifact.** Real environment, real commands, real calls, through the path its
+   real consumer uses ([lane-code.md](references/lane-code.md)). Never simulate a pass: a row that
+   cannot be run live is recorded **UNTESTED** with the reason — an honest gap beats a fake green.
 3. **Route by artifact type.** One spec usually mixes types — route each seed row to its lane
    (code / agent-tools / agent-reasoning), don't force one method onto everything.
 4. **Failures run the autonomy rule** (`references/autonomy-and-escalation.md` — the shared
@@ -67,6 +67,10 @@ Load these just-in-time per phase — one at a time:
    per its declared type's contract (live). Two layers, not duplication.
 6. **Telemetry stays in the spec folder.** The report is per-stage telemetry (three-tier feedback
    architecture, tier 1) — it travels with the spec folder across sessions for the retro to consume.
+7. **Every live validation writes a report.** Whoever runs the rows — this skill, a builder, or
+   the owner by hand — and even when the run is partial: `feedback/testing-NNN.md` with a
+   `testing_verdict` header. A row not run is UNTESTED with the reason `owed`, so a later run can
+   close it. A live check with no report is invisible to the retro.
 
 ## Phases
 
@@ -88,6 +92,10 @@ Load these just-in-time per phase — one at a time:
    explicitly override (log as a Known-Risk in the report).
 3. Locate the seed sources (Phase 1 lifts them): spec Test Sources / per-agent Examples + Edge
    Cases, tool Example I/O + Errors tables, Acceptance Criteria, `reviews/review-NNN-testseed.md`.
+4. Re-run every environment probe the rows depend on (a service is up, a credential is present,
+   a fixture exists) and stamp each result with `measured_at`. Never reuse a probe result from the
+   spec, the seed, or an earlier report — the environment changes between sessions. The RUN or
+   UNTESTED call for each row is made in Phase 3 from these fresh probes, never in Phase 1.
 
 ### Phase 2: Artifact-type routing
 
@@ -124,3 +132,8 @@ reasoning lane, and any service/UI shell around it takes the code lane.
 |------|-----|
 | LLM-judge for reasoning-lane rows | Spawn a fresh-context judge sub-agent via the Task tool (`subagent_type: "general-purpose"`) — judge prompt in [lane-agent-reasoning.md](references/lane-agent-reasoning.md) |
 | Driving the app / confirming a change end-to-end (code lane) | Invoke the built-in `run` / `verify` skills via the Skill tool — see [lane-code.md](references/lane-code.md) |
+
+**Lane sub-agents write to files.** If you delegate a lane to a sub-agent, its brief names
+`{spec-folder}/feedback/testing-NNN-lanes/<lane>.md` as the write path, and the sub-agent writes
+its rows there before it reports. Consolidate the report from these files, never from chat
+replies. A delegated lane with no file is UNTESTED with the reason `lane report missing`.

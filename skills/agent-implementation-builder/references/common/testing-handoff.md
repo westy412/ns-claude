@@ -39,6 +39,15 @@ seed. It lifts the seed into a test manifest, routes each row by artifact type, 
 live, and writes `feedback/testing-NNN.md` with a machine-readable `testing_verdict` — that verdict
 is the live gate. Record the outcome in `progress.md`.
 
+## Evidence that counts
+
+- **Exercise each shipped artifact the way its consumer does.** A package entry point, a stylesheet,
+  an endpoint, or a UI is imported, compiled, rendered, or called through the real consumer path. A
+  build, a copy, or a text check is not evidence.
+- **A CI gate that cannot run exits non-zero, or you remove it.** A green skip is never a PASS.
+- **A "deployed" criterion closes on one end-to-end worked example on the deployed environment.** A
+  health probe alone does not close it.
+
 ## Deferral
 
 Typed testing is never one option among alternatives: it runs, or it is deferred.

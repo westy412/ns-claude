@@ -433,7 +433,7 @@ Progress tracking template: `templates/progress.md`
 - `references/common/patterns.md` — Template-to-instances, nested teams, 3-level nesting
 - `references/common/sub-agents.md` — Delegation strategy, sub-agent invocation patterns
 - `references/common/progress-tracking.md` — Progress tracking & cross-session resumption
-- `references/common/feedback-loop.md` — Cheat sheet update process
+- `references/common/feedback-loop.md` — Fix-or-escalate per finding, the Build Escalation Record, live-service and credential rules, how to report a verified fix, cheat sheet updates
 - `references/common/autonomy-and-escalation.md` — Fix-or-ask contract: auto-fix a finding vs escalate, plus the escalation comms standard. Load when handling a review/feedback finding or before escalating.
 - `references/common/per-phase-review.md` — Per-phase review loop: a scoped code review after each of Phases 1–4 + the final big review. Run at each phase boundary.
 - `references/common/testing-handoff.md` — Layer-3 handoff: after the verifier's report has no open FAIL, surface the spec's test seed and invoke the typed-testing skill (wired — its `testing_verdict` is the live gate). Completion sequence step 3 (`references/common/workflow-phases.md` → Completion sequence).

@@ -24,6 +24,10 @@ Template: `templates/teammate-prompt-implementation.md`. Fields:
 - Stay inside the ownership boundary; request out-of-boundary changes from the lead rather than making them.
 - **Do not revert or overwrite others' edits** — the worker is not alone in the codebase.
 - Resume from the state sources when supplied, not from conversation memory.
+- **Safety floor** — processes by assigned port and own PID only (never pattern kills), secrets by
+  key name only (never printed), no `git revert/checkout/restore/stash/reset` on shared files.
+  The lead assigns the ports and lists the user's own running local services at Phase 0. The same
+  floor binds the lead and a single-agent build, not only teammates.
 
 ## Final response = review evidence
 
