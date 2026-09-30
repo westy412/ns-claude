@@ -124,44 +124,63 @@ After Phase 0, all phases come directly from the spec's execution plan. The buil
 
 ## Completion
 
-After all phases complete:
+After all phases complete, run the **Completion sequence**, in this fixed order on every build:
+`big review → verifier → typed testing → acceptance-criteria table → completion state`
 
-### Big Review (before acceptance criteria)
+### Step 1: Big Review
 
-Before verifying acceptance criteria, run the final aggregate review across the whole change (`references/per-phase-review.md` → The big review) — it catches the cross-phase / integration issues a per-phase review can't see. Resolve findings via the autonomy rule.
+Run the aggregate review across the whole change (`references/per-phase-review.md` → The big review)
+for the cross-phase issues a per-phase review cannot see. Resolve findings via the autonomy rule.
 
-On a clean big review, hand off to live validation: surface the spec's test seed and invoke the
-typed-testing skill — see `references/testing-handoff.md` (wired; its `testing_verdict` is the
-live gate, with non-blocking deferral if it cannot run now).
+### Step 2: Verify (static)
 
-### Step 1: Verify Acceptance Criteria
+On a clean big review, invoke the `general-implementation-verifier` skill on the spec folder. It
+writes `feedback/verification-NNN.md`: a PASS / WARN / FAIL verdict per criterion and a traceability
+matrix. The verifier reports; it does not fix.
 
-Read the spec's Acceptance Criteria section. For each criterion:
+- The verifier runs on every build. It is not optional, and not a choice you offer the user.
+- Each FAIL and WARN runs the autonomy rule and becomes a Drift Log row. Invoke the verifier again
+  if the fixes were substantial.
+- Team mode: release the build team first (Execution below); apply fixes yourself or through a
+  focused sub-agent.
 
-1. If it includes a command (e.g., `pytest tests/`), run it
-2. If it's a behavioral check, verify the implementation matches
-3. Mark each criterion as pass/fail
+### Step 3: Live Validation
 
-**If any criterion fails:** Fix the issue before proceeding. If you can't fix it, report to the user.
+With no open verifier FAIL, hand off to typed testing — see `references/testing-handoff.md`. Its
+`testing_verdict` is the live gate.
 
-### Step 2: Output Completion Promise
+### Step 4: Acceptance-Criteria Table
 
-Only when ALL acceptance criteria pass:
+Write the table into the Implementation section of `progress.md`, one row per acceptance criterion
+in the spec: `# | Criterion | Evidence | Verdict | Owner | Re-check condition`.
 
-1. Output the completion promise string from the spec (wrapped in `<promise>` tags)
-2. Update the spec's Meta table: `Status: in-progress` → `Status: complete`
-3. Update the feature folder's `progress.md`: set all chunks to `done`, add final session log entry, update Next Action with handoff to `/general-implementation-verifier`
+- Draw each verdict from recorded evidence — a `testing_verdict` row, the verifier's matrix, or a
+  command you run now. Only PASS closes a row; "met" without re-checkable evidence is not PASS.
+- A FAIL row runs the autonomy rule: fix and re-check before Step 5, else escalate.
+- Each PARTIAL, UNTESTED, or deferred row needs an owner and a re-check condition. A row marked
+  "deferred by design" must cite the spec line that allows the deferral.
 
-### Step 3: Clean Up (Team Mode Only)
+### Step 5: Completion State
 
-If team mode was used:
-1. Shutdown all teammates via `SendMessage(shutdown_request)`
-2. Delete the team via `TeamDelete`
-3. Clean up teammate prompt files:
+- **Every row PASS:** output the completion promise string from the spec (wrapped in `<promise>`
+  tags). Set the spec Meta `Status: complete` and the progress Status to `complete`. Mark all chunks
+  `done` and add a final Session Log entry.
+- **Any row not PASS:** do not output the completion promise. Set the spec Meta
+  `Status: builder-complete` and the progress Status to `builder-complete`. Add one Open Questions /
+  Blockers row per open criterion, with its owner and re-check condition. No deploy or promotion
+  step runs until each open row passes, or until the user records a waiver that names the rows.
+
+### Execution (Claude Code)
+
+- **Release the build team before Step 2** (team mode only). A lead runs one team at a time, and
+  the verifier creates its own team. Send `SendMessage(shutdown_request)` to each teammate, then
+  `TeamDelete`, then remove the prompt files:
    ```bash
    rm -rf {repo-path}/teammate-prompts/{team-name}/
    rmdir {repo-path}/teammate-prompts/ 2>/dev/null
    ```
+- **Invoke the verifier** via the `Skill` tool → `skill: "general-implementation-verifier"` with the
+  spec-folder path.
 
 ---
 

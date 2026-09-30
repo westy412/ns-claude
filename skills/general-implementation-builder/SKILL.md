@@ -86,7 +86,7 @@ Whatever the spec defines — this skill is technology-agnostic. The spec's type
 | Initialize | Phase 0 setup, locate or populate `progress.md` in feature folder, determine execution mode | `references/workflow.md` |
 | Team Mode | Parallel execution with teammates (2+ streams) | `references/team-mode.md` |
 | Single-Agent Mode | Sequential execution (1 stream or simple specs) | `references/single-agent-mode.md` |
-| Completion | Verify acceptance criteria, output completion promise | `references/workflow.md` |
+| Completion | Big review → verifier → typed testing → acceptance-criteria table → completion promise or `builder-complete` | `references/workflow.md` |
 
 ### Phase 0: Parse Spec and Initialize (Fixed)
 
@@ -199,7 +199,7 @@ Full process: `references/feedback-loop.md` (cites `references/autonomy-and-esca
 - `references/feedback-loop.md` — Learning from mistakes and recording patterns
 - `references/autonomy-and-escalation.md` — Fix-or-ask contract: when to auto-fix a finding vs escalate to the user, plus the escalation comms standard. Load when handling a review/feedback finding or before escalating to the user.
 - `references/per-phase-review.md` — Per-phase review loop: a scoped code review at each phase boundary + the big review before completion. Run at each phase boundary.
-- `references/testing-handoff.md` — Layer-3 handoff: on a clean big review, surface the spec's test seed and invoke the typed-testing skill (wired — its `testing_verdict` is the live gate). Read at the big review, before completion.
+- `references/testing-handoff.md` — Layer-3 handoff: after the verifier's report has no open FAIL, surface the spec's test seed and invoke the typed-testing skill (wired — its `testing_verdict` is the live gate). Completion step 3.
 
 ---
 

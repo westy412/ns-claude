@@ -1,7 +1,6 @@
 ---
 name: bug-hunter
 description: Adversarial 3-agent bug finding pipeline using team mode. Spawns Hunter, Skeptic, and Referee teammates sequentially with file-based prompts via teammate-spawn pattern. Exploits sycophancy through opposing scoring incentives. Three modes - Quick, Standard, Deep Scan. Use for bug audits, code reviews, or pre-release checks.
-disable-model-invocation: true
 argument-hint: "[target-path]"
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Agent, AskUserQuestion, TeamCreate, TeamDelete, TaskCreate, TaskUpdate, TaskGet, TaskList, TaskOutput, SendMessage
 ---

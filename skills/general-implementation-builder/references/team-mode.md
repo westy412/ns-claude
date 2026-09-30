@@ -222,14 +222,15 @@ After all phases complete:
 2. **Verify acceptance criteria** — Run test commands, check behavioral criteria
 3. **Fix issues** — If any criterion fails, assign fix work to the appropriate teammate
 4. **Shutdown teammates** — Send shutdown requests via `SendMessage(shutdown_request)`
-5. **Clean up team** — `TeamDelete`
+5. **Clean up team** — `TeamDelete` (a lead runs one team at a time; the verifier needs its own)
 6. **Clean up prompt files:**
    ```bash
    rm -rf {repo-path}/teammate-prompts/{team-name}/
    rmdir {repo-path}/teammate-prompts/ 2>/dev/null
    ```
-7. **Output completion promise** — Only after ALL acceptance criteria pass
-8. **Update spec status** — `Status: in-progress` → `Status: complete`
+7. **Run the Completion sequence from Step 2** (`references/workflow.md` → Completion): verifier →
+   typed testing → acceptance-criteria table → completion promise or `builder-complete`. Do not
+   output the completion promise before that sequence ends.
 
 ---
 

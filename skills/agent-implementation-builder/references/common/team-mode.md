@@ -172,15 +172,17 @@ The `communication` section of the execution plan defines what needs to be share
 ### Step 8: Finalization
 
 After all phases complete:
+0. Run the **big review** (`references/common/per-phase-review.md` → The big review) across the whole change; resolve findings via the autonomy rule.
 1. Lead validates all files exist and are internally consistent; verify changed files stayed within each stream's ownership boundary (no cross-stream clobbering) and review integration seams
 2. Run tests if defined in acceptance criteria
 3. Shutdown teammates via `SendMessage(shutdown_request)`
-4. Clean up team via `TeamDelete`
+4. Clean up team via `TeamDelete` (a lead runs one team at a time; the verifier needs its own)
 5. Clean up teammate prompt files:
    ```bash
    rm -rf {project-path}/teammate-prompts/{team-name}/
    rmdir {project-path}/teammate-prompts/ 2>/dev/null
    ```
+6. Run the Completion sequence from step 2 (`references/common/workflow-phases.md` → Completion sequence): verifier → typed testing → acceptance-criteria table → completion state.
 
 ---
 

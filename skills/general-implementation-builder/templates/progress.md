@@ -6,7 +6,7 @@
 |-------|-------|
 | **Workforce** | [content-workforce / inbound-workforce / outbound-workforce] |
 | **Feature Folder** | [full path to specs/YYYY-MM-DD-feature-name/] |
-| **Status** | brainstorm / discovery / spec-building / spec-review / implementation / verification / complete |
+| **Status** | brainstorm / discovery / spec-building / spec-review / implementation / verification / builder-complete / complete |
 | **Linear Issue** | [URL or "None"] |
 | **Created** | YYYY-MM-DD |
 | **Last Updated** | YYYY-MM-DD |

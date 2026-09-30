@@ -37,15 +37,18 @@ surface the phase touched.
 
 ## The big review (before completion)
 
-After the final phase, run one aggregate review across the whole change before verifying acceptance
-criteria — the cross-phase issues a per-phase review can't see (integration seams, inter-phase
-inconsistency, end-to-end contract). Findings run the same autonomy rule. The terminal verifier is
-the static half of this; here it's the build-side gate before you emit the completion promise.
+After the final phase, run one aggregate review across the whole change — the cross-phase issues a
+per-phase review can't see (integration seams, inter-phase inconsistency, end-to-end contract).
+Findings run the same autonomy rule.
 
-On a clean big review, hand off to live validation — see `testing-handoff.md`: surface the spec's
-test seed (worked examples, edge cases, tool example-I/O, acceptance criteria) and invoke the
-typed-testing skill for the spec folder. Wired — its `testing_verdict` report is the live gate; if
-it cannot run now, record that live testing is owed (deferral is non-blocking; silent skipping is not).
+The big review is step 1 of the builder's **Completion sequence** (`workflow.md` → Completion in the
+general builder; `common/workflow-phases.md` → Completion sequence in the agent builder). The order
+is fixed on every build:
+
+`big review → verifier → typed testing → acceptance-criteria table → completion state`
+
+On a clean big review, invoke the implementation verifier next — not typed testing. Typed testing
+runs after the verifier's fixes, so it exercises the fixed code (`testing-handoff.md`).
 
 ---
 

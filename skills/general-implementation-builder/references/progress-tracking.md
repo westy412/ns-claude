@@ -85,7 +85,7 @@ Update the feature folder's `progress.md` at these moments:
 | Completing a file | Add to Completed Files with commit hash |
 | Starting a session | Add Session Log entry |
 | Ending a session | Update Session Log with summary |
-| All phases complete | Update Next Action with handoff to `/general-implementation-verifier` |
+| All phases complete | Run the Completion sequence (`references/workflow.md` → Completion); record the verification report, the testing verdict, and the acceptance-criteria table; set Status `complete` or `builder-complete` |
 
 **CRITICAL: Update the feature folder's `progress.md` BEFORE ending a session.** The next session depends on it.
 
