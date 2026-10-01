@@ -43,10 +43,18 @@ dedupes at consolidation; analyzers must not self-censor to avoid overlap.
      for that run explicitly — never return silence." (Feeds `dimensions_no_signal` in the report.)
    - Scope fence: findings only; no skill edits, no spec edits, no proposals (proposals are the
      lead's pattern-gate job)
+   - Write path: "Write your findings for each run to
+     `{spec-folder}/feedback/retro-NNN-dimensions/dimension-{n}-{name}.md` (NNN = the retro report
+     number that run will get), then reply with the paths. If a write is refused, return the full
+     findings inline and say the write failed — never a summary." Chat replies truncate; the
+     files are the record.
 3. Spawn all four in parallel, each with the minimal pointer prompt from `teammate-spawn`'s
    Execution section (it carries the platform spawn mechanics).
-4. Collect findings; **review each analyzer's output before accepting** — an unattributed or
-   evidence-free finding goes back or gets dropped.
+4. Collect findings from the dimension files, not from chat; **review each analyzer's output
+   before accepting** — an unattributed or evidence-free finding goes back or gets dropped.
+5. **Silence is not non-delivery.** Before you record an analyzer as not delivered (a
+   capture-failure), send it two status requests. Attribute the failure only when both go
+   unanswered, and cite both requests in the sweep summary.
 
 ---
 

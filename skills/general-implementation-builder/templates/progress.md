@@ -6,7 +6,7 @@
 |-------|-------|
 | **Workforce** | [content-workforce / inbound-workforce / outbound-workforce] |
 | **Feature Folder** | [full path to specs/YYYY-MM-DD-feature-name/] |
-| **Status** | brainstorm / discovery / spec-building / spec-review / implementation / verification / complete |
+| **Status** | brainstorm / discovery / spec-building / spec-review / implementation / verification / builder-complete / complete |
 | **Linear Issue** | [URL or "None"] |
 | **Created** | YYYY-MM-DD |
 | **Last Updated** | YYYY-MM-DD |
@@ -29,6 +29,7 @@
 | discovery.md | complete / n/a | /discovery | |
 | spec.md OR spec/ | complete / n/a | /general-spec-builder OR /agent-spec-builder | |
 | reviews/review-NNN.md | complete / n/a | /review-general-spec OR /review-agent-spec | |
+| reviews/phase-NNN.md | complete / n/a | implementation builder (per-phase review) | |
 | feedback/verification-NNN.md | pending / complete / n/a | /general-implementation-verifier | |
 
 ---
@@ -167,6 +168,15 @@
 **Class:** `code-bug` = code diverged from a correct spec. `spec-bug` = the spec was wrong
 (spec-defect loopback — amend the spec, never code-only). **Front-load failure?** = yes when
 discovery/spec should have caught it — every mid-build spec amendment is one.
+
+#### Build Escalation Record
+
+> One row each time the build waits on the user, whether or not a drift finding caused the wait.
+> The build-stage twin of the spec-stage Escalation & Decision Record; the run retro reads both.
+
+| Phase | Point | Type | Asked | Answer | Date |
+|-------|-------|------|-------|--------|------|
+| [N] | [gate or chunk] | branch-B / gate-override / fired-once / prober-force | [the question] | [the user's answer — required] | [YYYY-MM-DD — required] |
 
 ### Session Log
 

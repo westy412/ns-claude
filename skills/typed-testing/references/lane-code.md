@@ -18,6 +18,12 @@ Pick per row by what the code is:
 | **UI / browser flow** | Launch the app and drive the row's golden path; assert the visible outcome the seed names |
 | **Library / module** | Import and call the function with the row's input in a minimal runner; assert the return value |
 
+**Consumer path.** Exercise every shipped, consumer-facing artifact the way its real consumer
+uses it: a shipped package is imported through each public entry point and rendered inside the
+consuming app; a shipped stylesheet is compiled through the consumer's own build; an endpoint is
+called the way its client calls it. A build, a copy, a text check, or an isolated snapshot of the
+artifact is not a run — the row stays UNTESTED until the consumer path runs.
+
 **Execution surface:** the built-in `run` and `verify` skills are the live-validation surface —
 invoke `run` (Skill tool) to launch and drive the app, and `verify` to confirm a change
 end-to-end. Fall back to direct Bash execution for simple CLI/library rows where launching the
@@ -46,6 +52,8 @@ exit 0 (or the stated criterion) = PASS; capture failing output into the report.
 - Side-effectful rows (writes, sends, deploys): prefer the project's sandbox/staging path if the
   spec names one; if only production exists, **escalate before executing** (autonomy rule —
   outward-facing actions need the user).
+- Never print environment values or secrets. Name a variable by its key, and redact values in
+  any helper or command output that reaches the report or the chat.
 
 ## Recording
 

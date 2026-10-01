@@ -21,6 +21,19 @@ For each phase, after its chunks complete and before the next phase starts:
 4. **Record** each finding as a row in `progress.md` → **Drift Log / Spec-Feedback Ledger**
    (phase · finding · code-bug vs spec-bug · resolution · spec-amended? · escalated? ·
    front-load-failure?) — the Layer-4 telemetry the retro reads.
+5. **File the verdict** in `reviews/phase-NNN.md` (NNN = the phase number): the header below, then
+   the findings. A re-review adds a round to the same file and updates the header.
+   ```yaml
+   phase_review_verdict:
+     phase: 2
+     overall: PASS | FAIL | SKIPPED
+     blocking: 0
+     findings: 3
+   ```
+
+The review is **blocking**: the next phase does not start until `reviews/phase-NNN.md` exists. A
+deliberate skip still writes the file, with `overall: SKIPPED` and the reason. A review that left no
+file did not happen.
 
 Only then move to the next phase.
 
@@ -30,22 +43,25 @@ Only then move to the next phase.
 
 The review is scoped to the phase, so it stays cheap — it reads the phase's diff and the matching
 spec slice, not the whole tree. For a trivial single-phase spec the loop collapses into just the
-**big review**; don't spawn a reviewer per chunk or for a one-file change. Match the review to the
-surface the phase touched.
+**big review** (file `reviews/phase-001.md` as `SKIPPED`, reason: single phase); don't spawn a
+reviewer per chunk or for a one-file change. Match the review to the surface the phase touched.
 
 ---
 
 ## The big review (before completion)
 
-After the final phase, run one aggregate review across the whole change before verifying acceptance
-criteria — the cross-phase issues a per-phase review can't see (integration seams, inter-phase
-inconsistency, end-to-end contract). Findings run the same autonomy rule. The terminal verifier is
-the static half of this; here it's the build-side gate before you emit the completion promise.
+After the final phase, run one aggregate review across the whole change — the cross-phase issues a
+per-phase review can't see (integration seams, inter-phase inconsistency, end-to-end contract).
+Findings run the same autonomy rule.
 
-On a clean big review, hand off to live validation — see `testing-handoff.md`: surface the spec's
-test seed (worked examples, edge cases, tool example-I/O, acceptance criteria) and invoke the
-typed-testing skill for the spec folder. Wired — its `testing_verdict` report is the live gate; if
-it cannot run now, record that live testing is owed (deferral is non-blocking; silent skipping is not).
+The big review is step 1 of the builder's **Completion sequence** (`workflow.md` → Completion in the
+general builder; `common/workflow-phases.md` → Completion sequence in the agent builder). The order
+is fixed on every build:
+
+`big review → verifier → typed testing → acceptance-criteria table → completion state`
+
+On a clean big review, invoke the implementation verifier next — not typed testing. Typed testing
+runs after the verifier's fixes, so it exercises the fixed code (`testing-handoff.md`).
 
 ---
 

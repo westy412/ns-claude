@@ -97,6 +97,11 @@ Based on the framework in agent-config.yaml, read the corresponding cheat sheet:
 
 Read individual spec files as needed for understanding before implementation begins.
 
+**Git pre-flight** — run `git status` in each target repo at build start, and again before each
+stream's agent starts. On a dirty tree, isolate the work (worktree or branch), or ask the user once,
+at kickoff, and record the answer as a standing policy in Decisions Made; never re-ask it per
+iteration. Never pack or publish from a dirty tree. Runs in both modes.
+
 **If TEAM MODE (from Step 1):** After reading specs, go to `references/common/team-mode.md` and follow its workflow. DO NOT proceed to Step 6.
 
 **If SINGLE-AGENT MODE:** Proceed to Step 6.
@@ -578,10 +583,18 @@ async def get_status(job_id: str):
 
 ---
 
-## Final Big Review (before handoff)
+## Completion sequence
 
-After Phase 7, before declaring the system complete or handing off to `agent-implementation-verifier`, run the aggregate **big review** across the whole system (`references/common/per-phase-review.md` → The big review) — integration seams between teams, end-to-end agent I/O contracts, and cross-phase consistency the per-phase reviews can't see. Resolve findings via the autonomy rule, then proceed to verification.
+After Phase 7, run the Completion sequence. The order is fixed on every build, in both modes:
 
-On a clean big review, hand off to live validation: surface the spec's test seed and invoke the
-typed-testing skill — see `references/common/testing-handoff.md` (wired; its `testing_verdict` is
-the live gate, with non-blocking deferral if it cannot run now).
+`big review → verifier → typed testing → acceptance-criteria table → completion state`
+
+1. **Big review** — the aggregate review across the whole system (`references/common/per-phase-review.md` → The big review): integration seams between teams, end-to-end agent I/O contracts, and cross-phase consistency the per-phase reviews can't see. Resolve findings via the autonomy rule.
+2. **Verify (static)** — on a clean big review, invoke the `agent-implementation-verifier` skill on the spec folder. It writes `feedback/verification-NNN.md`. The verifier runs on every build; it is not optional, and it is not a choice you offer the user. Each FAIL and WARN runs the autonomy rule and becomes a Drift Log row. Invoke the verifier again if the fixes were substantial. In team mode, release the build team first (`references/common/team-mode.md` → Finalization); apply fixes yourself or through a focused sub-agent.
+3. **Live validation** — with no open verifier FAIL, hand off to typed testing (`references/common/testing-handoff.md`). Its `testing_verdict` is the live gate.
+4. **Acceptance-criteria table** — in the Implementation section of `progress.md`, one row per acceptance criterion in the spec: `# | Criterion | Evidence | Verdict | Owner | Re-check condition`. Draw each verdict from recorded evidence (a `testing_verdict` row, the verifier's matrix, a command you run now). Only PASS closes a row; "met" without re-checkable evidence is not PASS. A FAIL row runs the autonomy rule. Each PARTIAL, UNTESTED, or deferred row needs an owner and a re-check condition; "deferred by design" must cite the spec line that allows it.
+5. **Completion state** — every row PASS: declare the system complete (output the completion promise if the spec defines one) and set Status `complete`. Any row not PASS: do not declare the system complete and output no completion promise; set Status `builder-complete` and add one Open Questions / Blockers row per open criterion, with its owner and re-check condition. No deploy or promotion step runs until each open row passes, or until the user records a waiver that names the rows.
+
+Deferral never blocks the session. It never produces a completion claim.
+
+**Execution (Claude Code):** invoke the verifier via the `Skill` tool → `skill: "agent-implementation-verifier"` with the spec-folder path.

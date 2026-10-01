@@ -2,7 +2,6 @@
 name: changelog
 description: "Generate user-facing changelogs from Linear issues and git commits. Use when creating a changelog for any Novosapien product. Scans completed Linear issues and git history across all sub-repos, groups by feature area, and outputs polished markdown."
 allowed-tools: Read, Bash, Write, Edit, mcp__linear__list_issues, mcp__linear__get_issue
-disable-model-invocation: true
 argument-hint: "[start-date end-date]"
 ---
 

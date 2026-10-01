@@ -1,6 +1,5 @@
 ---
-description: Verify a general implementation against its spec. Spawns parallel verification agents to check spec compliance, completeness, and code quality. Produces a consolidated report with actionable findings. Use after general-implementation-builder completes.
-disable-model-invocation: true
+description: Verify a general implementation against its spec. Spawns parallel verification agents to check spec compliance, completeness, and code quality. Produces a consolidated report with actionable findings. The implementation builder invokes it on every build, after a clean big review; also use it on request to check a finished build against its spec.
 argument-hint: "[spec-folder-path]"
 ---
 
@@ -14,12 +13,13 @@ Spawns a team of verification agents that evaluate a completed implementation ag
 ## When to Use This Skill
 
 Use this skill when:
-- `general-implementation-builder` has completed (or mostly completed) an implementation
+- `general-implementation-builder` invokes it on every build, after a clean big review (Completion step 2)
+- A user asks to verify a finished or mostly finished implementation against its spec
 - You want to verify the implementation matches the spec before human review
 - You need an actionable report of what's missing or incorrect to feed back for fixes
 
 **Skip this skill when:**
-- Verifying an agent implementation (use `agent-implementation-verifier` instead -- future skill)
+- Verifying an agent implementation (use `agent-implementation-verifier` instead)
 - The spec hasn't been implemented yet (use `general-implementation-builder` first)
 - You only need to review the spec itself (use `review-spec` instead)
 
@@ -119,11 +119,13 @@ Each agent's prompt must include:
 7. Write report to `{spec-folder}/feedback/verification-NNN.md` (incrementing number)
 8. Present summary to the invoking agent or user
 
-### Phase 4: Hand Off to Typed Testing (on static PASS)
+### Phase 4: Return to the Builder, or Hand Off to Typed Testing
 
-This verifier is static-only by design -- it does not run the code or the acceptance-criteria commands. Executing the artifact against its spec-derived test sources (acceptance-criteria commands, worked examples, edge cases) is owned by the **typed-testing skill**, a separate live-validation stage that this verifier hands off to.
+This verifier is static-only by design -- it does not run the code or the acceptance-criteria commands. Executing the artifact against its spec-derived test sources (acceptance-criteria commands, worked examples, edge cases) is owned by the **typed-testing skill**, a separate live-validation stage.
 
-On a static **PASS** (no FAILs), hand off to typed testing for the spec folder: `-> typed-testing {spec-folder-path}`.
+**Invoked by a builder (the normal path):** stop after the report. Return the verdict and the report path to the builder. The builder applies the fixes, re-verifies when the fixes were substantial, and owns the typed-testing handoff in its Completion sequence. Do not invoke typed testing from here -- the builder runs it after its fixes, so the tests exercise the fixed code.
+
+**Invoked standalone (by a user):** on a static **PASS** (no FAILs), hand off to typed testing for the spec folder: `-> typed-testing {spec-folder-path}`.
 
 **Wired -- invoke it now.** Invoke the typed-testing skill for the spec folder. It lifts the spec's test seed into a test manifest, routes each row by artifact type (code / agent-tools / agent-reasoning), runs the artifact live, and writes `{spec-folder}/feedback/testing-NNN.md` with a machine-readable `testing_verdict` -- the live gate this static PASS feeds. Record the handoff in the report. If typed testing cannot run right now (user defers, environment unavailable), record that **live testing is owed** instead -- deferral does not block the static PASS. Do **not** spawn a `test-verifier` agent (there is none).
 

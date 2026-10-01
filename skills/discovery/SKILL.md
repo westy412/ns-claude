@@ -95,13 +95,15 @@ the existing schema/code — not just the docs and not a guess. Most "reality di
 failures are preventable right here. When a data contract or integration is in play, ground it
 against the real thing (codebase/web research) before it's written down as fact.
 
-**Reuse claims carry a probe obligation.** Any framing that leans on a named existing
-capability/seam/asset — "reuse X", "wrap the existing Y", "few-shot on Z", "same gate as W" —
-must be probed to a cite (file:symbol) proving the seam exists at the **shape** assumed: a
-callable service vs logic inline in a route; a data pool that actually carries the needed
-fields; a gate whose fail-mode is stated. Never infer a reusable seam from a code comment or a
-sibling's design. If the seam is aspirational, the doc says so explicitly (extract-first note)
-instead of asserting it.
+**Every claim about existing code carries a probe obligation.** Each code symbol, field,
+endpoint, tool, route, config key, test, or `file:line` that `discovery.md` names or leans on is
+probed to a cite (file:symbol) that shows its **real shape**, or is marked **"does not exist"**.
+This covers stated reuse ("reuse X", "wrap the existing Y", "few-shot on Z", "same gate as W") and
+every mechanism the design assumes: a field a row actually carries, when a function actually runs,
+a route that is actually mounted, a callable service vs logic inline in a route, a gate whose
+fail-mode is stated. Never infer a seam or a shape from a code comment, a doc, or a sibling's
+design. If the seam is aspirational, the doc says so explicitly (extract-first note) instead of
+asserting it.
 
 ### Soft Sequencing
 
@@ -114,6 +116,11 @@ discovery's #1 named failure mode. If you notice solutioning early, pull back to
 Before writing `discovery.md`, **stop and re-read the conversation as an artifact.** Refuse to pass
 thin, unanchored, or internally-inconsistent output. This is a gate, not a question — it runs every
 time, after the convergence checkpoint.
+
+**Re-check the claims first.** Re-probe every claim about existing code in the draft against the
+source, including claims made early in the conversation. A named thing without a cite at its real
+shape (or a "does not exist" marker) is a gate failure. A claim the source contradicts is corrected
+before anything is written.
 
 **Run the checklist.** For each Coverage Checklist dimension: concrete, or explicitly logged as
 known-risk/out-of-scope? Any dimension that is silently vague is a gate failure.

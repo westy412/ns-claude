@@ -1,6 +1,5 @@
 ---
-description: Investigate production errors on GCP Cloud Run services. Discovers deployed services, retrieves error logs via gcloud CLI, traces errors to source code, and presents diagnosis with a potential fix. Does NOT write code until the user validates the diagnosis.
-disable-model-invocation: true
+description: Investigate production errors on GCP Cloud Run services. Discovers deployed services, retrieves error logs via gcloud CLI, traces errors to source code, and presents diagnosis with a potential fix. Does NOT write code until the user validates the diagnosis. Use when a deployed Cloud Run service throws errors or the user reports a production failure.
 argument-hint: "[service-name]"
 allowed-tools: Bash, Read, Grep, Glob, AskUserQuestion
 ---

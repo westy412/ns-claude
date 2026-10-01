@@ -320,3 +320,22 @@ output; reasoning agents → eval / LLM-judge) and what `review-agent-spec` asse
 against (a behavioral requirement no test can be lifted from is a FAIL). Any agent missing either is a
 spec defect — fill it from discovery/conversation (autonomous if settled, else one specific question)
 before proceeding to Phase 5.
+
+---
+
+### Check 7: Consistency Sweep (BLOCKING)
+
+Re-read the whole spec (`overview.md`, every agent `.md`, `team.md`, `manifest.yaml`) and assert it
+reads one way:
+
+- **Counts match** — every count literal ("three agents", "four output fields") matches the list or
+  table it names.
+- **One reading per behaviour** — each agent's behaviour reads the same way across its Examples, Edge
+  Cases, and the overview and team files.
+- **One name per value** — each status, enum, or state value keeps one name in every file (never
+  `decline` in one file and `reject` in another).
+
+Fix what discovery/conversation settles. A sentence with two readings that the discovery doc does not
+settle is a question for the user (one specific question, Branch B) — never a silent pick. Where
+discovery left a hole, ask. Each question appends a `branch-B` row to `progress.md`'s Escalation &
+Decision Record.

@@ -38,6 +38,34 @@ conversation.
 > (correct the spec), Branch B if not (escalate, then correct the spec). Either way the correction
 > lands in the spec — the build never silently routes around a bad spec.
 
+**Record every wait.** Each time the build waits on the user, add a row to the **Build Escalation
+Record** in `progress.md`, whether or not a drift finding caused the wait. The user's answer and its
+date are required cells.
+
+**Live or shared services are never Branch A.** An action on a live or shared service is Branch B
+with its consequence stated, or a Known-Risk row with a re-apply step. Examples: a probe that can
+fill a production instance, a setting changed outside the declared deploy path, a kill on a shared
+database's run. "Shared with another environment or another run" is an irreversibility class.
+
+**Credential sweep before a blocker.** Before you declare a credential or environment blocker, look
+for credentials of the same type across the workspace: sibling repos' `.env`, `*.tfvars`, CI secret
+templates. Refer to them by key name only; never print a value. Try each against the failing call.
+Fire-once → Known-Risk applies only after the sweep fails.
+
+---
+
+## Report what you verified
+
+The comms standard governs how you ask; this governs how you report.
+
+- **A reported fix names the instance it was verified in** — repo, worktree, port, build — and
+  states what you observed there, not what you changed in source. If the user drives a running
+  stack, re-verify against that stack before you make the claim.
+- **A directive about another stream's owned files comes from a read of that file's current source
+  or a live run** — never from a docstring, a package's copy of the code, a prior belief, or another
+  agent's report.
+- **A stream that refuses a directive with evidence is the contract at work**, not friction.
+
 ---
 
 ## Sweep for other instances (after any Branch-A code fix)

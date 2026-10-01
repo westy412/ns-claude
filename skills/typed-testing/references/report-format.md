@@ -3,7 +3,9 @@
 > **Context:** The run is recorded in `{spec-folder}/feedback/testing-NNN.md` (its own `testing-*`
 > sequence, next NNN; sibling to the verifier's `verification-NNN.md`). The report is per-stage
 > telemetry — it stays in the spec folder so it travels across sessions and the run retro can
-> consume it. Use `templates/testing-report.md`.
+> consume it. Use `templates/testing-report.md`. **Every live validation writes one** — whoever
+> drives it (this skill, a builder, the owner by hand), partial runs included; rows not run are
+> UNTESTED with the reason `owed`.
 
 ---
 
@@ -38,7 +40,10 @@ input, expected, observed, verdict), the per-agent type-conformance table (agent
 UNTESTED rows with reasons, and the failure findings with routing.
 
 UNTESTED is honest signal, not noise: every UNTESTED row carries the reason (no credentials /
-external cost / environment down / missing seed) so the gap is visible, owned, and re-runnable.
+external cost / environment down / missing seed / owed / lane report missing) so the gap is
+visible, owned, and re-runnable. An environment reason cites its probe and `measured_at` from the
+Environment Probes table. When a lane ran as a sub-agent, build its rows from
+`feedback/testing-NNN-lanes/<lane>.md`, never from a chat reply.
 
 ## Failure routing — the autonomy rule applied to live failures
 
@@ -50,6 +55,14 @@ don't restate it). The live-testing question: **which side is wrong, the artifac
 | Artifact diverges from what the spec/seed establishes | **A** (auto-fix) | Implementation defect → route to the implementation-builder (re-enter with the finding; trivial fixes may be applied directly), then **re-run the failed rows** as a new `testing-NNN` run |
 | The seed's expected output is itself wrong (the spec mis-modelled reality — the live run proves it) | **A** (resolvable from intent) / **B** | If discovery/spec intent settles what it *should* be: correct **the spec** and re-derive the row — **never patch the test or the expectation in place to make it pass**. Spec-defect loopback: the correction lands in the spec via the spec-builder, then the row re-runs |
 | Genuinely ambiguous which side is wrong | **B** (escalate) | One concise question to the user (comms standard in the doctrine); on "proceed", log a Known-Risk |
+
+Two cases that are **not** ambiguous:
+- **The spec fixes the input.** When the spec fixes the argument, or the bound the expected value
+  depends on, a mismatch is Branch A on the artifact. "The model chose a different argument" is
+  an artifact defect, not an open question.
+- **A missing test harness.** Before a row goes UNTESTED for a missing harness, read the
+  spec-stage decision record for a ruling on that boundary. A flag-guarded test switch in a mock
+  the run already edits is Branch A — add it and run the row.
 
 Findings are recorded in the report **and** the routing destination (builder fix list /
 spec-defect note in `progress.md`) — a finding that lives only in the report dies in the report.

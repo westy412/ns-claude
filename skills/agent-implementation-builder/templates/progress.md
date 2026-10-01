@@ -127,6 +127,15 @@
 (spec-defect loopback — amend the spec, never code-only). **Front-load failure?** = yes when
 discovery/spec should have caught it — every mid-build spec amendment is one.
 
+### Build Escalation Record
+
+> One row each time the build waits on the user, whether or not a drift finding caused the wait.
+> The build-stage twin of the spec-stage Escalation & Decision Record; the run retro reads both.
+
+| Phase | Point | Type | Asked | Answer | Date |
+|-------|-------|------|-------|--------|------|
+| [N] | [gate or chunk] | branch-B / gate-override / fired-once / prober-force | [the question] | [the user's answer — required] | [YYYY-MM-DD — required] |
+
 ---
 
 ## Open Questions / Blockers

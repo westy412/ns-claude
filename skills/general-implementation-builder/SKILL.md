@@ -86,7 +86,7 @@ Whatever the spec defines — this skill is technology-agnostic. The spec's type
 | Initialize | Phase 0 setup, locate or populate `progress.md` in feature folder, determine execution mode | `references/workflow.md` |
 | Team Mode | Parallel execution with teammates (2+ streams) | `references/team-mode.md` |
 | Single-Agent Mode | Sequential execution (1 stream or simple specs) | `references/single-agent-mode.md` |
-| Completion | Verify acceptance criteria, output completion promise | `references/workflow.md` |
+| Completion | Big review → verifier → typed testing → acceptance-criteria table → completion promise or `builder-complete` | `references/workflow.md` |
 
 ### Phase 0: Parse Spec and Initialize (Fixed)
 
@@ -100,6 +100,10 @@ Whatever the spec defines — this skill is technology-agnostic. The spec's type
 4. Load top-level skills from the Skills section (one at a time)
 5. Determine execution mode
 6. Initialize project (if needed)
+   - **Git pre-flight** — run `git status` in each target repo at build start, and again before each
+     stream's agent starts. On a dirty tree, isolate the work (worktree or branch), or ask the user once,
+     at kickoff, and record the answer as a standing policy in Decisions Made; never re-ask it per
+     iteration. Never pack or publish from a dirty tree.
 7. Locate or populate the feature folder's `progress.md`:
    - If `progress.md` exists: read it, append the `## Implementation` section if missing
    - If not: create from `templates/progress.md`
@@ -196,10 +200,10 @@ Full process: `references/feedback-loop.md` (cites `references/autonomy-and-esca
 - `references/single-agent-mode.md` — Sequential execution for simple specs
 - `references/sub-agents.md` — Delegation strategy for research sub-agents
 - `references/progress-tracking.md` — Progress tracking and cross-session resumption
-- `references/feedback-loop.md` — Learning from mistakes and recording patterns
+- `references/feedback-loop.md` — Fix-or-escalate per finding, the Build Escalation Record, live-service and credential rules, how to report a verified fix
 - `references/autonomy-and-escalation.md` — Fix-or-ask contract: when to auto-fix a finding vs escalate to the user, plus the escalation comms standard. Load when handling a review/feedback finding or before escalating to the user.
 - `references/per-phase-review.md` — Per-phase review loop: a scoped code review at each phase boundary + the big review before completion. Run at each phase boundary.
-- `references/testing-handoff.md` — Layer-3 handoff: on a clean big review, surface the spec's test seed and invoke the typed-testing skill (wired — its `testing_verdict` is the live gate). Read at the big review, before completion.
+- `references/testing-handoff.md` — Layer-3 handoff: after the verifier's report has no open FAIL, surface the spec's test seed and invoke the typed-testing skill (wired — its `testing_verdict` is the live gate). Completion step 3.
 
 ---
 
